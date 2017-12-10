@@ -2,19 +2,19 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.Types.ObjectId;
 
-var orderSchema = new Schema({
+var tradeSchema = new Schema({
+  order: {type: ObjectId, required: true},
   user: {type: ObjectId, required: true},
+  counterparty: {type: ObjectId, required: true},
   instrument: {type: ObjectId, required: true},
   side: {type: String, enum: ['BUY', 'SELL'], required: true},
   price: {type: Number, required: true},
   quantity: {type: Number, required: true},
-  tradedQuantity: {type: Number},
-  status: {type: String, enum: ['ACTIVE', 'WITHDRAWN', 'TRADED']},
   createTimestamp: Date,
   updateTimestamp: Date
 });
 
-orderSchema.pre('save', function(next) {
+tradeSchema.pre('save', function(next) {
   var currentDate = new Date();
   if (this.isNew) {
     this.createTimestamp = currentDate;
@@ -23,20 +23,4 @@ orderSchema.pre('save', function(next) {
   next();
 });
 
-orderSchema.pre('save', function(next) {
-  if (this.isNew) {
-    this.tradedQuantity = 0;
-  }
-  next();
-});
-
-orderSchema.pre('save', function(next) {
-  if (this.isNew) {
-    this.status = 'ACTIVE';
-  } else if (this.quantity == this.tradedQuantity) {
-    this.status = 'TRADED';
-  }
-  next();
-});
-
-module.exports = mongoose.model('Order', orderSchema);
+module.exports = mongoose.model('Trade', tradeSchema);

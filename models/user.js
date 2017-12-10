@@ -13,10 +13,10 @@ var userSchema = new Schema({
 
 userSchema.pre('save', function(next) {
   var currentDate = new Date();
-  this.updateTimestamp = currentDate;
-  if (!this.createTimestamp) {
+  if (this.isNew) {
     this.createTimestamp = currentDate;
   }
+  this.updateTimestamp = currentDate;
   next();
 });
 

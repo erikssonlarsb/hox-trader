@@ -22,10 +22,10 @@ instrumentSchema.pre('save', function(next) {
 
 instrumentSchema.pre('save', function(next) {
   var currentDate = new Date();
-  this.updateTimestamp = currentDate;
-  if (!this.createTimestamp) {
+  if (this.isNew) {
     this.createTimestamp = currentDate;
   }
+  this.updateTimestamp = currentDate;
   next();
 });
 
