@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 */
 app.use('/authentication', require('./handlers/authentication'));
 app.use('/users', isAuthenticated, require('./handlers/users'));
-app.use('/contracts', isAuthenticated, require('./handlers/contracts'));
+app.use('/instruments', isAuthenticated, require('./handlers/instruments'));
 app.use('/orders', isAuthenticated, require('./handlers/orders'));
 
 mongoose.connect(config.database, function(err) {

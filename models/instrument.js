@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.Types.ObjectId;
 
-var contractSchema = new Schema({
+var instrumentSchema = new Schema({
   name: {type: String, unique: true},
   underlying: {type: String, required: true},
   expiry: {type: Date, required: true},
@@ -10,7 +10,7 @@ var contractSchema = new Schema({
   updateTimestamp: Date
 });
 
-contractSchema.pre('save', function(next) {
+instrumentSchema.pre('save', function(next) {
   const monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN",
     "JUL", "AUG", "SEP", "OKT", "NOV", "DEC"];
 
@@ -20,7 +20,7 @@ contractSchema.pre('save', function(next) {
   next();
 });
 
-contractSchema.pre('save', function(next) {
+instrumentSchema.pre('save', function(next) {
   var currentDate = new Date();
   this.updateTimestamp = currentDate;
   if (!this.createTimestamp) {
@@ -29,4 +29,4 @@ contractSchema.pre('save', function(next) {
   next();
 });
 
-module.exports = mongoose.model('Contract', contractSchema);
+module.exports = mongoose.model('Instrument', instrumentSchema);

@@ -1,39 +1,39 @@
 var express = require('express');
 var router = express.Router();
-var Contract = require('../models/contract');
+var Instrument = require('../models/instrument');
 
 router.get('/', function(req, res){
-  Contract.find({}, function(err, contacts) {
+  Instrument.find({}, function(err, instruments) {
     if (err) {
       res.status(500).json({'error': err})
     } else {
-      res.json(contacts);
+      res.json(instruments);
     }
   });
 });
 
 router.post('/', function(req, res){
-  var contract = new Contract({
+  var instrument = new Instrument({
     underlying: req.body.underlying,
     expiry: req.body.expiry
   });
-  contract.save(function(err) {
+  instrument.save(function(err) {
     if (err) {
       res.status(500).json({'error': err})
     } else {
-      res.json(contract);
+      res.json(instrument);
     }
   });
 });
 
 router.get('/:id', function(req, res){
-  Contract.findById(req.params.id, function(err, contract) {
+  Instrument.findById(req.params.id, function(err, instrument) {
     if (err) {
       res.status(500).json({'error': err})
-    } else if (contract) {
-      res.json(contract);
+    } else if (instrument) {
+      res.json(instrument);
     }  else {
-      res.status(404).send();  // No contract found
+      res.status(404).send();  // No instrument found
     }
   });
 });

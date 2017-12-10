@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var Order = require('../models/order');
-var Contract = require('../models/contract');
+var Instrument = require('../models/instrument');
 
 router.get('/', function(req, res){
   Order.find({}, function(err, orders) {
@@ -14,9 +14,9 @@ router.get('/', function(req, res){
 });
 
 router.post('/', function(req, res){
-  Contract.findById(req.body.contract, function(err, contract) {
-    if (contract) {
-      createOrder(contract, req, function(err, order) {
+  Instrument.findById(req.body.instrument, function(err, instrument) {
+    if (instrument) {
+      createOrder(instrument, req, function(err, order) {
         if (err) {
           res.status(500).json({'error': err})
         } else {
@@ -24,9 +24,9 @@ router.post('/', function(req, res){
         }
       });
     } else {
-      Contract.findOne({name: req.body.contract}, function(err, contract) {
-        if (contract) {
-          createOrder(contract, req, function(err, order) {
+      Instrument.findOne({name: req.body.instrument}, function(err, instrument) {
+        if (instrument) {
+          createOrder(instrument, req, function(err, order) {
             if (err) {
               res.status(500).json({'error': err})
             } else {
@@ -34,17 +34,17 @@ router.post('/', function(req, res){
             }
           });
         } else {
-          res.status(500).json({'error': 'Invalid contract.'});
+          res.status(500).json({'error': 'Invalid instrument.'});
         }
       });
     }
   });
 });
 
-function createOrder(contract, req, callback) {
+function createOrder(instrument, req, callback) {
   var order = new Order({
     user: req.auth.user._id,
-    contract: contract._id,
+    instrument: instrument._id,
     side: req.body.side,
     price: req.body.price,
     quantity: req.body.quantity

@@ -4,7 +4,7 @@ var ObjectId = Schema.Types.ObjectId;
 
 var orderSchema = new Schema({
   user: {type: ObjectId, required: true},
-  contract: {type: ObjectId, required: true},
+  instrument: {type: ObjectId, required: true},
   side: {type: String, enum: ['Buy', 'Sell'], required: true},
   price: {type: Number, required: true},
   quantity: {type: Number, required: true},
