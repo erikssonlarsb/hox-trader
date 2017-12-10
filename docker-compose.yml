@@ -1,0 +1,19 @@
+version: "2"
+services:
+  web:
+    container_name: hox-trader
+    restart: always
+    build: .
+    environment:
+      PORT: 4000
+      DATABASE: mongodb:27017
+    ports:
+      - '4000:4000'
+    depends_on:
+      - mongo
+  mongo:
+    container_name: mongodb
+    image: mongo:latest
+    command: mongod --port 27017 --bind_ip_all
+    ports:
+      - '27017:27017'
