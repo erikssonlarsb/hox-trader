@@ -3,10 +3,10 @@ var Schema = mongoose.Schema;
 var ObjectId = Schema.Types.ObjectId;
 
 var tradeSchema = new Schema({
-  order: {type: ObjectId, required: true},
-  user: {type: ObjectId, required: true},
-  counterparty: {type: ObjectId, required: true},
-  instrument: {type: ObjectId, required: true},
+  order: {type: ObjectId, ref: 'Order', required: true},
+  user: {type: ObjectId, ref: 'User', required: true},
+  counterparty: {type: ObjectId, ref: 'User', required: true},
+  instrument: {type: ObjectId, ref: 'Instrument', required: true},
   side: {type: String, enum: ['BUY', 'SELL'], required: true},
   price: {type: Number, required: true},
   quantity: {type: Number, required: true},

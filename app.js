@@ -12,8 +12,10 @@ app.use(bodyParser.json());
 */
 app.use('/authentication', require('./handlers/authentication'));
 app.use('/users', isAuthenticated, require('./handlers/users'));
+app.use('/roles', isAuthenticated, require('./handlers/roles'));
 app.use('/instruments', isAuthenticated, require('./handlers/instruments'));
 app.use('/orders', isAuthenticated, require('./handlers/orders'));
+app.use('/trades', isAuthenticated, require('./handlers/trades'));
 
 mongoose.connect(config.database, function(err) {
   if (err) {

@@ -1,11 +1,14 @@
 var express = require('express');
 var router = express.Router();
+var mongoose = require('mongoose');
 var Order = require('../models/order');
 var Trade = require('../models/trade');
 var Instrument = require('../models/instrument');
 
 router.get('/', function(req, res){
-  Order.find({}, function(err, orders) {
+  Order.find({})
+  .populate('instrument')
+  .exec(function(err, orders) {
     if (err) {
       res.status(500).json({'error': err});
     } else {
@@ -15,37 +18,36 @@ router.get('/', function(req, res){
 });
 
 router.post('/', function(req, res){
-  Instrument.findById(req.body.instrument, function(err, instrument) {
-    if (instrument) {
-      createOrder(instrument, req, function(err, order) {
-        if (err) {
-          res.status(500).json({'error': err})
-        } else {
-          res.json(order);
-        }
-      });
-    } else {
-      Instrument.findOne({name: req.body.instrument}, function(err, instrument) {
-        if (instrument) {
-          createOrder(instrument, req, function(err, order) {
-            if (err) {
-              res.status(500).json({'error': err})
-            } else {
-              res.json(order);
-            }
-          });
-        } else {
-          res.status(500).json({'error': 'Invalid instrument.'});
-        }
-      });
-    }
-  });
+  if (!mongoose.Types.ObjectId.isValid(req.body.instrument)) {
+    Instrument.findOne({name: req.body.instrument}, function(err, instrument) {
+      if (instrument) {
+        req.body.instrument = instrument._id;
+        createOrder(req, function(err, order) {
+          if (err) {
+            res.status(500).json({'error': err});
+          } else {
+            res.json(order);
+          }
+        });
+      } else {
+        res.status(500).json({'error': "Instrument not found."});
+      }
+    });
+  } else {
+    createOrder(req, function(err, order) {
+      if (err) {
+        res.status(500).json({'error': err});
+      } else {
+        res.json(order);
+      }
+    });
+  }
 });
 
-function createOrder(instrument, req, callback) {
+function createOrder(req, callback) {
   var order = new Order({
     user: req.auth.user._id,
-    instrument: instrument._id,
+    instrument: req.body.instrument,
     side: req.body.side,
     price: req.body.price,
     quantity: req.body.quantity,
@@ -128,7 +130,9 @@ function createOrder(instrument, req, callback) {
 };
 
 router.get('/:id', function(req, res){
-  Order.findById(req.params.id, function(err, order) {
+  Order.findById(req.params.id)
+  .populate('instrument')
+  .exec(function(err, order) {
     if (err) {
       res.status(500).json({'error': err})
     } else if (order) {
