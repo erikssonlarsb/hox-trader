@@ -1,7 +1,7 @@
 FROM node:argon
-RUN mkdir /app
-WORKDIR /app
-COPY package.json /app
+RUN mkdir /server
+WORKDIR /server
+COPY package.json /server
 RUN npm install --quiet
-COPY . /app
+COPY . /server
 CMD ["npm", "start"]

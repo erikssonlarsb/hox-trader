@@ -10,12 +10,12 @@ app.use(bodyParser.json());
 /*
 * Routes
 */
-app.use('/authentication', require('./handlers/authentication'));
-app.use('/users', authorize, require('./handlers/users'));
-app.use('/roles', authorize, require('./handlers/roles'));
-app.use('/instruments', authorize, require('./handlers/instruments'));
-app.use('/orders', authorize, require('./handlers/orders'));
-app.use('/trades', authorize, require('./handlers/trades'));
+app.use('/api/authentication', require('./handlers/authentication'));
+app.use('/api/users', authorize, require('./handlers/users'));
+app.use('/api/roles', authorize, require('./handlers/roles'));
+app.use('/api/instruments', authorize, require('./handlers/instruments'));
+app.use('/api/orders', authorize, require('./handlers/orders'));
+app.use('/api/trades', authorize, require('./handlers/trades'));
 
 mongoose.connect(config.database, function(err) {
   if (err) {

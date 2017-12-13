@@ -36,7 +36,7 @@ function authenticate(req) {
 function checkPermissions(req) {
   return new Promise(function(resolve, reject) {
     var permission = req.auth.user.role.permissions.find(function(permission) {
-      if (permission.resource == req.baseUrl.replace('/','')) {
+      if (permission.resource == req.baseUrl.replace('/api/','')) {
         return true;
       }
     });
