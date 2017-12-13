@@ -3,7 +3,7 @@ services:
   web:
     container_name: hox-trader
     restart: always
-    build: .
+    build: ./hox-server
     environment:
       PORT: 4000
       DATABASE: mongodb:27017
