@@ -12,7 +12,6 @@ router.post('/', function(req, res){
     if (err) {
       res.status(500).json({'error': err})
     } else {
-      console.log(user);
       if (!user) {
         res.status(401).json({message: 'Authentication failed. User not found.'});
       } else {
