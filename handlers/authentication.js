@@ -5,12 +5,14 @@ var config = require('../config');
 var User = require('../models/user');
 
 router.post('/', function(req, res){
-  User.findOne({
-    username: req.body.username
-  }, function(err, user) {
+  User.findOne({username: req.body.username})
+  .populate('role')
+  .populate('isAdmin')
+  .exec(function(err, user) {
     if (err) {
       res.status(500).json({'error': err})
     } else {
+      console.log(user);
       if (!user) {
         res.status(401).json({message: 'Authentication failed. User not found.'});
       } else {

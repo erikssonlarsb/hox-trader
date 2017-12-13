@@ -6,7 +6,11 @@ var Trade = require('../models/trade');
 var Instrument = require('../models/instrument');
 
 router.get('/', function(req, res){
-  Order.find({})
+  var query = {};
+  if (!req.auth.user.role.isAdmin) {
+    query.user = req.auth.user._id;
+  }
+  Order.find(query)
   .populate('instrument')
   .exec(function(err, orders) {
     if (err) {
@@ -130,7 +134,11 @@ function createOrder(req, callback) {
 };
 
 router.get('/:id', function(req, res){
-  Order.findById(req.params.id)
+  var query = {_id: req.params.id};
+  if (!req.auth.user.role.isAdmin) {
+    query.user = req.auth.user._id;
+  }
+  Order.findOne(query)
   .populate('instrument')
   .exec(function(err, order) {
     if (err) {

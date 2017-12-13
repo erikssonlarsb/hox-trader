@@ -2,7 +2,7 @@ var app = require('express')();
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var config = require('./config');
-var isAuthenticated = require('./utils/isAuthenticated');
+var authorize = require('./utils/authorize');
 
 app.use(bodyParser.urlencoded({extended: false}));  // Form for authentication
 app.use(bodyParser.json());
@@ -11,11 +11,11 @@ app.use(bodyParser.json());
 * Routes
 */
 app.use('/authentication', require('./handlers/authentication'));
-app.use('/users', isAuthenticated, require('./handlers/users'));
-app.use('/roles', isAuthenticated, require('./handlers/roles'));
-app.use('/instruments', isAuthenticated, require('./handlers/instruments'));
-app.use('/orders', isAuthenticated, require('./handlers/orders'));
-app.use('/trades', isAuthenticated, require('./handlers/trades'));
+app.use('/users', authorize, require('./handlers/users'));
+app.use('/roles', authorize, require('./handlers/roles'));
+app.use('/instruments', authorize, require('./handlers/instruments'));
+app.use('/orders', authorize, require('./handlers/orders'));
+app.use('/trades', authorize, require('./handlers/trades'));
 
 mongoose.connect(config.database, function(err) {
   if (err) {

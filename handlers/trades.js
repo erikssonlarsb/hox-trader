@@ -3,7 +3,11 @@ var router = express.Router();
 var Trade = require('../models/trade');
 
 router.get('/', function(req, res){
-  Trade.find({})
+  var query = {};
+  if (!req.auth.user.role.isAdmin) {
+    query.user = req.auth.user._id;
+  }
+  Trade.find(query)
   .populate('order')
   .populate('user')
   .populate('counterparty', 'name email phone')
@@ -18,7 +22,11 @@ router.get('/', function(req, res){
 });
 
 router.get('/:id', function(req, res){
-  Trade.findById(req.params.id)
+  var query = {_id: req.params.id};
+  if (!req.auth.user.role.isAdmin) {
+    query.user = req.auth.user._id;
+  }
+  Trade.findOne(query)
   .populate('order')
   .populate('user')
   .populate('counterparty', 'name email phone')

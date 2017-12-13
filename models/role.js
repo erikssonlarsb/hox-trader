@@ -3,6 +3,7 @@ var Schema = mongoose.Schema;
 
 var permissionSchema = new Schema({
   _id : false,
+  isAdmin: Boolean,
   resource: {type: String, required: true},
   methods: {type: [String], enum: ['GET', 'POST', 'PUT', 'DELETE'], required: true}
 });

@@ -5,7 +5,11 @@ var User = require('../models/user');
 var Role = require('../models/role');
 
 router.get('/', function(req, res){
-  User.find({})
+  var query = {};
+  if (!req.auth.user.role.isAdmin) {
+    query._id = req.auth.user._id;
+  }
+  User.find(query)
   .populate('role')
   .exec(function(err, users) {
     if (err) {
@@ -63,7 +67,11 @@ function createUser(req, callback) {
 }
 
 router.get('/:id', function(req, res){
-  User.findById(req.params.id)
+  var query = {_id: req.params.id};
+  if (!req.auth.user.role.isAdmin) {
+    query._id = req.auth.user._id;
+  }
+  User.findOne(query)
   .populate('role')
   .exec(function(err, user) {
     if (err) {
