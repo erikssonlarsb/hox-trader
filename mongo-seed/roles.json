@@ -1,0 +1,86 @@
+[
+  {
+      "_id" : ObjectId("000000000000000000000001"),
+      "__v" : NumberInt(0),
+      "createTimestamp" : ISODate("1970-01-01T00:00:00.000+0000"),
+      "name" : "superadmin",
+      "isAdmin" : true,
+      "permissions" : [
+          {
+              "resource" : "instruments",
+              "methods" : [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "DELETE"
+              ]
+          },
+          {
+              "resource" : "orders",
+              "methods" : [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "DELETE"
+              ]
+          },
+          {
+              "resource" : "trades",
+              "methods" : [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "DELETE"
+              ]
+          },
+          {
+              "resource" : "users",
+              "methods" : [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "DELETE"
+              ]
+          },
+          {
+              "resource" : "roles",
+              "methods" : [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "DELETE"
+              ]
+          }
+      ]
+  },
+  {
+      "_id" : ObjectId("000000000000000000000002"),
+      "__v" : NumberInt(0),
+      "createTimestamp" : ISODate("1970-01-01T00:00:00.000+0000"),
+      "name" : "trader",
+      "isAdmin" : false,
+      "permissions" : [
+          {
+              "resource" : "instruments",
+              "methods" : [
+                  "GET"
+              ]
+          },
+          {
+              "resource" : "orders",
+              "methods" : [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "DELETE"
+              ]
+          },
+          {
+              "resource" : "trades",
+              "methods" : [
+                  "GET"
+              ]
+          }
+      ]
+  }
+]

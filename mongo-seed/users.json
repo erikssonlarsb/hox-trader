@@ -1,0 +1,24 @@
+[
+  {
+    "_id" : ObjectId("000000000000000000000003"),
+    "__v" : NumberInt(0),
+    "createTimestamp" : ISODate("1970-01-01T00:00:00.000+0000"),
+    "name" : "Admin One",
+    "role" : ObjectId("000000000000000000000001"),
+    "username" : "admin1",
+    "password" : "admin1",
+    "email" : "admin1@hoxtrader.com",
+    "phone" : "555-236-461"
+  },
+  {
+    "_id" : ObjectId("000000000000000000000004"),
+    "__v" : NumberInt(0),
+    "createTimestamp" : ISODate("1970-01-01T00:00:00.000+0000"),
+    "name" : "Trader One",
+    "role" : ObjectId("000000000000000000000002"),
+    "username" : "trader1",
+    "password" : "trader1",
+    "email" : "trader1@hoxtrader.com",
+    "phone" : "555-872-3371"
+  }
+]

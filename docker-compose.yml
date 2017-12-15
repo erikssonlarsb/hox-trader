@@ -10,10 +10,17 @@ services:
     ports:
       - '4000:4000'
     depends_on:
-      - mongo
-  mongo:
-    container_name: mongodb
+      - mongodb
+  mongodb:
     image: mongo:latest
     command: mongod --port 27017 --bind_ip_all
     ports:
       - '27017:27017'
+  mongo-seed:
+    image: mongo
+    command: bash -c
+             "mongoimport --host mongodb --db test --collection roles --type json --file /roles.json --jsonArray &&
+              mongoimport --host mongodb --db test --collection users --type json --file /users.json --jsonArray"
+    volumes:
+      - ./mongo-seed/roles.json:/roles.json
+      - ./mongo-seed/users.json:/users.json
