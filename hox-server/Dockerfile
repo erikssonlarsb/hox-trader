@@ -1,4 +1,4 @@
-FROM node:argon
+FROM node:latest
 RUN mkdir /server
 WORKDIR /server
 COPY package.json /server
