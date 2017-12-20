@@ -1,7 +1,12 @@
 version: "2"
 services:
-  web:
-    container_name: hox-trader
+  client:
+    build: ./hox-client
+    ports:
+      - '4200:4200'
+    depends_on:
+      - server
+  server:
     restart: always
     build: ./hox-server
     environment:

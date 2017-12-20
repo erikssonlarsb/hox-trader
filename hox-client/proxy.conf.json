@@ -1,0 +1,6 @@
+{
+  "/api/*": {
+    "target": "http://server:4000",
+    "secure": false
+  }
+}
