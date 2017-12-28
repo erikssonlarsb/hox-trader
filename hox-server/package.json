@@ -1,27 +1,9 @@
 {
-  "name": "hox-trader",
-  "version": "0.0.1",
-  "description": "Online application for otc trading on the HOX index.",
-  "main": "index.js",
+  "name": "hox-server",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/erikssonlarsb/hox-trader.git"
-  },
-  "keywords": [
-    "hox",
-    "otc",
-    "trading"
-  ],
-  "author": "erikssonlarsb",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/erikssonlarsb/hox-trader/issues"
-  },
-  "homepage": "https://github.com/erikssonlarsb/hox-trader#readme",
   "dependencies": {
     "body-parser": "^1.18.2",
     "express": "^4.16.2",

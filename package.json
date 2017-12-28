@@ -1,0 +1,20 @@
+{
+  "name": "hox-trader",
+  "version": "0.0.1",
+  "description": "Online application for otc trading on the HOX index.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/erikssonlarsb/hox-trader.git"
+  },
+  "keywords": [
+    "hox",
+    "otc",
+    "trading"
+  ],
+  "author": "erikssonlarsb",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/erikssonlarsb/hox-trader/issues"
+  },
+  "homepage": "https://github.com/erikssonlarsb/hox-trader#readme",
+}
