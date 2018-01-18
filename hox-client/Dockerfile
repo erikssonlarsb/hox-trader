@@ -1,7 +1,6 @@
 FROM node:latest
 RUN mkdir /client
 WORKDIR /client
-COPY package.json /client
-RUN npm install
 COPY . /client
+RUN npm install --quiet
 CMD ["npm", "start"]

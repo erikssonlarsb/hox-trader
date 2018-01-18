@@ -17,14 +17,16 @@ app.use('/api/instruments', authorize, require('./handlers/instruments'));
 app.use('/api/orders', authorize, require('./handlers/orders'));
 app.use('/api/trades', authorize, require('./handlers/trades'));
 
-mongoose.connect(config.database, function(err) {
+
+console.log('Connecting to database: %s.', config.database);
+mongoose.connect(config.database, {user: config.db_user, pass: config.db_password, auth: {authdb: config.db_auth}}, function(err) {
   if (err) {
-    console.log('Could not connect tot database %s, %s.', config.database, err);
+    console.log('Could not connect to database: %s.', err);
     process.exit(1);
   } else {
-    console.log('Hox-trader connected do database %s.', config.database);
+    console.log('Connected do database.');
     app.listen(config.port, function() {
-      console.log('Hox-trader running on port %s.', config.port);
+      console.log('Running on port: %s.', config.port);
     });
   }
 });
