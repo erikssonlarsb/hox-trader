@@ -1,26 +1,23 @@
-import { Component, Injectable, Injector } from '@angular/core';
-import { Http }  from '@angular/http';
+import { Component, OnInit } from '@angular/core';
+import { Router }  from '@angular/router';
+
+import { AuthService } from './services/auth/auth.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-  title = this.get();
-  constructor(private http: Http, private injector: Injector) {
-    console.log("test");
-  }
+export class AppComponent implements OnInit {
+  title = "HOX Trader";
 
-  get(): Promise<any> {
-    return this.http
-      .get("http://localhost:4000/api/users")
-      .toPromise()
-      .then(function(response) {
-        console.log(response);
-      })
-      .catch(function(err) {
-        console.log(err);
-      });
+  constructor(private authService: AuthService, private router: Router) {}
+
+  ngOnInit(): void {
+    this.authService.init().then(() => {
+      if(!this.authService.isAuthenticated()) {
+        this.router.navigate(['/login']);
+      }
+    })
   }
 }
