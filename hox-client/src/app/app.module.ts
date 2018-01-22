@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 
 import { RoutingModule } from './routing.module';
+import { MaterialModule } from './material.module';
 
 import { AuthService } from './services/auth/auth.service';
 
@@ -23,7 +24,8 @@ import { OverviewComponent } from './routes/overview/overview.component';
     BrowserModule,
     HttpModule,
     FormsModule,
-    RoutingModule
+    RoutingModule,
+    MaterialModule
   ],
   providers: [
     AuthService
