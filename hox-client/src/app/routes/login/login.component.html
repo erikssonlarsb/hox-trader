@@ -1,14 +1,26 @@
-<div>
-    <label>username:
-      <input [(ngModel)]="username" placeholder="username">
-    </label>
-</div>
-<div>
-    <label>password:
-      <input type="password" [(ngModel)]="password" placeholder="password">
-    </label>
-</div>
-<button
-  (click)="login()">
-  Logga in
-</button>
+<mat-card>
+  <form
+    class="login-container">
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Username"
+        name="username"
+        [(ngModel)]="username">
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Password"
+        name="password"
+        type="password"
+        [(ngModel)]="password">
+    </mat-form-field>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="login()">
+      Logga in
+    </button>
+  </form>
+</mat-card>
