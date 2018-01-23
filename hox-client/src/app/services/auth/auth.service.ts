@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs/Subject';
 import { Http, URLSearchParams }  from '@angular/http';
 
-import { Payload } from './payload';
+import { Payload, User } from './payload';
 
 @Injectable()
 export class AuthService {
   private token: string;
   private payload: Payload;
+  loginChanged = new Subject<boolean>();
+
   constructor(private http: Http) { }
 
   init(): Promise<void> {
@@ -14,10 +17,10 @@ export class AuthService {
       this.token = localStorage.getItem('token');
       if(this.token) {
         this.payload = this.getPayload(this.token);
-        this.isAuthenticated();
       }
+      this.loginChanged.next(this.isAuthenticated());
       resolve();
-    })
+    });
   }
 
   isAuthenticated(): boolean {
@@ -35,19 +38,36 @@ export class AuthService {
     let body = new URLSearchParams();
     body.append('username', username);
     body.append('password', password);
-      return this.http
-        .post(window.location.origin + "/api/authentication", body)
-        .toPromise()
-        .then((response) => {
-          var token = response.json().token;
-          localStorage.setItem('token', token);
-          this.token = token;
-          this.payload = this.getPayload(token);
-          return;
-        })
-        .catch(function(err) {
-          throw err.json();
-        });
+    return this.http
+      .post(window.location.origin + "/api/authentication", body)
+      .toPromise()
+      .then((response) => {
+        var token = response.json().token;
+        localStorage.setItem('token', token);
+        this.token = token;
+        this.payload = this.getPayload(token);
+        this.loginChanged.next(true);
+        return;
+      })
+      .catch(function(err) {
+        throw err.json();
+      });
+  }
+
+  logout(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      localStorage.removeItem('token');
+      this.loginChanged.next(false);
+      resolve();
+    });
+  }
+
+  getLoggedInUser(): User {
+    if(this.isAuthenticated()) {
+      return this.payload.user;
+    } else {
+      return null;
+    }
   }
 
   private getPayload(token: string): Payload {

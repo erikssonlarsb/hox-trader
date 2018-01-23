@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router }  from '@angular/router';
+import {Subscription} from 'rxjs/Subscription';
 
 import { AuthService } from './services/auth/auth.service';
 
@@ -9,15 +10,34 @@ import { AuthService } from './services/auth/auth.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  title = "HOX Trader";
+  subscription: Subscription;
+  loggedIn: boolean = false;
 
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
+
+    this.subscription = this.authService.loginChanged
+    .subscribe(
+      (loggedIn: boolean) => {
+        this.loggedIn = loggedIn;
+      }
+    )
+
     this.authService.init().then(() => {
       if(!this.authService.isAuthenticated()) {
         this.router.navigate(['/login']);
       }
     })
+  }
+
+  logout(): void {
+    this.authService.logout()
+      .then(() => {
+        this.router.navigate(['/login']);
+      })
+      .catch(function(err) {
+        console.log(err);
+      });
   }
 }

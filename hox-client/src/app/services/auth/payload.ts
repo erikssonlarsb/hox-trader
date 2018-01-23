@@ -8,7 +8,7 @@ export class Payload {
   }
 }
 
-class User {
+export class User {
   name: string;
   role: Role;
   email: string;
