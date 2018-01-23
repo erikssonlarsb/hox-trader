@@ -10,6 +10,7 @@ import { RoutingModule } from './routing.module';
 import { MaterialModule } from './material.module';
 
 import { AuthService } from './services/auth/auth.service';
+import { ApiService } from './services/api/api.service';
 
 import { LoginComponent } from './routes/login/login.component';
 import { OverviewComponent } from './routes/overview/overview.component';
@@ -30,7 +31,8 @@ import { OverviewComponent } from './routes/overview/overview.component';
     MaterialModule
   ],
   providers: [
-    AuthService
+    AuthService,
+    ApiService
   ],
   bootstrap: [AppComponent]
 })

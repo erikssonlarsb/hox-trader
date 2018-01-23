@@ -70,6 +70,14 @@ export class AuthService {
     }
   }
 
+  getToken(): string {
+    if(this.isAuthenticated()) {
+      return this.token;
+    } else {
+      return null;
+    }
+  }
+
   private getPayload(token: string): Payload {
     var base64Url = token.split('.')[1];
     var base64 = base64Url.replace('-', '+').replace('_', '/');
