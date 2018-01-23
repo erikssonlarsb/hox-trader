@@ -4,8 +4,10 @@
   left: 0;
 }
 
-.example-fill-remaining-space {
-  /* This fills the remaining space, by using flexbox.
-     Every toolbar row uses a flexbox row layout. */
+.toolbar-padding {
+  padding-top: 75px;
+}
+
+.flex-right {
   flex: 1 1 auto;
 }
