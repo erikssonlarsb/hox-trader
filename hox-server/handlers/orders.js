@@ -11,12 +11,32 @@ router.get('/', function(req, res){
     query.user = req.auth.user._id;
   }
   Order.find(query)
+  .populate('user')
   .populate('instrument')
   .exec(function(err, orders) {
     if (err) {
       res.status(500).json({'error': err});
     } else {
       res.json(orders);
+    }
+  });
+});
+
+router.get('/:id', function(req, res){
+  var query = {_id: req.params.id};
+  if (!req.auth.user.role.isAdmin) {
+    query.user = req.auth.user._id;
+  }
+  Order.findOne(query)
+  .populate('user')
+  .populate('instrument')
+  .exec(function(err, order) {
+    if (err) {
+      res.status(500).json({'error': err})
+    } else if (order) {
+      res.json(order);
+    } else {
+      res.status(404).send();  // No order found
     }
   });
 });
@@ -132,23 +152,5 @@ function createOrder(req, callback) {
     });
   })
 };
-
-router.get('/:id', function(req, res){
-  var query = {_id: req.params.id};
-  if (!req.auth.user.role.isAdmin) {
-    query.user = req.auth.user._id;
-  }
-  Order.findOne(query)
-  .populate('instrument')
-  .exec(function(err, order) {
-    if (err) {
-      res.status(500).json({'error': err})
-    } else if (order) {
-      res.json(order);
-    } else {
-      res.status(404).send();  // No order found
-    }
-  });
-});
 
 module.exports = router
