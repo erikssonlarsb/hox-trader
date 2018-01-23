@@ -3,7 +3,7 @@ import { Http, URLSearchParams, Headers, RequestOptions }  from '@angular/http';
 
 import { AuthService } from '../../services/auth/auth.service';
 
-import { Instrument, Order, Trade } from '../../models/index';
+import { Instrument, Order, ORDER_SIDE, Trade } from '../../models/index';
 
 @Injectable()
 export class ApiService {
@@ -20,6 +20,16 @@ export class ApiService {
       .catch(this.handleError);
   }
 
+  getInstrument(id: string): Promise<Instrument> {
+    let headers = new Headers({'Authorization': 'Bearer ' + this.authService.getToken()});
+    let options = new RequestOptions({ headers: headers});
+    return this.http
+      .get(`${window.location.origin}/api/instruments/${id}`, options)
+      .toPromise()
+      .then(response => new Instrument(response.json()))
+      .catch(this.handleError);
+  }
+
   getOrders(params: URLSearchParams = new URLSearchParams()): Promise<Order[]> {
     let headers = new Headers({'Authorization': 'Bearer ' + this.authService.getToken()});
     let options = new RequestOptions({ headers: headers, search: params });
@@ -27,6 +37,24 @@ export class ApiService {
       .get(`${window.location.origin}/api/orders`, options)
       .toPromise()
       .then(response => response.json().map(json => new Order(json)))
+      .catch(this.handleError);
+  }
+
+  postOrder(instrument: string, side: ORDER_SIDE, quantity: number, price: number): Promise<Order> {
+    let body = {
+      instrument: instrument,
+      side: side,
+      quantity: quantity,
+      price: price
+    }
+
+    console.log(body);
+    let headers = new Headers({'Authorization': 'Bearer ' + this.authService.getToken()});
+    let options = new RequestOptions({ headers: headers});
+    return this.http
+      .post(`${window.location.origin}/api/orders`, body, options)
+      .toPromise()
+      .then(response => new Order(response.json()))
       .catch(this.handleError);
   }
 

@@ -1,6 +1,7 @@
 import { Instrument } from './instrument';
 
 export class Order {
+  id: string;
   user: string;
   instrument: Instrument;
   side: ORDER_SIDE;
@@ -12,6 +13,7 @@ export class Order {
   updateTimestamp: Date;
 
   constructor(json) {
+    this.id = json._id;
     this.user = json.user;
     this.instrument = new Instrument(json.instrument);
     this.side = json.side;
@@ -24,12 +26,12 @@ export class Order {
   }
 }
 
-enum ORDER_SIDE {
+export enum ORDER_SIDE {
   BUY = "BUY",
   SELL = "SELL"
 }
 
-enum ORDER_STATUS {
+export enum ORDER_STATUS {
   ACTIVE = "ACTIVE",
   WITHDRAWN = "WITHDRAWN",
   TRADED = "TRADED"

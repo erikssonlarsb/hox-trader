@@ -1,4 +1,5 @@
 export class Instrument {
+  id: string;
   name: string;
   underlying: string;
   expiry: Date;
@@ -6,6 +7,7 @@ export class Instrument {
   updateTimestamp: Date;
 
   constructor(json) {
+    this.id = json._id;
     this.name = json.name;
     this.underlying = json.underlying;
     this.expiry = new Date(json.expiry);

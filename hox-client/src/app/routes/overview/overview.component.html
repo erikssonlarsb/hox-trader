@@ -5,7 +5,7 @@ Welcome {{ user.name }}!
     Market
   </mat-card-title>
   <mat-table #table [dataSource]="instruments">
-    
+
     <ng-container matColumnDef="name">
       <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
       <mat-cell *matCellDef="let element"> {{ element.name }} </mat-cell>
@@ -17,7 +17,7 @@ Welcome {{ user.name }}!
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="instrumentColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: instrumentColumns;"></mat-row>
+    <mat-row class="row-clickable" *matRowDef="let instrument; columns: instrumentColumns;" [routerLink]="['/order/'+instrument.id]"></mat-row>
   </mat-table>
 </mat-card>
 

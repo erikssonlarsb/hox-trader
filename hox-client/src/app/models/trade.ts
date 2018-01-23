@@ -1,18 +1,20 @@
-import { Order } from './order';
+import { Order, ORDER_SIDE } from './order';
 import { Instrument } from './instrument';
 
 export class Trade {
+  id: string;
   order: Order;
   user: string;
   counterparty: string;
   instrument: Instrument;
-  side: TRADE_SIDE;
+  side: ORDER_SIDE;
   price: number;
   quantity: number;
   createTimestamp: Date;
   updateTimestamp: Date;
 
   constructor(json) {
+    this.id = json._id;
     this.order = new Order(json.order);
     this.user = json.user;
     this.counterparty = json.counterparty;
@@ -23,9 +25,4 @@ export class Trade {
     this.createTimestamp = new Date(json.createTimestamp);
     this.updateTimestamp = new Date(json.updateTimestamp);
   }
-}
-
-enum TRADE_SIDE {
-  BUY = "BUY",
-  SELL = "SELL"
 }

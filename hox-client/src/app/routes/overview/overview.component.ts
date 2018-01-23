@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { MatTableDataSource } from '@angular/material';
 
 import { AuthService } from '../../services/auth/auth.service';
@@ -49,5 +50,9 @@ export class OverviewComponent  implements OnInit  {
       .catch(function(err) {
         console.log(err);
       });
+  }
+
+  clickInstrument(instrument: Instrument): void {
+    console.log(instrument);
   }
 }
