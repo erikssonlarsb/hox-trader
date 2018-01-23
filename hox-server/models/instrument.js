@@ -15,7 +15,7 @@ instrumentSchema.pre('save', function(next) {
 
   var year = this.expiry.getFullYear();
   var month = monthNames[this.expiry.getMonth()];
-  this.name = this.underlying + month + year
+  this.name = this.underlying + " " + month + " " + year
   next();
 });
 
