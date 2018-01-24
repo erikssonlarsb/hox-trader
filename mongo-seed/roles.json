@@ -50,6 +50,12 @@
                   "PUT",
                   "DELETE"
               ]
+          },
+          {
+              "resource" : "orderdepths",
+              "methods" : [
+                  "GET"
+              ]
           }
       ]
   },
@@ -77,6 +83,12 @@
           },
           {
               "resource" : "trades",
+              "methods" : [
+                  "GET"
+              ]
+          },
+          {
+              "resource" : "orderdepths",
               "methods" : [
                   "GET"
               ]
