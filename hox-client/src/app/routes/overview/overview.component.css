@@ -5,3 +5,16 @@ mat-card {
 .row-clickable {
   cursor: pointer;
 }
+
+mat-header-cell[class*="price"],
+mat-header-cell[class*="Price"],
+mat-header-cell[class*="quantity"],
+mat-header-cell[class*="Quantity"],
+mat-cell[class*="price"],
+mat-cell[class*="Price"],
+mat-cell[class*="quantity"],
+mat-cell[class*="Quantity"] {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 10px;
+}

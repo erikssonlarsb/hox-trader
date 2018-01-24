@@ -6,7 +6,7 @@ import { AuthService } from '../../services/auth/auth.service';
 import { User } from '../../services/auth/payload';
 import { ApiService } from '../../services/api/api.service';
 
-import { Instrument, Order, Trade } from '../../models/index';
+import { OrderDepth, Order, Trade } from '../../models/index';
 
 @Component({
   selector: 'app-overview',
@@ -15,10 +15,10 @@ import { Instrument, Order, Trade } from '../../models/index';
 })
 export class OverviewComponent  implements OnInit  {
   private user: User;
-  instrumentColumns = ['name', 'expiry'];
+  orderDepthColumns = ['instrument', 'expiry', 'buyQuantity', 'buyPrice', 'sellPrice', 'sellQuantity'];
   orderColumns = ['instrument', 'side', 'price', 'quantity', 'tradedQuantity', 'status'];
   tradeColumns = ['instrument', 'side', 'price', 'quantity', 'counterparty'];
-  instruments: MatTableDataSource<Instrument>;
+  orderDepths: MatTableDataSource<OrderDepth>;
   orders: MatTableDataSource<Order>;
   trades: MatTableDataSource<Trade>;
 
@@ -27,9 +27,9 @@ export class OverviewComponent  implements OnInit  {
   ngOnInit(): void {
     this.user = this.authService.getLoggedInUser();
 
-    this.ApiService.getInstruments()
+    this.ApiService.getOrderDepths()
       .then((response) => {
-        this.instruments = new MatTableDataSource<Instrument>(response);
+        this.orderDepths = new MatTableDataSource<OrderDepth>(response);
       })
       .catch(function(err) {
         console.log(err);
@@ -52,7 +52,7 @@ export class OverviewComponent  implements OnInit  {
       });
   }
 
-  clickInstrument(instrument: Instrument): void {
-    console.log(instrument);
+  clickInstrument(orderDepth: OrderDepth): void {
+    console.log(orderDepth.instrument);
   }
 }

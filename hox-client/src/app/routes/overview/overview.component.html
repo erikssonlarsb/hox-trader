@@ -4,20 +4,40 @@ Welcome {{ user.name }}!
   <mat-card-title>
     Market
   </mat-card-title>
-  <mat-table #table [dataSource]="instruments">
+  <mat-table #table [dataSource]="orderDepths">
 
-    <ng-container matColumnDef="name">
-      <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{ element.name }} </mat-cell>
+    <ng-container matColumnDef="instrument">
+      <mat-header-cell *matHeaderCellDef>Instrument</mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{ element.instrument.name }} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="expiry">
       <mat-header-cell *matHeaderCellDef>Expiry</mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{ element.expiry | date }} </mat-cell>
+      <mat-cell *matCellDef="let element"> {{ element.instrument.expiry | date }} </mat-cell>
     </ng-container>
 
-    <mat-header-row *matHeaderRowDef="instrumentColumns"></mat-header-row>
-    <mat-row class="row-clickable" *matRowDef="let instrument; columns: instrumentColumns;" [routerLink]="['/order/'+instrument.id]"></mat-row>
+    <ng-container matColumnDef="buyQuantity">
+      <mat-header-cell *matHeaderCellDef>Buy Quantity</mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{ element.buy[0].quantity | number:'1.0-0' }} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="buyPrice">
+      <mat-header-cell *matHeaderCellDef>Buy Price</mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{ element.buy[0].price | number:'1.2-2' }} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="sellPrice">
+      <mat-header-cell *matHeaderCellDef>Sell Price</mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{ element.sell[0].price | number:'1.2-2' }} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="sellQuantity">
+      <mat-header-cell *matHeaderCellDef>Sell Quantity</mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{ element.sell[0].quantity | number:'1.0-0' }} </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="orderDepthColumns"></mat-header-row>
+    <mat-row class="row-clickable" *matRowDef="let orderDepth; columns: orderDepthColumns;" [routerLink]="['/order/'+orderDepth.instrument.id]"></mat-row>
   </mat-table>
 </mat-card>
 
@@ -39,17 +59,17 @@ Welcome {{ user.name }}!
 
     <ng-container matColumnDef="price">
       <mat-header-cell *matHeaderCellDef>Price</mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{ element.price }} </mat-cell>
+      <mat-cell *matCellDef="let element"> {{ element.price | number:'1.2-2' }} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="quantity">
       <mat-header-cell *matHeaderCellDef>Quantity</mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{ element.quantity }} </mat-cell>
+      <mat-cell *matCellDef="let element"> {{ element.quantity | number:'1.0-0' }} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="tradedQuantity">
       <mat-header-cell *matHeaderCellDef>Traded Quantity</mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{ element.tradedQuantity }} </mat-cell>
+      <mat-cell *matCellDef="let element"> {{ element.tradedQuantity | number:'1.0-0' }} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="status">
@@ -80,12 +100,12 @@ Welcome {{ user.name }}!
 
     <ng-container matColumnDef="price">
       <mat-header-cell *matHeaderCellDef>Price</mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{ element.price }} </mat-cell>
+      <mat-cell *matCellDef="let element"> {{ element.price | number:'1.2-2' }} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="quantity">
       <mat-header-cell *matHeaderCellDef>Quantity</mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{ element.quantity }} </mat-cell>
+      <mat-cell *matCellDef="let element"> {{ element.quantity | number:'1.0-0' }} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="counterparty">
