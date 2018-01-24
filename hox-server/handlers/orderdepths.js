@@ -18,7 +18,7 @@ router.get('/', function(req, res){
         }
         orderdepths[order.instrument._id].addOrder(order);
       });
-      res.json(orderdepths);
+      res.json(Object.keys(orderdepths).map(function(key) {return orderdepths[key];})); // Convert map to array
     }
   });
 });
