@@ -16,6 +16,7 @@ app.use('/api/roles', authorize, require('./handlers/roles'));
 app.use('/api/instruments', authorize, require('./handlers/instruments'));
 app.use('/api/orders', authorize, require('./handlers/orders'));
 app.use('/api/trades', authorize, require('./handlers/trades'));
+app.use('/api/orderdepths', authorize, require('./handlers/orderdepths'));
 
 
 console.log('Connecting to database: %s.', config.database);
