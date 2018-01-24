@@ -3,13 +3,13 @@ var Schema = mongoose.Schema;
 
 var permissionSchema = new Schema({
   _id : false,
-  isAdmin: Boolean,
   resource: {type: String, required: true},
   methods: {type: [String], enum: ['GET', 'POST', 'PUT', 'DELETE'], required: true}
 });
 
 var roleSchema = new Schema({
   name: {type: String, required: true, unique: true},
+  isAdmin: Boolean,
   permissions: {type: [permissionSchema], required: true},
   createTimestamp: Date,
   updateTimestamp: Date
