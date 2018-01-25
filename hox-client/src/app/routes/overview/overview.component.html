@@ -18,26 +18,26 @@ Welcome {{ user.name }}!
 
     <ng-container matColumnDef="buyQuantity">
       <mat-header-cell *matHeaderCellDef>Buy Quantity</mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{ element.buy[0].quantity | number:'1.0-0' }} </mat-cell>
+      <mat-cell *matCellDef="let element"> {{ element.buy[0]?.quantity | number:'1.0-0' }} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="buyPrice">
       <mat-header-cell *matHeaderCellDef>Buy Price</mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{ element.buy[0].price | number:'1.2-2' }} </mat-cell>
+      <mat-cell *matCellDef="let element"> {{ element.buy[0]?.price | number:'1.2-2' }} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="sellPrice">
       <mat-header-cell *matHeaderCellDef>Sell Price</mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{ element.sell[0].price | number:'1.2-2' }} </mat-cell>
+      <mat-cell *matCellDef="let element"> {{ element.sell[0]?.price | number:'1.2-2' }} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="sellQuantity">
       <mat-header-cell *matHeaderCellDef>Sell Quantity</mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{ element.sell[0].quantity | number:'1.0-0' }} </mat-cell>
+      <mat-cell *matCellDef="let element"> {{ element.sell[0]?.quantity | number:'1.0-0' }} </mat-cell>
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="orderDepthColumns"></mat-header-row>
-    <mat-row class="row-clickable" *matRowDef="let orderDepth; columns: orderDepthColumns;" [routerLink]="['/order/'+orderDepth.instrument.id]"></mat-row>
+    <mat-row class="row-clickable" *matRowDef="let element; columns: orderDepthColumns;" [routerLink]="['/order/'+element.instrument.id]"></mat-row>
   </mat-table>
 </mat-card>
 

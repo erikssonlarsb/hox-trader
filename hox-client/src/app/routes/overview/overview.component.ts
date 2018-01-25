@@ -51,8 +51,4 @@ export class OverviewComponent  implements OnInit  {
         console.log(err);
       });
   }
-
-  clickInstrument(orderDepth: OrderDepth): void {
-    console.log(orderDepth.instrument);
-  }
 }
