@@ -13,10 +13,6 @@ import { OrderDepth, Order, Trade } from '../../models/index';
   styleUrls: ['./overview.component.css']
 })
 export class OverviewComponent  implements OnInit  {
-  private user: User;
-  orderDepthColumns = ['instrument', 'expiry', 'buyQuantity', 'buyPrice', 'sellPrice', 'sellQuantity'];
-  orderColumns = ['instrument', 'side', 'price', 'quantity', 'tradedQuantity', 'status'];
-  tradeColumns = ['instrument', 'side', 'price', 'quantity', 'counterparty'];
   orderDepths: Array<OrderDepth>;
   orders: Array<Order>;
   trades: Array<Trade>;
@@ -24,11 +20,8 @@ export class OverviewComponent  implements OnInit  {
   constructor(private authService: AuthService, private ApiService: ApiService) { }
 
   ngOnInit(): void {
-    this.user = this.authService.getLoggedInUser();
-
     this.ApiService.getOrderDepths()
       .then((orderDepths) => {
-        this.orderDepths =orderDepths;
       })
       .catch(function(err) {
         console.log(err);

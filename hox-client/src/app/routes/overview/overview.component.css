@@ -1,1 +1,3 @@
-
+div[class*="col-"] {
+    padding-bottom: 30px;
+}

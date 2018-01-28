@@ -2,22 +2,30 @@ import { Instrument } from './instrument';
 
 export class OrderDepth {
   instrument: Instrument;
-  buy: Array<Level>;
-  sell: Array<Level>;
+  levels: Array<Level>;
+  totalBuy: number;
+  totalSell: number;
+  max: number;
 
   constructor(json) {
     this.instrument = new Instrument(json.instrument);
-    this.buy = json.buy.map(level => new Level(level));
-    this.sell = json.sell.map(level => new Level(level));
+    this.levels = json.levels.map(level => new Level(level));
+    this.totalBuy = json.totalBuy;
+    this.totalSell = json.totalSell;
+    this.max = json.max;
   }
 }
 
 class Level {
-  price: number;
-  quantity: number;
+  buyPrice: number;
+  buyQuantity: number;
+  sellPrice: number;
+  sellQuantity: number;
 
   constructor(json) {
-    this.price = json.price;
-    this.quantity = json.quantity;
+    this.buyPrice = json.buyPrice;
+    this.buyQuantity = json.buyQuantity;
+    this.sellPrice = json.sellPrice;
+    this.sellQuantity = json.sellQuantity;
   }
 }

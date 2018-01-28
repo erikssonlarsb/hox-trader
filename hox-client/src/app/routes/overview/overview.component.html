@@ -1,1 +1,75 @@
-Welcome {{ user.name }}!
+<div class="row">
+  <div class="col-sm-6" *ngFor="let orderDepth of orderDepths;">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">{{orderDepth.instrument.name}}</h5>
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <td scope="col">Quantity</td>
+              <td scope="col">Price</td>
+              <td scope="col" class="text-right">Buy</td>
+              <td scope="col">Sell</td>
+              <td scope="col" class="text-right">Price</td>
+              <td scope="col" class="text-right">Quantity</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let level of orderDepth.levels;">
+              <td>{{level.buyQuantity}}</td>
+              <td>{{level.buyPrice}}</td>
+              <td class="text-right">
+                <div class="progress">
+                  <div
+                    class="progress-bar"
+                    role="progressbar"
+                    [style.width.%]="(level.buyQuantity*100)/orderDepth.max"
+                    [style.margin-left.%]="100-(level.buyQuantity*100)/orderDepth.max">
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="progress">
+                  <div
+                    class="progress-bar bg-danger"
+                    role="progressbar"
+                    [style.width.%]="(level.sellQuantity*100)/orderDepth.max">
+                  </div>
+                </div>
+              </td>
+              <td class="text-right">{{level.sellPrice}}</td>
+              <td class="text-right">{{level.sellQuantity}}</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th scope="col">{{orderDepth.totalBuy}}</th>
+              <th scope="col"></th>
+              <th scope="col" class="text-right">
+                <div class="progress">
+                  <div
+                    class="progress-bar"
+                    role="progressbar"
+                    [style.width.%]="(orderDepth.totalBuy*100)/(orderDepth.totalBuy + orderDepth.totalSell)"
+                    [style.margin-left.%]="100-(orderDepth.totalBuy*100)/(orderDepth.totalBuy + orderDepth.totalSell)">
+                  </div>
+                </div>
+              </th>
+              <th scope="col">
+                <div class="progress">
+                  <div
+                    class="progress-bar bg-danger"
+                    role="progressbar"
+                    [style.width.%]="(orderDepth.totalSell*100)/(orderDepth.totalBuy + orderDepth.totalSell)">
+                  </div>
+                </div>
+              </th>
+              <th scope="col" class="text-right"></th>
+              <th scope="col" class="text-right">{{orderDepth.totalSell}}</th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

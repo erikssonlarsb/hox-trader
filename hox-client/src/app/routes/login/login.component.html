@@ -1,1 +1,26 @@
-
+<form class="form-signin">
+  <h2 class="form-signin-heading">Please sign in</h2>
+  <label for="inputUsername" class="sr-only">Username</label>
+  <input
+    name="username"
+    type="text"
+    class="form-control"
+    placeholder="Username"
+    required
+    autofocus
+    [(ngModel)]="username">
+  <label for="inputPassword" class="sr-only">Password</label>
+  <input
+    name="password"
+    type="password"
+    class="form-control"
+    placeholder="Password"
+    required
+    [(ngModel)]="password">
+  <button
+    class="btn btn-lg btn-primary btn-block"
+    type="submit"
+    (click)="login()">
+    Sign in
+  </button>
+</form>
