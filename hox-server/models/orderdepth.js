@@ -2,6 +2,8 @@ class OrderDepth {
   constructor(instrument) {
     this.instrument = instrument;
     this.levels = [];
+    this.total = 0;
+    this.max = 0;
   }
 
   addOrder(order) {
@@ -10,6 +12,9 @@ class OrderDepth {
 
     if(existing) {
       existing[order.side.toLowerCase() + 'Quantity'] += order.quantity;
+      this.total += order.quantity;
+      this.max = (this.max > order.quantity) ? this.max : order.quantity;
+
     } else {
       var buySide = this.levels.filter(function(level) {
         return level.buyPrice != null;
@@ -29,9 +34,12 @@ class OrderDepth {
         sellSide.push({quantity: order.quantity, price: order.price});
         sellSide.sort(function(levelA, levelB) {return levelA.price - levelB.price});
       }
-      var max = Math.max(buySide.length, sellSide.length);
+
+      var depth = Math.max(buySide.length, sellSide.length);
+      var max = 0;
+      var total = 0;
       var levels = [];
-      for (var i = 0; i < max; i++) {
+      for (var i = 0; i < depth; i++) {
         var buyPrice = null;
         var buyQuantity = null;
         var sellPrice = null;
@@ -39,14 +47,20 @@ class OrderDepth {
         if (buySide[i]) {
           buyPrice = buySide[i].price;
           buyQuantity = buySide[i].quantity;
+          total += buyQuantity;
+          max = (max > buyQuantity) ? max : buyQuantity;
         }
         if (sellSide[i]) {
           sellPrice = sellSide[i].price;
           sellQuantity = sellSide[i].quantity;
+          total += sellQuantity;
+          max = (max > sellQuantity) ? max : sellQuantity;
         }
         levels.push(new Level(buyPrice, buyQuantity, sellPrice, sellQuantity));
       }
       this.levels = levels;
+      this.total = total;
+      this.max = max;
     }
   }
 }
