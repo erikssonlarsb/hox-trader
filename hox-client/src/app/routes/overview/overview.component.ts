@@ -22,6 +22,7 @@ export class OverviewComponent  implements OnInit  {
   ngOnInit(): void {
     this.ApiService.getOrderDepths()
       .then((orderDepths) => {
+        this.orderDepths = orderDepths;
       })
       .catch(function(err) {
         console.log(err);
