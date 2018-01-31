@@ -16,6 +16,7 @@ import { LoginComponent } from './routes/login/login.component';
 import { OverviewComponent } from './routes/overview/overview.component';
 import { OrderComponent } from './routes/order/order.component';
 import { TransactionsComponent } from './routes/transactions/transactions.component';
+import { OrdersComponent } from './routes/orders/orders.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { TransactionsComponent } from './routes/transactions/transactions.compon
     LoginComponent,
     OverviewComponent,
     OrderComponent,
-    TransactionsComponent
+    TransactionsComponent,
+    OrdersComponent
   ],
   imports: [
     BrowserModule,

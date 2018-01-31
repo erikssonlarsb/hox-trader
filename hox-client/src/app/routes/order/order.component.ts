@@ -25,10 +25,16 @@ export class OrderComponent  implements OnInit  {
     this.route
       .paramMap
       .subscribe(params => {
+        console.log(params);
+        console.log(params.get('id'));
         if(params.get('id')) {  // Retrieve existing order
-          this.apiService.getOrder(params.get('instrument'))
+          this.apiService.getOrder(params.get('id'))
             .then((order) => {
               this.order = order;
+              this.instrument = order.instrument.name;
+              this.side = order.side;
+              this.quantity = order.quantity - order.tradedQuantity;
+              this.price = order.price;
             })
             .catch(function(err) {
               console.log(err);

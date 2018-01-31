@@ -1,0 +1,37 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">
+          Orders
+        </h5>
+        <div class="table-responsive">
+          <table class="table table-sm table-hover">
+            <thead>
+              <tr>
+                <td scope="col">Date</td>
+                <td scope="col">Instrument</td>
+                <td scope="col">Type</td>
+                <td scope="col">Quantity</td>
+                <td scope="col">Traded quantity</td>
+                <td scope="col">Price</td>
+                <td scope="col">Status</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="pointer" [routerLink]="['/order', order.id]" *ngFor="let order of orders;">
+                <td>{{order.updateTimestamp | date}}</td>
+                <td>{{order.instrument.name}}</td>
+                <td>{{order.side}}</td>
+                <td>{{order.quantity}}</td>
+                <td>{{order.tradedQuantity}}</td>
+                <td>{{order.price}}</td>
+                <td>{{order.status}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
