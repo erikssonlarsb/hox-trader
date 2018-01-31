@@ -10,6 +10,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'overview', component: OverviewComponent },
   { path: 'order', component: OrderComponent },
+  { path: 'order/:id', component: OrderComponent }
 
 ];
 

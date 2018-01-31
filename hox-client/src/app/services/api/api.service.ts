@@ -40,6 +40,17 @@ export class ApiService {
       .catch(this.handleError);
   }
 
+  getOrder(id: string): Promise<Order> {
+    let headers = new Headers({'Authorization': 'Bearer ' + this.authService.getToken()});
+    let options = new RequestOptions({ headers: headers});
+    return this.http
+      .get(`${window.location.origin}/api/orders/${id}`, options)
+      .toPromise()
+      .then(response => new Order(response.json()))
+      .catch(this.handleError);
+  }
+
+
   postOrder(instrument: string, side: ORDER_SIDE, quantity: number, price: number): Promise<Order> {
     let body = {
       instrument: instrument,
@@ -47,8 +58,6 @@ export class ApiService {
       quantity: quantity,
       price: price
     }
-
-    console.log(body);
     let headers = new Headers({'Authorization': 'Bearer ' + this.authService.getToken()});
     let options = new RequestOptions({ headers: headers});
     return this.http
@@ -79,6 +88,6 @@ export class ApiService {
   }
 
   private handleError(error: any): Promise<any> {
-    return Promise.reject(error.message || error);
+    return Promise.reject(error.json().error);
   }
 }

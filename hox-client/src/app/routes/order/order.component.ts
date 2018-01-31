@@ -11,31 +11,74 @@ import { Instrument, Order, ORDER_SIDE } from '../../models/index';
   styleUrls: ['./order.component.css']
 })
 export class OrderComponent  implements OnInit  {
-  instrument: Instrument;
+  instruments: Array<Instrument>;
+  instrument: string;
   side: ORDER_SIDE;
   quantity: number;
   price: number;
-  order: Order;
+  order: Order
+  error: string;
 
   constructor(private route: ActivatedRoute, private apiService: ApiService) { }
 
   ngOnInit(): void {
-    this.apiService.getInstrument(this.route.snapshot.paramMap.get('instrument'))
-      .then((instrument) => {
-        this.instrument = instrument;
-      })
-      .catch(function(err) {
-        console.log(err);
+    this.route
+      .paramMap
+      .subscribe(params => {
+        if(params.get('id')) {  // Retrieve existing order
+          this.apiService.getOrder(params.get('instrument'))
+            .then((order) => {
+              this.order = order;
+            })
+            .catch(function(err) {
+              console.log(err);
+            });
+        } else if(params.get('instrument')) {  // Populate details from router params
+          this.apiService.getInstrument(params.get('instrument'))
+            .then((instrument) => {
+              this.instrument = instrument.name;
+              this.instruments = [instrument];
+            })
+            .catch(function(err) {
+              console.log(err);
+            });
+          this.side = ORDER_SIDE[params.get('side')];
+          this.quantity = Number(params.get('quantity'));
+          this.price = Number(params.get('price'));
+        } else {  // Get all instruments for client to fill in order details
+          this.apiService.getInstruments()
+            .then((instruments) => {
+              this.instruments = instruments;
+            })
+            .catch(function(err) {
+              console.log(err);
+            });
+        }
       });
   }
 
+  //TODO: Should work by model binding
+  onSideChange(side): void {
+    this.side = side;
+  }
+
   placeOrder(): void {
-    this.apiService.postOrder(this.instrument.id, this.side, this.quantity, this.price)
+    this.error = null;  // Reset error message
+
+    //TODO: Should be form validation on required fields.
+    if(this.instrument == null) {
+      this.error = "No instrument selected";
+      return;
+    }
+    var instrumentId = this.instruments.filter(
+      instrument => instrument.name == this.instrument)[0].id;
+    this.apiService.postOrder(instrumentId, this.side, this.quantity, this.price)
       .then((order) => {
         this.order = order;
       })
-      .catch(function(err) {
-        console.log(err);
+      .catch((error) => {
+        console.log(error);
+        this.error = error.message;
       });
   }
 }

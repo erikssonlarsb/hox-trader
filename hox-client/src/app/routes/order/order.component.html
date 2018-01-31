@@ -1,1 +1,115 @@
-
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">
+          Order
+        </h5>
+        <div class="row">
+          <div class="col-md-12">
+            <form>
+              <div class="form-group">
+                <label for="instrument">Instrument</label>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fa fa-fw fa-newspaper-o" aria-hidden="true"></i></span>
+                  </div>
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="instrument"
+                    id="instrument"
+                    [typeahead]="instruments"
+                    [typeaheadMinLength]="0"
+                    typeaheadOptionField="name"
+                    placeholder="Click to search"
+                    [(ngModel)]="instrument"
+                    required />
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-12">
+                  <label>Side</label>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="custom-control custom-radio custom-control-inline">
+                        <input
+                          type="radio"
+                          class="custom-control-input"
+                          name="side"
+                          id="buy"
+                          (change)="onSideChange('BUY')"
+                          [checked]="side == 'BUY' ? true : false"
+                          required>
+                        <label class="custom-control-label" for="buy">Buy</label>
+                      </div>
+                      <div class="custom-control custom-radio custom-control-inline">
+                        <input
+                          type="radio"
+                          class="custom-control-input"
+                          name="side"
+                          id="sell"
+                          (change)="onSideChange('SELL')"
+                          [checked]="side == 'SELL' ? true : false"
+                          required>
+                        <label class="custom-control-label" for="sell">Sell</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="quantity">Quantity</label>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fa fa-fw fa-balance-scale" aria-hidden="true"></i></span>
+                    </div>
+                    <input
+                      type="number"
+                      class="form-control"
+                      name="quantity"
+                      id="quantity"
+                      [(ngModel)]="quantity"
+                      required />
+                  </div>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="price">Price</label>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fa fa-fw fa-money" aria-hidden="true"></i></span>
+                    </div>
+                    <input
+                      type="number"
+                      class="form-control"
+                      name="price"
+                      id="price"
+                      [(ngModel)]="price"
+                      required />
+                  </div>
+                </div>
+              </div>
+              <button
+                type="submit"
+                class="btn btn-lg btn-primary btn-block"
+                (click)="placeOrder()">
+                <i class="fa fa-paper-plane-o"></i> Submit
+              </button>
+            </form>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div [hidden]="!order" class="alert alert-success" role="alert">
+              {{order?.status}}
+            </div>
+            <div [hidden]="!error" class="alert alert-danger" role="alert">
+              {{error}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
