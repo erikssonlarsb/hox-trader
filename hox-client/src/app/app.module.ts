@@ -15,14 +15,15 @@ import { ApiService } from './services/api/api.service';
 import { LoginComponent } from './routes/login/login.component';
 import { OverviewComponent } from './routes/overview/overview.component';
 import { OrderComponent } from './routes/order/order.component';
-
+import { TransactionsComponent } from './routes/transactions/transactions.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     OverviewComponent,
-    OrderComponent
+    OrderComponent,
+    TransactionsComponent
   ],
   imports: [
     BrowserModule,

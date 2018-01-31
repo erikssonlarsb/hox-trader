@@ -16,7 +16,7 @@ export class OrderComponent  implements OnInit  {
   side: ORDER_SIDE;
   quantity: number;
   price: number;
-  order: Order
+  order: Order;
   error: string;
 
   constructor(private route: ActivatedRoute, private apiService: ApiService) { }
