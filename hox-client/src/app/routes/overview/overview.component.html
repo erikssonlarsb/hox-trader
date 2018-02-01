@@ -55,13 +55,13 @@
               <td class="text-right">
                 <a
                   [routerLink]="['/order', {instrument: orderDepth.instrument.id, side: 'BUY', quantity: level.sellQuantity, price: level.sellPrice}]">
-                  {{level.sellQuantity}}
+                  {{level.sellPrice}}
                 </a>
               </td>
               <td class="text-right">
                 <a
                   [routerLink]="['/order', {instrument: orderDepth.instrument.id, side: 'BUY', price: level.sellPrice}]">
-                  {{level.sellPrice}}
+                  {{level.sellQuantity}}
                 </a>
               </td>
             </tr>

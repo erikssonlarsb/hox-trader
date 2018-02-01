@@ -23,4 +23,19 @@ export class OrdersComponent implements OnInit  {
         console.log(err);
       });
   }
+
+  deleteOrder(id): void {
+    this.ApiService.deleteOrder(id)
+      .then(() => {
+        this.ApiService.getOrders()
+          .then((orders) => {
+            this.orders = orders;
+          })
+          .catch(function(err) {
+            console.log(err);
+          });
+      }).catch(function(err) {
+        console.log(err);
+      });
+  }
 }

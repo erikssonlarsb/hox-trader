@@ -67,6 +67,16 @@ export class ApiService {
       .catch(this.handleError);
   }
 
+  deleteOrder(id: string): Promise<any> {
+    let headers = new Headers({'Authorization': 'Bearer ' + this.authService.getToken()});
+    let options = new RequestOptions({ headers: headers});
+    return this.http
+      .delete(`${window.location.origin}/api/orders/${id}`, options)
+      .toPromise()
+      .then(response => response.json())
+      .catch(this.handleError);
+  }
+
   getTrades(params: URLSearchParams = new URLSearchParams()): Promise<Trade[]> {
     let headers = new Headers({'Authorization': 'Bearer ' + this.authService.getToken()});
     let options = new RequestOptions({ headers: headers, search: params });

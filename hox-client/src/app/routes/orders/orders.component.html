@@ -16,10 +16,11 @@
                 <td scope="col">Traded quantity</td>
                 <td scope="col">Price</td>
                 <td scope="col">Status</td>
+                <td scope="col"></td>
               </tr>
             </thead>
             <tbody>
-              <tr class="pointer" [routerLink]="['/order', order.id]" *ngFor="let order of orders;">
+              <tr *ngFor="let order of orders;">
                 <td>{{order.updateTimestamp | date}}</td>
                 <td>{{order.instrument.name}}</td>
                 <td>{{order.side}}</td>
@@ -27,6 +28,15 @@
                 <td>{{order.tradedQuantity}}</td>
                 <td>{{order.price}}</td>
                 <td>{{order.status}}</td>
+                <td>
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-danger btn-block"
+                    (click)="deleteOrder(order.id)"
+                    [hidden]="order.status != 'ACTIVE'">
+                    <i class="fa fa-trash"></i> Delete
+                  </button>
+                </td>
               </tr>
             </tbody>
           </table>

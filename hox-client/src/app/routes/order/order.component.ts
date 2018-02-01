@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { ApiService } from '../../services/api/api.service';
 
@@ -19,14 +19,12 @@ export class OrderComponent  implements OnInit  {
   order: Order;
   error: string;
 
-  constructor(private route: ActivatedRoute, private apiService: ApiService) { }
+  constructor(private router: Router, private route: ActivatedRoute, private apiService: ApiService) { }
 
   ngOnInit(): void {
     this.route
       .paramMap
       .subscribe(params => {
-        console.log(params);
-        console.log(params.get('id'));
         if(params.get('id')) {  // Retrieve existing order
           this.apiService.getOrder(params.get('id'))
             .then((order) => {
@@ -80,7 +78,7 @@ export class OrderComponent  implements OnInit  {
       instrument => instrument.name == this.instrument)[0].id;
     this.apiService.postOrder(instrumentId, this.side, this.quantity, this.price)
       .then((order) => {
-        this.order = order;
+        this.router.navigate(['/orders']);
       })
       .catch((error) => {
         console.log(error);
