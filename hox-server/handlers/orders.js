@@ -68,6 +68,26 @@ router.post('/', function(req, res){
   }
 });
 
+router.put('/:id', function(req, res){
+  modifyOrder(req, function(err, order) {
+    if (err) {
+      res.status(500).json({'error': err});
+    } else {
+      res.json(order);
+    }
+  });
+});
+
+router.delete('/:id', function(req, res){
+  deleteOrder(req, function(err, order) {
+    if (err) {
+      res.status(500).json({'error': err});
+    } else {
+      res.status(204).end();
+    }
+  });
+});
+
 function createOrder(req, callback) {
   var order = new Order({
     user: req.auth.user._id,
@@ -83,74 +103,134 @@ function createOrder(req, callback) {
     } else {
       callback(null, order);
     }
-  }).then(function() {
-    //  Match new order to existing to generate trades
-    var otherSide = order.side == 'BUY' ? 'SELL' : 'BUY';
-    Order.find({
-      instrument: order.instrument,
-      side: otherSide,
-      status: 'ACTIVE'
-    }).sort('updateTimestamp').exec(function (err, matchingOrders) {
-      if(err) {
-        console.log("Error finding order to match: %s.", err);
-      } else {
-        matchingOrders.some(function(matchingOrder) {
-          if ((order.side == 'BUY' && order.price >= matchingOrder.price) ||
-              (order.side == 'SELL' && order.price <= matchingOrder.price)) {
-            //  Orders match, create trades
-            var matchQuantity = Math.min(order.quantity, matchingOrder.quantity);
-
-            var trade = new Trade({
-              order: order._id,
-              user: order.user,
-              counterparty: matchingOrder.user,
-              instrument: order.instrument,
-              side: order.side,
-              price: matchingOrder.price,
-              quantity: matchQuantity
-            });
-
-            var matchingTrade = new Trade({
-              order: matchingOrder._id,
-              user: matchingOrder.user,
-              counterparty: order.user,
-              instrument: matchingOrder.instrument,
-              side: matchingOrder.side,
-              price: matchingOrder.price,
-              quantity: matchQuantity
-            });
-
-            matchingTrade.save(function(err) {
-              if (err) {
-                throw Error(err);
-              } else {
-                matchingOrder.tradedQuantity += matchQuantity;
-                matchingOrder.save(function(err) {
-                  if (err) {
-                    throw Error(err);
-                  }
-                });
-              }
-            }).then(
-              trade.save(function(err) {
-                if (err) {
-                  throw Error(err);
-                } else {
-                  order.tradedQuantity += matchQuantity;
-                  order.save(function(err) {
-                    if (err) {
-                      throw Error(err);
-                    }
-                    return order.quantity == 0;  // If filly filled, break loop
-                  });
-                };
-              })
-            );
-          }
-        });
-      }
-    });
   })
-};
+  .then(function() {
+    matchOrder(order);
+  });
+}
+
+function modifyOrder(req, callback) {
+  var query = {_id: req.params.id};
+  if (!req.auth.user.role.isAdmin) {
+    query.user = req.auth.user._id;
+  }
+  Order.findOne(query)
+  .populate('user')
+  .populate('instrument')
+  .exec(function(err, order) {
+    if (err) {
+      callback(err, null);
+    } else if (order) {
+      order.quantity = req.body.quantity;
+      order.price = req.body.price;
+
+      order.save(function(err) {
+        if (err) {
+          callback(err, null);
+        } else {
+          callback(null, order);
+        }
+      }).then(function() {
+        matchOrder(order);
+      });
+    } else {
+      callback("Order not found", null);
+    }
+  });
+}
+
+function deleteOrder(req, callback) {
+  var query = {_id: req.params.id};
+  if (!req.auth.user.role.isAdmin) {
+    query.user = req.auth.user._id;
+  }
+  Order.findOne(query)
+  .exec(function(err, order) {
+    if (err) {
+      callback(err, null);
+    } else if (order) {
+      if(order.status == 'ACTIVE') {
+        order.status = 'WITHDRAWN'
+      } else {
+        callback("Order not active", null);
+      }
+      order.save(function(err) {
+        if (err) {
+          callback(err, null);
+        } else {
+          callback(null, order);
+        }
+      });
+    } else {
+      callback("Order not found", null);
+    }
+  });
+}
+
+function matchOrder(order) {
+  var query = {
+    instrument: order.instrument,
+    status: 'ACTIVE',
+  }
+
+  if (order.side == 'BUY') {
+    query.side = 'SELL';
+    query.price = { "$lte": order.price };
+  } else {
+    query.side = 'BUY';
+    query.price = { "$gte": order.price };
+  }
+
+  Order.find(query).sort('modifyTimestamp').exec(function (err, matchingOrders) {
+    if(err) {
+      console.log("Error finding order to match: %s.", err);
+    } else {
+      for (let matchingOrder of matchingOrders) {
+        var matchQuantity = Math.min(
+          order.quantity - order.tradedQuantity,
+          matchingOrder.quantity - matchingOrder.tradedQuantity
+        );
+        var trade = new Trade({
+          order: order._id,
+          user: order.user,
+          counterparty: matchingOrder.user,
+          instrument: order.instrument,
+          side: order.side,
+          price: matchingOrder.price,
+          quantity: matchQuantity
+        });
+
+        var matchingTrade = new Trade({
+          order: matchingOrder._id,
+          user: matchingOrder.user,
+          counterparty: order.user,
+          instrument: matchingOrder.instrument,
+          side: matchingOrder.side,
+          price: matchingOrder.price,
+          quantity: matchQuantity
+        });
+
+        order.tradedQuantity += matchQuantity;
+        matchingOrder.tradedQuantity += matchQuantity;
+
+        trade.save()
+        .then(function() {
+          return matchingTrade.save();
+        })
+        .then(function() {
+          return order.save();
+        })
+        .then(function() {
+          return matchingOrder.save();
+        })
+
+        if(order.quantity == order.tradedQuantity) {
+          // order fully traded
+          break;
+        }
+      }
+    }
+  })
+}
 
 module.exports = router

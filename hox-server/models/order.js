@@ -11,13 +11,18 @@ var orderSchema = new Schema({
   tradedQuantity: {type: Number},
   status: {type: String, enum: ['ACTIVE', 'WITHDRAWN', 'TRADED']},
   createTimestamp: Date,
-  updateTimestamp: Date
+  updateTimestamp: Date,
+  modifyTimestamp: Date
 });
 
 orderSchema.pre('save', function(next) {
   var currentDate = new Date();
   if (this.isNew) {
     this.createTimestamp = currentDate;
+    this.modifyTimestamp = currentDate;
+  }
+  if (this.isModified('quantity') || this.isModified('price')) {
+      this.modifyTimestamp = currentDate;
   }
   this.updateTimestamp = currentDate;
   next();
