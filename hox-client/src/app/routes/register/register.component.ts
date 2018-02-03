@@ -20,7 +20,7 @@ export class RegisterComponent {
 
   constructor(private apiService: ApiService, private router: Router) { }
 
-  private register(): void {
+  register(): void {
     this.errorMessage = null;
     if(this.password == this.confirmPassword) {
       this.apiService.postRegistration(this.name, this.username, this.password, this.email, this.phone)

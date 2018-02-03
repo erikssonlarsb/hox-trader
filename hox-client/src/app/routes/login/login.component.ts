@@ -15,7 +15,7 @@ export class LoginComponent {
 
   constructor(private authService: AuthService, private router: Router) { }
 
-  private login(): void {
+  login(): void {
     this.errorMessage = null;
     this.authService.login(this.username, this.password)
       .then(() => {
