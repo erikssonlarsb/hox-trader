@@ -2,8 +2,8 @@
   "name": "hox-client",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --host 0.0.0.0 --proxy-config proxy.conf.prod.json",
-    "dev": "ng serve --prod --port 4300 --proxy-config proxy.conf.json",
+    "start": "ng serve --prod --host 0.0.0.0 --proxy-config proxy.conf.prod.json",
+    "dev": "ng serve --port 4300 --proxy-config proxy.conf.json",
     "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
