@@ -49,8 +49,8 @@ export class AuthService {
         this.loginChanged.next(true);
         return;
       })
-      .catch(function(err) {
-        throw err.json();
+      .catch((error) => {
+        return Promise.reject(error.json().message);
       });
   }
 

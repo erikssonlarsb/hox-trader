@@ -1,4 +1,4 @@
-.login-form {
+.register-form {
   max-width: 330px;
   padding: 15px;
   margin: 0 auto;
@@ -10,6 +10,6 @@
 button {
   margin-top: 10px;
 }
-.register {
-  text-align: center;
+.alert {
+  margin-top: 1rem;
 }

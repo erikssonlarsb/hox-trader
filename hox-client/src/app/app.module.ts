@@ -13,6 +13,7 @@ import { AuthService } from './services/auth/auth.service';
 import { ApiService } from './services/api/api.service';
 
 import { LoginComponent } from './routes/login/login.component';
+import { RegisterComponent } from './routes/register/register.component';
 import { OverviewComponent } from './routes/overview/overview.component';
 import { OrderComponent } from './routes/order/order.component';
 import { TransactionsComponent } from './routes/transactions/transactions.component';
@@ -22,6 +23,7 @@ import { OrdersComponent } from './routes/orders/orders.component';
   declarations: [
     AppComponent,
     LoginComponent,
+    RegisterComponent,
     OverviewComponent,
     OrderComponent,
     TransactionsComponent,

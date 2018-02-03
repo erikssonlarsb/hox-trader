@@ -10,6 +10,21 @@ export class ApiService {
 
   constructor(private http: Http, private authService: AuthService) { }
 
+  postRegistration(name: string, username: string, password: string, email: string, phone: string): Promise<any> {
+    let body = {
+      name: name,
+      username: username,
+      password: password,
+      email: email,
+      phone: phone
+    }
+    return this.http
+      .post(`${window.location.origin}/api/registration`, body)
+      .toPromise()
+      .then(response => response)
+      .catch(this.handleError);
+  }
+
   getInstruments(params: URLSearchParams = new URLSearchParams()): Promise<Instrument[]> {
     let headers = new Headers({'Authorization': 'Bearer ' + this.authService.getToken()});
     let options = new RequestOptions({ headers: headers, search: params });
@@ -98,6 +113,6 @@ export class ApiService {
   }
 
   private handleError(error: any): Promise<any> {
-    return Promise.reject(error.json().error);
+    return Promise.reject(error.json().error.errmsg);
   }
 }

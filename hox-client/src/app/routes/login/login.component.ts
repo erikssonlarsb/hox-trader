@@ -11,16 +11,18 @@ import { AuthService } from '../../services/auth/auth.service';
 export class LoginComponent {
   username: string;
   password: string;
+  errorMessage: string;
 
   constructor(private authService: AuthService, private router: Router) { }
 
   private login(): void {
+    this.errorMessage = null;
     this.authService.login(this.username, this.password)
       .then(() => {
         this.router.navigate(['/overview']);
       })
-      .catch(function(err) {
-        console.log(err);
+      .catch((error) => {
+        this.errorMessage = error;
       });
   }
 }

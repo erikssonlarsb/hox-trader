@@ -1,0 +1,114 @@
+<div class="register-form">
+  <form class="form-register">
+    <h2 class="form-register-heading">Register new user</h2>
+
+    <div class="form-group">
+      <label for="name">Name</label>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text"><i class="fa fa-fw fa-address-card" aria-hidden="true"></i></span>
+        </div>
+        <input
+          name="name"
+          type="text"
+          class="form-control"
+          placeholder="Your full name"
+          required
+          autofocus
+          [(ngModel)]="name">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="email">E-mail</label>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text"><i class="fa fa-fw fa-envelope" aria-hidden="true"></i></span>
+        </div>
+        <input
+          name="email"
+          type="email"
+          class="form-control"
+          placeholder="E-mail"
+          required
+          [(ngModel)]="email">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="phone">Phone</label>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text"><i class="fa fa-fw fa-phone" aria-hidden="true"></i></span>
+        </div>
+        <input
+          name="phone"
+          type="tel"
+          class="form-control"
+          placeholder="Phone"
+          required
+          [(ngModel)]="phone">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="username">Username</label>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text"><i class="fa fa-fw fa-user" aria-hidden="true"></i></span>
+        </div>
+        <input
+          name="username"
+          type="text"
+          class="form-control"
+          placeholder="Name used for logging in"
+          required
+          autofocus
+          [(ngModel)]="username">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text"><i class="fa fa-fw fa-lock" aria-hidden="true"></i></span>
+        </div>
+        <input
+          name="password"
+          type="password"
+          class="form-control"
+          placeholder="Password"
+          required
+          [(ngModel)]="password">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="confirmPassword">Confirm password</label>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text"><i class="fa fa-fw fa-lock" aria-hidden="true"></i></span>
+        </div>
+        <input
+          name="confirmPassword"
+          type="password"
+          class="form-control"
+          placeholder="Confirm Password"
+          required
+          [(ngModel)]="confirmPassword">
+      </div>
+    </div>
+
+    <button
+      class="btn btn-lg btn-primary btn-block"
+      type="submit"
+      (click)="register()">
+      Register
+    </button>
+  </form>
+
+  <div [hidden]="!errorMessage" class="alert alert-danger" role="alert">
+    {{errorMessage}}
+  </div>
+</div>
