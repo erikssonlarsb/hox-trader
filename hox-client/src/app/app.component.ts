@@ -35,7 +35,7 @@ export class AppComponent implements OnInit {
     .subscribe(
       (loggedIn: boolean) => {
         if(loggedIn) {
-          this.toggleNavbarVisible();
+          this.toggleNavbar('visible');
         }
       }
     )
@@ -44,7 +44,7 @@ export class AppComponent implements OnInit {
       if(!this.authService.isAuthenticated()) {
         this.router.navigate(['/login']);
       } else {
-        this.toggleNavbarVisible();
+        this.toggleNavbar('visible');
       }
     })
   }
@@ -59,7 +59,11 @@ export class AppComponent implements OnInit {
       });
   }
 
-  toggleNavbarVisible(): void {
-    this.menuVisibleState = (this.menuVisibleState === 'hidden' ? 'visible' : 'hidden');
+  toggleNavbar(state: string): void {
+    if(state) {
+      this.menuVisibleState = state;
+    } else {
+      this.menuVisibleState = (this.menuVisibleState === 'hidden' ? 'visible' : 'hidden');
+    }
   }
 }
