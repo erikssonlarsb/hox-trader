@@ -13,10 +13,11 @@ import { AuthService } from './services/auth/auth.service';
   animations: [
     trigger('menuVisibleAnimation', [
         state('hidden', style({
-            transform: 'translateY(0)',
+          transform: 'translateY(-100%)',
+          visibility: 'hidden'
         })),
         state('visible', style({
-            transform: 'translateY(-100%)',
+            transform: 'translateY(0)',
         })),
         transition('hidden => visible', animate('1000ms ease-in')),
         transition('visible => hidden', animate('1000ms ease-out'))
@@ -33,7 +34,9 @@ export class AppComponent implements OnInit {
     this.subscription = this.authService.loginChanged
     .subscribe(
       (loggedIn: boolean) => {
-        this.toggleNavbarVisible();
+        if(loggedIn) {
+          this.toggleNavbarVisible();
+        }
       }
     )
 
