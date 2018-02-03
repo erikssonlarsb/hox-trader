@@ -10,6 +10,7 @@ app.use(bodyParser.json());
 /*
 * Routes
 */
+app.use('/api/registration', require('./handlers/registration'));
 app.use('/api/authentication', require('./handlers/authentication'));
 app.use('/api/users', authorize, require('./handlers/users'));
 app.use('/api/roles', authorize, require('./handlers/roles'));
@@ -17,6 +18,7 @@ app.use('/api/instruments', authorize, require('./handlers/instruments'));
 app.use('/api/orders', authorize, require('./handlers/orders'));
 app.use('/api/trades', authorize, require('./handlers/trades'));
 app.use('/api/orderdepths', authorize, require('./handlers/orderdepths'));
+
 
 
 console.log('Connecting to database: %s.', config.database);
