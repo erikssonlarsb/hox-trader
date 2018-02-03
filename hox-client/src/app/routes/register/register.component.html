@@ -108,6 +108,9 @@
     </button>
   </form>
 
+  <div [hidden]="!success" class="alert alert-success" role="alert">
+    User successfully created. <a [routerLink]="['/login']">Go to login page.</a>
+  </div>
   <div [hidden]="!errorMessage" class="alert alert-danger" role="alert">
     {{errorMessage}}
   </div>
