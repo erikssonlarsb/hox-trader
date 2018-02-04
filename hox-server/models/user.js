@@ -6,7 +6,7 @@ var Role = require('./role');
 var userSchema = new Schema({
   name: String,
   role: {type: ObjectId, ref: 'Role', required: true},
-  username: {type: String, required: true, unique: true},
+  username: {type: String, required: true, unique: true, lowercase: true, trim: true},
   password: {type: String, required: true, select: false},
   email: {type: String, required: true, unique: true},
   phone: {type: String, required: true},
