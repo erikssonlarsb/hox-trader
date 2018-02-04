@@ -10,7 +10,6 @@ router.get('/', function(req, res){
   Trade.find(query)
   .populate('order')
   .populate('user')
-  .populate('counterparty', 'name email phone')
   .populate('instrument')
   .exec(function(err, trades) {
     if (err) {

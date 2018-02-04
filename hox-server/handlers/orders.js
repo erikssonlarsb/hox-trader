@@ -193,7 +193,6 @@ function matchOrder(order) {
         var trade = new Trade({
           order: order._id,
           user: order.user,
-          counterparty: matchingOrder.user,
           instrument: order.instrument,
           side: order.side,
           price: matchingOrder.price,
@@ -203,12 +202,14 @@ function matchOrder(order) {
         var matchingTrade = new Trade({
           order: matchingOrder._id,
           user: matchingOrder.user,
-          counterparty: order.user,
           instrument: matchingOrder.instrument,
           side: matchingOrder.side,
           price: matchingOrder.price,
           quantity: matchQuantity
         });
+
+        trade.counterpartyTrade = matchingTrade._id;
+        matchingTrade.counterpartyTrade = trade._id;
 
         order.tradedQuantity += matchQuantity;
         matchingOrder.tradedQuantity += matchQuantity;
@@ -223,6 +224,9 @@ function matchOrder(order) {
         .then(function() {
           return matchingOrder.save();
         })
+        .catch(function(error) {
+          console.log(error);
+        });
 
         if(order.quantity == order.tradedQuantity) {
           // order fully traded
