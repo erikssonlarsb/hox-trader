@@ -28,8 +28,12 @@ router.get('/:id', function(req, res){
   Trade.findOne(query)
   .populate('order')
   .populate('user')
-  .populate('counterparty', 'name email phone')
   .populate('instrument')
+  .populate({
+    path: 'counterpartyTrade',
+    select: 'user',
+    populate: {path: 'user', model: 'User', select: 'name email phone'}
+  })
   .exec(function(err, trade) {
     if (err) {
       res.status(500).json({'error': err})
