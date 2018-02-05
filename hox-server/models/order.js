@@ -8,7 +8,7 @@ var orderSchema = new Schema({
   side: {type: String, enum: ['BUY', 'SELL'], required: true},
   price: {type: Number, required: true},
   quantity: {type: Number, required: true, min: 0, validate: {validator : function(v) {return v > 0;}}},
-  tradedQuantity: {type: Number, min: 0},
+  tradedQuantity: {type: Number, min: 0, default: 0},
   status: {type: String, enum: ['ACTIVE', 'WITHDRAWN', 'TRADED']},
   createTimestamp: Date,
   updateTimestamp: Date,
@@ -25,13 +25,6 @@ orderSchema.pre('save', function(next) {
       this.modifyTimestamp = currentDate;
   }
   this.updateTimestamp = currentDate;
-  next();
-});
-
-orderSchema.pre('save', function(next) {
-  if (this.isNew) {
-    this.tradedQuantity = 0;
-  }
   next();
 });
 
