@@ -8,7 +8,12 @@ var userSchema = new Schema({
   role: {type: ObjectId, ref: 'Role', required: true},
   username: {type: String, required: true, unique: true, lowercase: true, trim: true},
   password: {type: String, required: true, select: false},
-  email: {type: String, required: true, unique: true},
+  email: {
+    type: String,
+    match: [/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/, 'E-mail invalid.'],
+    required: true,
+    unique: true
+  },
   phone: {type: String, required: true},
   createTimestamp: Date,
   updateTimestamp: Date
