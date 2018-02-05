@@ -8,18 +8,19 @@ class OrderDepth {
   }
 
   addOrder(order) {
+    var remainingQuantity = order.quantity - order.tradedQuantity;
     var existing = this.levels
       .find((level) => level[order.side.toLowerCase() + 'Price'] == order.price);
 
-    if(existing) {
-      existing[order.side.toLowerCase() + 'Quantity'] += order.quantity;
-      if(order.side == "BUY") {
-        this.totalBuy += order.quantity;
-      } else {
-        this.totalSell += order.quantity;
-      }
-      this.max = (this.max > order.quantity) ? this.max : order.quantity;
 
+    if(existing) {
+      existing[order.side.toLowerCase() + 'Quantity'] += remainingQuantity;
+      if(order.side == "BUY") {
+        this.totalBuy += remainingQuantity;
+      } else {
+        this.totalSell += remainingQuantity;
+      }
+      this.max = (this.max > existing[order.side.toLowerCase() + 'Quantity']) ? this.max : existing[order.side.toLowerCase() + 'Quantity'];
     } else {
       var buySide = this.levels.filter(function(level) {
         return level.buyPrice != null;
@@ -33,10 +34,10 @@ class OrderDepth {
       });
 
       if(order.side == "BUY") {
-        buySide.push({quantity: order.quantity, price: order.price});
+        buySide.push({quantity: remainingQuantity, price: order.price});
         buySide.sort(function(levelA, levelB) {return levelB.price - levelA.price});
       } else {
-        sellSide.push({quantity: order.quantity, price: order.price});
+        sellSide.push({quantity: remainingQuantity, price: order.price});
         sellSide.sort(function(levelA, levelB) {return levelA.price - levelB.price});
       }
 
