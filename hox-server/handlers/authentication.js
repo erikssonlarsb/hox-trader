@@ -5,7 +5,7 @@ var config = require('../config');
 var User = require('../models/user');
 
 router.post('/', function(req, res){
-  User.findOne({username: req.body.username})
+  User.findOne({username: req.body.username.trim().toLowerCase()})
   .populate('role')
   .populate('isAdmin')
   .exec(function(err, user) {
