@@ -11,6 +11,11 @@ router.get('/', function(req, res){
   .populate('order')
   .populate('user')
   .populate('instrument')
+  .populate({
+    path: 'counterpartyTrade',
+    select: 'user',
+    populate: {path: 'user', select: 'name email phone'}
+  })
   .exec(function(err, trades) {
     if (err) {
       res.status(500).json({'error': err});
@@ -32,7 +37,7 @@ router.get('/:id', function(req, res){
   .populate({
     path: 'counterpartyTrade',
     select: 'user',
-    populate: {path: 'user', model: 'User', select: 'name email phone'}
+    populate: {path: 'user', select: 'name email phone'}
   })
   .exec(function(err, trade) {
     if (err) {
