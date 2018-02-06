@@ -17,15 +17,19 @@ var orderSchema = new Schema({
 });
 
 orderSchema.pre('save', function(next) {
-  Instrument.findById(this.instrument, function(err, instrument) {
-    if (err) {
-      next(err);
-    } else if (instrument.expiry <= new Date()) {
-      next(new Error('Cannot enter order on expired instrument.'));
-    }  else {
-      next();
-    }
-  });
+  if(this.status != 'EXPIRED') {
+    Instrument.findById(this.instrument, function(err, instrument) {
+      if (err) {
+        next(err);
+      } else if (instrument.expiry <= new Date()) {
+        next(new Error('Cannot enter order on expired instrument.'));
+      }  else {
+        next();
+      }
+    });
+  } else {
+    next();
+  }
 });
 
 orderSchema.pre('save', function(next) {

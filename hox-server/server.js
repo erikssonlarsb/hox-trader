@@ -1,8 +1,10 @@
 var app = require('express')();
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+require('console-stamp')(console, { pattern: 'yyyy/mm/dd HH:MM:ss.l' });
 var config = require('./config');
 var authorize = require('./utils/authorize');
+var scheduler = require('./scheduler/scheduler')
 
 app.use(bodyParser.urlencoded({extended: false}));  // Form for authentication
 app.use(bodyParser.json());
@@ -30,6 +32,8 @@ mongoose.connect(config.database, {user: config.db_user, pass: config.db_passwor
     console.log('Connected do database.');
     app.listen(config.port, function() {
       console.log('Running on port: %s.', config.port);
+      console.log('Initiating jobs.');
+      scheduler.init();
     });
   }
 });
