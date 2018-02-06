@@ -173,15 +173,19 @@ function matchOrder(order) {
     status: 'ACTIVE',
   }
 
+  var sorting = [['modifyTimestamp', 1]];
+
   if (order.side == 'BUY') {
     query.side = 'SELL';
     query.price = { "$lte": order.price };
+    sorting.unshift(['price', 1]);
   } else {
     query.side = 'BUY';
     query.price = { "$gte": order.price };
+    sorting.unshift(['price', -1]);
   }
 
-  Order.find(query).sort('modifyTimestamp').exec(function (err, matchingOrders) {
+  Order.find(query).sort(sorting).exec(function (err, matchingOrders) {
     if(err) {
       console.log("Error finding order to match: %s.", err);
     } else {
