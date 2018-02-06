@@ -8,8 +8,8 @@ export class OrderDepth {
   max: number;
 
   constructor(json) {
-    this.instrument = new Instrument(json.instrument);
-    this.levels = json.levels.map(level => new Level(level));
+    this.instrument = json.instrument ? new Instrument(json.instrument) : null;
+    this.levels = json.levels ? json.levels.map(level => new Level(level)) : null;
     this.totalBuy = json.totalBuy;
     this.totalSell = json.totalSell;
     this.max = json.max;

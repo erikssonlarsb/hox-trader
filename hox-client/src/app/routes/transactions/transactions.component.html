@@ -14,6 +14,7 @@
                 <td scope="col">Type</td>
                 <td scope="col">Quantity</td>
                 <td scope="col">Price</td>
+                <td scope="col">Counterparty</td>
               </tr>
             </thead>
             <tbody>
@@ -23,6 +24,7 @@
                 <td>{{transaction.side}}</td>
                 <td>{{transaction.quantity}}</td>
                 <td>{{transaction.price}}</td>
+                <td>{{transaction.counterpartyTrade.user.name}}</td>
               </tr>
             </tbody>
           </table>

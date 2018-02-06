@@ -113,6 +113,7 @@ export class ApiService {
   }
 
   private handleError(error: any): Promise<any> {
+    console.log(error);
     return Promise.reject(error.json().error.errmsg);
   }
 }

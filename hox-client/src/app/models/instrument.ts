@@ -10,8 +10,8 @@ export class Instrument {
     this.id = json._id;
     this.name = json.name;
     this.underlying = json.underlying;
-    this.expiry = new Date(json.expiry);
-    this.createTimestamp = new Date(json.createTimestamp);
-    this.updateTimestamp = new Date(json.updateTimestamp);
+    this.expiry = json.expiry ? new Date(json.expiry) : null;
+    this.createTimestamp = json.createTimestamp ? new Date(json.createTimestamp) : null;
+    this.updateTimestamp = json.updateTimestamp ? new Date(json.updateTimestamp) : null;
   }
 }

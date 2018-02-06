@@ -1,11 +1,12 @@
 import { Order, ORDER_SIDE } from './order';
+import { User } from './user';
 import { Instrument } from './instrument';
 
 export class Trade {
   id: string;
   order: Order;
-  user: string;
-  counterparty: string;
+  user: User;
+  counterpartyTrade: Trade;
   instrument: Instrument;
   side: ORDER_SIDE;
   price: number;
@@ -15,14 +16,14 @@ export class Trade {
 
   constructor(json) {
     this.id = json._id;
-    this.order = new Order(json.order);
-    this.user = json.user;
-    this.counterparty = json.counterparty;
-    this.instrument = new Instrument(json.instrument);
+    this.order = json.order ? new Order(json.order) : null;
+    this.user = json.user ? new User(json.user) : null;
+    this.counterpartyTrade = json.counterpartyTrade ? new Trade(json.counterpartyTrade) : null;
+    this.instrument = json.instrument ? new Instrument(json.instrument) : null;
     this.side = json.side;
     this.price = json.price;
     this.quantity = json.quantity;
-    this.createTimestamp = new Date(json.createTimestamp);
-    this.updateTimestamp = new Date(json.updateTimestamp);
+    this.createTimestamp = json.createTimestamp ? new Date(json.createTimestamp) : null;
+    this.updateTimestamp = json.updateTimestamp ? new Date(json.updateTimestamp) : null;
   }
 }
