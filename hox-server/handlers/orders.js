@@ -60,7 +60,7 @@ router.post('/', function(req, res){
   } else {
     createOrder(req, function(err, order) {
       if (err) {
-        res.status(500).json({'error': err});
+        res.status(500).json({'error': err.message});
       } else {
         res.json(order);
       }
