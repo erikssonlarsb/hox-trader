@@ -10,6 +10,7 @@
             <thead>
               <tr>
                 <td scope="col">Date</td>
+                <td *ngIf="user.role.isAdmin" scope="col">User</td>
                 <td scope="col">Instrument</td>
                 <td scope="col">Type</td>
                 <td scope="col">Quantity</td>
@@ -20,6 +21,7 @@
             <tbody>
               <tr *ngFor="let transaction of transactions;">
                 <td>{{transaction.updateTimestamp | date}}</td>
+                <td *ngIf="user.role.isAdmin" scope="col">{{transaction.user.name}}</td>
                 <td>{{transaction.instrument.name}}</td>
                 <td>{{transaction.side}}</td>
                 <td>{{transaction.quantity}}</td>

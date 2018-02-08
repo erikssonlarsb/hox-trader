@@ -10,6 +10,7 @@
             <thead>
               <tr>
                 <td scope="col">Date</td>
+                <td *ngIf="user.role.isAdmin" scope="col">User</td>
                 <td scope="col">Instrument</td>
                 <td scope="col">Type</td>
                 <td scope="col">Quantity</td>
@@ -22,6 +23,7 @@
             <tbody>
               <tr *ngFor="let order of orders;">
                 <td>{{order.updateTimestamp | date}}</td>
+                <td *ngIf="user.role.isAdmin" scope="col">{{order.user.name}}</td>
                 <td>{{order.instrument.name}}</td>
                 <td>{{order.side}}</td>
                 <td>{{order.quantity}}</td>
