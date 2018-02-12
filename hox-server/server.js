@@ -18,6 +18,7 @@ app.use('/api/users', authorize, require('./handlers/users'));
 app.use('/api/roles', authorize, require('./handlers/roles'));
 app.use('/api/instruments', authorize, require('./handlers/instruments'));
 app.use('/api/orders', authorize, require('./handlers/orders'));
+app.use('/api/prices', authorize, require('./handlers/prices'));
 app.use('/api/trades', authorize, require('./handlers/trades'));
 app.use('/api/orderdepths', authorize, require('./handlers/orderdepths'));
 

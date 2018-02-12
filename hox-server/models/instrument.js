@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var Price = require('./price');
 
 var instrumentSchema = new Schema({
   name: {type: String, unique: true},
@@ -8,6 +9,15 @@ var instrumentSchema = new Schema({
   createTimestamp: Date,
   updateTimestamp: Date
 });
+
+instrumentSchema.virtual('prices', {
+  ref: 'Price',
+  localField: '_id',
+  foreignField: 'instrument'
+});
+
+instrumentSchema.set('toObject', { virtuals: true });
+instrumentSchema.set('toJSON', { virtuals: true });
 
 instrumentSchema.pre('save', function(next) {
   const monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN",

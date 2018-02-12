@@ -56,6 +56,15 @@
               "methods" : [
                   "GET"
               ]
+          },
+          {
+              "resource" : "prices",
+              "methods" : [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "DELETE"
+              ]
           }
       ]
   },
@@ -89,6 +98,12 @@
           },
           {
               "resource" : "orderdepths",
+              "methods" : [
+                  "GET"
+              ]
+          },
+          {
+              "resource" : "prices",
               "methods" : [
                   "GET"
               ]

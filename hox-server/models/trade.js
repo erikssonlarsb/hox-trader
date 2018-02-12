@@ -10,6 +10,7 @@ var tradeSchema = new Schema({
   side: {type: String, enum: ['BUY', 'SELL'], required: true},
   price: {type: Number, required: true},
   quantity: {type: Number, required: true},
+  isSettled: {type: Boolean, default: false},
   createTimestamp: Date,
   updateTimestamp: Date
 });
