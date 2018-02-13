@@ -54,7 +54,11 @@ exports.job = new CronJob('0 0 0 * * *', function() {
 
         for (let userSettlements of Object.values(settlements)) {
           for (let settlement of Object.values(userSettlements)) {
+            if (settlement.amount == 0) {
+              settlement.isAcknowledged = true;
+            }
             settlement.save();
+            
             for (let trade of settlement.trades) {
               trade.isSettled = true;
               trade.save();
