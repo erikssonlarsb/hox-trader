@@ -1,0 +1,65 @@
+var express = require('express');
+var router = express.Router();
+var mongoose = require('mongoose');
+var Settlement = require('../models/settlement');
+
+router.get('/', function(req, res){
+  var query = {};
+  if (!req.auth.user.role.isAdmin) {
+    query.user = req.auth.user._id;
+  }
+  Settlement.find(query)
+  .populate('user')
+  .populate('trades')
+  .populate({
+    path: 'counterpartySettlement',
+    select: 'user isAcknowledged',
+    populate: {path: 'user', select: 'name email phone'}
+  })
+  .exec(function(err, settlements) {
+    if (err) {
+      res.status(500).json({'error': err});
+    } else {
+      res.json(settlements);
+    }
+  });
+});
+
+
+router.put('/:id', function(req, res){
+  modifySettlement(req, function(err, settlement) {
+    if (err) {
+      res.status(500).json({'error': err});
+    } else {
+      res.json(settlement);
+    }
+  });
+});
+
+function modifySettlement(req, callback) {
+  var query = {_id: req.params.id};
+  if (!req.auth.user.role.isAdmin) {
+    query.user = req.auth.user._id;
+  }
+  Settlement.findOne(query)
+  .exec(function(err, settlement) {
+    if (err) {
+      callback(err, null);
+    } else if (settlement) {
+      settlement.isAcknowledged = req.body.isAcknowledged;
+
+      settlement.save(function(err) {
+        if (err) {
+          callback(err, null);
+        } else {
+          callback(null, settlement);
+        }
+      });
+    } else {
+      callback("Settlement not found", null);
+    }
+  });
+}
+
+
+module.exports = router

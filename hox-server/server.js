@@ -21,6 +21,7 @@ app.use('/api/orders', authorize, require('./handlers/orders'));
 app.use('/api/prices', authorize, require('./handlers/prices'));
 app.use('/api/trades', authorize, require('./handlers/trades'));
 app.use('/api/orderdepths', authorize, require('./handlers/orderdepths'));
+app.use('/api/settlements', authorize, require('./handlers/settlements'));
 
 
 

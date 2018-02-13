@@ -3,7 +3,7 @@ import { Http, URLSearchParams, Headers, RequestOptions }  from '@angular/http';
 
 import { AuthService } from '../../services/auth/auth.service';
 
-import { Instrument, Order, ORDER_SIDE, Trade, OrderDepth } from '../../models/index';
+import { Instrument, Order, ORDER_SIDE, Trade, OrderDepth, Settlement } from '../../models/index';
 
 @Injectable()
 export class ApiService {
@@ -99,6 +99,29 @@ export class ApiService {
       .get(`${window.location.origin}/api/trades`, options)
       .toPromise()
       .then(response => response.json().map(json => new Trade(json)))
+      .catch(this.handleError);
+  }
+
+  getSettlements(params: URLSearchParams = new URLSearchParams()): Promise<Settlement[]> {
+    let headers = new Headers({'Authorization': 'Bearer ' + this.authService.getToken()});
+    let options = new RequestOptions({ headers: headers, search: params });
+    return this.http
+      .get(`${window.location.origin}/api/settlements`, options)
+      .toPromise()
+      .then(response => response.json().map(json => new Settlement(json)))
+      .catch(this.handleError);
+  }
+
+  acknowledgeSettlement(id: string): Promise<Settlement> {
+    let body = {
+      isAcknowledged: true
+    }
+    let headers = new Headers({'Authorization': 'Bearer ' + this.authService.getToken()});
+    let options = new RequestOptions({ headers: headers});
+    return this.http
+      .put(`${window.location.origin}/api/settlements/${id}`, body, options)
+      .toPromise()
+      .then(response => new Settlement(response.json()))
       .catch(this.handleError);
   }
 

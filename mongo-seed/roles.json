@@ -65,6 +65,13 @@
                   "PUT",
                   "DELETE"
               ]
+          },
+          {
+              "resource" : "settlements",
+              "methods" : [
+                  "GET",
+                  "PUT"
+              ]
           }
       ]
   },
@@ -106,6 +113,13 @@
               "resource" : "prices",
               "methods" : [
                   "GET"
+              ]
+          },
+          {
+              "resource" : "settlements",
+              "methods" : [
+                  "GET",
+                  "PUT"
               ]
           }
       ]
