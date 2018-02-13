@@ -3,8 +3,11 @@
     <div class="card">
       <div class="card-body">
         <h5 class="card-title">
-          Orders
+          Settlements
         </h5>
+        <span class="badge badge-danger">Action required</span>
+        <span class="badge badge-warning">Awaiting counterparty</span>
+        <span class="badge badge-success">Settlement finished</span>
         <div class="table-responsive">
           <table class="table table-sm table-hover">
             <thead>
@@ -14,25 +17,28 @@
                 <td scope="col">Amount</td>
                 <td scope="col">Cpty</td>
                 <td scope="col">Cpty phone</td>
-                <td scope="col">Cpty ack</td>
                 <td scope="col"></td>
                 <td scope="col"></td>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let settlement of settlements;">
+              <tr *ngFor="let settlement of settlements;"
+                [ngClass]="[
+                  (settlement.isAcknowledged && settlement.counterpartySettlement.isAcknowledged) ? 'table-success' : '',
+                  (settlement.isAcknowledged && !settlement.counterpartySettlement.isAcknowledged) || (!settlement.counterpartySettlement.isAcknowledged && settlement.amount > 0) ? 'table-warning' : '',
+                  (!settlement.isAcknowledged && settlement.counterpartySettlement.isAcknowledged) || (!settlement.isAcknowledged && settlement.amount < 0) ? 'table-danger' : ''
+                  ]">
                 <td>{{settlement.updateTimestamp | date}}</td>
                 <td *ngIf="user.role.isAdmin" scope="col">{{settlement.user.name}}</td>
                 <td>{{settlement.amount}}</td>
                 <td>{{settlement.counterpartySettlement.user.name}}</td>
                 <td>{{settlement.counterpartySettlement.user.phone}}</td>
-                <td><i class="fa fa-lg" [ngClass]="settlement.counterpartySettlement.isAcknowledged ? 'fa-check-circle-o' : 'fa-times-circle-o'"></i></td>
                 <td>
                   <button
                     type="button"
                     class="btn btn-sm btn-primary btn-block"
                     (click)="acknowledgeSettlement(settlement.id)"
-                    [hidden]="settlement.isAcknowledged">
+                    [hidden]="settlement.isAcknowledged || (!settlement.counterpartySettlement.isAcknowledged && settlement.amount >= 0)">
                     <i class="fa fa-check"></i> Acknowledge
                   </button>
                 </td>
@@ -40,7 +46,7 @@
                   <button
                     type="button"
                     class="btn btn-sm btn-success btn-block"
-                    (click)="openSwish(settlement.id)"
+                    (click)="openSwish(settlement)"
                     [hidden]="settlement.isAcknowledged || settlement.amount >= 0">
                     <i class="fa fa-handshake-o"></i> Swish
                   </button>

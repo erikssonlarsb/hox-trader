@@ -2,5 +2,11 @@
   "/api/*": {
     "target": "http://localhost:4000",
     "secure": false
+  },
+  "/qr": {
+    "target": "https://www.swish.bankgirot.se/qrg-swish/api/v1/prefilled",
+    "secure": true,
+    "changeOrigin": true,
+    "pathRewrite": {"^/qr" : ""}
   }
 }
