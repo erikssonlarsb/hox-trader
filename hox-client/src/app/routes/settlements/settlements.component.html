@@ -14,8 +14,8 @@
               <tr>
                 <td scope="col">Date</td>
                 <td *ngIf="user.role.isAdmin" scope="col">User</td>
-                <td scope="col">Amount</td>
-                <td scope="col">Cpty</td>
+                <td scope="col" class="text-right">Amount</td>
+                <td scope="col">Counterparty</td>
                 <td scope="col">Cpty phone</td>
                 <td scope="col"></td>
                 <td scope="col"></td>
@@ -30,7 +30,7 @@
                   ]">
                 <td>{{settlement.updateTimestamp | date}}</td>
                 <td *ngIf="user.role.isAdmin" scope="col">{{settlement.user.name}}</td>
-                <td>{{settlement.amount}}</td>
+                <td class="text-right">{{settlement.amount}}</td>
                 <td>{{settlement.counterpartySettlement.user.name}}</td>
                 <td>{{settlement.counterpartySettlement.user.phone}}</td>
                 <td>

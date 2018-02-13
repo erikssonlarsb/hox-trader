@@ -13,9 +13,9 @@
                 <td *ngIf="user.role.isAdmin" scope="col">User</td>
                 <td scope="col">Instrument</td>
                 <td scope="col">Type</td>
-                <td scope="col">Quantity</td>
-                <td scope="col">Traded quantity</td>
-                <td scope="col">Price</td>
+                <td scope="col" class="text-right">Quantity</td>
+                <td scope="col" class="text-right">Traded quantity</td>
+                <td scope="col" class="text-right">Price</td>
                 <td scope="col">Status</td>
                 <td scope="col"></td>
               </tr>
@@ -26,9 +26,9 @@
                 <td *ngIf="user.role.isAdmin" scope="col">{{order.user.name}}</td>
                 <td>{{order.instrument.name}}</td>
                 <td>{{order.side}}</td>
-                <td>{{order.quantity}}</td>
-                <td>{{order.tradedQuantity}}</td>
-                <td>{{order.price}}</td>
+                <td class="text-right">{{order.quantity}}</td>
+                <td class="text-right">{{order.tradedQuantity}}</td>
+                <td class="text-right">{{order.price}}</td>
                 <td>{{order.status}}</td>
                 <td>
                   <button

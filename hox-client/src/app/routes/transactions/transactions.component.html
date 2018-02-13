@@ -13,8 +13,8 @@
                 <td *ngIf="user.role.isAdmin" scope="col">User</td>
                 <td scope="col">Instrument</td>
                 <td scope="col">Type</td>
-                <td scope="col">Quantity</td>
-                <td scope="col">Price</td>
+                <td scope="col" class="text-right">Quantity</td>
+                <td scope="col" class="text-right">Price</td>
                 <td scope="col">Counterparty</td>
               </tr>
             </thead>
@@ -24,8 +24,8 @@
                 <td *ngIf="user.role.isAdmin" scope="col">{{transaction.user.name}}</td>
                 <td>{{transaction.instrument.name}}</td>
                 <td>{{transaction.side}}</td>
-                <td>{{transaction.quantity}}</td>
-                <td>{{transaction.price}}</td>
+                <td class="text-right">{{transaction.quantity}}</td>
+                <td class="text-right">{{transaction.price}}</td>
                 <td>{{transaction.counterpartyTrade.user.name}}</td>
               </tr>
             </tbody>

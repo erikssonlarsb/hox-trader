@@ -5,3 +5,13 @@
 body {
   background-color: #eee;
 }
+
+th.text-right,
+td.text-right {
+  padding-right: 15px;
+}
+
+td > button.btn-sm {
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
