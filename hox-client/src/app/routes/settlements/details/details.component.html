@@ -26,7 +26,7 @@
             </thead>
             <tbody>
               <tr *ngFor="let trade of settlement?.trades;">
-                <td>{{trade.updateTimestamp | date}}</td>
+                <td>{{trade.createTimestamp | date}}</td>
                 <td>{{trade.instrument.name}}</td>
                 <td>{{trade.instrument.expiry | date}}</td>
                 <td>{{trade.side}}</td>
@@ -40,14 +40,7 @@
             </tbody>
             <tfoot>
               <tr>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
+                <th colspan="8"></th>
                 <th class="text-right">Total: </th>
                 <th class="text-right">{{settlement?.amount}}</th>
               </tr>
