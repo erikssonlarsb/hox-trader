@@ -19,6 +19,7 @@ import { OrderComponent } from './routes/order/order.component';
 import { TransactionsComponent } from './routes/transactions/transactions.component';
 import { OrdersComponent } from './routes/orders/orders.component';
 import { SettlementsComponent } from './routes/settlements/settlements.component';
+import { SettlementDetailsComponent } from './routes/settlements/details/details.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { SettlementsComponent } from './routes/settlements/settlements.component
     OrderComponent,
     TransactionsComponent,
     OrdersComponent,
-    SettlementsComponent
+    SettlementsComponent,
+    SettlementDetailsComponent
   ],
   imports: [
     BrowserModule,

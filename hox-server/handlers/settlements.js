@@ -25,6 +25,39 @@ router.get('/', function(req, res){
   });
 });
 
+router.get('/:id', function(req, res){
+  var query = {_id: req.params.id};
+  if (!req.auth.user.role.isAdmin) {
+    query.user = req.auth.user._id;
+  }
+  Settlement.findOne(query)
+  .populate('user')
+  .populate({
+    path: 'trades',
+    populate: {
+      path: 'instrument',
+      populate: {
+        path: 'prices',
+        match: { type: { $eq: 'SETTLEMENT'}}
+      }
+    }
+  })
+  .populate({
+    path: 'counterpartySettlement',
+    select: 'user isAcknowledged',
+    populate: {path: 'user', select: 'name email phone'}
+  })
+  .exec(function(err, trade) {
+    if (err) {
+      res.status(500).json({'error': err})
+    } else if (trade) {
+      res.json(trade);
+    } else {
+      res.status(404).send();  // No order found
+    }
+  });
+});
+
 
 router.put('/:id', function(req, res){
   modifySettlement(req, function(err, settlement) {

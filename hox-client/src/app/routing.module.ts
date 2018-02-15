@@ -8,6 +8,7 @@ import { OrderComponent } from './routes/order/order.component';
 import { TransactionsComponent } from './routes/transactions/transactions.component';
 import { OrdersComponent } from './routes/orders/orders.component';
 import { SettlementsComponent } from './routes/settlements/settlements.component';
+import { SettlementDetailsComponent } from './routes/settlements/details/details.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/overview', pathMatch: 'full' },
@@ -18,7 +19,8 @@ const routes: Routes = [
   { path: 'order/:id', component: OrderComponent },
   { path: 'orders', component: OrdersComponent },
   { path: 'transactions', component: TransactionsComponent },
-  { path: 'settlements', component: SettlementsComponent }
+  { path: 'settlements', component: SettlementsComponent },
+  { path: 'settlements/:id', component: SettlementDetailsComponent }
 
 ];
 

@@ -112,6 +112,16 @@ export class ApiService {
       .catch(this.handleError);
   }
 
+  getSettlement(id: string): Promise<Settlement> {
+    let headers = new Headers({'Authorization': 'Bearer ' + this.authService.getToken()});
+    let options = new RequestOptions({ headers: headers});
+    return this.http
+      .get(`${window.location.origin}/api/settlements/${id}`, options)
+      .toPromise()
+      .then(response => new Settlement(response.json()))
+      .catch(this.handleError);
+  }
+
   acknowledgeSettlement(id: string): Promise<Settlement> {
     let body = {
       isAcknowledged: true

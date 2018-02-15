@@ -4,3 +4,4 @@ export { Trade } from './trade';
 export { OrderDepth } from './orderdepth';
 export { User } from './user';
 export { Settlement } from './settlement';
+export { Price, PRICE_TYPE } from './price';

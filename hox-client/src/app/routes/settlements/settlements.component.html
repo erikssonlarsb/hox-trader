@@ -12,6 +12,7 @@
           <table class="table table-sm table-hover">
             <thead>
               <tr>
+                <td scope="col"></td>
                 <td scope="col">Date</td>
                 <td *ngIf="user.role.isAdmin" scope="col">User</td>
                 <td scope="col" class="text-right">Amount</td>
@@ -28,6 +29,7 @@
                   (settlement.isAcknowledged && !settlement.counterpartySettlement.isAcknowledged) || (!settlement.counterpartySettlement.isAcknowledged && settlement.amount > 0) ? 'table-warning' : '',
                   (!settlement.isAcknowledged && settlement.counterpartySettlement.isAcknowledged) || (!settlement.isAcknowledged && settlement.amount < 0) ? 'table-danger' : ''
                   ]">
+                <td><a class="nav-link" routerLink="/settlements/{{settlement.id}}"><i class="fa fa-file-text" aria-hidden="true"></i></a></td>
                 <td>{{settlement.updateTimestamp | date}}</td>
                 <td *ngIf="user.role.isAdmin" scope="col">{{settlement.user.name}}</td>
                 <td class="text-right">{{settlement.amount}}</td>

@@ -1,0 +1,58 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">
+          Settlement details
+        </h5>
+        <p>Date: {{settlement?.updateTimestamp | date}}</p>
+        <p>Counterparty: {{settlement?.counterpartySettlement.user.name}}</p>
+
+        <table class="table table-sm table-hover">
+          <thead>
+            <tr>
+              <td scope="col">Date</td>
+              <td scope="col">Instrument</td>
+              <td scope="col">Expiry</td>
+              <td scope="col">Side</td>
+              <td scope="col" class="text-right">Quantity</td>
+              <td scope="col" class="text-right">Price</td>
+              <td scope="col" class="text-right">Amount</td>
+              <td scope="col" class="text-right">Settlement Price</td>
+              <td scope="col" class="text-right">Settlement Amount</td>
+              <td scope="col" class="text-right">P/L</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let trade of settlement?.trades;">
+              <td>{{trade.updateTimestamp | date}}</td>
+              <td>{{trade.instrument.name}}</td>
+              <td>{{trade.instrument.expiry | date}}</td>
+              <td>{{trade.side}}</td>
+              <td class="text-right">{{trade.quantity}}</td>
+              <td class="text-right">{{trade.price}}</td>
+              <td class="text-right">{{trade.quantity * trade.price}}</td>
+              <td class="text-right">{{trade.instrument.prices[0].value}}</td>
+              <td class="text-right">{{trade.quantity * trade.instrument.prices[0].value}}</td>
+              <td class="text-right">{{trade.side == 'BUY' ? trade.quantity * trade.instrument.prices[0].value - trade.quantity * trade.price : trade.quantity * trade.price -trade.quantity * trade.instrument.prices[0].value}}</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th class="text-right">{{settlement?.amount}}</th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

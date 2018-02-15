@@ -19,11 +19,11 @@ export class SettlementsComponent implements OnInit  {
   user: User;
   settlements: Array<Settlement>;
 
-  constructor(private datePipe: DatePipe, private http: Http, private authService: AuthService, private ApiService: ApiService) { }
+  constructor(private datePipe: DatePipe, private http: Http, private authService: AuthService, private apiService: ApiService) { }
 
   ngOnInit(): void {
     this.user = this.authService.getLoggedInUser();
-    this.ApiService.getSettlements()
+    this.apiService.getSettlements()
       .then((settlements) => {
         this.settlements = settlements;
       })
@@ -33,9 +33,9 @@ export class SettlementsComponent implements OnInit  {
   }
 
   acknowledgeSettlement(id): void {
-    this.ApiService.acknowledgeSettlement(id)
+    this.apiService.acknowledgeSettlement(id)
       .then(() => {
-        this.ApiService.getSettlements()
+        this.apiService.getSettlements()
           .then((settlements) => {
             this.settlements = settlements;
           })
