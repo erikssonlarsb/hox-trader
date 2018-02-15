@@ -8,92 +8,94 @@
             {{orderDepth.instrument.name}}
           </a>
         </h5>
-        <table class="table table-sm table-hover">
-          <thead>
-            <tr>
-              <td scope="col">Quantity</td>
-              <td scope="col">Price</td>
-              <td scope="col" class="text-right">Buy</td>
-              <td scope="col">Sell</td>
-              <td scope="col" class="text-right">Price</td>
-              <td scope="col" class="text-right">Quantity</td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let level of orderDepth.levels;">
-              <td>
-                <a
-                [routerLink]="['/order', {instrument: orderDepth.instrument.id, side: 'SELL', quantity: level.buyQuantity, price: level.buyPrice}]">
-                {{level.buyQuantity}}
-                </a>
-              </td>
-              <td>
-                <a
-                [routerLink]="['/order', {instrument: orderDepth.instrument.id, side: 'SELL', price: level.buyPrice}]">
-                {{level.buyPrice}}
-                </a>
-              </td>
-              <td class="text-right">
-                <div class="progress">
-                  <div
-                    class="progress-bar"
-                    role="progressbar"
-                    [style.width.%]="(level.buyQuantity*100)/orderDepth.max"
-                    [style.margin-left.%]="100-(level.buyQuantity*100)/orderDepth.max">
+        <div class="table-responsive">
+          <table class="table table-sm table-hover">
+            <thead>
+              <tr>
+                <td scope="col"><i class="fa fa-fw fa-balance-scale"></i></td>
+                <td scope="col"><i class="fa fa-fw fa-money"></i></td>
+                <td scope="col" class="text-center">B</td>
+                <td scope="col" class="text-center">S</td>
+                <td scope="col" class="text-right"><i class="fa fa-fw fa-money"></i></td>
+                <td scope="col" class="text-right"><i class="fa fa-fw fa-balance-scale"></i></td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let level of orderDepth.levels;">
+                <td>
+                  <a
+                  [routerLink]="['/order', {instrument: orderDepth.instrument.id, side: 'SELL', quantity: level.buyQuantity, price: level.buyPrice}]">
+                  {{level.buyQuantity}}
+                  </a>
+                </td>
+                <td>
+                  <a
+                  [routerLink]="['/order', {instrument: orderDepth.instrument.id, side: 'SELL', price: level.buyPrice}]">
+                  {{level.buyPrice}}
+                  </a>
+                </td>
+                <td class="text-right">
+                  <div class="progress">
+                    <div
+                      class="progress-bar"
+                      role="progressbar"
+                      [style.width.%]="(level.buyQuantity*100)/orderDepth.max"
+                      [style.margin-left.%]="100-(level.buyQuantity*100)/orderDepth.max">
+                    </div>
                   </div>
-                </div>
-              </td>
-              <td>
-                <div class="progress">
-                  <div
-                    class="progress-bar bg-danger"
-                    role="progressbar"
-                    [style.width.%]="(level.sellQuantity*100)/orderDepth.max">
+                </td>
+                <td>
+                  <div class="progress">
+                    <div
+                      class="progress-bar bg-danger"
+                      role="progressbar"
+                      [style.width.%]="(level.sellQuantity*100)/orderDepth.max">
+                    </div>
                   </div>
-                </div>
-              </td>
-              <td class="text-right">
-                <a
-                  [routerLink]="['/order', {instrument: orderDepth.instrument.id, side: 'BUY', price: level.sellPrice}]">
-                  {{level.sellPrice}}
-                </a>
-              </td>
-              <td class="text-right">
-                <a
-                  [routerLink]="['/order', {instrument: orderDepth.instrument.id, side: 'BUY', quantity: level.sellQuantity, price: level.sellPrice}]">
-                  {{level.sellQuantity}}
-                </a>
-              </td>
-            </tr>
-          </tbody>
-          <tfoot>
-            <tr>
-              <th scope="col">{{orderDepth.totalBuy}}</th>
-              <th scope="col"></th>
-              <th scope="col" class="text-right">
-                <div class="progress">
-                  <div
-                    class="progress-bar"
-                    role="progressbar"
-                    [style.width.%]="(orderDepth.totalBuy*100)/(orderDepth.totalBuy + orderDepth.totalSell)"
-                    [style.margin-left.%]="100-(orderDepth.totalBuy*100)/(orderDepth.totalBuy + orderDepth.totalSell)">
+                </td>
+                <td class="text-right">
+                  <a
+                    [routerLink]="['/order', {instrument: orderDepth.instrument.id, side: 'BUY', price: level.sellPrice}]">
+                    {{level.sellPrice}}
+                  </a>
+                </td>
+                <td class="text-right">
+                  <a
+                    [routerLink]="['/order', {instrument: orderDepth.instrument.id, side: 'BUY', quantity: level.sellQuantity, price: level.sellPrice}]">
+                    {{level.sellQuantity}}
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <th scope="col">{{orderDepth.totalBuy}}</th>
+                <th scope="col"></th>
+                <th scope="col" class="text-right">
+                  <div class="progress">
+                    <div
+                      class="progress-bar"
+                      role="progressbar"
+                      [style.width.%]="(orderDepth.totalBuy*100)/(orderDepth.totalBuy + orderDepth.totalSell)"
+                      [style.margin-left.%]="100-(orderDepth.totalBuy*100)/(orderDepth.totalBuy + orderDepth.totalSell)">
+                    </div>
                   </div>
-                </div>
-              </th>
-              <th scope="col">
-                <div class="progress">
-                  <div
-                    class="progress-bar bg-danger"
-                    role="progressbar"
-                    [style.width.%]="(orderDepth.totalSell*100)/(orderDepth.totalBuy + orderDepth.totalSell)">
+                </th>
+                <th scope="col">
+                  <div class="progress">
+                    <div
+                      class="progress-bar bg-danger"
+                      role="progressbar"
+                      [style.width.%]="(orderDepth.totalSell*100)/(orderDepth.totalBuy + orderDepth.totalSell)">
+                    </div>
                   </div>
-                </div>
-              </th>
-              <th scope="col" class="text-right"></th>
-              <th scope="col" class="text-right">{{orderDepth.totalSell}}</th>
-            </tr>
-          </tfoot>
-        </table>
+                </th>
+                <th scope="col" class="text-right"></th>
+                <th scope="col" class="text-right">{{orderDepth.totalSell}}</th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
       </div>
     </div>
   </div>
