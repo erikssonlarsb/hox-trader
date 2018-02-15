@@ -6,7 +6,7 @@ var OrderDepth = require('../models/orderdepth');
 
 router.get('/', function(req, res) {
   var orderDepths = {};
-  Instrument.find({})
+  Instrument.find({'expiry': {$gt: Date.now()}})
     .then(instruments => {
       instruments.forEach(function(instrument) {
         orderDepths[instrument._id] = new OrderDepth(instrument);
