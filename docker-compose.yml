@@ -9,7 +9,7 @@ services:
     ports:
       - '27017:27017'
   mongo-seed:
-    image: mongo
+    image: mongo:latest
     command: bash -c
              "mongoimport --host mongodb --username $DB_USER --password $DB_PASSWORD --authenticationDatabase admin --db test --collection roles --type json --file /roles.json --jsonArray &&
               mongoimport --host mongodb --username $DB_USER --password $DB_PASSWORD --authenticationDatabase admin --db test --collection users --type json --file /users.json --jsonArray"
