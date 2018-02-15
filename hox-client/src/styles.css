@@ -14,4 +14,15 @@ td.text-right {
 td > button.btn-sm {
   padding-top: 0px;
   padding-bottom: 0px;
+  height: 100%;
+}
+
+.table td {
+  height: 1px;
+  vertical-align: middle;
+}
+
+.table thead th, .table thead td {
+  vertical-align: top;
+  border-bottom: 1px solid #dee2e6;
 }

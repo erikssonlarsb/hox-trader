@@ -12,14 +12,13 @@
           <table class="table table-sm table-hover">
             <thead>
               <tr>
-                <td scope="col"></td>
-                <td scope="col">Date</td>
-                <td *ngIf="user.role.isAdmin" scope="col">User</td>
-                <td scope="col" class="text-right">Amount</td>
-                <td scope="col">Counterparty</td>
-                <td scope="col">Cpty phone</td>
-                <td scope="col"></td>
-                <td scope="col"></td>
+                <th scope="col">Date</th>
+                <th *ngIf="user.role.isAdmin" scope="col">User</th>
+                <th scope="col" class="text-right">Amount</th>
+                <th scope="col">Counterparty</th>
+                <th scope="col"></th> <!-- info button -->
+                <th scope="col"></th> <!-- ack button -->
+                <th scope="col"></th> <!-- swish button -->
               </tr>
             </thead>
             <tbody>
@@ -29,19 +28,25 @@
                   (settlement.isAcknowledged && !settlement.counterpartySettlement.isAcknowledged) || (!settlement.counterpartySettlement.isAcknowledged && settlement.amount > 0) ? 'table-warning' : '',
                   (!settlement.isAcknowledged && settlement.counterpartySettlement.isAcknowledged) || (!settlement.isAcknowledged && settlement.amount < 0) ? 'table-danger' : ''
                   ]">
-                <td><a class="nav-link" routerLink="/settlements/{{settlement.id}}"><i class="fa fa-file-text" aria-hidden="true"></i></a></td>
                 <td>{{settlement.updateTimestamp | date}}</td>
                 <td *ngIf="user.role.isAdmin" scope="col">{{settlement.user.name}}</td>
                 <td class="text-right">{{settlement.amount}}</td>
                 <td>{{settlement.counterpartySettlement.user.name}}</td>
-                <td>{{settlement.counterpartySettlement.user.phone}}</td>
+                <td>
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-info btn-block"
+                    routerLink="/settlements/{{settlement.id}}">
+                    <i class="fa fa-info"></i> Info
+                  </button>
+                </td>
                 <td>
                   <button
                     type="button"
                     class="btn btn-sm btn-primary btn-block"
                     (click)="acknowledgeSettlement(settlement.id)"
                     [hidden]="settlement.isAcknowledged || (!settlement.counterpartySettlement.isAcknowledged && settlement.amount >= 0)">
-                    <i class="fa fa-check"></i> Acknowledge
+                    <i class="fa fa-check"></i> Ack
                   </button>
                 </td>
                 <td>

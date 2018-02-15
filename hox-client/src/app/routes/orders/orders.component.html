@@ -9,15 +9,15 @@
           <table class="table table-sm table-hover">
             <thead>
               <tr>
-                <td scope="col">Date</td>
-                <td *ngIf="user.role.isAdmin" scope="col">User</td>
-                <td scope="col">Instrument</td>
-                <td scope="col">Type</td>
-                <td scope="col" class="text-right">Quantity</td>
-                <td scope="col" class="text-right">Traded quantity</td>
-                <td scope="col" class="text-right">Price</td>
-                <td scope="col">Status</td>
-                <td scope="col"></td>
+                <th scope="col">Date</th>
+                <th *ngIf="user.role.isAdmin" scope="col">User</th>
+                <th scope="col">Instrument</th>
+                <th scope="col">Side</th>
+                <th scope="col" class="text-right">Quantity</th>
+                <th scope="col" class="text-right">Traded</th>
+                <th scope="col" class="text-right">Price</th>
+                <th scope="col">Status</th>
+                <th scope="col"></th>
               </tr>
             </thead>
             <tbody>
