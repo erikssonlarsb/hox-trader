@@ -24,4 +24,22 @@ router.get('/', function(req, res) {
     });
 });
 
+router.get('/:id', function(req, res) {
+  var orderDepth;
+  Instrument.findById(req.params.id)
+  .then(instrument => {
+    orderDepth = new OrderDepth(instrument);
+    return Order.find({instrument: instrument._id});
+  })
+  .then(orders => {
+    orders.forEach(function(order) {
+      orderDepth.addOrder(order);
+    });
+    res.json(orderDepth);
+  })
+  .catch(err => {
+    res.status(500).json({ error : err });
+  });
+});
+
 module.exports = router
