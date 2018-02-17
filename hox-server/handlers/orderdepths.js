@@ -29,7 +29,7 @@ router.get('/:id', function(req, res) {
   Instrument.findById(req.params.id)
   .then(instrument => {
     orderDepth = new OrderDepth(instrument);
-    return Order.find({instrument: instrument._id});
+    return Order.find({instrument: instrument._id, status: 'ACTIVE'});
   })
   .then(orders => {
     orders.forEach(function(order) {
