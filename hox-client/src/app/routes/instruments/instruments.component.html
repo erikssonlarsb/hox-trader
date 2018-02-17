@@ -1,0 +1,40 @@
+<div class="row">
+  <div class="col-md-6" *ngFor="let orderDepth of orderDepths;">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">
+          <a
+            routerLink="/instruments/{{orderDepth.instrument.id}}">
+            {{orderDepth.instrument.name}}
+          </a>
+        </h5>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="row">
+              <div class="col-sm-12">
+                <button
+                  type="button"
+                  class="btn btn-sm btn-primary btn-block"
+                  [routerLink]="['/order', {instrument: orderDepth.instrument.id, side: 'BUY', price: orderDepth.levels[0]?.sellPrice}]">
+                  Buy {{orderDepth.levels[0]?.sellPrice ? '@ ' + orderDepth.levels[0]?.sellPrice : ''}}
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="row">
+              <div class="col-sm-12">
+                <button
+                  type="button"
+                  class="btn btn-sm btn-danger btn-block"
+                  [routerLink]="['/order', {instrument: orderDepth.instrument.id, side: 'SELL', price: orderDepth.levels[0]?.buyPrice}]">
+                  Sell {{orderDepth.levels[0]?.buyPrice ? '@ ' + orderDepth.levels[0]?.buyPrice : ''}}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

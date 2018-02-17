@@ -19,7 +19,7 @@ export class LoginComponent {
     this.errorMessage = null;
     this.authService.login(this.username, this.password)
       .then(() => {
-        this.router.navigate(['/overview']);
+        this.router.navigate(['/instruments']);
       })
       .catch((error) => {
         this.errorMessage = error;

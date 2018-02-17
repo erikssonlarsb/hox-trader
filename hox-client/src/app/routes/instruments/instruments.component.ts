@@ -5,17 +5,17 @@ import { ApiService } from '../../services/api/api.service';
 import { OrderDepth } from '../../models/index';
 
 @Component({
-  selector: 'app-overview',
-  templateUrl: './overview.component.html',
-  styleUrls: ['./overview.component.css']
+  selector: 'app-instruments',
+  templateUrl: './instruments.component.html',
+  styleUrls: ['./instruments.component.css']
 })
-export class OverviewComponent  implements OnInit  {
+export class InstrumentsComponent  implements OnInit  {
   orderDepths: Array<OrderDepth>;
 
-  constructor(private ApiService: ApiService) { }
+  constructor(private apiService: ApiService) { }
 
   ngOnInit(): void {
-    this.ApiService.getOrderDepths()
+    this.apiService.getOrderDepths()
       .then((orderDepths) => {
         this.orderDepths = orderDepths;
       })

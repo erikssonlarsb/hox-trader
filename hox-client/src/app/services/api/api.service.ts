@@ -145,6 +145,16 @@ export class ApiService {
       .catch(this.handleError);
   }
 
+  getOrderDepth(id: string): Promise<OrderDepth> {
+    let headers = new Headers({'Authorization': 'Bearer ' + this.authService.getToken()});
+    let options = new RequestOptions({ headers: headers});
+    return this.http
+      .get(`${window.location.origin}/api/orderdepths/${id}`, options)
+      .toPromise()
+      .then(response => new OrderDepth(response.json()))
+      .catch(this.handleError);
+  }
+
   private handleError(error: any): Promise<any> {
     console.log(error);
     return Promise.reject(error.json().error.errmsg);
