@@ -17,7 +17,7 @@ export class OrderComponent  implements OnInit  {
   quantity: number;
   price: number;
   order: Order;
-  error: string;
+  errorMessage: string;
 
   constructor(private router: Router, private route: ActivatedRoute, private apiService: ApiService) { }
 
@@ -67,11 +67,11 @@ export class OrderComponent  implements OnInit  {
   }
 
   placeOrder(): void {
-    this.error = null;  // Reset error message
+    this.errorMessage = null;  // Reset error message
 
     //TODO: Should be form validation on required fields.
-    if(this.instrument == null) {
-      this.error = "No instrument selected";
+    if(!this.instrument) {
+      this.errorMessage = "No instrument selected";
       return;
     }
     var instrumentId = this.instruments.filter(
@@ -81,8 +81,7 @@ export class OrderComponent  implements OnInit  {
         this.router.navigate(['/orders']);
       })
       .catch((error) => {
-        console.log(error);
-        this.error = error.message;
+        this.errorMessage = error;
       });
   }
 }

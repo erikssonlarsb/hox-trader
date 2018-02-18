@@ -160,7 +160,18 @@ export class ApiService {
     if(error.status == 401) {
       authService.logout();
     } else {
-      return Promise.reject(error.json().message || error.json().error.errmsg);
+      let json = error.json();
+      if(!json) {
+        return Promise.reject(error.statusText + ": " + error.status);
+      } else if(json.error && json.error.errmsg) {
+        return Promise.reject(json.error.errmsg);
+      } else if(json.error) {
+        return Promise.reject(json.error);
+      } else if(json.message) {
+        return Promise.reject(json.message);
+      } else {
+        return Promise.reject("Unknown error.");
+      }
     }
   }
 }
