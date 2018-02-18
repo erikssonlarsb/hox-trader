@@ -37,7 +37,7 @@ export class SettlementsComponent implements OnInit  {
       .then(() => {
         this.apiService.getSettlements()
           .then((settlements) => {
-            this.settlements = settlements;
+            this.settlements = settlements.sort((a: Settlement, b: Settlement) => {return a.createTimestamp.getDate() - b.createTimestamp.getDate()});;
           })
           .catch(function(err) {
             console.log(err);

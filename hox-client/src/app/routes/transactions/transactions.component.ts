@@ -14,7 +14,7 @@ import { User } from '../../services/auth/payload';
 
 export class TransactionsComponent implements OnInit  {
   user: User;
-  transactions: Array<Trade>;
+  trades: Array<Trade>;
 
   constructor(private authService: AuthService, private ApiService: ApiService) { }
 
@@ -22,7 +22,7 @@ export class TransactionsComponent implements OnInit  {
     this.user = this.authService.getLoggedInUser();
     this.ApiService.getTrades()
       .then((trades) => {
-        this.transactions = trades;
+        this.trades = trades.sort((a: Trade, b: Trade) => {return a.createTimestamp.getDate() - b.createTimestamp.getDate()});
       })
       .catch(function(err) {
         console.log(err);

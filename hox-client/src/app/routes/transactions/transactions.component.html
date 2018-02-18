@@ -19,14 +19,14 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let transaction of transactions;">
-                <td>{{transaction.updateTimestamp | date}}</td>
-                <td *ngIf="user.role.isAdmin" scope="col">{{transaction.user.name}}</td>
-                <td>{{transaction.instrument.name}}</td>
-                <td>{{transaction.side}}</td>
-                <td class="text-right">{{transaction.quantity}}</td>
-                <td class="text-right">{{transaction.price}}</td>
-                <td>{{transaction.counterpartyTrade.user.name}}</td>
+              <tr *ngFor="let trade of trades;">
+                <td>{{trade.createTimestamp | date}}</td>
+                <td *ngIf="user.role.isAdmin" scope="col">{{trade.user.name}}</td>
+                <td>{{trade.instrument.name}}</td>
+                <td>{{trade.side}}</td>
+                <td class="text-right">{{trade.quantity}}</td>
+                <td class="text-right">{{trade.price}}</td>
+                <td>{{trade.counterpartyTrade.user.name}}</td>
               </tr>
             </tbody>
           </table>

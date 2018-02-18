@@ -22,7 +22,7 @@
             </thead>
             <tbody>
               <tr *ngFor="let order of orders;">
-                <td>{{order.updateTimestamp | date}}</td>
+                <td>{{order.createTimestamp | date}}</td>
                 <td *ngIf="user.role.isAdmin" scope="col">{{order.user.name}}</td>
                 <td>{{order.instrument.name}}</td>
                 <td>{{order.side}}</td>

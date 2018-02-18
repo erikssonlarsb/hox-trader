@@ -22,7 +22,7 @@ export class OrdersComponent implements OnInit  {
     this.user = this.authService.getLoggedInUser();
     this.ApiService.getOrders()
       .then((orders) => {
-        this.orders = orders;
+        this.orders = orders.sort((a: Order, b: Order) => {return a.createTimestamp.getDate() - b.createTimestamp.getDate()});
       })
       .catch(function(err) {
         console.log(err);
