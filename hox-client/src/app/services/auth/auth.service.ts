@@ -80,6 +80,7 @@ export class AuthService {
 
   private getPayload(token: string): Payload {
     var base64Url = token.split('.')[1];
+    if(!base64Url) {return null;}  // token is corrupt 
     var base64 = base64Url.replace('-', '+').replace('_', '/');
     var json = JSON.parse(window.atob(base64));
     let payload : Payload = Object.assign(new Payload(), json);

@@ -22,7 +22,7 @@ export class ApiService {
       .post(`${window.location.origin}/api/registration`, body)
       .toPromise()
       .then(response => response)
-      .catch(this.handleError);
+      .catch(error => this.handleError(error, this.authService));
   }
 
   getInstruments(params: URLSearchParams = new URLSearchParams()): Promise<Instrument[]> {
@@ -32,7 +32,7 @@ export class ApiService {
       .get(`${window.location.origin}/api/instruments`, options)
       .toPromise()
       .then(response => response.json().map(json => new Instrument(json)))
-      .catch(this.handleError);
+      .catch(error => this.handleError(error, this.authService));
   }
 
   getInstrument(id: string): Promise<Instrument> {
@@ -42,7 +42,7 @@ export class ApiService {
       .get(`${window.location.origin}/api/instruments/${id}`, options)
       .toPromise()
       .then(response => new Instrument(response.json()))
-      .catch(this.handleError);
+      .catch(error => this.handleError(error, this.authService));
   }
 
   getOrders(params: URLSearchParams = new URLSearchParams()): Promise<Order[]> {
@@ -52,7 +52,7 @@ export class ApiService {
       .get(`${window.location.origin}/api/orders`, options)
       .toPromise()
       .then(response => response.json().map(json => new Order(json)))
-      .catch(this.handleError);
+      .catch(error => this.handleError(error, this.authService));
   }
 
   getOrder(id: string): Promise<Order> {
@@ -62,7 +62,7 @@ export class ApiService {
       .get(`${window.location.origin}/api/orders/${id}`, options)
       .toPromise()
       .then(response => new Order(response.json()))
-      .catch(this.handleError);
+      .catch(error => this.handleError(error, this.authService));
   }
 
 
@@ -79,7 +79,7 @@ export class ApiService {
       .post(`${window.location.origin}/api/orders`, body, options)
       .toPromise()
       .then(response => new Order(response.json()))
-      .catch(this.handleError);
+      .catch(error => this.handleError(error, this.authService));
   }
 
   deleteOrder(id: string): Promise<any> {
@@ -89,7 +89,7 @@ export class ApiService {
       .delete(`${window.location.origin}/api/orders/${id}`, options)
       .toPromise()
       .then(response => response.json())
-      .catch(this.handleError);
+      .catch(error => this.handleError(error, this.authService));
   }
 
   getTrades(params: URLSearchParams = new URLSearchParams()): Promise<Trade[]> {
@@ -99,7 +99,7 @@ export class ApiService {
       .get(`${window.location.origin}/api/trades`, options)
       .toPromise()
       .then(response => response.json().map(json => new Trade(json)))
-      .catch(this.handleError);
+      .catch(error => this.handleError(error, this.authService));
   }
 
   getSettlements(params: URLSearchParams = new URLSearchParams()): Promise<Settlement[]> {
@@ -109,7 +109,7 @@ export class ApiService {
       .get(`${window.location.origin}/api/settlements`, options)
       .toPromise()
       .then(response => response.json().map(json => new Settlement(json)))
-      .catch(this.handleError);
+      .catch(error => this.handleError(error, this.authService));
   }
 
   getSettlement(id: string): Promise<Settlement> {
@@ -119,7 +119,7 @@ export class ApiService {
       .get(`${window.location.origin}/api/settlements/${id}`, options)
       .toPromise()
       .then(response => new Settlement(response.json()))
-      .catch(this.handleError);
+      .catch(error => this.handleError(error, this.authService));
   }
 
   acknowledgeSettlement(id: string): Promise<Settlement> {
@@ -132,7 +132,7 @@ export class ApiService {
       .put(`${window.location.origin}/api/settlements/${id}`, body, options)
       .toPromise()
       .then(response => new Settlement(response.json()))
-      .catch(this.handleError);
+      .catch(error => this.handleError(error, this.authService));
   }
 
   getOrderDepths(params: URLSearchParams = new URLSearchParams()): Promise<OrderDepth[]> {
@@ -142,7 +142,7 @@ export class ApiService {
       .get(`${window.location.origin}/api/orderdepths`, options)
       .toPromise()
       .then(response => response.json().map(json => new OrderDepth(json)))
-      .catch(this.handleError);
+      .catch(error => this.handleError(error, this.authService));
   }
 
   getOrderDepth(id: string): Promise<OrderDepth> {
@@ -152,11 +152,15 @@ export class ApiService {
       .get(`${window.location.origin}/api/orderdepths/${id}`, options)
       .toPromise()
       .then(response => new OrderDepth(response.json()))
-      .catch(this.handleError);
+      .catch(error => this.handleError(error, this.authService));
   }
 
-  private handleError(error: any): Promise<any> {
+  private handleError(error: any, authService: AuthService): Promise<any> {
     console.log(error);
-    return Promise.reject(error.json().error.errmsg);
+    if(error.status == 401) {
+      authService.logout();
+    } else {
+      return Promise.reject(error.json().message || error.json().error.errmsg);
+    }
   }
 }
