@@ -6,12 +6,14 @@ var OrderDepth = require('../models/orderdepth');
 
 router.get('/', function(req, res) {
   var orderDepths = {};
-  Instrument.find({'expiry': {$gt: Date.now()}})
+
+  req.query.expiry = {$gt: Date.now()};
+  Instrument.find(req.query)
     .then(instruments => {
       instruments.forEach(function(instrument) {
         orderDepths[instrument._id] = new OrderDepth(instrument);
       });
-      return Order.find({status: 'ACTIVE'});
+      return Order.find({status: 'ACTIVE', instrument: {$in: instruments.map((instrument) => instrument._id)}});
     })
     .then(orders => {
       orders.forEach(function(order) {

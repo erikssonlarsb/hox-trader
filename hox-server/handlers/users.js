@@ -5,9 +5,8 @@ var User = require('../models/user');
 var Role = require('../models/role');
 
 router.get('/', function(req, res){
-  var query = {};
   if (!req.auth.user.role.isAdmin) {
-    query._id = req.auth.user._id;
+    req.query._id = req.auth.user._id;
   }
   User.find(query)
   .populate('role')

@@ -6,11 +6,10 @@ var Trade = require('../models/trade');
 var Instrument = require('../models/instrument');
 
 router.get('/', function(req, res){
-  var query = {};
   if (!req.auth.user.role.isAdmin) {
-    query.user = req.auth.user._id;
+    req.query.user = req.auth.user._id;
   }
-  Order.find(query)
+  Order.find(req.query)
   .populate('user')
   .populate('instrument')
   .exec(function(err, orders) {

@@ -3,9 +3,8 @@ var router = express.Router();
 var Trade = require('../models/trade');
 
 router.get('/', function(req, res){
-  var query = {};
   if (!req.auth.user.role.isAdmin) {
-    query.user = req.auth.user._id;
+    req.query.user = req.auth.user._id;
   }
   Trade.find(query)
   .populate('order')

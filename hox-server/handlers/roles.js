@@ -3,7 +3,7 @@ var router = express.Router();
 var Role = require('../models/role');
 
 router.get('/', function(req, res){
-  Role.find({}, function(err, roles) {
+  Role.find(req.query, function(err, roles) {
     if (err) {
       res.status(500).json({'error': err})
     } else {

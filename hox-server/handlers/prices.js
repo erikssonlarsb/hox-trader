@@ -3,7 +3,7 @@ var router = express.Router();
 var Price = require('../models/price');
 
 router.get('/', function(req, res){
-  Price.find({}, function(err, prices) {
+  Price.find(req.query, function(err, prices) {
     if (err) {
       res.status(500).json({'error': err})
     } else {

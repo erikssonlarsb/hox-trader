@@ -4,9 +4,8 @@ var mongoose = require('mongoose');
 var Settlement = require('../models/settlement');
 
 router.get('/', function(req, res){
-  var query = {};
   if (!req.auth.user.role.isAdmin) {
-    query.user = req.auth.user._id;
+    req.query.user = req.auth.user._id;
   }
   Settlement.find(query)
   .populate('user')

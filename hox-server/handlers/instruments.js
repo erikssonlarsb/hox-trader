@@ -3,7 +3,7 @@ var router = express.Router();
 var Instrument = require('../models/instrument');
 
 router.get('/', function(req, res){
-  Instrument.find({}, function(err, instruments) {
+  Instrument.find(req.query, function(err, instruments) {
     if (err) {
       res.status(500).json({'error': err})
     } else {
