@@ -5,7 +5,7 @@ var Price = require('../models/price');
 router.get('/', function(req, res){
   Price.find(req.query, function(err, prices) {
     if (err) {
-      res.status(500).json({'error': err})
+      res.status(500).json({'error': err.toString()})
     } else {
       res.json(prices);
     }
@@ -21,7 +21,7 @@ router.post('/', function(req, res){
   });
   price.save(function(err) {
     if (err) {
-      res.status(500).json({'error': err})
+      res.status(500).json({'error': err.toString()})
     } else {
       res.json(price);
     }

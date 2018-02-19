@@ -17,7 +17,7 @@ router.get('/', function(req, res){
   })
   .exec(function(err, trades) {
     if (err) {
-      res.status(500).json({'error': err});
+      res.status(500).json({'error': err.toString()});
     } else {
       res.json(trades);
     }
@@ -40,7 +40,7 @@ router.get('/:id', function(req, res){
   })
   .exec(function(err, trade) {
     if (err) {
-      res.status(500).json({'error': err})
+      res.status(500).json({'error': err.toString()})
     } else if (trade) {
       res.json(trade);
     } else {

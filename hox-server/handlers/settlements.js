@@ -17,7 +17,7 @@ router.get('/', function(req, res){
   })
   .exec(function(err, settlements) {
     if (err) {
-      res.status(500).json({'error': err});
+      res.status(500).json({'error': err.toString()});
     } else {
       res.json(settlements);
     }
@@ -48,7 +48,7 @@ router.get('/:id', function(req, res){
   })
   .exec(function(err, trade) {
     if (err) {
-      res.status(500).json({'error': err})
+      res.status(500).json({'error': err.toString()})
     } else if (trade) {
       res.json(trade);
     } else {
@@ -61,7 +61,7 @@ router.get('/:id', function(req, res){
 router.put('/:id', function(req, res){
   modifySettlement(req, function(err, settlement) {
     if (err) {
-      res.status(500).json({'error': err});
+      res.status(500).json({'error': err.toString()});
     } else {
       res.json(settlement);
     }

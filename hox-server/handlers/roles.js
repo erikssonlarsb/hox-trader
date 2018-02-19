@@ -5,7 +5,7 @@ var Role = require('../models/role');
 router.get('/', function(req, res){
   Role.find(req.query, function(err, roles) {
     if (err) {
-      res.status(500).json({'error': err})
+      res.status(500).json({'error': err.toString()})
     } else {
       res.json(roles);
     }
@@ -20,7 +20,7 @@ router.post('/', function(req, res){
 
   role.save(function(err) {
     if (err) {
-      res.status(500).json({'error': err})
+      res.status(500).json({'error': err.toString()})
     } else {
       res.json(role);
     }
@@ -30,7 +30,7 @@ router.post('/', function(req, res){
 router.get('/:id', function(req, res){
   Role.findById(req.params.id, function(err, role) {
     if (err) {
-      res.status(500).json({'error': err})
+      res.status(500).json({'error': err.toString()})
     } else if (role) {
       res.json(role);
     } else {

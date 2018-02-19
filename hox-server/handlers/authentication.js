@@ -10,7 +10,7 @@ router.post('/', function(req, res){
   .populate('isAdmin')
   .exec(function(err, user) {
     if (err) {
-      res.status(500).json({'error': err})
+      res.status(500).json({'error': err.toString()})
     } else {
       if (!user) {
         res.status(401).json({message: 'Authentication failed. User not found.'});

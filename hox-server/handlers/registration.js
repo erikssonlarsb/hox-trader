@@ -14,7 +14,7 @@ router.post('/', function(req, res){
 
   user.save(function(err) {
     if (err) {
-      res.status(500).json({'error': err})
+      res.status(500).json({'error': err.toString()})
     } else {
       res.sendStatus(201);
     }

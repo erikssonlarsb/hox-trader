@@ -14,7 +14,7 @@ router.get('/', function(req, res){
   .populate('instrument')
   .exec(function(err, orders) {
     if (err) {
-      res.status(500).json({'error': err});
+      res.status(500).json({'error': err.toString()});
     } else {
       res.json(orders);
     }
@@ -31,7 +31,7 @@ router.get('/:id', function(req, res){
   .populate('instrument')
   .exec(function(err, order) {
     if (err) {
-      res.status(500).json({'error': err})
+      res.status(500).json({'error': err.toString()})
     } else if (order) {
       res.json(order);
     } else {
@@ -47,7 +47,7 @@ router.post('/', function(req, res){
         req.body.instrument = instrument._id;
         createOrder(req, function(err, order) {
           if (err) {
-            res.status(500).json({'error': err});
+            res.status(500).json({'error': err.toString()});
           } else {
             res.json(order);
           }
@@ -59,7 +59,7 @@ router.post('/', function(req, res){
   } else {
     createOrder(req, function(err, order) {
       if (err) {
-        res.status(500).json({'error': err.message});
+        res.status(500).json({'error': err.toString()});
       } else {
         res.json(order);
       }
@@ -70,7 +70,7 @@ router.post('/', function(req, res){
 router.put('/:id', function(req, res){
   modifyOrder(req, function(err, order) {
     if (err) {
-      res.status(500).json({'error': err});
+      res.status(500).json({'error': err.toString()});
     } else {
       res.json(order);
     }
@@ -80,7 +80,7 @@ router.put('/:id', function(req, res){
 router.delete('/:id', function(req, res){
   deleteOrder(req, function(err, order) {
     if (err) {
-      res.status(500).json({'error': err});
+      res.status(500).json({'error': err.toString()});
     } else {
       res.status(204).end();
     }

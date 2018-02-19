@@ -5,7 +5,7 @@ var Instrument = require('../models/instrument');
 router.get('/', function(req, res){
   Instrument.find(req.query, function(err, instruments) {
     if (err) {
-      res.status(500).json({'error': err})
+      res.status(500).json({'error': err.toString()})
     } else {
       res.json(instruments);
     }
@@ -19,7 +19,7 @@ router.post('/', function(req, res){
   });
   instrument.save(function(err) {
     if (err) {
-      res.status(500).json({'error': err})
+      res.status(500).json({'error': err.toString()})
     } else {
       res.json(instrument);
     }
@@ -29,7 +29,7 @@ router.post('/', function(req, res){
 router.get('/:id', function(req, res){
   Instrument.findById(req.params.id, function(err, instrument) {
     if (err) {
-      res.status(500).json({'error': err})
+      res.status(500).json({'error': err.toString()})
     } else if (instrument) {
       res.json(instrument);
     }  else {

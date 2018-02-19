@@ -12,7 +12,7 @@ router.get('/', function(req, res){
   .populate('role')
   .exec(function(err, users) {
     if (err) {
-      res.status(500).json({'error': err})
+      res.status(500).json({'error': err.toString()})
     } else {
       res.json(users);
     }
@@ -26,7 +26,7 @@ router.post('/', function(req, res) {
         req.body.role = role._id;
         createUser(req, function(err, user) {
           if (err) {
-            res.status(500).json({'error': err});
+            res.status(500).json({'error': err.toString()});
           } else {
             res.json(user);
           }
@@ -38,7 +38,7 @@ router.post('/', function(req, res) {
   } else {
     createUser(req, function(err, user) {
       if (err) {
-        res.status(500).json({'error': err});
+        res.status(500).json({'error': err.toString()});
       } else {
         res.json(user);
       }
@@ -74,7 +74,7 @@ router.get('/:id', function(req, res){
   .populate('role')
   .exec(function(err, user) {
     if (err) {
-      res.status(500).json({'error': err})
+      res.status(500).json({'error': err.toString()})
     } else if (user) {
       res.json(user);
     } else {
