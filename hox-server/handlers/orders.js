@@ -4,6 +4,7 @@ var mongoose = require('mongoose');
 var Order = require('../models/order');
 var Trade = require('../models/trade');
 var Instrument = require('../models/instrument');
+var Price = require('../models/price');
 
 router.get('/', function(req, res){
   if (!req.auth.user.role.isAdmin) {
@@ -211,6 +212,13 @@ function matchOrder(order) {
           quantity: matchQuantity
         });
 
+        var price = new Price({
+          instrument: order.instrument,
+          type: "LAST",
+          date: new Date().setHours(0,0,0,0),
+          value: matchingOrder.price
+        });
+
         trade.counterpartyTrade = matchingTrade._id;
         matchingTrade.counterpartyTrade = trade._id;
 
@@ -226,6 +234,23 @@ function matchOrder(order) {
         })
         .then(function() {
           return matchingOrder.save();
+        })
+        .then(function() {
+          return Price.findOne(
+            {
+              instrument: price.instrument,
+              type: price.type,
+              date: price.date
+            }, function (err, existingPrice) {
+            if (err) {
+              console.log(err);
+            } else if (existingPrice) {
+              existingPrice.value = price.value;
+              existingPrice.save();
+            } else {
+              price.save();
+            }
+          })
         })
         .catch(function(error) {
           console.log(error);

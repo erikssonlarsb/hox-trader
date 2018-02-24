@@ -11,6 +11,8 @@ var priceSchema = new Schema({
   updateTimestamp: Date
 });
 
+priceSchema.index({instrument: 1, type: 1, date: 1}, {unique: true});
+
 priceSchema.pre('save', function(next) {
   var currentDate = new Date();
   if (this.isNew) {
