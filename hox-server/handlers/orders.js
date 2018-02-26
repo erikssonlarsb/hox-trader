@@ -212,13 +212,6 @@ function matchOrder(order) {
           quantity: matchQuantity
         });
 
-        var price = new Price({
-          instrument: order.instrument,
-          type: "LAST",
-          date: new Date().setHours(0,0,0,0),
-          value: matchingOrder.price
-        });
-
         trade.counterpartyTrade = matchingTrade._id;
         matchingTrade.counterpartyTrade = trade._id;
 
@@ -238,16 +231,73 @@ function matchOrder(order) {
         .then(function() {
           return Price.findOne(
             {
-              instrument: price.instrument,
-              type: price.type,
-              date: price.date
+              instrument: order.instrument,
+              type: "LAST"
             }, function (err, existingPrice) {
             if (err) {
               console.log(err);
             } else if (existingPrice) {
-              existingPrice.value = price.value;
+              existingPrice.value = matchingOrder.price;
+              existingPrice.date = new Date();
               existingPrice.save();
             } else {
+              var price = new Price({
+                instrument: order.instrument,
+                type: "LAST",
+                date: new Date(),
+                value: matchingOrder.price
+              });
+              price.save();
+            }
+          })
+        })
+        .then(function() {
+          return Price.findOne(
+            {
+              instrument: order.instrument,
+              type: "HIGH"
+            }, function (err, existingPrice) {
+            if (err) {
+              console.log(err);
+            } else if (existingPrice) {
+              if (matchingOrder.price > existingPrice.value) {
+                existingPrice.value = matchingOrder.price;
+                existingPrice.date = new Date();
+                existingPrice.save();
+              }
+            } else {
+              var price = new Price({
+                instrument: order.instrument,
+                type: "HIGH",
+                date: new Date(),
+                value: matchingOrder.price
+              });
+              console.log(price);
+              price.save();
+            }
+          })
+        })
+        .then(function() {
+          return Price.findOne(
+            {
+              instrument: order.instrument,
+              type: "LOW"
+            }, function (err, existingPrice) {
+            if (err) {
+              console.log(err);
+            } else if (existingPrice) {
+              if (matchingOrder.price < existingPrice.value) {
+                existingPrice.value = matchingOrder.price;
+                existingPrice.date = new Date();
+                existingPrice.save();
+              }
+            } else {
+              var price = new Price({
+                instrument: order.instrument,
+                type: "LOW",
+                date: new Date(),
+                value: matchingOrder.price
+              });
               price.save();
             }
           })

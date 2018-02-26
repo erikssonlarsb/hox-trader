@@ -4,7 +4,7 @@ var ObjectId = Schema.Types.ObjectId;
 
 var priceSchema = new Schema({
   instrument: {type: ObjectId, ref: 'Instrument', required: true},
-  type: {type: String, enum: ['LAST', 'CLOSE', 'SETTLEMENT'], required: true},
+  type: {type: String, enum: ['LAST', 'HIGH', 'LOW', 'CLOSE', 'SETTLEMENT'], required: true},
   date: {type: Date, required: true},
   value: {type: Number, required: true},
   createTimestamp: Date,
