@@ -4,7 +4,7 @@ export class Price {
   id: string;
   type: PRICE_TYPE;
   date: Date;
-  value: Number;
+  value: number;
   createTimestamp: Date;
   updateTimestamp: Date;
 
@@ -20,6 +20,8 @@ export class Price {
 
 export enum PRICE_TYPE {
   LAST = "LAST",
+  HIGH = "HIGH",
+  LOW = "LOW",
   CLOSE = "CLOSE",
   SETTLEMENT = "SETTLEMENT"
 }

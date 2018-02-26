@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { URLSearchParams }  from '@angular/http';
 
 import { ApiService } from '../../../services/api/api.service';
 
-import { Instrument, OrderDepth } from '../../../models/index';
+import { Instrument, OrderDepth, Price } from '../../../models/index';
 
 @Component({
   selector: 'app-instrument-details',
@@ -13,6 +14,9 @@ import { Instrument, OrderDepth } from '../../../models/index';
 export class InstrumentDetailsComponent  implements OnInit  {
   instrument: Instrument;
   orderDepth: OrderDepth;
+  last: Price;
+  high: Price;
+  low: Price;
 
   constructor(private router: Router, private route: ActivatedRoute, private apiService: ApiService) { }
 
@@ -32,6 +36,18 @@ export class InstrumentDetailsComponent  implements OnInit  {
         this.apiService.getOrderDepth(params.get('id'))
           .then((orderDepth) => {
             this.orderDepth = orderDepth;
+          })
+          .catch(function(err) {
+            console.log(err);
+          });
+
+        let priceParams = new URLSearchParams();
+        priceParams.append('instrument', params.get('id'));
+        this.apiService.getPrices(priceParams)
+          .then((prices) => {
+            this.last = prices.find(price => price.type == 'LAST');
+            this.high = prices.find(price => price.type == 'HIGH');
+            this.low = prices.find(price => price.type == 'LOW');
           })
           .catch(function(err) {
             console.log(err);

@@ -6,26 +6,40 @@
           {{instrument.name}}
         </h5>
         <div class="row">
-          <div class="col-sm-6">
-            <div class="row">
-              <div class="col-sm-6"><b>Underlying:</b></div>
-              <div class="col">{{instrument.underlying}}</div>
-            </div>
-            <div class="row">
-              <div class="col-sm-6"><b>Expiry:</b></div>
-              <div class="col">{{instrument.expiry | date}}</div>
-            </div>
+          <div class="col-sm-auto table-responsive">
+            <table class="table table-sm">
+              <thead>
+                <tr>
+                  <th scope="col" class="border-top-0">Buy</th>
+                  <th scope="col" class="border-top-0">Sell</th>
+                  <th scope="col" class="border-top-0">Last</th>
+                  <th scope="col" class="border-top-0">High</th>
+                  <th scope="col" class="border-top-0">Low</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{orderDepth?.levels[0]?.buyPrice}}</td>
+                  <td>{{orderDepth?.levels[0]?.sellPrice}}</td>
+                  <td>{{last?.value}}</td>
+                  <td>{{high?.value}}</td>
+                  <td>{{low?.value}}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
+        </div>
+        <div class="row">
           <div class="col-sm-6 table-responsive">
             <table *ngIf="orderDepth" class="table table-sm table-hover">
               <thead>
                 <tr>
-                  <th scope="col"><i class="fa fa-fw fa-balance-scale"></i></th>
-                  <th scope="col"><i class="fa fa-fw fa-money"></i></th>
-                  <th scope="col" class="text-center">B</th>
-                  <th scope="col" class="text-center">S</th>
-                  <th scope="col" class="text-right"><i class="fa fa-fw fa-money"></i></th>
-                  <th scope="col" class="text-right"><i class="fa fa-fw fa-balance-scale"></i></th>
+                  <th scope="col" class="border-top-0"><i class="fa fa-fw fa-balance-scale"></i></th>
+                  <th scope="col" class="border-top-0"><i class="fa fa-fw fa-money"></i></th>
+                  <th scope="col" class="border-top-0 text-center">B</th>
+                  <th scope="col" class="border-top-0 text-center">S</th>
+                  <th scope="col" class="border-top-0 text-right"><i class="fa fa-fw fa-money"></i></th>
+                  <th scope="col" class="border-top-0 text-right"><i class="fa fa-fw fa-balance-scale"></i></th>
                 </tr>
               </thead>
               <tbody>
@@ -104,6 +118,17 @@
               </tfoot>
             </table>
           </div>
+          <div class="col-sm-6 order-sm-first">
+            <div class="row">
+              <div class="col-sm-6"><b>Underlying:</b></div>
+              <div class="col">{{instrument.underlying}}</div>
+            </div>
+            <div class="row">
+              <div class="col-sm-6"><b>Expiry:</b></div>
+              <div class="col">{{instrument.expiry | date}}</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

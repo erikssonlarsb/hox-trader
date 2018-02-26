@@ -3,7 +3,7 @@ import { Http, URLSearchParams, Headers, RequestOptions }  from '@angular/http';
 
 import { AuthService } from '../../services/auth/auth.service';
 
-import { Instrument, Order, ORDER_SIDE, Trade, OrderDepth, Settlement } from '../../models/index';
+import { Instrument, Order, ORDER_SIDE, Trade, OrderDepth, Settlement, Price } from '../../models/index';
 
 @Injectable()
 export class ApiService {
@@ -152,6 +152,16 @@ export class ApiService {
       .get(`${window.location.origin}/api/orderdepths/${id}`, options)
       .toPromise()
       .then(response => new OrderDepth(response.json()))
+      .catch(error => this.handleError(error, this.authService));
+  }
+
+  getPrices(params: URLSearchParams = new URLSearchParams()): Promise<Price[]> {
+    let headers = new Headers({'Authorization': 'Bearer ' + this.authService.getToken()});
+    let options = new RequestOptions({ headers: headers, search: params });
+    return this.http
+      .get(`${window.location.origin}/api/prices`, options)
+      .toPromise()
+      .then(response => response.json().map(json => new Price(json)))
       .catch(error => this.handleError(error, this.authService));
   }
 
