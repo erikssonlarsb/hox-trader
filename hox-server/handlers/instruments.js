@@ -3,7 +3,9 @@ var router = express.Router();
 var Instrument = require('../models/instrument');
 
 router.get('/', function(req, res){
-  Instrument.find(req.query, function(err, instruments) {
+  Instrument.find(req.query)
+  .populate('underlying')
+  .exec(function(err, instruments) {
     if (err) {
       res.status(500).json({'error': err.toString()})
     } else {
@@ -14,6 +16,8 @@ router.get('/', function(req, res){
 
 router.post('/', function(req, res){
   var instrument = new Instrument({
+    name: req.body.name,
+    type: req.body.type,
     underlying: req.body.underlying,
     expiry: req.body.expiry
   });
@@ -27,7 +31,9 @@ router.post('/', function(req, res){
 });
 
 router.get('/:id', function(req, res){
-  Instrument.findById(req.params.id, function(err, instrument) {
+  Instrument.findById(req.params.id)
+  .populate('underlying')
+  .exec(function(err, instrument) {
     if (err) {
       res.status(500).json({'error': err.toString()})
     } else if (instrument) {
