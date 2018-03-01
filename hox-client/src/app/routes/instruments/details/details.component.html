@@ -120,10 +120,19 @@
           </div>
           <div class="col-sm-6 order-sm-first">
             <div class="row">
-              <div class="col-sm-6"><b>Underlying:</b></div>
-              <div class="col">{{instrument.underlying}}</div>
+              <div class="col-sm-6"><b>Type:</b></div>
+              <div class="col">{{instrument.type}}</div>
             </div>
-            <div class="row">
+            <div *ngIf="instrument.underlying" class="row">
+              <div class="col-sm-6"><b>Underlying:</b></div>
+              <div class="col">
+                <a
+                routerLink="/instruments/{{instrument.underlying.id}}">
+                {{instrument.underlying.name}}
+                </a>
+              </div>
+            </div>
+            <div *ngIf="instrument.underlying" class="row">
               <div class="col-sm-6"><b>Expiry:</b></div>
               <div class="col">{{instrument.expiry | date}}</div>
             </div>
