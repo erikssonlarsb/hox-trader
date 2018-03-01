@@ -96,6 +96,7 @@
                   <th scope="col" class="text-right">
                     <div class="progress">
                       <div
+                        *ngIf="orderDepth.totalBuy"
                         class="progress-bar"
                         role="progressbar"
                         [style.width.%]="(orderDepth.totalBuy*100)/(orderDepth.totalBuy + orderDepth.totalSell)"
@@ -106,6 +107,7 @@
                   <th scope="col">
                     <div class="progress">
                       <div
+                        *ngIf="orderDepth.totalSell"
                         class="progress-bar bg-danger"
                         role="progressbar"
                         [style.width.%]="(orderDepth.totalSell*100)/(orderDepth.totalBuy + orderDepth.totalSell)">
