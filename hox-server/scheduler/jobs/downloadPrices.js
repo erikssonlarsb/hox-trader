@@ -30,105 +30,109 @@ exports.job = new CronJob('0 0 0 * * *', function() {
         var timezone = 'CET';
         request(eval('`'+url+'`'), function (error, response, body) {
           var jsonBody = JSON.parse(body);
-          var historicPrices = jsonBody.data[0].chartData.cp;
-          if (historicPrices) {
-            async.eachSeries(historicPrices,
-              function(historicPrice, callback) {
-                var price = new Price({
-                  instrument: instrument._id,
-                  type: 'CLOSE',
-                  date: new Date(historicPrice[0]),
-                  value: historicPrice[1]
-                });
-                price.save(function(err) {
-                  if (err) {
-                    console.log(err);
-                  }
-                })
-                .then(function() {
-                  return Price.findOne(
-                    {
-                      instrument: instrument._id,
-                      type: "LAST"
-                    }, function (err, existingPrice) {
+          if(jsonBody.exception) {
+            console.error(jsonBody.exception['@msg']);
+          } else {
+            var historicPrices = jsonBody.data[0].chartData.cp;
+            if (historicPrices) {
+              async.eachSeries(historicPrices,
+                function(historicPrice, callback) {
+                  var price = new Price({
+                    instrument: instrument._id,
+                    type: 'CLOSE',
+                    date: new Date(historicPrice[0]),
+                    value: historicPrice[1]
+                  });
+                  price.save(function(err) {
                     if (err) {
                       console.log(err);
-                    } else if (existingPrice) {
-                      if (new Date(historicPrice[0]) > existingPrice.date) {
-                        existingPrice.value = historicPrice[1];
-                        existingPrice.date = new Date(historicPrice[0]);
-                        existingPrice.save();
-                      }
-                    } else {
-                      var price = new Price({
-                        instrument: instrument._id,
-                        type: "LAST",
-                        date: new Date(historicPrice[0]),
-                        value: historicPrice[1]
-                      });
-                      price.save();
                     }
                   })
-                })
-                .then(function() {
-                  return Price.findOne(
-                    {
-                      instrument: instrument._id,
-                      type: "HIGH"
-                    }, function (err, existingPrice) {
-                    if (err) {
-                      console.log(err);
-                    } else if (existingPrice) {
-                      if (historicPrice[1] > existingPrice.value) {
-                        existingPrice.value = historicPrice[1];
-                        existingPrice.date = new Date(historicPrice[0]);
-                        existingPrice.save();
-                      }
-                    } else {
-                      var price = new Price({
+                  .then(function() {
+                    return Price.findOne(
+                      {
                         instrument: instrument._id,
-                        type: "HIGH",
-                        date: new Date(historicPrice[0]),
-                        value: historicPrice[1]
-                      });
-                      price.save();
-                    }
-                  })
-                })
-                .then(function() {
-                  return Price.findOne(
-                    {
-                      instrument: instrument._id,
-                      type: "LOW"
-                    }, function (err, existingPrice) {
-                    if (err) {
-                      console.log(err);
-                    } else if (existingPrice) {
-                      if (historicPrice[1] < existingPrice.value) {
-                        existingPrice.value = historicPrice[1];
-                        existingPrice.date = new Date(historicPrice[0]);
-                        existingPrice.save();
+                        type: "LAST"
+                      }, function (err, existingPrice) {
+                      if (err) {
+                        console.log(err);
+                      } else if (existingPrice) {
+                        if (new Date(historicPrice[0]) > existingPrice.date) {
+                          existingPrice.value = historicPrice[1];
+                          existingPrice.date = new Date(historicPrice[0]);
+                          existingPrice.save();
+                        }
+                      } else {
+                        var price = new Price({
+                          instrument: instrument._id,
+                          type: "LAST",
+                          date: new Date(historicPrice[0]),
+                          value: historicPrice[1]
+                        });
+                        price.save();
                       }
-                    } else {
-                      var price = new Price({
-                        instrument: instrument._id,
-                        type: "LOW",
-                        date: new Date(historicPrice[0]),
-                        value: historicPrice[1]
-                      });
-                      price.save();
-                    }
+                    })
                   })
-                })
-                .then(function() {
-                  callback();
-                })
-                .catch(function(error) {
-                  console.log(error);
-                  callback();
-                });
-              }
-            )
+                  .then(function() {
+                    return Price.findOne(
+                      {
+                        instrument: instrument._id,
+                        type: "HIGH"
+                      }, function (err, existingPrice) {
+                      if (err) {
+                        console.log(err);
+                      } else if (existingPrice) {
+                        if (historicPrice[1] > existingPrice.value) {
+                          existingPrice.value = historicPrice[1];
+                          existingPrice.date = new Date(historicPrice[0]);
+                          existingPrice.save();
+                        }
+                      } else {
+                        var price = new Price({
+                          instrument: instrument._id,
+                          type: "HIGH",
+                          date: new Date(historicPrice[0]),
+                          value: historicPrice[1]
+                        });
+                        price.save();
+                      }
+                    })
+                  })
+                  .then(function() {
+                    return Price.findOne(
+                      {
+                        instrument: instrument._id,
+                        type: "LOW"
+                      }, function (err, existingPrice) {
+                      if (err) {
+                        console.log(err);
+                      } else if (existingPrice) {
+                        if (historicPrice[1] < existingPrice.value) {
+                          existingPrice.value = historicPrice[1];
+                          existingPrice.date = new Date(historicPrice[0]);
+                          existingPrice.save();
+                        }
+                      } else {
+                        var price = new Price({
+                          instrument: instrument._id,
+                          type: "LOW",
+                          date: new Date(historicPrice[0]),
+                          value: historicPrice[1]
+                        });
+                        price.save();
+                      }
+                    })
+                  })
+                  .then(function() {
+                    callback();
+                  })
+                  .catch(function(error) {
+                    console.log(error);
+                    callback();
+                  });
+                }
+              )
+            }
           }
         });
       }
