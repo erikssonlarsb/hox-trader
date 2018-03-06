@@ -6,7 +6,7 @@ router.get('/', function(req, res){
   if (!req.auth.user.role.isAdmin) {
     req.query.user = req.auth.user._id;
   }
-  Trade.find(query)
+  Trade.find(req.query)
   .populate('order')
   .populate('user')
   .populate('instrument')

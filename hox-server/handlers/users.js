@@ -8,7 +8,7 @@ router.get('/', function(req, res){
   if (!req.auth.user.role.isAdmin) {
     req.query._id = req.auth.user._id;
   }
-  User.find(query)
+  User.find(req.query)
   .populate('role')
   .exec(function(err, users) {
     if (err) {

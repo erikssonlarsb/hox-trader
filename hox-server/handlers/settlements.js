@@ -7,7 +7,7 @@ router.get('/', function(req, res){
   if (!req.auth.user.role.isAdmin) {
     req.query.user = req.auth.user._id;
   }
-  Settlement.find(query)
+  Settlement.find(req.query)
   .populate('user')
   .populate('trades')
   .populate({
