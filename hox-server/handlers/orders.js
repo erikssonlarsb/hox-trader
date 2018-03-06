@@ -272,7 +272,6 @@ function matchOrder(order) {
                 date: new Date(),
                 value: matchingOrder.price
               });
-              console.log(price);
               price.save();
             }
           })
