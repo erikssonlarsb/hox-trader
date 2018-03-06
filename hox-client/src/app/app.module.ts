@@ -4,6 +4,8 @@ import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 
+import { ChartsModule } from 'ng2-charts';
+
 import { AppComponent } from './app.component';
 
 import { RoutingModule } from './routing.module';
@@ -41,7 +43,8 @@ import { SettlementDetailsComponent } from './routes/settlements/details/details
     HttpModule,
     FormsModule,
     RoutingModule,
-    BootstrapModule
+    BootstrapModule,
+    ChartsModule
   ],
   providers: [
     AuthService,

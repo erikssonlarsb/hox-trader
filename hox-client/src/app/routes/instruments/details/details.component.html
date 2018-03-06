@@ -30,8 +30,8 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-sm-6 table-responsive">
-            <table *ngIf="orderDepth" class="table table-sm table-hover">
+          <div class="col-md-6 table-responsive">
+            <table *ngIf="orderDepth?.levels.length > 0" class="table table-sm table-hover">
               <thead>
                 <tr>
                   <th scope="col" class="border-top-0"><i class="fa fa-fw fa-balance-scale"></i></th>
@@ -120,13 +120,21 @@
               </tfoot>
             </table>
           </div>
-          <div class="col-sm-6 order-sm-first">
+          <div class="col-md-6 order-md-first">
             <div class="row">
-              <div class="col-sm-6"><b>Type:</b></div>
+              <div class="col-5 col-lg-4"><b>Type</b></div>
               <div class="col">{{instrument.type}}</div>
             </div>
+            <div *ngIf="instrument.ticker" class="row">
+              <div class="col-5 col-lg-4"><b>Ticker</b></div>
+              <div class="col">{{instrument.ticker}}</div>
+            </div>
+            <div *ngIf="instrument.isin" class="row">
+              <div class="col-5 col-lg-4"><b>ISIN</b></div>
+              <div class="col">{{instrument.isin}}</div>
+            </div>
             <div *ngIf="instrument.underlying" class="row">
-              <div class="col-sm-6"><b>Underlying:</b></div>
+              <div class="col-5 col-lg-4"><b>Underlying</b></div>
               <div class="col">
                 <a
                 routerLink="/instruments/{{instrument.underlying.id}}">
@@ -135,9 +143,21 @@
               </div>
             </div>
             <div *ngIf="instrument.underlying" class="row">
-              <div class="col-sm-6"><b>Expiry:</b></div>
+              <div class="col-5 col-lg-4"><b>Expiry</b></div>
               <div class="col">{{instrument.expiry | date}}</div>
             </div>
+          </div>
+        </div>
+        <div class="row mt-2" *ngIf="chartLabels?.length > 0">
+          <div class="col-sm-12">
+            <canvas
+              baseChart
+              [chartType]="'line'"
+              [datasets]="chartData"
+              [labels]="chartLabels"
+              [options]="chartOptions"
+              [legend]="false">
+          </canvas>
           </div>
         </div>
       </div>

@@ -5,6 +5,8 @@ export class Instrument {
   id: string;
   name: string;
   type: string;
+  isin: string;
+  ticker: string;
   underlying: Instrument;
   expiry: Date;
   prices: Array<Price>;
@@ -15,6 +17,8 @@ export class Instrument {
     this.id = json._id;
     this.name = json.name;
     this.type = json.type;
+    this.isin = json.isin;
+    this.ticker = json.ticker;
     this.underlying = json.underlying ? new Instrument(json.underlying) : null;
     this.expiry = json.expiry ? new Date(json.expiry) : null;
     this.prices = json.prices ? json.prices.map(price => new Price(price)) : null;
