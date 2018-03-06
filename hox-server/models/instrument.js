@@ -13,6 +13,8 @@ var instrumentSchema = new Schema({
     return derivatives.indexOf(this.type) <= -1;
   }},
   type: {type: String, enum: ['INDEX', 'FORWARD'], required: true},
+  isin: {type: String},
+  ticker: {type: String},
   underlying: {type: ObjectId, ref: 'Instrument', required: function() {
     return derivatives.indexOf(this.type) > -1;
   }},
