@@ -23,6 +23,7 @@ import { TransactionsComponent } from './routes/transactions/transactions.compon
 import { OrdersComponent } from './routes/orders/orders.component';
 import { SettlementsComponent } from './routes/settlements/settlements.component';
 import { SettlementDetailsComponent } from './routes/settlements/details/details.component';
+import { AdminComponent } from './routes/admin/admin.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { SettlementDetailsComponent } from './routes/settlements/details/details
     TransactionsComponent,
     OrdersComponent,
     SettlementsComponent,
-    SettlementDetailsComponent
+    SettlementDetailsComponent,
+    AdminComponent
   ],
   imports: [
     BrowserModule,

@@ -10,6 +10,7 @@ import { TransactionsComponent } from './routes/transactions/transactions.compon
 import { OrdersComponent } from './routes/orders/orders.component';
 import { SettlementsComponent } from './routes/settlements/settlements.component';
 import { SettlementDetailsComponent } from './routes/settlements/details/details.component';
+import { AdminComponent } from './routes/admin/admin.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/instruments', pathMatch: 'full' },
@@ -22,7 +23,8 @@ const routes: Routes = [
   { path: 'orders', component: OrdersComponent },
   { path: 'transactions', component: TransactionsComponent },
   { path: 'settlements', component: SettlementsComponent },
-  { path: 'settlements/:id', component: SettlementDetailsComponent }
+  { path: 'settlements/:id', component: SettlementDetailsComponent },
+  { path: 'admin', component: AdminComponent },
 
 ];
 

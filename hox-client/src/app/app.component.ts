@@ -5,6 +5,7 @@ import { trigger,state,style,transition,animate } from '@angular/animations';
 import { Subscription } from 'rxjs/Subscription';
 
 import { AuthService } from './services/auth/auth.service';
+import { User } from './models/index';
 
 @Component({
   selector: 'app-root',
@@ -27,6 +28,7 @@ import { AuthService } from './services/auth/auth.service';
 export class AppComponent implements OnInit {
   subscription: Subscription;
   menuVisibleState: string = 'hidden';
+  user: User;
 
   constructor(private authService: AuthService, private router: Router) {}
 
@@ -35,6 +37,7 @@ export class AppComponent implements OnInit {
     .subscribe(
       (loggedIn: boolean) => {
         if(loggedIn) {
+          this.user = this.authService.getLoggedInUser();
           this.toggleNavbar('visible');
         }
       }
@@ -44,7 +47,9 @@ export class AppComponent implements OnInit {
       if(!this.authService.isAuthenticated()) {
         this.router.navigate(['/login']);
       } else {
+        this.user = this.authService.getLoggedInUser();
         this.toggleNavbar('visible');
+
       }
     })
   }

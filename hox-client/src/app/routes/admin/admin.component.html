@@ -1,0 +1,70 @@
+<div class="row">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">
+          Create derivative
+        </h5>
+        <div class="row">
+          <div class="col-md-12">
+            <form>
+              <div class="form-group">
+                <label for="index">Index</label>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fa fa-fw fa-newspaper-o" aria-hidden="true"></i></span>
+                  </div>
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="index"
+                    id="index"
+                    [typeahead]="indices"
+                    [typeaheadMinLength]="0"
+                    typeaheadOptionField="name"
+                    placeholder="Click to select index"
+                    [(ngModel)]="index"
+                    required />
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Expiry date</label>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fa fa-fw fa-calendar" aria-hidden="true"></i></span>
+                  </div>
+                  <input
+                    type="text"
+                    class="form-control"
+                    bsDatepicker
+                    [minDate]="minDate"
+                    #dp="bsDatepicker"
+                    placeholder="Click to select date"
+                    [(bsValue)]="expiry"
+                    [bsConfig]="{ dateInputFormat: 'YYYY-MM-DD' }"
+                    required />
+                 </div>
+              </div>
+              <button
+                type="submit"
+                class="btn btn-lg btn-primary btn-block"
+                (click)="createDerivative()">
+                <i class="fa fa-paper-plane-o"></i> Create
+              </button>
+            </form>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div [hidden]="!statusMessage" class="alert alert-success" role="alert">
+              {{statusMessage}}
+            </div>
+            <div [hidden]="!errorMessage" class="alert alert-danger" role="alert">
+              {{errorMessage}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

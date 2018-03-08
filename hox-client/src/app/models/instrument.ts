@@ -26,3 +26,8 @@ export class Instrument {
     this.updateTimestamp = json.updateTimestamp ? new Date(json.updateTimestamp) : null;
   }
 }
+
+export enum INSTRUMENT_TYPE {
+  INDEX = "INDEX",
+  FORWARD = "FORWARD"
+}
