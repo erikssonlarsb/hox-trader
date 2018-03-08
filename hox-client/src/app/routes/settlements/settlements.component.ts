@@ -5,8 +5,7 @@ import { Http }  from '@angular/http';
 import { AuthService } from '../../services/auth/auth.service';
 import { ApiService } from '../../services/api/api.service';
 
-import { Settlement } from '../../models/index';
-import { User } from '../../services/auth/payload';
+import { Settlement, User } from '../../models/index';
 
 @Component({
   selector: 'app-settlements',

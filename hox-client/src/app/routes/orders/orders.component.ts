@@ -3,8 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth/auth.service';
 import { ApiService } from '../../services/api/api.service';
 
-import { Order } from '../../models/index';
-import { User } from '../../services/auth/payload';
+import { Order, User } from '../../models/index';
 
 @Component({
   selector: 'app-orders',

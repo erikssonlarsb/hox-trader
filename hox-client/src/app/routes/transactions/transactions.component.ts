@@ -3,8 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth/auth.service';
 import { ApiService } from '../../services/api/api.service';
 
-import {Trade } from '../../models/index';
-import { User } from '../../services/auth/payload';
+import { Trade, User } from '../../models/index';
 
 @Component({
   selector: 'app-transactions',
