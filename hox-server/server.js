@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 require('console-stamp')(console, { pattern: 'yyyy/mm/dd HH:MM:ss.l' });
 var config = require('./config');
 var authorize = require('./utils/authorize');
-var scheduler = require('./scheduler/scheduler')
+var scheduler = require('./jobs/scheduler')
 
 app.use(bodyParser.urlencoded({extended: false}));  // Form for authentication
 app.use(bodyParser.json());
@@ -22,6 +22,7 @@ app.use('/api/prices', authorize, require('./handlers/prices'));
 app.use('/api/trades', authorize, require('./handlers/trades'));
 app.use('/api/orderdepths', authorize, require('./handlers/orderdepths'));
 app.use('/api/settlements', authorize, require('./handlers/settlements'));
+app.use('/api/jobs', authorize, require('./handlers/jobs'));
 
 
 

@@ -1,8 +1,7 @@
-var CronJob = require('cron').CronJob;
 var Trade = require('../../models/trade');
 var Settlement = require('../../models/settlement');
 
-exports.job = new CronJob('0 0 0 * * *', function() {
+exports.run = function() {
   console.log("### settleTrades started.");
   Trade.find({isSettled: false})
     .populate('counterpartyTrade')
@@ -58,7 +57,7 @@ exports.job = new CronJob('0 0 0 * * *', function() {
               settlement.isAcknowledged = true;
             }
             settlement.save();
-            
+
             for (let trade of settlement.trades) {
               trade.isSettled = true;
               trade.save();
@@ -70,5 +69,4 @@ exports.job = new CronJob('0 0 0 * * *', function() {
         console.log("settleTrades finished. ###");
       }
     });
-
-}, null, true, 'Europe/London', null, true);
+};

@@ -1,7 +1,6 @@
-var CronJob = require('cron').CronJob;
 var Order = require('../../models/order');
 
-exports.job = new CronJob('0 0 0 * * *', function() {
+exports.run = function() {
   console.log("### expireOrders started.");
   Order.find({status: 'ACTIVE'})
   .populate('instrument', 'expiry').exec(function (err, orders) {
@@ -20,5 +19,4 @@ exports.job = new CronJob('0 0 0 * * *', function() {
     }
     console.log("expireOrders finished. ###");
   });
-
-}, null, true, 'Europe/London', null, true);
+};

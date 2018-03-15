@@ -72,6 +72,13 @@
                   "GET",
                   "PUT"
               ]
+          },
+          {
+              "resource" : "jobs",
+              "methods" : [
+                  "GET",
+                  "PUT"
+              ]
           }
       ]
   },
