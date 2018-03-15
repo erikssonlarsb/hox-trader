@@ -5,6 +5,7 @@ var Instrument = require('../models/instrument');
 router.get('/', function(req, res){
   Instrument.find(req.query)
   .populate('underlying')
+  .populate('prices')
   .exec(function(err, instruments) {
     if (err) {
       res.status(500).json({'error': err.toString()})
@@ -33,6 +34,7 @@ router.post('/', function(req, res){
 router.get('/:id', function(req, res){
   Instrument.findById(req.params.id)
   .populate('underlying')
+  .populate('prices')
   .exec(function(err, instrument) {
     if (err) {
       res.status(500).json({'error': err.toString()})
