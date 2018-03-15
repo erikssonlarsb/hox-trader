@@ -56,11 +56,62 @@
         </div>
         <div class="row">
           <div class="col-md-12">
-            <div [hidden]="!statusMessage" class="alert alert-success" role="alert">
-              {{statusMessage}}
+            <div [hidden]="!createDerivativeStatusMessage" class="alert alert-success" role="alert">
+              {{createDerivativeStatusMessage}}
             </div>
-            <div [hidden]="!errorMessage" class="alert alert-danger" role="alert">
-              {{errorMessage}}
+            <div [hidden]="!createDerivativeErrorMessage" class="alert alert-danger" role="alert">
+              {{createDerivativeErrorMessage}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">
+          Execute Job
+        </h5>
+        <div class="row">
+          <div class="col-md-12">
+            <form>
+              <div class="form-group">
+                <label for="index">Job</label>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fa fa-fw fa-cogs" aria-hidden="true"></i></span>
+                  </div>
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="job"
+                    id="job"
+                    [typeahead]="jobs"
+                    [typeaheadMinLength]="0"
+                    typeaheadOptionField="name"
+                    placeholder="Click to select job"
+                    [(ngModel)]="job"
+                    required />
+                </div>
+              </div>
+              <button
+                type="submit"
+                class="btn btn-lg btn-primary btn-block"
+                (click)="runJob()">
+                <i class="fa fa-paper-plane-o"></i> Run
+              </button>
+            </form>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div [hidden]="!runJobStatusMessage" class="alert alert-success" role="alert">
+              {{runJobStatusMessage}}
+            </div>
+            <div [hidden]="!runJobErrorMessage" class="alert alert-danger" role="alert">
+              {{runJobErrorMessage}}
             </div>
           </div>
         </div>

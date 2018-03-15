@@ -180,6 +180,26 @@ export class ApiService {
       .catch(error => this.handleError(error, this.authService));
   }
 
+  getJobs(params: URLSearchParams = new URLSearchParams()): Promise<string[]> {
+    let headers = new Headers({'Authorization': 'Bearer ' + this.authService.getToken()});
+    let options = new RequestOptions({ headers: headers, search: params });
+    return this.http
+      .get(`${window.location.origin}/api/jobs`, options)
+      .toPromise()
+      .then(response => response.json().map(json => json))
+      .catch(error => this.handleError(error, this.authService));
+  }
+
+  runJob(id: string): Promise<string> {
+    let headers = new Headers({'Authorization': 'Bearer ' + this.authService.getToken()});
+    let options = new RequestOptions({ headers: headers});
+    return this.http
+      .put(`${window.location.origin}/api/jobs/${id}/run`, null, options)
+      .toPromise()
+      .then(response => response)
+      .catch(error => this.handleError(error, this.authService));
+  }
+
   private handleError(error: any, authService: AuthService): Promise<any> {
     console.log(error);
     if(error.status == 401) {

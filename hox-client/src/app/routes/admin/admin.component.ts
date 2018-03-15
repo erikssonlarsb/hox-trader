@@ -15,8 +15,13 @@ export class AdminComponent  implements OnInit  {
   minDate: Date = new Date();
   expiry: Date;
   index: string;
-  statusMessage: string;
-  errorMessage: string;
+  createDerivativeStatusMessage: string;
+  createDerivativeErrorMessage: string;
+
+  jobs: Array<string>;
+  job: string;
+  runJobStatusMessage: string;
+  runJobSErrorMessage: string;
 
   constructor(private apiService: ApiService) { }
 
@@ -26,21 +31,39 @@ export class AdminComponent  implements OnInit  {
     this.apiService.getInstruments(instrumentParams)
     .then((indices) => {
       this.indices = indices;
-    })
+    });
+
+    this.apiService.getJobs()
+    .then((jobs) => {
+      this.jobs = jobs;
+    });
   }
 
   createDerivative(): void {
-    this.statusMessage = null;  // Reset status message
-    this.errorMessage = null;  // Reset error message
+    this.createDerivativeStatusMessage = null;  // Reset status message
+    this.createDerivativeErrorMessage = null;  // Reset error message
 
     var instrumentId = this.indices.filter(
       instrument => instrument.name == this.index)[0].id;
     this.apiService.postInstrument(null, INSTRUMENT_TYPE.FORWARD, instrumentId, this.expiry)
       .then((instrument) => {
-        this.statusMessage = instrument.name + " successfully created."
+        this.createDerivativeStatusMessage = instrument.name + " successfully created."
       })
       .catch((error) => {
-        this.errorMessage = error;
+        this.createDerivativeErrorMessage = error;
+      });
+  }
+
+  runJob(): void {
+    this.runJobStatusMessage = null;  // Reset status message
+    this.runJobSErrorMessage = null;  // Reset error message
+
+    this.apiService.runJob(this.job)
+      .then((info) => {
+        this.runJobStatusMessage = this.job + " successfully initiated."
+      })
+      .catch((error) => {
+        this.runJobSErrorMessage = error;
       });
   }
 }
