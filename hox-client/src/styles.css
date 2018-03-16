@@ -26,3 +26,8 @@ td > button.btn-sm {
   vertical-align: top;
   border-bottom: 1px solid #dee2e6;
 }
+
+/* Fix height for iOS */
+input {
+	height: 2.5rem;
+}
