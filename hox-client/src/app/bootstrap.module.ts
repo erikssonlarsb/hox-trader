@@ -1,14 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { TypeaheadModule, BsDatepickerModule  } from 'ngx-bootstrap';
+import { TypeaheadModule } from 'ngx-bootstrap';
 
 @NgModule({
   imports: [
     CommonModule,
     TypeaheadModule.forRoot(),
-    BsDatepickerModule.forRoot()
   ],
-  exports: [TypeaheadModule, BsDatepickerModule]
+  exports: [TypeaheadModule]
 })
 export class BootstrapModule {}

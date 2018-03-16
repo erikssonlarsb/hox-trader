@@ -12,7 +12,7 @@ import { Instrument, INSTRUMENT_TYPE, PRICE_TYPE } from '../../models/index';
 })
 export class AdminComponent  implements OnInit  {
   indices: Array<Instrument>;
-  minDate: Date = new Date();
+  minDate: string = new Date().toISOString().slice(0,10);
   expiry: Date;
   index: string;
   createDerivativeStatusMessage: string;
