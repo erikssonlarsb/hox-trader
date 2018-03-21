@@ -23,6 +23,7 @@ services:
     build: ./hox-server
     environment:
       PORT: 4000
+      USE_SSL: 'false'
       DATABASE: mongodb:27017
       DB_USER: $DB_USER
       DB_PASSWORD: $DB_PASSWORD
@@ -39,21 +40,25 @@ services:
     build:
       context: ./openssl
       args:
-        - COMMON_NAME=Hox Trader
-        - KEY_NAME=hoxtrader
+        - COMMON_NAME=$COMMON_NAME
+        - KEY_NAME=$KEY_NAME
     volumes:
       - certs:/certs
     depends_on:
       - client
   reverseproxy:
-    build: ./reverseproxy
+    image: nginx:alpine
+    volumes:
+      - certs:/etc/ssl/certs
+      - ./reverseproxy/nginx.conf.template:/etc/nginx/nginx.conf.template
     ports:
       - '80:80'
       - '443:443'
       - '4000:4000'
       - '27017:27017'
-    volumes:
-      - certs:/etc/ssl/certs
+    environment:
+     - KEY_NAME=$KEY_NAME
+    command: sh -c "envsubst '$${KEY_NAME}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
     restart: always
     depends_on:
       - openssl

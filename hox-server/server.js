@@ -27,16 +27,20 @@ app.use('/api/jobs', authorize, require('./handlers/jobs'));
 
 
 console.log('Connecting to database: %s.', config.database);
-mongoose.connect(config.database, {server: {ssl: true}, user: config.db_user, pass: config.db_password, auth: {authdb: config.db_auth}}, function(err) {
-  if (err) {
-    console.log('Could not connect to database: %s.', err);
-    process.exit(1);
-  } else {
-    console.log('Connected do database.');
-    app.listen(config.port, function() {
-      console.log('Running on port: %s.', config.port);
-      console.log('Initiating jobs.');
-      scheduler.init();
-    });
-  }
-});
+
+var connectWithRetry = function() {
+  return mongoose.connect(config.database, {server: {ssl: config.use_ssl}, user: config.db_user, pass: config.db_password, auth: {authdb: config.db_auth}}, function(err) {
+    if (err) {
+      console.error('Failed to connect to mongo on startup - retrying in 5 sec', err);
+      setTimeout(connectWithRetry, 5000);
+    } else {
+      console.log('Connected do database.');
+      app.listen(config.port, function() {
+        console.log('Running on port: %s.', config.port);
+        console.log('Initiating jobs.');
+        scheduler.init();
+      });
+    }
+  });
+};
+connectWithRetry();
