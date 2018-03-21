@@ -35,12 +35,27 @@ services:
     depends_on:
       - server
 
+  openssl:
+    build:
+      context: ./openssl
+      args:
+        - COMMON_NAME=Hox Trader
+        - KEY_NAME=hoxtrader
+    volumes:
+      - certs:/certs
+    depends_on:
+      - client
   reverseproxy:
     build: ./reverseproxy
     ports:
-      - '4000:4000'
+      - '80:80'
+      - '443:443'
       - '4200:4200'
       - '27017:27017'
+    volumes:
+      - certs:/etc/ssl/certs
     restart: always
     depends_on:
-      - client
+      - openssl
+volumes:
+  certs:
