@@ -27,7 +27,7 @@ app.use('/api/jobs', authorize, require('./handlers/jobs'));
 
 
 console.log('Connecting to database: %s.', config.database);
-mongoose.connect(config.database, {user: config.db_user, pass: config.db_password, auth: {authdb: config.db_auth}}, function(err) {
+mongoose.connect(config.database, {server: {ssl: true}, user: config.db_user, pass: config.db_password, auth: {authdb: config.db_auth}}, function(err) {
   if (err) {
     console.log('Could not connect to database: %s.', err);
     process.exit(1);
