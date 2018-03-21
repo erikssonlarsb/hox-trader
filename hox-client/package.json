@@ -3,7 +3,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --prod --host 0.0.0.0 --live-reload false --proxy-config proxy.conf.prod.json",
-    "dev": "ng serve --port 4300 --proxy-config proxy.conf.json",
+    "dev": "ng serve --proxy-config proxy.conf.json",
     "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",

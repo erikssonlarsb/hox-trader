@@ -50,7 +50,7 @@ services:
     ports:
       - '80:80'
       - '443:443'
-      - '4200:4200'
+      - '4000:4000'
       - '27017:27017'
     volumes:
       - certs:/etc/ssl/certs
