@@ -5,6 +5,11 @@
         <h5 class="card-title">
           Settlements
         </h5>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="checkbox" id="hideFinished" [checked]="hideFinished" (change)="hideFinished = !hideFinished">
+          <label class="form-check-label" for="hideFinished">Hide finished</label>
+        </div>
+        <br>
         <span class="badge badge-danger">Action required</span>
         <span class="badge badge-warning">Awaiting counterparty</span>
         <span class="badge badge-success">Settlement finished</span>
@@ -22,43 +27,45 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let settlement of settlements;"
-                [ngClass]="[
-                  (settlement.isAcknowledged && settlement.counterpartySettlement.isAcknowledged) ? 'table-success' : '',
-                  (settlement.isAcknowledged && !settlement.counterpartySettlement.isAcknowledged) || (!settlement.counterpartySettlement.isAcknowledged && settlement.amount > 0) ? 'table-warning' : '',
-                  (!settlement.isAcknowledged && settlement.counterpartySettlement.isAcknowledged) || (!settlement.isAcknowledged && settlement.amount < 0) ? 'table-danger' : ''
-                  ]">
-                <td>{{settlement.createTimestamp | date}}</td>
-                <td *ngIf="user.role.isAdmin" scope="col">{{settlement.user.name}}</td>
-                <td class="text-right">{{settlement.amount}}</td>
-                <td>{{settlement.counterpartySettlement.user.name}}</td>
-                <td>
-                  <button
-                    type="button"
-                    class="btn btn-sm btn-info btn-block"
-                    routerLink="/settlements/{{settlement.id}}">
-                    <i class="fa fa-info"></i> Info
-                  </button>
-                </td>
-                <td>
-                  <button
-                    type="button"
-                    class="btn btn-sm btn-primary btn-block"
-                    (click)="acknowledgeSettlement(settlement.id)"
-                    [hidden]="settlement.isAcknowledged || (!settlement.counterpartySettlement.isAcknowledged && settlement.amount >= 0)">
-                    <i class="fa fa-check"></i> Ack
-                  </button>
-                </td>
-                <td>
-                  <button
-                    type="button"
-                    class="btn btn-sm btn-success btn-block"
-                    (click)="openSwish(settlement)"
-                    [hidden]="settlement.isAcknowledged || settlement.amount >= 0">
-                    <i class="fa fa-handshake-o"></i> Swish
-                  </button>
-                </td>
-              </tr>
+              <ng-container *ngFor="let settlement of settlements;">
+                <tr *ngIf="!hideFinished || !settlement.isAcknowledged || !settlement.counterpartySettlement.isAcknowledged"
+                  [ngClass]="[
+                    (settlement.isAcknowledged && settlement.counterpartySettlement.isAcknowledged) ? 'table-success' : '',
+                    (settlement.isAcknowledged && !settlement.counterpartySettlement.isAcknowledged) || (!settlement.counterpartySettlement.isAcknowledged && settlement.amount > 0) ? 'table-warning' : '',
+                    (!settlement.isAcknowledged && settlement.counterpartySettlement.isAcknowledged) || (!settlement.isAcknowledged && settlement.amount < 0) ? 'table-danger' : ''
+                    ]">
+                  <td>{{settlement.createTimestamp | date}}</td>
+                  <td *ngIf="user.role.isAdmin" scope="col">{{settlement.user.name}}</td>
+                  <td class="text-right">{{settlement.amount}}</td>
+                  <td>{{settlement.counterpartySettlement.user.name}}</td>
+                  <td>
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-info btn-block"
+                      routerLink="/settlements/{{settlement.id}}">
+                      <i class="fa fa-info"></i> Info
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-primary btn-block"
+                      (click)="acknowledgeSettlement(settlement.id)"
+                      [hidden]="settlement.isAcknowledged || (!settlement.counterpartySettlement.isAcknowledged && settlement.amount >= 0)">
+                      <i class="fa fa-check"></i> Ack
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-success btn-block"
+                      (click)="openSwish(settlement)"
+                      [hidden]="settlement.isAcknowledged || settlement.amount >= 0">
+                      <i class="fa fa-handshake-o"></i> Swish
+                    </button>
+                  </td>
+                </tr>
+              </ng-container>
             </tbody>
           </table>
         </div>

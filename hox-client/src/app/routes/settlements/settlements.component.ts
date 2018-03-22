@@ -17,6 +17,7 @@ import { Settlement, User } from '../../models/index';
 export class SettlementsComponent implements OnInit  {
   user: User;
   settlements: Array<Settlement>;
+  hideFinished: boolean = true;
 
   constructor(private datePipe: DatePipe, private http: Http, private authService: AuthService, private apiService: ApiService) { }
 

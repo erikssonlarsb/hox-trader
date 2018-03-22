@@ -5,6 +5,10 @@
         <h5 class="card-title">
           Transactions
         </h5>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="checkbox" id="hideExpired" [checked]="hideExpired" (change)="hideExpired = !hideExpired">
+          <label class="form-check-label" for="hideExpired">Hide expired</label>
+        </div>
         <div class="table-responsive">
           <table class="table table-sm table-hover">
             <thead>
@@ -19,15 +23,17 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let trade of trades;">
-                <td>{{trade.createTimestamp | date}}</td>
-                <td *ngIf="user.role.isAdmin" scope="col">{{trade.user.name}}</td>
-                <td>{{trade.instrument.name}}</td>
-                <td>{{trade.side}}</td>
-                <td class="text-right">{{trade.quantity}}</td>
-                <td class="text-right">{{trade.price}}</td>
-                <td>{{trade.counterpartyTrade.user.name}}</td>
-              </tr>
+              <ng-container *ngFor="let trade of trades;">
+                <tr *ngIf="!hideExpired || trade.instrument.expiry > dateNow">
+                  <td>{{trade.createTimestamp | date}}</td>
+                  <td *ngIf="user.role.isAdmin" scope="col">{{trade.user.name}}</td>
+                  <td>{{trade.instrument.name}}</td>
+                  <td>{{trade.side}}</td>
+                  <td class="text-right">{{trade.quantity}}</td>
+                  <td class="text-right">{{trade.price}}</td>
+                  <td>{{trade.counterpartyTrade.user.name}}</td>
+                </tr>
+              </ng-container>
             </tbody>
           </table>
         </div>

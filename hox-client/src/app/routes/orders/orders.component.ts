@@ -14,6 +14,8 @@ import { Order, User } from '../../models/index';
 export class OrdersComponent implements OnInit  {
   user: User;
   orders: Array<Order>;
+  hideExpired: boolean = true;
+  dateNow: Date = new Date();
 
   constructor(private authService: AuthService, private ApiService: ApiService) { }
 
