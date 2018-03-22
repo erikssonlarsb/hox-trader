@@ -25,7 +25,7 @@ export class SettlementsComponent implements OnInit  {
     this.user = this.authService.getLoggedInUser();
     this.apiService.getSettlements()
       .then((settlements) => {
-        this.settlements = settlements;
+        this.settlements = settlements.sort((a: Settlement, b: Settlement) => {return a.createTimestamp.getTime() - b.createTimestamp.getTime()});;
       })
       .catch(function(err) {
         console.log(err);
@@ -37,7 +37,7 @@ export class SettlementsComponent implements OnInit  {
       .then(() => {
         this.apiService.getSettlements()
           .then((settlements) => {
-            this.settlements = settlements.sort((a: Settlement, b: Settlement) => {return a.createTimestamp.getDate() - b.createTimestamp.getDate()});;
+            this.settlements = settlements.sort((a: Settlement, b: Settlement) => {return a.createTimestamp.getTime() - b.createTimestamp.getTime()});;
           })
           .catch(function(err) {
             console.log(err);
