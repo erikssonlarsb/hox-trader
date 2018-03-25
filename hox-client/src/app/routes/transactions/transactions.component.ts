@@ -14,8 +14,7 @@ import { Trade, User } from '../../models/index';
 export class TransactionsComponent implements OnInit  {
   user: User;
   trades: Array<Trade>;
-  hideExpired: boolean = true;
-  dateNow: Date = new Date();
+  hideSettled: boolean = true;
 
   constructor(private authService: AuthService, private ApiService: ApiService) { }
 
