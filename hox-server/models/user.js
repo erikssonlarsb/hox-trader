@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var bcrypt = require('bcryptjs');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.Types.ObjectId;
 var Role = require('./role');
@@ -28,12 +29,30 @@ userSchema.pre('save', function(next) {
   next();
 });
 
+userSchema.pre('save', function(next) {
+  const saltRounds = 10;
+  bcrypt.hash(this.password, saltRounds, (err, hash) => {
+    if (err) {
+      return next(err);
+    } else {
+      this.password = hash;
+      next();
+    }
+  });
+});
+
 userSchema.methods.verifyPassword = function(candidatePassword, cb) {
   mongoose.model('User', userSchema).findOne({username: this.username}).select('password').exec(function (err, user) {
     if(err) {
       cb(err, null);
     } else {
-      cb(null, user.password == candidatePassword);
+      bcrypt.compare(candidatePassword, user.password, function(err, result) {
+        if(err) {
+          cb(err, null);
+        } else {
+          cb(null, result);
+        }
+      });
     }
   });
 };

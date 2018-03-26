@@ -6,7 +6,7 @@
     "name" : "Admin One",
     "role" : ObjectId("000000000000000000000001"),
     "username" : "admin1",
-    "password" : "admin1",
+    "password" : "$2a$10$Yz9cZW2lUlJ6ysi6biSMk.pynYh/iz9WUgd5f9mMQ4V1jNU5YzQBi",
     "email" : "admin1@hoxtrader.com",
     "phone" : "555-236-461"
   },
@@ -17,7 +17,7 @@
     "name" : "Trader One",
     "role" : ObjectId("000000000000000000000002"),
     "username" : "trader1",
-    "password" : "trader1",
+    "password" : "$2a$10$dLznkTVmjxiiOSA2RmAXKe5LAmMla68uNiS/NQ1ZjqmvrTxmPTIGK",
     "email" : "trader1@hoxtrader.com",
     "phone" : "555-872-3371"
   }
