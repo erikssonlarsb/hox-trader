@@ -30,15 +30,19 @@ userSchema.pre('save', function(next) {
 });
 
 userSchema.pre('save', function(next) {
-  const saltRounds = 10;
-  bcrypt.hash(this.password, saltRounds, (err, hash) => {
-    if (err) {
-      return next(err);
-    } else {
-      this.password = hash;
-      next();
-    }
-  });
+  if (this.isModified("password")) {
+    const saltRounds = 10;
+    bcrypt.hash(this.password, saltRounds, (err, hash) => {
+      if (err) {
+        return next(err);
+      } else {
+        this.password = hash;
+        next();
+      }
+    });
+  } else {
+    next();
+  }
 });
 
 userSchema.methods.verifyPassword = function(candidatePassword, cb) {

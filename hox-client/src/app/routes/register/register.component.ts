@@ -33,6 +33,5 @@ export class RegisterComponent {
     } else {
       this.errorMessage = "Passwords doesn't match."
     }
-
   }
 }

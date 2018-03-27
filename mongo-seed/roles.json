@@ -111,6 +111,13 @@
               ]
           },
           {
+              "resource" : "users",
+              "methods" : [
+                  "GET",
+                  "PUT"
+              ]
+          },
+          {
               "resource" : "orderdepths",
               "methods" : [
                   "GET"

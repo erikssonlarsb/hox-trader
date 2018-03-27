@@ -46,6 +46,33 @@ router.post('/', function(req, res) {
   }
 });
 
+router.get('/:id', function(req, res) {
+  var query = {_id: req.params.id};
+  if (!req.auth.user.role.isAdmin) {
+    query._id = req.auth.user._id;
+  }
+  User.findOne(query)
+  .exec(function(err, user) {
+    if (err) {
+      res.status(500).json({'error': err.toString()})
+    } else if (user) {
+      res.json(user);
+    } else {
+      res.status(404).send();  // No user found
+    }
+  });
+});
+
+router.put('/:id', function(req, res) {
+  modifyUser(req, function(err, user) {
+    if (err) {
+      res.status(500).json({'error': err.toString()});
+    } else {
+      res.json(user);
+    }
+  });
+});
+
 function createUser(req, callback) {
   var user = new User({
     name: req.body.name,
@@ -65,22 +92,33 @@ function createUser(req, callback) {
   });
 }
 
-router.get('/:id', function(req, res){
+function modifyUser(req, callback) {
   var query = {_id: req.params.id};
   if (!req.auth.user.role.isAdmin) {
     query._id = req.auth.user._id;
   }
   User.findOne(query)
-  .populate('role')
   .exec(function(err, user) {
     if (err) {
-      res.status(500).json({'error': err.toString()})
+      callback(err, null);
     } else if (user) {
-      res.json(user);
+      if(req.body.name) user.name = req.body.name;
+      if(req.body.username) user.username = req.body.username;
+      if(req.body.email) user.email = req.body.email;
+      if(req.body.phone) user.phone = req.body.phone;
+      if(req.body.password) user.password = req.body.password;
+
+      user.save(function(err) {
+        if (err) {
+          callback(err, null);
+        } else {
+          callback(null, user);
+        }
+      });
     } else {
-      res.status(404).send();  // No user found
+      callback("User not found", null);
     }
   });
-});
+}
 
 module.exports = router

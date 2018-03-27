@@ -1,0 +1,40 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">
+          Users
+        </h5>
+        <div class="table-responsive">
+          <table class="table table-sm table-hover">
+            <thead>
+              <tr>
+                <th scope="col">Username</th>
+                <th scope="col">Name</th>
+                <th scope="col">Role</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let user of users;">
+                <tr>
+                  <td>{{user.username}}</td>
+                  <td>{{user.name}}</td>
+                  <td>{{user.role.name}}</td>
+                  <td>
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-danger btn-block"
+                      [routerLink]="['/users', user.id]">
+                      <i class="fa fa-trash"></i> Edit
+                    </button>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

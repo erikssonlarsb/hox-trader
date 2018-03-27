@@ -3,7 +3,7 @@ import { Http, URLSearchParams, Headers, RequestOptions }  from '@angular/http';
 
 import { AuthService } from '../../services/auth/auth.service';
 
-import { Instrument, INSTRUMENT_TYPE, Order, ORDER_SIDE, Trade, OrderDepth, Settlement, Price, PRICE_TYPE } from '../../models/index';
+import { User, Instrument, INSTRUMENT_TYPE, Order, ORDER_SIDE, Trade, OrderDepth, Settlement, Price, PRICE_TYPE } from '../../models/index';
 
 @Injectable()
 export class ApiService {
@@ -22,6 +22,46 @@ export class ApiService {
       .post(`${window.location.origin}/api/registration`, body)
       .toPromise()
       .then(response => response)
+      .catch(error => this.handleError(error, this.authService));
+  }
+
+  getUsers(params: URLSearchParams = new URLSearchParams()): Promise<User[]> {
+    let headers = new Headers({'Authorization': 'Bearer ' + this.authService.getToken()});
+    let options = new RequestOptions({ headers: headers, search: params });
+    return this.http
+      .get(`${window.location.origin}/api/users`, options)
+      .toPromise()
+      .then(response => response.json().map(json => new User(json)))
+      .catch(error => this.handleError(error, this.authService));
+  }
+
+  getUser(id: string): Promise<User> {
+    let headers = new Headers({'Authorization': 'Bearer ' + this.authService.getToken()});
+    let options = new RequestOptions({ headers: headers});
+    return this.http
+      .get(`${window.location.origin}/api/users/${id}`, options)
+      .toPromise()
+      .then(response => new User(response.json()))
+      .catch(error => this.handleError(error, this.authService));
+  }
+
+  updateUser(id: string, user: User): Promise<User> {
+    let headers = new Headers({'Authorization': 'Bearer ' + this.authService.getToken()});
+    let options = new RequestOptions({ headers: headers});
+    return this.http
+      .put(`${window.location.origin}/api/users/${id}`, user, options)
+      .toPromise()
+      .then(response => new User(response.json()))
+      .catch(error => this.handleError(error, this.authService));
+  }
+
+  updateUserPassword(id: string, password: string): Promise<string> {
+    let headers = new Headers({'Authorization': 'Bearer ' + this.authService.getToken()});
+    let options = new RequestOptions({ headers: headers});
+    return this.http
+      .put(`${window.location.origin}/api/users/${id}`, {password: password}, options)
+      .toPromise()
+      .then(response => new User(response.json()))
       .catch(error => this.handleError(error, this.authService));
   }
 

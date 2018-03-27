@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { URLSearchParams }  from '@angular/http';
 
 import { ApiService } from '../../services/api/api.service';
 
-import { Instrument, INSTRUMENT_TYPE, PRICE_TYPE } from '../../models/index';
+import { Instrument, INSTRUMENT_TYPE, PRICE_TYPE, User } from '../../models/index';
 
 @Component({
   selector: 'app-order',
@@ -30,7 +31,9 @@ export class AdminComponent  implements OnInit  {
   runJobStatusMessage: string;
   runJobErrorMessage: string;
 
-  constructor(private apiService: ApiService) { }
+  users: Array<User>;
+
+  constructor(private router: Router, private apiService: ApiService) { }
 
   ngOnInit(): void {
     let indexParams = new URLSearchParams();
@@ -50,6 +53,11 @@ export class AdminComponent  implements OnInit  {
     this.apiService.getJobs()
     .then((jobs) => {
       this.jobs = jobs;
+    });
+
+    this.apiService.getUsers()
+    .then((users) => {
+      this.users = users;
     });
   }
 
@@ -103,5 +111,9 @@ export class AdminComponent  implements OnInit  {
       .catch((error) => {
         this.runJobErrorMessage = error;
       });
+  }
+
+  userOnSelect(event): void {
+    this.router.navigate(['/users', event.item.id]);
   }
 }

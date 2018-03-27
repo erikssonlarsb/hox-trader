@@ -16,6 +16,8 @@ import { ApiService } from './services/api/api.service';
 
 import { LoginComponent } from './routes/login/login.component';
 import { RegisterComponent } from './routes/register/register.component';
+import { UsersComponent } from './routes/users/users.component';
+import { UserDetailsComponent } from './routes/users/details/details.component';
 import { InstrumentsComponent } from './routes/instruments/instruments.component';
 import { InstrumentDetailsComponent } from './routes/instruments/details/details.component';
 import { OrderComponent } from './routes/order/order.component';
@@ -30,6 +32,8 @@ import { AdminComponent } from './routes/admin/admin.component';
     AppComponent,
     LoginComponent,
     RegisterComponent,
+    UsersComponent,
+    UserDetailsComponent,
     InstrumentsComponent,
     InstrumentDetailsComponent,
     OrderComponent,

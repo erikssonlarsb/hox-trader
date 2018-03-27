@@ -3,6 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { LoginComponent } from './routes/login/login.component';
 import { RegisterComponent } from './routes/register/register.component';
+import { UsersComponent } from './routes/users/users.component';
+import { UserDetailsComponent } from './routes/users/details/details.component';
 import { InstrumentsComponent } from './routes/instruments/instruments.component';
 import { InstrumentDetailsComponent } from './routes/instruments/details/details.component';
 import { OrderComponent } from './routes/order/order.component';
@@ -16,6 +18,8 @@ const routes: Routes = [
   { path: '', redirectTo: '/instruments', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'users', component: UsersComponent },
+  { path: 'users/:id', component: UserDetailsComponent },
   { path: 'instruments', component: InstrumentsComponent },
   { path: 'instruments/:id', component: InstrumentDetailsComponent },
   { path: 'order', component: OrderComponent },
