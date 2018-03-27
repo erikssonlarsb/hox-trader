@@ -32,6 +32,7 @@ export class AdminComponent  implements OnInit  {
   runJobErrorMessage: string;
 
   users: Array<User>;
+  user: User;
 
   constructor(private router: Router, private apiService: ApiService) { }
 
