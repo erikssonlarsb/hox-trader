@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { ApiService } from '../../../services/api/api.service';
 
@@ -22,7 +22,7 @@ export class UserDetailsComponent implements OnInit  {
   changePasswordStatusMessage: string;
   changePasswordErrorMessage: string;
 
-  constructor(private router: Router, private route: ActivatedRoute, private apiService: ApiService) { }
+  constructor(private route: ActivatedRoute, private apiService: ApiService) { }
 
   ngOnInit(): void {
     this.route

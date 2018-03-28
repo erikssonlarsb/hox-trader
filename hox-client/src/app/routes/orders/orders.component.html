@@ -14,7 +14,7 @@
             <thead>
               <tr>
                 <th scope="col">Date</th>
-                <th *ngIf="user.role.isAdmin" scope="col">User</th>
+                <th *ngIf="user?.role.isAdmin" scope="col">User</th>
                 <th scope="col">Instrument</th>
                 <th scope="col">Side</th>
                 <th scope="col" class="text-right">Quantity</th>
@@ -28,7 +28,7 @@
               <ng-container *ngFor="let order of orders;">
                 <tr *ngIf="!hideExpired || order.instrument.expiry > dateNow">
                   <td>{{order.createTimestamp | date}}</td>
-                  <td *ngIf="user.role.isAdmin" scope="col">{{order.user.name}}</td>
+                  <td *ngIf="user?.role.isAdmin" scope="col">{{order.user.name}}</td>
                   <td>{{order.instrument.name}}</td>
                   <td>{{order.side}}</td>
                   <td class="text-right">{{order.quantity}}</td>

@@ -18,7 +18,7 @@
             <thead>
               <tr>
                 <th scope="col">Date</th>
-                <th *ngIf="user.role.isAdmin" scope="col">User</th>
+                <th *ngIf="user?.role.isAdmin" scope="col">User</th>
                 <th scope="col" class="text-right">Amount</th>
                 <th scope="col">Counterparty</th>
                 <th scope="col"></th> <!-- info button -->
@@ -35,7 +35,7 @@
                     (!settlement.isAcknowledged && settlement.counterpartySettlement.isAcknowledged) || (!settlement.isAcknowledged && settlement.amount < 0) ? 'table-danger' : ''
                     ]">
                   <td>{{settlement.createTimestamp | date}}</td>
-                  <td *ngIf="user.role.isAdmin" scope="col">{{settlement.user.name}}</td>
+                  <td *ngIf="user?.role.isAdmin" scope="col">{{settlement.user.name}}</td>
                   <td class="text-right">{{settlement.amount}}</td>
                   <td>{{settlement.counterpartySettlement.user.name}}</td>
                   <td>
