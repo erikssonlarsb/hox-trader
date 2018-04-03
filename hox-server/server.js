@@ -3,26 +3,26 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 require('console-stamp')(console, { pattern: 'yyyy/mm/dd HH:MM:ss.l' });
 var config = require('./config');
-var authorize = require('./utils/authorize');
+var auth = require('./utils/auth');
 var scheduler = require('./jobs/scheduler')
 
 app.use(bodyParser.urlencoded({extended: false}));  // Form for authentication
 app.use(bodyParser.json());
 
 /*
-* Routes
-*/
+ * Routes
+ */
 app.use('/api/registration', require('./handlers/registration'));
 app.use('/api/authentication', require('./handlers/authentication'));
-app.use('/api/users', authorize('_id'), require('./handlers/users'));
-app.use('/api/roles', authorize(), require('./handlers/roles'));
-app.use('/api/instruments', authorize(), require('./handlers/instruments'));
-app.use('/api/orders', authorize('user'), require('./handlers/orders'));
-app.use('/api/prices', authorize(), require('./handlers/prices'));
-app.use('/api/trades', authorize('user'), require('./handlers/trades'));
-app.use('/api/orderdepths', authorize(), require('./handlers/orderdepths'));
-app.use('/api/settlements', authorize('user'), require('./handlers/settlements'));
-app.use('/api/jobs', authorize(), require('./handlers/jobs'));
+app.use('/api/users', auth('_id'), require('./handlers/users'));
+app.use('/api/roles', auth(), require('./handlers/roles'));
+app.use('/api/instruments', auth(), require('./handlers/instruments'));
+app.use('/api/orders', auth('user'), require('./handlers/orders'));
+app.use('/api/prices', auth(), require('./handlers/prices'));
+app.use('/api/trades', auth('user'), require('./handlers/trades'));
+app.use('/api/orderdepths', auth(), require('./handlers/orderdepths'));
+app.use('/api/settlements', auth('user'), require('./handlers/settlements'));
+app.use('/api/jobs', auth(), require('./handlers/jobs'));
 
 
 
