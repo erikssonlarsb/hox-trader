@@ -1,14 +1,19 @@
 var jwt = require('jsonwebtoken');
 var config = require('../config');
 
-function authorize(req, res, next) {
-  authenticate(req).then(function(req) {
-    return checkPermissions(req);
-  }).then(function() {
-    next();
-  }).catch(function(err) {
-    return res.status(err.code).json({message: err.msg});
-  })
+function authorize(userField) {
+  return function(req, res, next) {
+    authenticate(req)
+    .then(function(req) {
+      return checkPermissions(req);
+    }).then(function(req) {
+      return checkUserAccess(req, userField);
+    }).then(function() {
+      next();
+    }).catch(function(err) {
+      return res.status(err.code).json({message: err.msg});
+    })
+  }
 }
 
 function authenticate(req) {
@@ -41,10 +46,19 @@ function checkPermissions(req) {
       }
     });
     if(permission && permission.methods.indexOf(req.method) > -1) {
-      resolve(true);
+      resolve(req);
     } else {
       reject({code: 405, msg: 'Permission denied for method ' + req.method});
     }
+  });
+}
+
+function checkUserAccess(req, userField) {
+  return new Promise(function(resolve, reject) {
+    if (userField && !req.auth.user.role.isAdmin) {
+      req.query[userField] = req.auth.user._id;
+    }
+    resolve(req);
   });
 }
 

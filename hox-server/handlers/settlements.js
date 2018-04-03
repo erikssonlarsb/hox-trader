@@ -4,9 +4,6 @@ var mongoose = require('mongoose');
 var Settlement = require('../models/settlement');
 
 router.get('/', function(req, res){
-  if (!req.auth.user.role.isAdmin) {
-    req.query.user = req.auth.user._id;
-  }
   Settlement.find(req.query)
   .populate('user')
   .populate('trades')
@@ -25,11 +22,8 @@ router.get('/', function(req, res){
 });
 
 router.get('/:id', function(req, res){
-  var query = {_id: req.params.id};
-  if (!req.auth.user.role.isAdmin) {
-    query.user = req.auth.user._id;
-  }
-  Settlement.findOne(query)
+  req.query._id = req.params.id;
+  Settlement.findOne(req.query)
   .populate('user')
   .populate({
     path: 'trades',
@@ -69,11 +63,8 @@ router.put('/:id', function(req, res){
 });
 
 function modifySettlement(req, callback) {
-  var query = {_id: req.params.id};
-  if (!req.auth.user.role.isAdmin) {
-    query.user = req.auth.user._id;
-  }
-  Settlement.findOne(query)
+  req.query._id = req.params.id;
+  Settlement.findOne(req.query)
   .exec(function(err, settlement) {
     if (err) {
       callback(err, null);

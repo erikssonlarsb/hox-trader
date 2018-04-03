@@ -5,9 +5,6 @@ var User = require('../models/user');
 var Role = require('../models/role');
 
 router.get('/', function(req, res){
-  if (!req.auth.user.role.isAdmin) {
-    req.query._id = req.auth.user._id;
-  }
   User.find(req.query)
   .populate('role')
   .exec(function(err, users) {
@@ -47,11 +44,8 @@ router.post('/', function(req, res) {
 });
 
 router.get('/:id', function(req, res) {
-  var query = {_id: req.params.id};
-  if (!req.auth.user.role.isAdmin) {
-    query._id = req.auth.user._id;
-  }
-  User.findOne(query)
+  req.query._id = req.params.id;
+  User.findOne(req.query)
   .exec(function(err, user) {
     if (err) {
       res.status(500).json({'error': err.toString()})
@@ -93,11 +87,8 @@ function createUser(req, callback) {
 }
 
 function modifyUser(req, callback) {
-  var query = {_id: req.params.id};
-  if (!req.auth.user.role.isAdmin) {
-    query._id = req.auth.user._id;
-  }
-  User.findOne(query)
+  req.query._id = req.params.id;
+  User.findOne(req.query)
   .exec(function(err, user) {
     if (err) {
       callback(err, null);

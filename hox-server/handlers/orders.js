@@ -6,10 +6,7 @@ var Trade = require('../models/trade');
 var Instrument = require('../models/instrument');
 var Price = require('../models/price');
 
-router.get('/', function(req, res){
-  if (!req.auth.user.role.isAdmin) {
-    req.query.user = req.auth.user._id;
-  }
+router.get('/', function(req, res) {
   Order.find(req.query)
   .populate('user')
   .populate('instrument')
@@ -22,12 +19,9 @@ router.get('/', function(req, res){
   });
 });
 
-router.get('/:id', function(req, res){
-  var query = {_id: req.params.id};
-  if (!req.auth.user.role.isAdmin) {
-    query.user = req.auth.user._id;
-  }
-  Order.findOne(query)
+router.get('/:id', function(req, res) {
+  req.query._id = req.params.id;
+  Order.findOne(req.query)
   .populate('user')
   .populate('instrument')
   .exec(function(err, order) {
@@ -110,11 +104,8 @@ function createOrder(req, callback) {
 }
 
 function modifyOrder(req, callback) {
-  var query = {_id: req.params.id};
-  if (!req.auth.user.role.isAdmin) {
-    query.user = req.auth.user._id;
-  }
-  Order.findOne(query)
+  req.query._id = req.params.id;
+  Order.findOne(req.query)
   .populate('user')
   .populate('instrument')
   .exec(function(err, order) {
@@ -140,11 +131,8 @@ function modifyOrder(req, callback) {
 }
 
 function deleteOrder(req, callback) {
-  var query = {_id: req.params.id};
-  if (!req.auth.user.role.isAdmin) {
-    query.user = req.auth.user._id;
-  }
-  Order.findOne(query)
+  req.query._id = req.params.id;
+  Order.findOne(req.query)
   .exec(function(err, order) {
     if (err) {
       callback(err, null);
