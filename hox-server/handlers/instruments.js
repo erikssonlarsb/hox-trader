@@ -1,8 +1,10 @@
-var express = require('express');
-var router = express.Router();
-var Instrument = require('../models/instrument');
+const express = require('express');
+const router = express.Router();
+const Instrument = require('../models/instrument');
+const Index = require('../models/instrument.index');
+const Derivative = require('../models/instrument.derivative');
 
-router.get('/', function(req, res){
+router.get('/', function(req, res) {
   Instrument.find(req.query)
   .populate('underlying')
   .populate('prices')
@@ -15,16 +17,21 @@ router.get('/', function(req, res){
   });
 });
 
-router.post('/', function(req, res){
-  var instrument = new Instrument({
-    name: req.body.name,
-    type: req.body.type,
-    underlying: req.body.underlying,
-    expiry: req.body.expiry
-  });
+router.post('/', function(req, res) {
+  let instrument = null;
+  switch(req.body.type) {
+    case 'Index':
+      instrument = new Index(req.body);
+      break;
+      case 'Derivative':
+        instrument = new Derivative(req.body);
+        break;
+    default:
+      res.status(500).json({'error': 'No such type: ' + req.body.type});
+  }
   instrument.save(function(err) {
     if (err) {
-      res.status(500).json({'error': err.toString()})
+      res.status(500).json({'error': err.toString()});
     } else {
       res.json(instrument);
     }

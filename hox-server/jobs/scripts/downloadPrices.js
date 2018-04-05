@@ -7,7 +7,7 @@ var url = "http://www.nasdaqomxnordic.com/webproxy/DataFeedProxy.aspx?SubSystem=
 
 exports.run = function() {
   console.log("### downloadPrices started.");
-  Instrument.find({type: 'INDEX'})
+  Instrument.find({type: 'Index'})
   .populate({
     path: 'prices',
     match: { type: { $eq: 'CLOSE'}}
