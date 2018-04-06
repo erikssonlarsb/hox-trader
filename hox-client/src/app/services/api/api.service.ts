@@ -3,7 +3,7 @@ import { Http, URLSearchParams, Headers, RequestOptions }  from '@angular/http';
 
 import { AuthService } from '../../services/auth/auth.service';
 
-import { User, Instrument, INSTRUMENT_TYPE, Order, ORDER_SIDE, Trade, OrderDepth, Settlement, Price, PRICE_TYPE } from '../../models/index';
+import { User, Instrument, Order, ORDER_SIDE, Trade, OrderDepth, Settlement, Price, PRICE_TYPE } from '../../models/index';
 
 @Injectable()
 export class ApiService {
@@ -85,17 +85,11 @@ export class ApiService {
       .catch(error => this.handleError(error, this.authService));
   }
 
-  postInstrument(name: string, type: INSTRUMENT_TYPE, underlying: string, expiry: Date): Promise<Instrument> {
-    let body = {
-      name: name,
-      type: type,
-      underlying: underlying,
-      expiry: expiry
-    }
+  postInstrument(instrument: Instrument): Promise<Instrument> {
     let headers = new Headers({'Authorization': 'Bearer ' + this.authService.getToken()});
     let options = new RequestOptions({ headers: headers});
     return this.http
-      .post(`${window.location.origin}/api/instruments`, body, options)
+      .post(`${window.location.origin}/api/instruments`, instrument, options)
       .toPromise()
       .then(response => new Instrument(response.json()))
       .catch(error => this.handleError(error, this.authService));

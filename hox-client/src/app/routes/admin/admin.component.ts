@@ -4,7 +4,7 @@ import { URLSearchParams }  from '@angular/http';
 
 import { ApiService } from '../../services/api/api.service';
 
-import { Instrument, INSTRUMENT_TYPE, PRICE_TYPE, User } from '../../models/index';
+import { Index, Derivative, PRICE_TYPE, User } from '../../models/index';
 
 @Component({
   selector: 'app-order',
@@ -12,14 +12,14 @@ import { Instrument, INSTRUMENT_TYPE, PRICE_TYPE, User } from '../../models/inde
   styleUrls: ['./admin.component.css']
 })
 export class AdminComponent  implements OnInit  {
-  indices: Array<Instrument>;
+  indices: Array<Index>;
   minDate: string = new Date().toISOString().slice(0,10);
   expiry: Date;
   index: string;
   createDerivativeStatusMessage: string;
   createDerivativeErrorMessage: string;
 
-  derivatives: Array<Instrument>;
+  derivatives: Array<Derivative>;
   derivative: string;
   settlementDate: Date;
   settlementValue: number;
@@ -38,17 +38,17 @@ export class AdminComponent  implements OnInit  {
 
   ngOnInit(): void {
     let indexParams = new URLSearchParams();
-    indexParams.append('type', 'INDEX');
+    indexParams.append('type', 'Index');
     this.apiService.getInstruments(indexParams)
-    .then((indices) => {
-      this.indices = indices;
+    .then((instruments) => {
+      this.indices = instruments.map(instrument => new Index(instrument));
     });
 
     let derivativeParams = new URLSearchParams();
-    derivativeParams.append('type', 'FORWARD');
+    derivativeParams.append('type', 'Derivative');
     this.apiService.getInstruments(derivativeParams)
-    .then((derivatives) => {
-      this.derivatives = derivatives;
+    .then((instruments) => {
+      this.derivatives = instruments.map(instrument => new Derivative(instrument));
     });
 
     this.apiService.getJobs()
@@ -66,8 +66,8 @@ export class AdminComponent  implements OnInit  {
     this.createDerivativeStatusMessage = null;  // Reset status message
     this.createDerivativeErrorMessage = null;  // Reset error message
 
-    var instrumentId = this.indices.filter(instrument => instrument.name == this.index)[0].id;
-    this.apiService.postInstrument(null, INSTRUMENT_TYPE.FORWARD, instrumentId, this.expiry)
+    var underlying = this.indices.find(instrument => instrument.name == this.index);
+    this.apiService.postInstrument(new Derivative({underlying: underlying, expiry: this.expiry, type: Derivative.name}))
       .then((instrument) => {
         this.createDerivativeStatusMessage = instrument.name + " successfully created."
       })
