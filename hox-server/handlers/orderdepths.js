@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var Instrument = require('../models/instrument');
+var Derivative = require('../models/instrument.derivative');
 var Order = require('../models/order');
 var OrderDepth = require('../models/orderdepth');
 
@@ -8,7 +8,7 @@ router.get('/', function(req, res) {
   var orderDepths = {};
 
   req.query.expiry = {$gt: Date.now()};
-  Instrument.find(req.query)
+  Derivative.find(req.query)
     .then(instruments => {
       instruments.forEach(function(instrument) {
         orderDepths[instrument._id] = new OrderDepth(instrument);
@@ -28,7 +28,7 @@ router.get('/', function(req, res) {
 
 router.get('/:id', function(req, res) {
   var orderDepth;
-  Instrument.findById(req.params.id)
+  Derivative.findById(req.params.id)
   .then(instrument => {
     orderDepth = new OrderDepth(instrument);
     return Order.find({instrument: instrument._id, status: 'ACTIVE'});
