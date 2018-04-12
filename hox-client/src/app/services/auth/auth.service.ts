@@ -60,6 +60,7 @@ export class AuthService {
     return new Promise((resolve, reject) => {
       localStorage.removeItem('token');
       this.loginChanged.next(false);
+      window.location.replace('/login');
       resolve();
     });
   }

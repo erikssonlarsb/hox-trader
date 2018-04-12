@@ -56,9 +56,6 @@ export class AppComponent implements OnInit {
 
   logout(): void {
     this.authService.logout()
-      .then(() => {
-        window.location.replace('/login');
-      })
       .catch(function(err) {
         console.log(err);
       });
