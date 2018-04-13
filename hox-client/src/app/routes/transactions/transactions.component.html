@@ -24,7 +24,7 @@
             </thead>
             <tbody>
               <ng-container *ngFor="let trade of trades;">
-                <tr *ngIf="!hideSettled || trade.isSettled">
+                <tr *ngIf="!hideSettled || !trade.isSettled">
                   <td>{{trade.createTimestamp | date}}</td>
                   <td *ngIf="user?.role.isAdmin" scope="col">{{trade.user.name}}</td>
                   <td>{{trade.instrument.name}}</td>
