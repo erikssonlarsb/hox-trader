@@ -4,7 +4,7 @@ import { HttpParams }  from '@angular/common/http';
 
 import { ApiService } from '../../services/api/api.service';
 
-import { Instrument, Index, Derivative, Price, PRICE_TYPE, User } from '../../models/index';
+import { INSTRUMENT_STATUS, Index, Derivative, Price, PRICE_TYPE, User } from '../../models/index';
 
 @Component({
   selector: 'app-order',
@@ -63,7 +63,7 @@ export class AdminComponent  implements OnInit  {
     this.createDerivativeErrorMessage = null;  // Reset error message
 
     let underlying = this.indices.find(instrument => instrument.name == this.index);
-    let newDerivative = new Derivative({underlying: underlying, expiry: this.expiry, type: Derivative.name});
+    let newDerivative = new Derivative({status: INSTRUMENT_STATUS.ACTIVE, underlying: underlying, expiry: this.expiry});
     this.apiService.postInstrument(newDerivative)
       .subscribe(
         instrument => this.createDerivativeStatusMessage = instrument.name + " successfully created.",
