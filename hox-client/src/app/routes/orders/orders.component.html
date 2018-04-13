@@ -6,8 +6,8 @@
           Orders
         </h5>
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="checkbox" id="hideNonActive" [checked]="hideNonActive" (change)="hideNonActive = !hideNonActive">
-          <label class="form-check-label" for="hideNonActive">Hide non-active orders</label>
+          <input class="form-check-input" type="checkbox" id="hideInactive" [checked]="hideInactive" (change)="hideInactive = !hideInactive">
+          <label class="form-check-label" for="hideInactive">Hide inactive instruments</label>
         </div>
         <div class="table-responsive">
           <table class="table table-sm table-hover">
@@ -26,7 +26,7 @@
             </thead>
             <tbody>
               <ng-container *ngFor="let order of orders;">
-                <tr *ngIf="!hideNonActive || order.status == 'ACTIVE'">
+                <tr *ngIf="!hideInactive || order.instrument.status == 'ACTIVE'">
                   <td>{{order.createTimestamp | date}}</td>
                   <td *ngIf="user?.role.isAdmin" scope="col">{{order.user.name}}</td>
                   <td>{{order.instrument.name}}</td>
