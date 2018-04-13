@@ -18,6 +18,12 @@ export class Price {
     this.createTimestamp = json.createTimestamp ? new Date(json.createTimestamp) : null;
     this.updateTimestamp = json.updateTimestamp ? new Date(json.updateTimestamp) : null;
   }
+
+  toJSON() {
+    return Object.assign({}, this, {
+      instrument: this.instrument.id
+    });
+  }
 }
 
 export enum PRICE_TYPE {

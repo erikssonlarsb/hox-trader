@@ -86,7 +86,7 @@ export class AdminComponent  implements OnInit  {
     this.addSettlementPriceStatusMessage = null;  // Reset status message
     this.addSettlementPriceErrorMessage = null;  // Reset error message
 
-    let instrument = this.derivatives.find(instrument => instrument.name == this.derivative)[0].id;
+    let instrument = this.derivatives.find(instrument => instrument.name == this.derivative);
     let newPrice = new Price({instrument: instrument, type: PRICE_TYPE.SETTLEMENT, date: this.settlementDate, value: this.settlementValue});
     this.apiService.postPrice(newPrice)
       .subscribe(
