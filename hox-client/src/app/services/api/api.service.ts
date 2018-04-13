@@ -128,7 +128,7 @@ export class ApiService {
       );
   }
 
-  deleteOrder(id: string): Observable<{}> {
+  withdrawOrder(id: string): Observable<{}> {
     let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
       .delete(`${window.location.origin}/api/orders/${id}`, { headers: headers })

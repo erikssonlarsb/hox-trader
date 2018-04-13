@@ -24,6 +24,12 @@ export class Order {
     this.createTimestamp = json.createTimestamp ? new Date(json.createTimestamp) : null;
     this.updateTimestamp = json.updateTimestamp ? new Date(json.updateTimestamp) : null;
   }
+
+  toJSON() {
+    return Object.assign({}, this, {
+      instrument: this.instrument.id
+    });
+  }
 }
 
 export enum ORDER_SIDE {
@@ -34,5 +40,6 @@ export enum ORDER_SIDE {
 export enum ORDER_STATUS {
   ACTIVE = "ACTIVE",
   WITHDRAWN = "WITHDRAWN",
-  TRADED = "TRADED"
+  TRADED = "TRADED",
+  EXPIRED = "EXPIRED"
 }

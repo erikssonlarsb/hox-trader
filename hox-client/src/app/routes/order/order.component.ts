@@ -41,8 +41,8 @@ export class OrderComponent  implements OnInit  {
               this.instruments = [instrument];
             });
           this.side = ORDER_SIDE[params.get('side')];
-          this.quantity = Number(params.get('quantity'));
-          this.price = Number(params.get('price'));
+          this.quantity = Number(params.get('quantity')) | 0;
+          this.price = Number(params.get('price')) | 0;
         } else {  // Get all instruments for client to fill in order details
           this.apiService.getInstruments()
             .subscribe(

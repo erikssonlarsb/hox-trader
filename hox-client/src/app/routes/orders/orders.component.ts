@@ -14,7 +14,7 @@ import { Order, User } from '../../models/index';
 export class OrdersComponent implements OnInit  {
   user: User;
   orders: Array<Order>;
-  hideExpired: boolean = true;
+  hideNonActive: boolean = true;
   dateNow: Date = new Date();
 
   constructor(private authService: AuthService, private ApiService: ApiService) { }
@@ -27,8 +27,8 @@ export class OrdersComponent implements OnInit  {
       );
   }
 
-  deleteOrder(id): void {
-    this.ApiService.deleteOrder(id)
+  withdrawOrder(id): void {
+    this.ApiService.withdrawOrder(id)
       .subscribe(() => {
         this.ApiService.getOrders()
           .subscribe(
