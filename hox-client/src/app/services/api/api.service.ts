@@ -1,16 +1,19 @@
 import { Injectable } from '@angular/core';
-import { Http, URLSearchParams, Headers, RequestOptions }  from '@angular/http';
+import { HttpClient, HttpParams, HttpHeaders }  from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 import { AuthService } from '../../services/auth/auth.service';
+import { ApiErrorHandler } from './apierrorhandler.service';
 
-import { User, Instrument, Order, ORDER_SIDE, Trade, OrderDepth, Settlement, Price, PRICE_TYPE } from '../../models/index';
+import { User, Instrument, INSTRUMENT_TYPE, Index, Derivative, Order, Trade, OrderDepth, Settlement, Price } from '../../models/index';
 
 @Injectable()
 export class ApiService {
 
-  constructor(private http: Http, private authService: AuthService) { }
+  constructor(private http: HttpClient, private authService: AuthService, private errorHandler: ApiErrorHandler) { }
 
-  postRegistration(name: string, username: string, password: string, email: string, phone: string): Promise<any> {
+  postRegistration(name: string, username: string, password: string, email: string, phone: string): Observable<{}> {
     let body = {
       name: name,
       username: username,
@@ -20,252 +23,228 @@ export class ApiService {
     }
     return this.http
       .post(`${window.location.origin}/api/registration`, body)
-      .toPromise()
-      .then(response => response)
-      .catch(error => this.handleError(error, this.authService));
+      .pipe(
+        catchError(error => this.errorHandler.handleError(error))
+      );
   }
 
-  getUsers(params: URLSearchParams = new URLSearchParams()): Promise<User[]> {
-    let headers = new Headers({'Authorization': 'Bearer ' + this.authService.getToken()});
-    let options = new RequestOptions({ headers: headers, search: params });
+  getUsers(params: HttpParams = new HttpParams()): Observable<User[]> {
+    let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
-      .get(`${window.location.origin}/api/users`, options)
-      .toPromise()
-      .then(response => response.json().map(json => new User(json)))
-      .catch(error => this.handleError(error, this.authService));
+      .get<User[]>(`${window.location.origin}/api/users`, { headers: headers, params: params })
+      .map(users => users.map(user => new User(user)))
+      .pipe(
+        catchError(error => this.errorHandler.handleError(error))
+      );
   }
 
-  getUser(id: string): Promise<User> {
-    let headers = new Headers({'Authorization': 'Bearer ' + this.authService.getToken()});
-    let options = new RequestOptions({ headers: headers});
+  getUser(id: string): Observable<User> {
+    let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
-      .get(`${window.location.origin}/api/users/${id}`, options)
-      .toPromise()
-      .then(response => new User(response.json()))
-      .catch(error => this.handleError(error, this.authService));
+      .get<User>(`${window.location.origin}/api/users/${id}`, { headers: headers })
+      .map(user => new User(user))
+      .pipe(
+        catchError(error => this.errorHandler.handleError(error))
+      );
   }
 
-  updateUser(id: string, user: User): Promise<User> {
-    let headers = new Headers({'Authorization': 'Bearer ' + this.authService.getToken()});
-    let options = new RequestOptions({ headers: headers});
+  updateUser(id: string, user: User): Observable<User> {
+    let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
-      .put(`${window.location.origin}/api/users/${id}`, user, options)
-      .toPromise()
-      .then(response => new User(response.json()))
-      .catch(error => this.handleError(error, this.authService));
+      .put<User>(`${window.location.origin}/api/users/${id}`, user, { headers: headers })
+      .map(user => new User(user))
+      .pipe(
+        catchError(error => this.errorHandler.handleError(error))
+      );
   }
 
-  updateUserPassword(id: string, password: string): Promise<string> {
-    let headers = new Headers({'Authorization': 'Bearer ' + this.authService.getToken()});
-    let options = new RequestOptions({ headers: headers});
+  updateUserPassword(id: string, password: string): Observable<User> {
+    let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
-      .put(`${window.location.origin}/api/users/${id}`, {password: password}, options)
-      .toPromise()
-      .then(response => new User(response.json()))
-      .catch(error => this.handleError(error, this.authService));
+      .put<User>(`${window.location.origin}/api/users/${id}`, { password: password }, { headers: headers })
+      .map(user => new User(user))
+      .pipe(
+        catchError(error => this.errorHandler.handleError(error))
+      );
   }
 
-  getInstruments(params: URLSearchParams = new URLSearchParams()): Promise<Instrument[]> {
-    let headers = new Headers({'Authorization': 'Bearer ' + this.authService.getToken()});
-    let options = new RequestOptions({ headers: headers, search: params });
+  getInstruments(params: HttpParams = new HttpParams()): Observable<Instrument[]> {
+    let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
-      .get(`${window.location.origin}/api/instruments`, options)
-      .toPromise()
-      .then(response => response.json().map(json => new Instrument(json)))
-      .catch(error => this.handleError(error, this.authService));
+      .get<Instrument[]>(`${window.location.origin}/api/instruments`, { headers: headers, params: params })
+      .map(instruments => instruments.map(instrument => this.instrumentTypeMapper(instrument)))
+      .pipe(
+        catchError(error => this.errorHandler.handleError(error))
+      );
   }
 
-  getInstrument(id: string): Promise<Instrument> {
-    let headers = new Headers({'Authorization': 'Bearer ' + this.authService.getToken()});
-    let options = new RequestOptions({ headers: headers});
+  getInstrument(id: string): Observable<Instrument> {
+    let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
-      .get(`${window.location.origin}/api/instruments/${id}`, options)
-      .toPromise()
-      .then(response => new Instrument(response.json()))
-      .catch(error => this.handleError(error, this.authService));
+      .get<Instrument>(`${window.location.origin}/api/instruments/${id}`, { headers: headers })
+      .map(instrument => this.instrumentTypeMapper(instrument))
+      .pipe(
+        catchError(error => this.errorHandler.handleError(error))
+      );
   }
 
-  postInstrument(instrument: Instrument): Promise<Instrument> {
-    let headers = new Headers({'Authorization': 'Bearer ' + this.authService.getToken()});
-    let options = new RequestOptions({ headers: headers});
+  postInstrument(instrument: Instrument): Observable<Instrument> {
+    let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
-      .post(`${window.location.origin}/api/instruments`, instrument, options)
-      .toPromise()
-      .then(response => new Instrument(response.json()))
-      .catch(error => this.handleError(error, this.authService));
+      .post<Instrument>(`${window.location.origin}/api/instruments`, instrument, { headers: headers })
+      .map(instrument => this.instrumentTypeMapper(instrument))
+      .pipe(
+        catchError(error => this.errorHandler.handleError(error))
+      );
   }
 
-  getOrders(params: URLSearchParams = new URLSearchParams()): Promise<Order[]> {
-    let headers = new Headers({'Authorization': 'Bearer ' + this.authService.getToken()});
-    let options = new RequestOptions({ headers: headers, search: params });
+  getOrders(params: HttpParams = new HttpParams()): Observable<Order[]> {
+    let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
-      .get(`${window.location.origin}/api/orders`, options)
-      .toPromise()
-      .then(response => response.json().map(json => new Order(json)))
-      .catch(error => this.handleError(error, this.authService));
+      .get<Order[]>(`${window.location.origin}/api/orders`, { headers: headers, params: params })
+      .map(orders => orders.map(order => new Order(order)))
+      .pipe(
+        catchError(error => this.errorHandler.handleError(error))
+      );
   }
 
-  getOrder(id: string): Promise<Order> {
-    let headers = new Headers({'Authorization': 'Bearer ' + this.authService.getToken()});
-    let options = new RequestOptions({ headers: headers});
+  getOrder(id: string): Observable<Order> {
+    let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
-      .get(`${window.location.origin}/api/orders/${id}`, options)
-      .toPromise()
-      .then(response => new Order(response.json()))
-      .catch(error => this.handleError(error, this.authService));
+      .get<Order>(`${window.location.origin}/api/orders/${id}`, { headers: headers })
+      .map(order => new Order(order))
+      .pipe(
+        catchError(error => this.errorHandler.handleError(error))
+      );
   }
 
-  postOrder(instrument: string, side: ORDER_SIDE, quantity: number, price: number): Promise<Order> {
-    let body = {
-      instrument: instrument,
-      side: side,
-      quantity: quantity,
-      price: price
-    }
-    let headers = new Headers({'Authorization': 'Bearer ' + this.authService.getToken()});
-    let options = new RequestOptions({ headers: headers});
+  postOrder(order: Order): Observable<Order> {
+    let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
-      .post(`${window.location.origin}/api/orders`, body, options)
-      .toPromise()
-      .then(response => new Order(response.json()))
-      .catch(error => this.handleError(error, this.authService));
+      .post<Order>(`${window.location.origin}/api/orders`, order, { headers: headers })
+      .map(order => new Order(order))
+      .pipe(
+        catchError(error => this.errorHandler.handleError(error))
+      );
   }
 
-  deleteOrder(id: string): Promise<any> {
-    let headers = new Headers({'Authorization': 'Bearer ' + this.authService.getToken()});
-    let options = new RequestOptions({ headers: headers});
+  deleteOrder(id: string): Observable<{}> {
+    let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
-      .delete(`${window.location.origin}/api/orders/${id}`, options)
-      .toPromise()
-      .then(response => response.json())
-      .catch(error => this.handleError(error, this.authService));
+      .delete(`${window.location.origin}/api/orders/${id}`, { headers: headers })
+      .pipe(
+        catchError(error => this.errorHandler.handleError(error))
+      );
   }
 
-  getTrades(params: URLSearchParams = new URLSearchParams()): Promise<Trade[]> {
-    let headers = new Headers({'Authorization': 'Bearer ' + this.authService.getToken()});
-    let options = new RequestOptions({ headers: headers, search: params });
+  getTrades(params: HttpParams = new HttpParams()): Observable<Trade[]> {
+    let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
-      .get(`${window.location.origin}/api/trades`, options)
-      .toPromise()
-      .then(response => response.json().map(json => new Trade(json)))
-      .catch(error => this.handleError(error, this.authService));
+      .get<Trade[]>(`${window.location.origin}/api/trades`, { headers: headers, params: params })
+      .map(trades => trades.map(trade => new Trade(trade)))
+      .pipe(
+        catchError(error => this.errorHandler.handleError(error))
+      );
   }
 
-  getSettlements(params: URLSearchParams = new URLSearchParams()): Promise<Settlement[]> {
-    let headers = new Headers({'Authorization': 'Bearer ' + this.authService.getToken()});
-    let options = new RequestOptions({ headers: headers, search: params });
+  getSettlements(params: HttpParams = new HttpParams()): Observable<Settlement[]> {
+    let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
-      .get(`${window.location.origin}/api/settlements`, options)
-      .toPromise()
-      .then(response => response.json().map(json => new Settlement(json)))
-      .catch(error => this.handleError(error, this.authService));
+      .get<Settlement[]>(`${window.location.origin}/api/settlements`, { headers: headers, params: params })
+      .map(settlements => settlements.map(settlement => new Settlement(settlement)))
+      .pipe(
+        catchError(error => this.errorHandler.handleError(error))
+      );
   }
 
-  getSettlement(id: string): Promise<Settlement> {
-    let headers = new Headers({'Authorization': 'Bearer ' + this.authService.getToken()});
-    let options = new RequestOptions({ headers: headers});
+  getSettlement(id: string): Observable<Settlement> {
+    let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
-      .get(`${window.location.origin}/api/settlements/${id}`, options)
-      .toPromise()
-      .then(response => new Settlement(response.json()))
-      .catch(error => this.handleError(error, this.authService));
+      .get(`${window.location.origin}/api/settlements/${id}`, { headers: headers })
+      .map(settlement => new Settlement(settlement))
+      .pipe(
+        catchError(error => this.errorHandler.handleError(error))
+      );
   }
 
-  acknowledgeSettlement(id: string): Promise<Settlement> {
-    let body = {
-      isAcknowledged: true
-    }
-    let headers = new Headers({'Authorization': 'Bearer ' + this.authService.getToken()});
-    let options = new RequestOptions({ headers: headers});
+  acknowledgeSettlement(id: string): Observable<Settlement> {
+    let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
-      .put(`${window.location.origin}/api/settlements/${id}`, body, options)
-      .toPromise()
-      .then(response => new Settlement(response.json()))
-      .catch(error => this.handleError(error, this.authService));
+      .put<Settlement>(`${window.location.origin}/api/settlements/${id}`, {isAcknowledged: true}, { headers: headers })
+      .map(settlement => new Settlement(settlement))
+      .pipe(
+        catchError(error => this.errorHandler.handleError(error))
+      );
   }
 
-  getOrderDepths(params: URLSearchParams = new URLSearchParams()): Promise<OrderDepth[]> {
-    let headers = new Headers({'Authorization': 'Bearer ' + this.authService.getToken()});
-    let options = new RequestOptions({ headers: headers, search: params });
+  getOrderDepths(params: HttpParams = new HttpParams()): Observable<OrderDepth[]> {
+    let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
-      .get(`${window.location.origin}/api/orderdepths`, options)
-      .toPromise()
-      .then(response => response.json().map(json => new OrderDepth(json)))
-      .catch(error => this.handleError(error, this.authService));
+      .get<OrderDepth[]>(`${window.location.origin}/api/orderdepths`, { headers: headers, params: params })
+      .map(orderDepths => orderDepths.map(orderDepth => new OrderDepth(orderDepth)))
+      .pipe(
+        catchError(error => this.errorHandler.handleError(error))
+      );
   }
 
-  getOrderDepth(id: string): Promise<OrderDepth> {
-    let headers = new Headers({'Authorization': 'Bearer ' + this.authService.getToken()});
-    let options = new RequestOptions({ headers: headers});
+  getOrderDepth(id: string): Observable<OrderDepth> {
+    let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
-      .get(`${window.location.origin}/api/orderdepths/${id}`, options)
-      .toPromise()
-      .then(response => new OrderDepth(response.json()))
-      .catch(error => this.handleError(error, this.authService));
+      .get<OrderDepth>(`${window.location.origin}/api/orderdepths/${id}`, { headers: headers })
+      .map(orderDepth => new OrderDepth(orderDepth))
+      .pipe(
+        catchError(error => this.errorHandler.handleError(error))
+      );
   }
 
-  getPrices(params: URLSearchParams = new URLSearchParams()): Promise<Price[]> {
-    let headers = new Headers({'Authorization': 'Bearer ' + this.authService.getToken()});
-    let options = new RequestOptions({ headers: headers, search: params });
+  getPrices(params: HttpParams = new HttpParams()): Observable<Price[]> {
+    let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
-      .get(`${window.location.origin}/api/prices`, options)
-      .toPromise()
-      .then(response => response.json().map(json => new Price(json)))
-      .catch(error => this.handleError(error, this.authService));
+      .get<Price[]>(`${window.location.origin}/api/prices`, { headers: headers, params: params })
+      .map(prices => prices.map(price => new Price(price)))
+      .pipe(
+        catchError(error => this.errorHandler.handleError(error))
+      );
   }
 
-  postPrice(instrument: string, type: PRICE_TYPE, date: Date, value: number): Promise<Price> {
-    let body = {
-      instrument: instrument,
-      type: type,
-      date: date,
-      value: value
-    }
-    let headers = new Headers({'Authorization': 'Bearer ' + this.authService.getToken()});
-    let options = new RequestOptions({ headers: headers});
+  postPrice(price: Price): Observable<Price> {
+    let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
-      .post(`${window.location.origin}/api/prices`, body, options)
-      .toPromise()
-      .then(response => new Price(response.json()))
-      .catch(error => this.handleError(error, this.authService));
+      .post<Price>(`${window.location.origin}/api/prices`, price, { headers: headers })
+      .map(price => new Price(price))
+      .pipe(
+        catchError(error => this.errorHandler.handleError(error))
+      );
   }
 
-  getJobs(params: URLSearchParams = new URLSearchParams()): Promise<string[]> {
-    let headers = new Headers({'Authorization': 'Bearer ' + this.authService.getToken()});
-    let options = new RequestOptions({ headers: headers, search: params });
+  getJobs(params: HttpParams = new HttpParams()): Observable<string[]> {
+    let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
-      .get(`${window.location.origin}/api/jobs`, options)
-      .toPromise()
-      .then(response => response.json().map(json => json))
-      .catch(error => this.handleError(error, this.authService));
+      .get<string[]>(`${window.location.origin}/api/jobs`, { headers: headers, params: params })
+      .pipe(
+        catchError(error => this.errorHandler.handleError(error))
+      );
   }
 
-  runJob(id: string): Promise<string> {
-    let headers = new Headers({'Authorization': 'Bearer ' + this.authService.getToken()});
-    let options = new RequestOptions({ headers: headers});
+  runJob(id: string): Observable<string> {
+    let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
-      .put(`${window.location.origin}/api/jobs/${id}/run`, null, options)
-      .toPromise()
-      .then(response => response)
-      .catch(error => this.handleError(error, this.authService));
+      .put<string>(`${window.location.origin}/api/jobs/${id}/run`, null, { headers: headers })
+      .pipe(
+        catchError(error => this.errorHandler.handleError(error))
+      );
   }
 
-  private handleError(error: any, authService: AuthService): Promise<any> {
-    console.log(error);
-    if(error.status == 401) {
-      authService.logout();
-    } else {
-      let json = error.json();
-      if(!json) {
-        return Promise.reject(error.statusText + ": " + error.status);
-      } else if(json.error && json.error.errmsg) {
-        return Promise.reject(json.error.errmsg);
-      } else if(json.error) {
-        return Promise.reject(json.error);
-      } else if(json.message) {
-        return Promise.reject(json.message);
-      } else {
-        return Promise.reject("Unknown error.");
+  private instrumentTypeMapper(instrument): Instrument {
+    switch(instrument.type) {
+      case INSTRUMENT_TYPE.Index: {
+        return new Index(instrument);
+      }
+      case INSTRUMENT_TYPE.Derivative: {
+        return new Derivative(instrument);
+      }
+      default: {
+        return new Instrument(instrument);
       }
     }
   }

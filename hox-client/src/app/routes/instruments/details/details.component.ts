@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { URLSearchParams }  from '@angular/http';
+import { HttpParams }  from '@angular/common/http';
 import { DatePipe } from '@angular/common';
 
 import { ApiService } from '../../../services/api/api.service';
@@ -30,27 +30,18 @@ export class InstrumentDetailsComponent  implements OnInit  {
     this.route
     .paramMap
     .subscribe(params => {
-      if(params.get('id')) {  // Retrieve existing order
-        this.apiService.getInstrument(params.get('id'))
-          .then((instrument) => {
-            this.instrument = instrument;
-          })
-          .catch(function(err) {
-            console.log(err);
-          });
+      this.apiService.getInstrument(params.get('id'))
+        .subscribe(
+          instrument => this.instrument = instrument
+        );
 
-        this.apiService.getOrderDepth(params.get('id'))
-          .then((orderDepth) => {
-            this.orderDepth = orderDepth;
-          })
-          .catch(function(err) {
-            console.log(err);
-          });
+      this.apiService.getOrderDepth(params.get('id'))
+        .subscribe(
+          orderDepth => this.orderDepth = orderDepth
+        );
 
-        let priceParams = new URLSearchParams();
-        priceParams.append('instrument', params.get('id'));
-        this.apiService.getPrices(priceParams)
-        .then((prices) => {
+      this.apiService.getPrices(new HttpParams().set('instrument', params.get('id')))
+        .subscribe(prices => {
           this.last = prices.find(price => price.type == 'LAST');
           this.high = prices.find(price => price.type == 'HIGH');
           this.low = prices.find(price => price.type == 'LOW');
@@ -63,11 +54,7 @@ export class InstrumentDetailsComponent  implements OnInit  {
             this.chartData[0].data[index] = price.value;
             this.chartLabels[index] = this.datePipe.transform(price.date);
           });
-        })
-        .catch(function(err) {
-          console.log(err);
         });
-      }
     })
   }
 }

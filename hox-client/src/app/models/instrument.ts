@@ -3,7 +3,7 @@ import { Price } from './price';
 export class Instrument {
   id: string;
   name: string;
-  type: string;
+  type: INSTRUMENT_TYPE | string;
   prices: Array<Price>;
   createTimestamp: Date;
   updateTimestamp: Date;
@@ -16,6 +16,11 @@ export class Instrument {
     this.createTimestamp = json.createTimestamp ? new Date(json.createTimestamp) : null;
     this.updateTimestamp = json.updateTimestamp ? new Date(json.updateTimestamp) : null;
   }
+}
+
+export enum INSTRUMENT_TYPE {
+  Index = "Index",
+  Derivative = "Derivative"
 }
 
 export class Index extends Instrument {

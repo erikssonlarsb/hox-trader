@@ -30,12 +30,9 @@ export class UserDetailsComponent implements OnInit  {
     .subscribe(params => {
       if(params.get('id')) {  // Retrieve existing order
         this.apiService.getUser(params.get('id'))
-          .then((user) => {
+          .subscribe(user => {
             this.originalUser = Object.assign({}, user);
             this.updatedUser = Object.assign({}, user);
-          })
-          .catch(function(err) {
-            console.log(err);
           });
         }
       }
@@ -47,12 +44,9 @@ export class UserDetailsComponent implements OnInit  {
     this.updateUserErrorMessage = null;  // Reset error message
 
     this.apiService.updateUser(this.updatedUser.id, this.updatedUser)
-      .then((user) => {
-        this.updateUserStatusMessage = "User successfully updated."
-      })
-      .catch((error) => {
-        this.updateUserErrorMessage = error;
-      });
+      .subscribe(
+        user => this.updateUserStatusMessage = "User successfully updated."
+      );
   }
 
   changePassword(): void {
@@ -61,13 +55,10 @@ export class UserDetailsComponent implements OnInit  {
 
     if(this.password == this.confirmPassword) {
       this.apiService.updateUserPassword(this.updatedUser.id, this.password)
-        .then((user) => {
+        .subscribe(user => {
           this.password = null;
           this.confirmPassword = null;
           this.changePasswordStatusMessage = "Password successfully changed."
-        })
-        .catch((error) => {
-          this.changePasswordErrorMessage = error;
         });
     } else {
       this.changePasswordErrorMessage = "Passwords doesn't match."

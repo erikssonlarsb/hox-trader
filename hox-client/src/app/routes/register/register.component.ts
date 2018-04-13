@@ -24,12 +24,9 @@ export class RegisterComponent {
     this.errorMessage = null;
     if(this.password == this.confirmPassword) {
       this.apiService.postRegistration(this.name, this.username, this.password, this.email, this.phone)
-        .then(() => {
-          this.success = true;
-        })
-        .catch((error) => {
-          this.errorMessage = error;
-        });
+        .subscribe(
+          () => this.success = true
+        );
     } else {
       this.errorMessage = "Passwords doesn't match."
     }

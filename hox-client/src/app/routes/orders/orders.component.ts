@@ -22,26 +22,18 @@ export class OrdersComponent implements OnInit  {
   ngOnInit(): void {
     this.user = this.authService.getLoggedInUser();
     this.ApiService.getOrders()
-      .then((orders) => {
-        this.orders = orders.sort((a: Order, b: Order) => {return a.createTimestamp.getTime() - b.createTimestamp.getTime()});
-      })
-      .catch(function(err) {
-        console.log(err);
-      });
+      .subscribe(
+        orders => this.orders = orders.sort((a: Order, b: Order) => {return a.createTimestamp.getTime() - b.createTimestamp.getTime()})
+      );
   }
 
   deleteOrder(id): void {
     this.ApiService.deleteOrder(id)
-      .then(() => {
+      .subscribe(() => {
         this.ApiService.getOrders()
-          .then((orders) => {
-            this.orders = orders;
-          })
-          .catch(function(err) {
-            console.log(err);
-          });
-      }).catch(function(err) {
-        console.log(err);
-      });
+          .subscribe(
+            orders => this.orders = orders
+          )
+      })
   }
 }

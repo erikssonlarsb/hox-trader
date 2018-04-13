@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpParams }  from '@angular/common/http';
 
 import { ApiService } from '../../services/api/api.service';
 
@@ -15,12 +16,9 @@ export class InstrumentsComponent  implements OnInit  {
   constructor(private apiService: ApiService) { }
 
   ngOnInit(): void {
-    this.apiService.getOrderDepths()
-      .then((orderDepths) => {
-        this.orderDepths = orderDepths;
-      })
-      .catch(function(err) {
-        console.log(err);
-      });
+    this.apiService.getOrderDepths(new HttpParams().set('status', 'ACTIVE'))
+      .subscribe(
+        orderDepths => this.orderDepths = orderDepths
+      );
   }
 }

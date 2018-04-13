@@ -22,14 +22,11 @@ export class SettlementDetailsComponent implements OnInit  {
     this.route
     .paramMap
     .subscribe(params => {
-      if(params.get('id')) {  // Retrieve existing order
+      if(params.get('id')) {
         this.apiService.getSettlement(params.get('id'))
-          .then((settlement) => {
-            this.settlement = settlement;
-          })
-          .catch(function(err) {
-            console.log(err);
-          });
+          .subscribe(
+            settlement => this.settlement = settlement
+          );
         }
       }
     )

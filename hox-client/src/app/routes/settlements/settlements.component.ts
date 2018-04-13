@@ -24,26 +24,18 @@ export class SettlementsComponent implements OnInit  {
   ngOnInit(): void {
     this.user = this.authService.getLoggedInUser();
     this.apiService.getSettlements()
-      .then((settlements) => {
-        this.settlements = settlements.sort((a: Settlement, b: Settlement) => {return a.createTimestamp.getTime() - b.createTimestamp.getTime()});;
-      })
-      .catch(function(err) {
-        console.log(err);
-      });
+      .subscribe(settlements =>
+        this.settlements = settlements.sort((a: Settlement, b: Settlement) => {return a.createTimestamp.getTime() - b.createTimestamp.getTime()})
+      );
   }
 
   acknowledgeSettlement(id): void {
     this.apiService.acknowledgeSettlement(id)
-      .then(() => {
+      .subscribe(() => {
         this.apiService.getSettlements()
-          .then((settlements) => {
-            this.settlements = settlements.sort((a: Settlement, b: Settlement) => {return a.createTimestamp.getTime() - b.createTimestamp.getTime()});;
-          })
-          .catch(function(err) {
-            console.log(err);
+          .subscribe(settlements => {
+            this.settlements = settlements.sort((a: Settlement, b: Settlement) => {return a.createTimestamp.getTime() - b.createTimestamp.getTime()})
           });
-      }).catch(function(err) {
-        console.log(err);
       });
   }
 

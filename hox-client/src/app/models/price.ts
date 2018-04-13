@@ -2,6 +2,7 @@ import { Instrument } from './instrument';
 
 export class Price {
   id: string;
+  instrument: Instrument;
   type: PRICE_TYPE;
   date: Date;
   value: number;
@@ -10,6 +11,7 @@ export class Price {
 
   constructor(json) {
     this.id = json._id;
+    this.instrument = json.instrument;
     this.type = json.type;
     this.date = json.date ? new Date(json.date) : null;
     this.value = json.value;

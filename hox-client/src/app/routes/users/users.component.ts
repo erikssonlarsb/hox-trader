@@ -16,11 +16,8 @@ export class UsersComponent  implements OnInit  {
 
   ngOnInit(): void {
     this.apiService.getUsers()
-      .then((users) => {
-        this.users = users;
-      })
-      .catch(function(err) {
-        console.log(err);
-      });
+      .subscribe(
+        users =>  this.users = users
+      );
   }
 }

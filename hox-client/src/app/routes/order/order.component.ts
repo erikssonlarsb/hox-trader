@@ -27,36 +27,27 @@ export class OrderComponent  implements OnInit  {
       .subscribe(params => {
         if(params.get('id')) {  // Retrieve existing order
           this.apiService.getOrder(params.get('id'))
-            .then((order) => {
+            .subscribe(order => {
               this.order = order;
               this.instrument = order.instrument.name;
               this.side = order.side;
               this.quantity = order.quantity - order.tradedQuantity;
               this.price = order.price;
-            })
-            .catch(function(err) {
-              console.log(err);
             });
         } else if(params.get('instrument')) {  // Populate details from router params
           this.apiService.getInstrument(params.get('instrument'))
-            .then((instrument) => {
+            .subscribe(instrument => {
               this.instrument = instrument.name;
               this.instruments = [instrument];
-            })
-            .catch(function(err) {
-              console.log(err);
             });
           this.side = ORDER_SIDE[params.get('side')];
           this.quantity = Number(params.get('quantity'));
           this.price = Number(params.get('price'));
         } else {  // Get all instruments for client to fill in order details
           this.apiService.getInstruments()
-            .then((instruments) => {
-              this.instruments = instruments;
-            })
-            .catch(function(err) {
-              console.log(err);
-            });
+            .subscribe(
+              instruments => this.instruments = instruments
+            );
         }
       });
   }
@@ -74,14 +65,11 @@ export class OrderComponent  implements OnInit  {
       this.errorMessage = "No instrument selected";
       return;
     }
-    var instrumentId = this.instruments.filter(
-      instrument => instrument.name == this.instrument)[0].id;
-    this.apiService.postOrder(instrumentId, this.side, this.quantity, this.price)
-      .then((order) => {
-        this.router.navigate(['/orders']);
-      })
-      .catch((error) => {
-        this.errorMessage = error;
-      });
+    let instrument = this.instruments.find(instrument => instrument.name == this.instrument);
+    let newOrder = new Order({instrument: instrument, side: this.side, quantity: this.quantity, price: this.price});
+    this.apiService.postOrder(newOrder)
+      .subscribe(
+        order => this.router.navigate(['/orders'])
+      );
   }
 }

@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 
 import { ChartsModule } from 'ng2-charts';
@@ -13,6 +14,7 @@ import { BootstrapModule } from './bootstrap.module';
 
 import { AuthService } from './services/auth/auth.service';
 import { ApiService } from './services/api/api.service';
+import { ApiErrorHandler } from './services/api/apierrorhandler.service';
 
 import { LoginComponent } from './routes/login/login.component';
 import { RegisterComponent } from './routes/register/register.component';
@@ -47,6 +49,7 @@ import { AdminComponent } from './routes/admin/admin.component';
     BrowserModule,
     BrowserAnimationsModule,
     HttpModule,
+    HttpClientModule,
     FormsModule,
     RoutingModule,
     BootstrapModule,
@@ -54,7 +57,9 @@ import { AdminComponent } from './routes/admin/admin.component';
   ],
   providers: [
     AuthService,
-    ApiService
+    ApiService,
+    ApiErrorHandler
+
   ],
   bootstrap: [AppComponent]
 })

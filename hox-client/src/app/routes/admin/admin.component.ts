@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { URLSearchParams }  from '@angular/http';
+import { HttpParams }  from '@angular/common/http';
 
 import { ApiService } from '../../services/api/api.service';
 
-import { Index, Derivative, PRICE_TYPE, User } from '../../models/index';
+import { Instrument, Index, Derivative, Price, PRICE_TYPE, User } from '../../models/index';
 
 @Component({
   selector: 'app-order',
@@ -37,47 +37,42 @@ export class AdminComponent  implements OnInit  {
   constructor(private router: Router, private apiService: ApiService) { }
 
   ngOnInit(): void {
-    let indexParams = new URLSearchParams();
-    indexParams.append('type', 'Index');
-    this.apiService.getInstruments(indexParams)
-    .then((instruments) => {
-      this.indices = instruments.map(instrument => new Index(instrument));
-    });
+    this.apiService.getInstruments(new HttpParams().set('type', 'Index'))
+      .subscribe(
+        instruments => this.indices = <Index[]> instruments
+      );
 
-    let derivativeParams = new URLSearchParams();
-    derivativeParams.append('type', 'Derivative');
-    this.apiService.getInstruments(derivativeParams)
-    .then((instruments) => {
-      this.derivatives = instruments.map(instrument => new Derivative(instrument));
-    });
+    this.apiService.getInstruments(new HttpParams().set('type', 'Derivative'))
+      .subscribe(
+        instruments => this.derivatives = <Derivative[]> instruments
+      );
 
     this.apiService.getJobs()
-    .then((jobs) => {
-      this.jobs = jobs;
-    });
+      .subscribe(
+        jobs => this.jobs = jobs
+      );
 
     this.apiService.getUsers()
-    .then((users) => {
-      this.users = users;
-    });
+      .subscribe(
+        users => this.users = users
+      );
   }
 
   createDerivative(): void {
     this.createDerivativeStatusMessage = null;  // Reset status message
     this.createDerivativeErrorMessage = null;  // Reset error message
 
-    var underlying = this.indices.find(instrument => instrument.name == this.index);
-    this.apiService.postInstrument(new Derivative({underlying: underlying, expiry: this.expiry, type: Derivative.name}))
-      .then((instrument) => {
-        this.createDerivativeStatusMessage = instrument.name + " successfully created."
-      })
-      .catch((error) => {
-        this.createDerivativeErrorMessage = error;
-      });
+    let underlying = this.indices.find(instrument => instrument.name == this.index);
+    let newDerivative = new Derivative({underlying: underlying, expiry: this.expiry, type: Derivative.name});
+    this.apiService.postInstrument(newDerivative)
+      .subscribe(
+        instrument => this.createDerivativeStatusMessage = instrument.name + " successfully created.",
+        error => this.createDerivativeErrorMessage = error
+      );
   }
 
   derivativeOnSelect(event): void {
-    var settlementPrice = event.item.prices.filter(price => price.type == 'SETTLEMENT');
+    let settlementPrice = event.item.prices.filter(price => price.type == 'SETTLEMENT');
     if (settlementPrice.length > 0) {
       this.settlementDate = settlementPrice[0].date;
       this.settlementValue = settlementPrice[0].value;
@@ -91,14 +86,13 @@ export class AdminComponent  implements OnInit  {
     this.addSettlementPriceStatusMessage = null;  // Reset status message
     this.addSettlementPriceErrorMessage = null;  // Reset error message
 
-    var instrumentId = this.derivatives.filter(instrument => instrument.name == this.derivative)[0].id;
-    this.apiService.postPrice(instrumentId, PRICE_TYPE.SETTLEMENT, this.settlementDate, this.settlementValue)
-      .then((price) => {
-        this.addSettlementPriceStatusMessage = "Settlement price successfully created."
-      })
-      .catch((error) => {
-        this.addSettlementPriceErrorMessage = error;
-      });
+    let instrument = this.derivatives.find(instrument => instrument.name == this.derivative)[0].id;
+    let newPrice = new Price({instrument: instrument, type: PRICE_TYPE.SETTLEMENT, date: this.settlementDate, value: this.settlementValue});
+    this.apiService.postPrice(newPrice)
+      .subscribe(
+        price => this.addSettlementPriceStatusMessage = "Settlement price successfully created.",
+        error => this.addSettlementPriceErrorMessage = error
+      );
   }
 
   runJob(): void {
@@ -106,12 +100,10 @@ export class AdminComponent  implements OnInit  {
     this.runJobErrorMessage = null;  // Reset error message
 
     this.apiService.runJob(this.job)
-      .then((info) => {
-        this.runJobStatusMessage = this.job + " successfully initiated."
-      })
-      .catch((error) => {
-        this.runJobErrorMessage = error;
-      });
+      .subscribe(
+        result => this.runJobStatusMessage = this.job + " successfully initiated.",
+        error => this.runJobErrorMessage = error
+      );
   }
 
   userOnSelect(event): void {

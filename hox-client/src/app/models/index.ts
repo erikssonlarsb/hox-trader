@@ -1,4 +1,4 @@
-export { Instrument, Index, Derivative } from './instrument';
+export { Instrument, INSTRUMENT_TYPE, Index, Derivative } from './instrument';
 export { Order, ORDER_SIDE, ORDER_STATUS } from './order';
 export { Trade } from './trade';
 export { OrderDepth } from './orderdepth';
