@@ -16,6 +16,8 @@ import { AuthService } from './services/auth/auth.service';
 import { ApiService } from './services/api/api.service';
 import { ApiErrorHandler } from './services/api/apierrorhandler.service';
 
+import { DateOnlyPipe } from './pipes/dateonly.pipe';
+
 import { LoginComponent } from './routes/login/login.component';
 import { RegisterComponent } from './routes/register/register.component';
 import { UsersComponent } from './routes/users/users.component';
@@ -43,7 +45,8 @@ import { AdminComponent } from './routes/admin/admin.component';
     OrdersComponent,
     SettlementsComponent,
     SettlementDetailsComponent,
-    AdminComponent
+    AdminComponent,
+    DateOnlyPipe
   ],
   imports: [
     BrowserModule,
@@ -59,6 +62,7 @@ import { AdminComponent } from './routes/admin/admin.component';
     AuthService,
     ApiService,
     ApiErrorHandler
+
 
   ],
   bootstrap: [AppComponent]

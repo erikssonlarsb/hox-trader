@@ -1,4 +1,5 @@
 import { Price } from './price';
+import { DateOnly } from  './dateonly';
 
 export class Instrument {
   id: string;
@@ -44,13 +45,13 @@ export class Index extends Instrument {
 
 export class Derivative extends Instrument {
   underlying: Instrument;
-  expiry: Date;
+  expiry: DateOnly;
 
   constructor(json) {
     json.type = INSTRUMENT_TYPE.Derivative;
     super(json);
     this.underlying = json.underlying ? new Instrument(json.underlying) : null;
-    this.expiry = json.expiry ? new Date(json.expiry) : null;
+    this.expiry = json.expiry ? new DateOnly(json.expiry) : null;
   }
 
   toJSON() {
