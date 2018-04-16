@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
+const DateOnly = require('mongoose-dateonly')(mongoose);
 const Instrument = require('./instrument');
 
 module.exports = Instrument.discriminator('Derivative', new Schema({
     underlying: {type: ObjectId, ref: 'Instrument', required: true},
-    expiry: {type: Date, required: true}
+    expiry: {type: DateOnly, required: true}
   })
   .pre('validate', function(next) {
     let derivative = this;
