@@ -23,9 +23,9 @@ router.post('/', function(req, res) {
     case 'Index':
       instrument = new Index(req.body);
       break;
-      case 'Derivative':
-        instrument = new Derivative(req.body);
-        break;
+    case 'Derivative':
+      instrument = new Derivative(req.body);
+      break;
     default:
       res.status(500).json({'error': 'No such type: ' + req.body.type});
   }
