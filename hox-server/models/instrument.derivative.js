@@ -16,7 +16,7 @@ module.exports = Instrument.discriminator('Derivative', new Schema({
       } else if (!underlying) {
         next(new Error("Underlying not found."));
       } else {
-        derivative.name = underlying.name + " " +  derivative.expiry.toLocaleString('en', { month: 'short', year: '2-digit'});
+        derivative.name = underlying.name + " " +  derivative.expiry.toDate().toLocaleString('en', { month: 'short', year: '2-digit'});
         next();
       }
     })
