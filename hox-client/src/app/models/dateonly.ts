@@ -58,7 +58,9 @@ export class DateOnly {
       return NaN;
     } else {
 
-      let string = this.year.toString() + this.month.toString() + this.date.toString();
+      // Concatenate with padding to preserve integer representation when
+      // month or day is single digit.
+      let string = this.year.toString() + this.month.toString().padStart(2, "0") + this.date.toString().padStart(2, "0");
       return parseInt(string);
     }
   }

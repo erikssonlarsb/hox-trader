@@ -4,7 +4,7 @@ import { HttpParams }  from '@angular/common/http';
 
 import { ApiService } from '../../services/api/api.service';
 
-import { INSTRUMENT_STATUS, Index, Derivative, Price, PRICE_TYPE, User } from '../../models/index';
+import { INSTRUMENT_STATUS, Index, Derivative, Price, PRICE_TYPE, User, DateOnly } from '../../models/index';
 
 @Component({
   selector: 'app-order',
@@ -14,7 +14,7 @@ import { INSTRUMENT_STATUS, Index, Derivative, Price, PRICE_TYPE, User } from '.
 export class AdminComponent  implements OnInit  {
   indices: Array<Index>;
   minDate: string = new Date().toISOString().slice(0,10);
-  expiry: Date;
+  expiry: DateOnly;
   index: string;
   createDerivativeStatusMessage: string;
   createDerivativeErrorMessage: string;
