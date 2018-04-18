@@ -4,12 +4,8 @@ import { DatePipe } from '@angular/common';
 import { DateOnly } from '../models/dateonly';
 
 @Pipe({name: 'dateonly'})
-export class DateOnlyPipe implements PipeTransform {
-
-  constructor(private datePipe: DatePipe) { }
-
-  transform(date: DateOnly, format: string = 'mediumDate'): any {
-    if (!date) return date;
-    return this.datePipe.transform(date.toDate(), format);
+export class DateOnlyPipe extends DatePipe implements PipeTransform  {
+  transform(date: any, format = 'mediumDate', timezone?: string, locale?: string): string|null {
+    return super.transform(date.toDate(), format, timezone, locale);
   }
 }

@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpParams }  from '@angular/common/http';
-import { DatePipe } from '@angular/common';
 
 import { ApiService } from '../../../services/api/api.service';
+
+import { DateOnlyPipe } from '../../../pipes/dateonly.pipe';
 
 import { Instrument, OrderDepth, Price } from '../../../models/index';
 
@@ -11,7 +12,7 @@ import { Instrument, OrderDepth, Price } from '../../../models/index';
   selector: 'app-instrument-details',
   templateUrl: './details.component.html',
   styleUrls: ['./details.component.css'],
-  providers: [DatePipe]
+  providers: [DateOnlyPipe]
 })
 export class InstrumentDetailsComponent  implements OnInit  {
   instrument: Instrument;
@@ -24,7 +25,7 @@ export class InstrumentDetailsComponent  implements OnInit  {
   chartData: Array<any>;
   chartLabels: Array<string>;
 
-  constructor(private datePipe: DatePipe, private router: Router, private route: ActivatedRoute, private apiService: ApiService) { }
+  constructor(private dateOnlyPipe: DateOnlyPipe, private router: Router, private route: ActivatedRoute, private apiService: ApiService) { }
 
   ngOnInit(): void {
     this.route
@@ -52,7 +53,7 @@ export class InstrumentDetailsComponent  implements OnInit  {
           this.chartData[0] = {data: new Array(), label: '', fill: false, lineTension: 0};
           this.historic.forEach((price, index) => {
             this.chartData[0].data[index] = price.value;
-            this.chartLabels[index] = this.datePipe.transform(price.date);
+            this.chartLabels[index] = this.dateOnlyPipe.transform(price.date);
           });
         });
     })

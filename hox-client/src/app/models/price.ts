@@ -1,10 +1,11 @@
 import { Instrument } from './instrument';
+import { DateOnly } from  './dateonly';
 
 export class Price {
   id: string;
   instrument: Instrument;
   type: PRICE_TYPE;
-  date: Date;
+  date: DateOnly;
   value: number;
   createTimestamp: Date;
   updateTimestamp: Date;
@@ -13,7 +14,7 @@ export class Price {
     this.id = json._id;
     this.instrument = json.instrument;
     this.type = json.type;
-    this.date = json.date ? new Date(json.date) : null;
+    this.date = json.date ? new DateOnly(json.date) : null;
     this.value = json.value;
     this.createTimestamp = json.createTimestamp ? new Date(json.createTimestamp) : null;
     this.updateTimestamp = json.updateTimestamp ? new Date(json.updateTimestamp) : null;
