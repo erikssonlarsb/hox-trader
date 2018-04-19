@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpParams }  from '@angular/common/http';
 
+import { DateOnly } from 'angular-date-only';
+
 import { ApiService } from '../../services/api/api.service';
 
-import { INSTRUMENT_STATUS, Index, Derivative, Price, PRICE_TYPE, User, DateOnly } from '../../models/index';
+import { INSTRUMENT_STATUS, Index, Derivative, Price, PRICE_TYPE, User } from '../../models/index';
 
 @Component({
   selector: 'app-order',

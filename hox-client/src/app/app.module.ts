@@ -7,6 +7,8 @@ import { FormsModule } from '@angular/forms';
 
 import { ChartsModule } from 'ng2-charts';
 
+import { DateOnlyModule }  from 'angular-date-only';
+
 import { AppComponent } from './app.component';
 
 import { RoutingModule } from './routing.module';
@@ -15,8 +17,6 @@ import { BootstrapModule } from './bootstrap.module';
 import { AuthService } from './services/auth/auth.service';
 import { ApiService } from './services/api/api.service';
 import { ApiErrorHandler } from './services/api/apierrorhandler.service';
-
-import { DateOnlyPipe } from './pipes/dateonly.pipe';
 
 import { LoginComponent } from './routes/login/login.component';
 import { RegisterComponent } from './routes/register/register.component';
@@ -45,8 +45,7 @@ import { AdminComponent } from './routes/admin/admin.component';
     OrdersComponent,
     SettlementsComponent,
     SettlementDetailsComponent,
-    AdminComponent,
-    DateOnlyPipe
+    AdminComponent
   ],
   imports: [
     BrowserModule,
@@ -56,7 +55,8 @@ import { AdminComponent } from './routes/admin/admin.component';
     FormsModule,
     RoutingModule,
     BootstrapModule,
-    ChartsModule
+    ChartsModule,
+    DateOnlyModule
   ],
   providers: [
     AuthService,

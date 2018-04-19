@@ -4,7 +4,7 @@ import { HttpParams }  from '@angular/common/http';
 
 import { ApiService } from '../../../services/api/api.service';
 
-import { DateOnlyPipe } from '../../../pipes/dateonly.pipe';
+import { DateOnlyPipe } from 'angular-date-only';
 
 import { Instrument, OrderDepth, Price } from '../../../models/index';
 

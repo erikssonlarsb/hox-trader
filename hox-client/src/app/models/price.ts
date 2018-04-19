@@ -1,5 +1,5 @@
 import { Instrument } from './instrument';
-import { DateOnly } from  './dateonly';
+import { DateOnly } from  'angular-date-only';
 
 export class Price {
   id: string;
