@@ -1,5 +1,11 @@
 {
   "name": "hox-server",
+  "description": "Server application for hox-trader",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/erikssonlarsb/hox-trader.git"
+  },
+  "license": "ISC",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server.js"
@@ -11,11 +17,11 @@
     "console-stamp": "^0.2.6",
     "cron": "^1.3.0",
     "dateonly": "^1.1.1",
-    "express": "^4.16.2",
-    "jsonwebtoken": "^8.1.0",
-    "mongoose": "^4.13.6",
+    "express": "^4.16.3",
+    "jsonwebtoken": "^8.2.1",
+    "mongoose": "^4.13.12",
     "mongoose-dateonly": "^1.0.4",
-    "nodemon": "^1.12.5",
-    "request": "^2.83.0"
+    "nodemon": "^1.17.3",
+    "request": "^2.85.0"
   }
 }
