@@ -1,9 +1,10 @@
-var request=require('request');
-var async=require('async');
-var Instrument = require('../../models/instrument');
-var Price = require('../../models/price');
+const request = require('request');
+const async = require('async');
+const DateOnly = require('dateonly');
+const Instrument = require('../../models/instrument');
+const Price = require('../../models/price');
 
-var url = "http://www.nasdaqomxnordic.com/webproxy/DataFeedProxy.aspx?SubSystem=History&Action=GetChartData&json=true&timezone=${timezone}&FromDate=${fromDate}&Instrument=${isin}";
+const url = "http://www.nasdaqomxnordic.com/webproxy/DataFeedProxy.aspx?SubSystem=History&Action=GetChartData&json=true&timezone=${timezone}&FromDate=${fromDate}&Instrument=${isin}";
 
 exports.run = function() {
   console.log("### downloadPrices started.");
@@ -17,14 +18,18 @@ exports.run = function() {
       console.log("Error finding instruments for price download: %s.", err);
     } else if(instruments) {
       for (let instrument of instruments) {
-        var lastDate = new Date("1970-01-01");  // Start date to use if no prices has been downloaded already
+        let lastDate = new DateOnly(19700000);  // Start date to use if no prices has been downloaded already
         if (instrument.prices.length > 0) {
-          lastDate = new Date(Math.max.apply(null, instrument.prices.map(function(price) {
+          lastDate = new DateOnly(Math.max.apply(null, instrument.prices.map(function(price) {
             return price.date ? price.date : 0;
           })));
         }
         lastDate.setDate(lastDate.getDate() + 1);  //Add one day
-        var fromDate = lastDate.toISOString().slice(0,10);
+        fromDate = new Date();
+        fromDate.setFullYear(lastDate.getFullYear());
+        fromDate.setMonth(lastDate.getMonth());
+        fromDate.setDate(lastDate.getDate());
+        fromDate = fromDate.toISOString().slice(0,10);
         var isin = instrument.isin;
         var timezone = 'CET';
         request(eval('`'+url+'`'), function (error, response, body) {
@@ -42,7 +47,7 @@ exports.run = function() {
                     var price = new Price({
                       instrument: instrument._id,
                       type: 'CLOSE',
-                      date: new Date(historicPrice[0]),
+                      date: new DateOnly(historicPrice[0]),
                       value: historicPrice[1]
                     });
                     price.save(function(err) {
@@ -59,16 +64,16 @@ exports.run = function() {
                         if (err) {
                           console.log(err);
                         } else if (existingPrice) {
-                          if (new Date(historicPrice[0]) > existingPrice.date) {
+                          if (new DateOnly(historicPrice[0]) > existingPrice.date) {
                             existingPrice.value = historicPrice[1];
-                            existingPrice.date = new Date(historicPrice[0]);
+                            existingPrice.date = new DateOnly(historicPrice[0]);
                             existingPrice.save();
                           }
                         } else {
                           var price = new Price({
                             instrument: instrument._id,
                             type: "LAST",
-                            date: new Date(historicPrice[0]),
+                            date: new DateOnly(historicPrice[0]),
                             value: historicPrice[1]
                           });
                           price.save();
@@ -86,14 +91,14 @@ exports.run = function() {
                         } else if (existingPrice) {
                           if (historicPrice[1] > existingPrice.value) {
                             existingPrice.value = historicPrice[1];
-                            existingPrice.date = new Date(historicPrice[0]);
+                            existingPrice.date = new DateOnly(historicPrice[0]);
                             existingPrice.save();
                           }
                         } else {
                           var price = new Price({
                             instrument: instrument._id,
                             type: "HIGH",
-                            date: new Date(historicPrice[0]),
+                            date: new DateOnly(historicPrice[0]),
                             value: historicPrice[1]
                           });
                           price.save();
@@ -111,14 +116,14 @@ exports.run = function() {
                         } else if (existingPrice) {
                           if (historicPrice[1] < existingPrice.value) {
                             existingPrice.value = historicPrice[1];
-                            existingPrice.date = new Date(historicPrice[0]);
+                            existingPrice.date = new DateOnly(historicPrice[0]);
                             existingPrice.save();
                           }
                         } else {
                           var price = new Price({
                             instrument: instrument._id,
                             type: "LOW",
-                            date: new Date(historicPrice[0]),
+                            date: new DateOnly(historicPrice[0]),
                             value: historicPrice[1]
                           });
                           price.save();
