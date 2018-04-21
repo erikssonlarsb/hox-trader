@@ -161,7 +161,7 @@ function matchOrder(order) {
     status: 'ACTIVE',
   }
 
-  var sorting = [['modifyTimestamp', 1]];
+  var sorting = [['updateTimestamp', 1]];
 
   if (order.side == 'BUY') {
     query.side = 'SELL';

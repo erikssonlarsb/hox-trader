@@ -8,8 +8,8 @@ class OrderDepth {
   }
 
   addOrder(order) {
-    var remainingQuantity = order.quantity - order.tradedQuantity;
-    var existing = this.levels
+    let remainingQuantity = order.quantity - order.tradedQuantity;
+    let existing = this.levels
       .find((level) => level[order.side.toLowerCase() + 'Price'] == order.price);
 
 
@@ -22,12 +22,12 @@ class OrderDepth {
       }
       this.max = (this.max > existing[order.side.toLowerCase() + 'Quantity']) ? this.max : existing[order.side.toLowerCase() + 'Quantity'];
     } else {
-      var buySide = this.levels.filter(function(level) {
+      let buySide = this.levels.filter(function(level) {
         return level.buyPrice != null;
       }).map(function(level) {
         return {price: level.buyPrice, quantity: level.buyQuantity};
       });
-      var sellSide = this.levels.filter(function(level) {
+      let sellSide = this.levels.filter(function(level) {
         return level.sellPrice != null;
       }).map(function(level) {
         return {price: level.sellPrice, quantity: level.sellQuantity};

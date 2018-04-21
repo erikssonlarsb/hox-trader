@@ -9,7 +9,6 @@ export class Order {
   quantity: number;
   tradedQuantity: number;
   status: ORDER_STATUS;
-  createTimestamp: Date;
   updateTimestamp: Date;
 
   constructor(json) {
@@ -21,7 +20,6 @@ export class Order {
     this.quantity = json.quantity;
     this.tradedQuantity = json.tradedQuantity;
     this.status= json.status;
-    this.createTimestamp = json.createTimestamp ? new Date(json.createTimestamp) : null;
     this.updateTimestamp = json.updateTimestamp ? new Date(json.updateTimestamp) : null;
   }
 

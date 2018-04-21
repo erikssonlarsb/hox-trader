@@ -8,7 +8,6 @@ export class Settlement {
   trades: Array<Trade>;
   isAcknowledged: Boolean;
   amount: number;
-  createTimestamp: Date;
   updateTimestamp: Date;
 
   constructor(json) {
@@ -18,7 +17,6 @@ export class Settlement {
     this.trades = json.trades ? json.trades.map(trade => new Trade(trade)) : null;
     this.isAcknowledged = json.isAcknowledged;
     this.amount = json.amount;
-    this.createTimestamp = json.createTimestamp ? new Date(json.createTimestamp) : null;
     this.updateTimestamp = json.updateTimestamp ? new Date(json.updateTimestamp) : null;
   }
 }

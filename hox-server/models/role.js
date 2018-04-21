@@ -1,26 +1,21 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-var permissionSchema = new Schema({
+const permissionSchema = new Schema({
   _id : false,
   resource: {type: String, required: true},
   methods: {type: [String], enum: ['GET', 'POST', 'PUT', 'DELETE'], required: true}
 });
 
-var roleSchema = new Schema({
+const roleSchema = new Schema({
   name: {type: String, required: true, unique: true},
   isAdmin: Boolean,
   permissions: {type: [permissionSchema], required: true},
-  createTimestamp: Date,
   updateTimestamp: Date
 });
 
 roleSchema.pre('save', function(next) {
-  var currentDate = new Date();
-  if (this.isNew) {
-    this.createTimestamp = currentDate;
-  }
-  this.updateTimestamp = currentDate;
+  this.updateTimestamp = new Date();
   next();
 });
 

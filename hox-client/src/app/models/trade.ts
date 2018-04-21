@@ -12,7 +12,6 @@ export class Trade {
   price: number;
   quantity: number;
   isSettled: boolean;
-  createTimestamp: Date;
   updateTimestamp: Date;
 
   constructor(json) {
@@ -25,7 +24,6 @@ export class Trade {
     this.price = json.price;
     this.quantity = json.quantity;
     this.isSettled = json.isSettled;
-    this.createTimestamp = json.createTimestamp ? new Date(json.createTimestamp) : null;
     this.updateTimestamp = json.updateTimestamp ? new Date(json.updateTimestamp) : null;
   }
 }

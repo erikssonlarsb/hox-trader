@@ -5,7 +5,6 @@ export class User {
   email: string;
   phone: string;
   role: Role;
-  createTimestamp: Date;
 
   constructor(json) {
     this.id = json._id;
@@ -14,7 +13,6 @@ export class User {
     this.email = json.email;
     this.phone = json.phone;
     this.role = json.role ? new Role(json.role) : null;
-    this.createTimestamp = json.createTimestamp ? new Date(json.createTimestamp) : null;
   }
 }
 

@@ -22,7 +22,7 @@ export class TransactionsComponent implements OnInit  {
     this.user = this.authService.getLoggedInUser();
     this.ApiService.getTrades()
       .subscribe(trades => {
-        this.trades = trades.sort((a: Trade, b: Trade) => {return a.createTimestamp.getTime() - b.createTimestamp.getTime()});
+        this.trades = trades.sort((a: Trade, b: Trade) => {return a.updateTimestamp.getTime() - b.updateTimestamp.getTime()});
       });
   }
 }

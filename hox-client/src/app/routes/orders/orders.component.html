@@ -27,7 +27,7 @@
             <tbody>
               <ng-container *ngFor="let order of orders;">
                 <tr *ngIf="!hideInactive || order.instrument.status == 'ACTIVE'">
-                  <td>{{order.createTimestamp | date}}</td>
+                  <td>{{order.updateTimestamp | date}}</td>
                   <td *ngIf="user?.role.isAdmin" scope="col">{{order.user.name}}</td>
                   <td>{{order.instrument.name}}</td>
                   <td>{{order.side}}</td>

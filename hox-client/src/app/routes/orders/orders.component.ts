@@ -23,7 +23,7 @@ export class OrdersComponent implements OnInit  {
     this.user = this.authService.getLoggedInUser();
     this.ApiService.getOrders()
       .subscribe(
-        orders => this.orders = orders.sort((a: Order, b: Order) => {return a.createTimestamp.getTime() - b.createTimestamp.getTime()})
+        orders => this.orders = orders.sort((a: Order, b: Order) => {return a.updateTimestamp.getTime() - b.updateTimestamp.getTime()})
       );
   }
 

@@ -7,7 +7,6 @@ export class Price {
   type: PRICE_TYPE;
   date: DateOnly;
   value: number;
-  createTimestamp: Date;
   updateTimestamp: Date;
 
   constructor(json) {
@@ -16,7 +15,6 @@ export class Price {
     this.type = json.type;
     this.date = json.date ? new DateOnly(json.date) : null;
     this.value = json.value;
-    this.createTimestamp = json.createTimestamp ? new Date(json.createTimestamp) : null;
     this.updateTimestamp = json.updateTimestamp ? new Date(json.updateTimestamp) : null;
   }
 

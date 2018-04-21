@@ -1,10 +1,10 @@
-var mongoose = require('mongoose');
-var bcrypt = require('bcryptjs');
-var Schema = mongoose.Schema;
-var ObjectId = Schema.Types.ObjectId;
-var Role = require('./role');
+const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+const Schema = mongoose.Schema;
+const ObjectId = Schema.Types.ObjectId;
+const Role = require('./role');
 
-var userSchema = new Schema({
+const userSchema = new Schema({
   name: String,
   role: {type: ObjectId, ref: 'Role', required: true},
   username: {type: String, required: true, unique: true, lowercase: true, trim: true},
@@ -16,16 +16,11 @@ var userSchema = new Schema({
     unique: true
   },
   phone: {type: String, required: true},
-  createTimestamp: Date,
   updateTimestamp: Date
 });
 
 userSchema.pre('save', function(next) {
-  var currentDate = new Date();
-  if (this.isNew) {
-    this.createTimestamp = currentDate;
-  }
-  this.updateTimestamp = currentDate;
+  this.updateTimestamp = new Date();
   next();
 });
 
