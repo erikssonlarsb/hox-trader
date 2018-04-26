@@ -4,7 +4,7 @@ const DateOnly = require('dateonly');
 const Instrument = require('../../models/instrument');
 const Price = require('../../models/price');
 
-const url = "http://www.nasdaqomxnordic.com/webproxy/DataFeedProxy.aspx?SubSystem=History&Action=GetChartData&json=true&timezone=${timezone}&FromDate=${fromDate}&Instrument=${isin}";
+const url = "http://www.nasdaqomxnordic.com/webproxy/DataFeedProxy.aspx?SubSystem=History&Action=GetChartData&json=true&timezone=CET&FromDate=${fromDate}&Instrument=${isin}";
 
 exports.run = function() {
   console.log("### downloadPrices started.");
@@ -18,20 +18,15 @@ exports.run = function() {
       console.log("Error finding instruments for price download: %s.", err);
     } else if(instruments) {
       for (let instrument of instruments) {
-        let lastDate = new DateOnly(19700000);  // Start date to use if no prices has been downloaded already
+        let fromDate = new DateOnly(19700001);  // Start date to use if no prices has been downloaded already
         if (instrument.prices.length > 0) {
-          lastDate = new DateOnly(Math.max.apply(null, instrument.prices.map(function(price) {
-            return price.date ? price.date : 0;
+          fromDate = new DateOnly(Math.max.apply(null, instrument.prices.map(function(price) {
+            return price.date ? price.date + 1 : 0;  // Add one day, to search from day after exisiting
           })));
         }
-        lastDate.setDate(lastDate.getDate() + 1);  //Add one day
-        fromDate = new Date();
-        fromDate.setFullYear(lastDate.getFullYear());
-        fromDate.setMonth(lastDate.getMonth());
-        fromDate.setDate(lastDate.getDate());
-        fromDate = fromDate.toISOString().slice(0,10);
+
+        fromDate = fromDate.toISOString();
         var isin = instrument.isin;
-        var timezone = 'CET';
         request(eval('`'+url+'`'), function (error, response, body) {
           if(error) {
             console.log("Error downloading prices: ", error);
