@@ -1,51 +1,55 @@
-version: "2"
+version: "3"
 services:
   mongodb:
     image: mongo:latest
     environment:
-      MONGO_INITDB_ROOT_USERNAME: $DB_USER
-      MONGO_INITDB_ROOT_PASSWORD: $DB_PASSWORD
+      MONGO_INITDB_ROOT_USERNAME: ${DB_USER-root}
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_PASSWORD-Aaa12345}
     command: mongod --port 27017 --bind_ip_all
+    restart: always
 
   mongo-seed:
     image: mongo:latest
     command: bash -c
-             "mongoimport --host mongodb --username $DB_USER --password $DB_PASSWORD --authenticationDatabase admin --db test --collection roles --type json --file /roles.json --jsonArray &&
-              mongoimport --host mongodb --username $DB_USER --password $DB_PASSWORD --authenticationDatabase admin --db test --collection users --type json --file /users.json --jsonArray"
+             "mongoimport --host mongodb --username ${DB_USER-root} --password ${DB_PASSWORD-Aaa12345} --authenticationDatabase admin --db test --collection roles --type json --file /roles.json --jsonArray &&
+              mongoimport --host mongodb --username ${DB_USER-root} --password ${DB_PASSWORD-Aaa12345} --authenticationDatabase admin --db test --collection users --type json --file /users.json --jsonArray"
     volumes:
       - ./mongo-seed/roles.json:/roles.json
       - ./mongo-seed/users.json:/users.json
     depends_on:
       - mongodb
+    restart: on-failure
 
   server:
-    restart: always
     build: ./hox-server
     environment:
       PORT: 4000
       USE_SSL: 'false'
       DATABASE: mongodb:27017
-      DB_USER: $DB_USER
-      DB_PASSWORD: $DB_PASSWORD
-      DB_AUTH: admin
+      DB_USER: ${DB_USER-root}
+      DB_PASSWORD: ${DB_PASSWORD-Aaa12345}
     depends_on:
       - mongo-seed
+    restart: always
 
   client:
     build: ./hox-client
     depends_on:
       - server
+    restart: always
 
   openssl:
     build:
       context: ./openssl
       args:
-        - COMMON_NAME=$COMMON_NAME
-        - KEY_NAME=$KEY_NAME
+        - COMMON_NAME=${COMMON_NAME-Hox Trader}
+        - KEY_NAME=${KEY_NAME-hoxtrader}
     volumes:
       - certs:/certs
     depends_on:
       - client
+    restart: on-failure
+
   reverseproxy:
     image: nginx:alpine
     volumes:
@@ -57,10 +61,11 @@ services:
       - '4000:4000'
       - '27017:27017'
     environment:
-     - KEY_NAME=$KEY_NAME
+      KEY_NAME: ${KEY_NAME-hoxtrader}
     command: sh -c "envsubst '$${KEY_NAME}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
-    restart: always
     depends_on:
       - openssl
+    restart: always
+
 volumes:
   certs:
