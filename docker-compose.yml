@@ -29,8 +29,9 @@ services:
       DB_AUTH : admin
       DB_USE_SSL: 'false'
       API_PORT: 4000
-      JWT_SECRET: ${JWT_SECRET-5uper5ecretJW7}
       JWT_EXPIRY: ${JWT_EXPIRY-86400}
+      JWT_RANDOMIZE_SECRET: 'true'
+      JWT_SECRET: ${JWT_SECRET-5uper5ecretJW7}
     depends_on:
       - mongo-seed
     restart: always
