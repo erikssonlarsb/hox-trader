@@ -23,11 +23,14 @@ services:
   server:
     build: ./hox-server
     environment:
-      PORT: 4000
-      USE_SSL: 'false'
-      DATABASE: mongodb:27017
+      DB_URL: mongodb:27017
       DB_USER: ${DB_USER-root}
       DB_PASSWORD: ${DB_PASSWORD-Aaa12345}
+      DB_AUTH : admin
+      DB_USE_SSL: 'false'
+      API_PORT: 4000
+      JWT_SECRET: ${JWT_SECRET-5uper5ecretJW7}
+      JWT_EXPIRY: ${JWT_EXPIRY-86400}
     depends_on:
       - mongo-seed
     restart: always

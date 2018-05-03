@@ -1,10 +1,11 @@
+const crypto = require('crypto');
 var app = require('express')();
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 require('console-stamp')(console, { pattern: 'yyyy/mm/dd HH:MM:ss.l' });
 var config = require('./config');
 var auth = require('./utils/auth');
-var scheduler = require('./jobs/scheduler')
+var scheduler = require('./jobs/scheduler');
 
 app.use(bodyParser.urlencoded({extended: false}));  // Form for authentication
 app.use(bodyParser.json());
@@ -26,17 +27,17 @@ app.use('/api/jobs', auth(), require('./handlers/jobs'));
 
 
 
-console.log('Connecting to database: %s.', config.database);
+console.log('Connecting to database: %s.', config.dbURL);
 
 var connectWithRetry = function() {
-  return mongoose.connect(config.database, {server: {ssl: config.use_ssl}, user: config.db_user, pass: config.db_password, auth: {authdb: config.db_auth}}, function(err) {
+  return mongoose.connect(config.dbURL, {server: {ssl: config.dbUseSSL}, user: config.dbUser, pass: config.dbPassword, auth: {authdb: config.dbAuth}}, function(err) {
     if (err) {
       console.error('Failed to connect to mongo on startup - retrying in 5 sec', err);
       setTimeout(connectWithRetry, 5000);
     } else {
       console.log('Connected do database.');
-      app.listen(config.port, function() {
-        console.log('Running on port: %s.', config.port);
+      app.listen(config.apiPort, function() {
+        console.log('Running on port: %s.', config.apiPort);
         console.log('Initiating jobs.');
         scheduler.init();
       });

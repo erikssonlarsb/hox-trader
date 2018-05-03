@@ -1,18 +1,19 @@
-var database = process.env.DATABASE || 'localhost:27017';
-var db_user = process.env.DB_USER || 'root';
-var db_password = process.env.DB_PASSWORD || 'Aaa12345';
-var db_auth = process.env.DB_AUTH || 'admin';
-var port = process.env.PORT || 3000;
-var use_ssl = process.env.USE_SSL || true;
-var jwtSecret = process.env.JWTSECRET || '5uper5ecretJW7';
+var dbURL = process.env.DB_URL || 'localhost:27017';
+var dbUser = process.env.DB_USER || 'root';
+var dbPassword = process.env.DB_PASSWORD || 'Aaa12345';
+var dbAuth = process.env.DB_AUTH || 'admin';
+var dbUseSSL = process.env.DB_USE_SSL || true;
+var apiPort = process.env.API_PORT || 3000;
+var jwtSecret = process.env.JWT_SECRET || '5uper5ecretJW7';
+var jwtExpiry = Number(process.env.JWT_EXPIRY) || 86400;  // jwt session TTL in seconds (86400 = 1 day)
 
 module.exports = {
-  'database': 'mongodb://' + database,
-  'db_user': db_user,
-  'db_password': db_password,
-  'db_auth': db_auth,
-  'port': port,
-  'use_ssl': use_ssl,
+  'dbURL': 'mongodb://' + dbURL,
+  'dbUser': dbUser,
+  'dbPassword': dbPassword,
+  'dbAuth': dbAuth,
+  'dbUseSSL': dbUseSSL,
+  'apiPort': apiPort,
   'jwtSecret': jwtSecret,
-  'jwtExpiry': 86400  // jwt session TTL in seconds (86400 = 1 day)
+  'jwtExpiry': jwtExpiry
 };
