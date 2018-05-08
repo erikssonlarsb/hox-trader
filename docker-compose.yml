@@ -1,7 +1,7 @@
 version: "3"
 services:
   mongodb:
-    image: mongo:3.7
+    image: mongo:3.6
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${DB_USER-root}
       MONGO_INITDB_ROOT_PASSWORD: ${DB_PASSWORD-Aaa12345}
@@ -9,7 +9,7 @@ services:
     restart: always
 
   mongo-seed:
-    image: mongo:3.7
+    image: mongo:3.6
     command: bash -c
              "mongoimport --host mongodb --username '${DB_USER-root}' --password '${DB_PASSWORD-Aaa12345}' --authenticationDatabase admin --db test --collection roles --type json --file /roles.json --jsonArray &&
               mongoimport --host mongodb --username '${DB_USER-root}' --password '${DB_PASSWORD-Aaa12345}' --authenticationDatabase admin --db test --collection users --type json --file /users.json --jsonArray"
