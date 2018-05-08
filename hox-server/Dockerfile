@@ -1,4 +1,4 @@
-FROM node:latest
+FROM node:9.11-alpine
 RUN mkdir /server
 WORKDIR /server
 COPY . /server

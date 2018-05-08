@@ -1,7 +1,7 @@
 version: "3"
 services:
   mongodb:
-    image: mongo:latest
+    image: mongo:3.7
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${DB_USER-root}
       MONGO_INITDB_ROOT_PASSWORD: ${DB_PASSWORD-Aaa12345}
@@ -9,7 +9,7 @@ services:
     restart: always
 
   mongo-seed:
-    image: mongo:latest
+    image: mongo:3.7
     command: bash -c
              "mongoimport --host mongodb --username '${DB_USER-root}' --password '${DB_PASSWORD-Aaa12345}' --authenticationDatabase admin --db test --collection roles --type json --file /roles.json --jsonArray &&
               mongoimport --host mongodb --username '${DB_USER-root}' --password '${DB_PASSWORD-Aaa12345}' --authenticationDatabase admin --db test --collection users --type json --file /users.json --jsonArray"
@@ -55,7 +55,7 @@ services:
     restart: on-failure
 
   reverseproxy:
-    image: nginx:alpine
+    image: nginx:1.13-alpine
     volumes:
       - certs:/etc/ssl/certs
       - ./reverseproxy/nginx.conf.template:/etc/nginx/nginx.conf.template
