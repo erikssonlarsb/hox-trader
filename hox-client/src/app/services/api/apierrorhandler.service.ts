@@ -20,8 +20,9 @@ export class ApiErrorHandler {
         // The backend returned an unsuccessful response code.
         // The response body may contain clues as to what went wrong.
         console.error(
-          `Backend returned code ${error.status}, ` +
-          `body was: ${error.error}`
+          `Backend returned status ${error.status}, ` +
+          `with message: ${error.error.message} ` +
+          `and code: ${error.error.code}`
         );
       }
     }

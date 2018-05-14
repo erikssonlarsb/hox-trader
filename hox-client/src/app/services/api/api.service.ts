@@ -13,7 +13,7 @@ export class ApiService {
 
   constructor(private http: HttpClient, private authService: AuthService, private errorHandler: ApiErrorHandler) { }
 
-  postRegistration(name: string, username: string, password: string, email: string, phone: string): Observable<{}> {
+  postRegistration(name: string, username: string, password: string, email: string, phone: string): Observable<void> {
     let body = {
       name: name,
       username: username,
@@ -22,7 +22,7 @@ export class ApiService {
       phone: phone
     }
     return this.http
-      .post(`${window.location.origin}/api/registration`, body)
+      .post<void>(`${window.location.origin}/api/registration`, body)
       .pipe(
         catchError(error => this.errorHandler.handleError(error))
       );

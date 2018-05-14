@@ -22,13 +22,14 @@ export class RegisterComponent {
 
   register(): void {
     this.errorMessage = null;
-    if(this.password == this.confirmPassword) {
+    if(this.password != this.confirmPassword) {
+      this.errorMessage = "Passwords doesn't match."
+    } else {
       this.apiService.postRegistration(this.name, this.username, this.password, this.email, this.phone)
         .subscribe(
-          () => this.success = true
+          () => this.success = true,
+          error => this.errorMessage = error.message
         );
-    } else {
-      this.errorMessage = "Passwords doesn't match."
     }
   }
 }
