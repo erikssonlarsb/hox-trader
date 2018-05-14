@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var User = require('../models/user');
+var Error = require('../utils/error');
 
 router.post('/', function(req, res){
   var user = new User({
@@ -14,9 +15,9 @@ router.post('/', function(req, res){
 
   user.save(function(err) {
     if (err) {
-      res.status(500).json({'error': err.toString()})
+      res.status(500).json(new Error(err.errmsg, err.code));
     } else {
-      res.sendStatus(201);
+      res.status(201).send();
     }
   });
 });
