@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
-import { Http, URLSearchParams }  from '@angular/http';
+import { HttpClient }  from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { HttpErrorResponse }  from '@angular/common/http';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 
 import { Session, User } from '../../models/index';
 
@@ -11,7 +15,7 @@ export class AuthService {
   private user: User;
   loginChanged = new Subject<boolean>();
 
-  constructor(private http: Http) { }
+  constructor(private http: HttpClient) { }
 
   init(): Promise<void> {
     return new Promise((resolve, reject) => {
@@ -36,24 +40,23 @@ export class AuthService {
     }
   }
 
-  login(username: string, password: string): Promise<any> {
-    let body = new URLSearchParams();
-    body.append('username', username);
-    body.append('password', password);
+  login(username: string, password: string): Observable<void> {
+    let body = {
+      username: username,
+      password: password
+    }
     return this.http
-      .post(window.location.origin + "/api/authentication", body)
-      .toPromise()
-      .then((response) => {
-        var token = response.json().token;
+      .post<any>(`${window.location.origin}/api/authentication`, body)
+      .map(response => {
+        var token = response.token;
         localStorage.setItem('token', token);
         this.token = token;
         this.session = this.getSession(token);
         this.loginChanged.next(true);
-        return;
       })
-      .catch((error) => {
-        return Promise.reject(error.json().message);
-      });
+      .pipe(
+        catchError(error => this.handleError(error))
+      );
   }
 
   logout(): Promise<void> {
@@ -88,4 +91,19 @@ export class AuthService {
     var json = JSON.parse(window.atob(base64));
     return new Session(json);;
   }
+
+  private handleError(error: HttpErrorResponse) {
+    if (error.error instanceof ErrorEvent) {
+      // A client-side or network error occurred. Handle it accordingly.
+      console.error('An error occurred:', error.error.message);
+    } else {
+      console.error(
+        `Backend returned status ${error.status}, ` +
+        `with message: ${error.error.message} ` +
+        `and code: ${error.error.code}`
+      );
+    }
+    // return an ErrorObservable with a user-facing error message
+    return new ErrorObservable(error.error);
+  };
 }

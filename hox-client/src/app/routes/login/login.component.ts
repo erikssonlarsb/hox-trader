@@ -24,11 +24,9 @@ export class LoginComponent implements OnInit {
   login(): void {
     this.errorMessage = null;
     this.authService.login(this.username, this.password)
-      .then(() => {
-        this.router.navigate(['/']);
-      })
-      .catch((error) => {
-        this.errorMessage = error;
-      });
+      .subscribe(
+        () => this.router.navigate(['/']),
+        error => this.errorMessage = error.message
+      );
   }
 }
