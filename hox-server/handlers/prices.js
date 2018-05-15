@@ -1,11 +1,12 @@
 var express = require('express');
 var router = express.Router();
 var Price = require('../models/price');
+var Error = require('../utils/error');
 
 router.get('/', function(req, res){
   Price.find(req.query, function(err, prices) {
     if (err) {
-      res.status(500).json({'error': err.toString()})
+      res.status(500).json(new Error(err));
     } else {
       res.json(prices);
     }
@@ -21,7 +22,7 @@ router.post('/', function(req, res){
   });
   price.save(function(err) {
     if (err) {
-      res.status(500).json({'error': err.toString()})
+      res.status(500).json(new Error(err));
     } else {
       res.json(price);
     }

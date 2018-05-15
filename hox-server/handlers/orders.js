@@ -5,6 +5,7 @@ var Order = require('../models/order');
 var Trade = require('../models/trade');
 var Instrument = require('../models/instrument');
 var Price = require('../models/price');
+var Error = require('../utils/error');
 
 router.get('/', function(req, res) {
   Order.find(req.query)
@@ -12,7 +13,7 @@ router.get('/', function(req, res) {
   .populate('instrument')
   .exec(function(err, orders) {
     if (err) {
-      res.status(500).json({'error': err.toString()});
+      res.status(500).json(new Error(err));
     } else {
       res.json(orders);
     }
@@ -26,7 +27,7 @@ router.get('/:id', function(req, res) {
   .populate('instrument')
   .exec(function(err, order) {
     if (err) {
-      res.status(500).json({'error': err.toString()})
+      res.status(500).json(new Error(err));
     } else if (order) {
       res.json(order);
     } else {
@@ -42,19 +43,19 @@ router.post('/', function(req, res){
         req.body.instrument = instrument._id;
         createOrder(req, function(err, order) {
           if (err) {
-            res.status(500).json({'error': err.toString()});
+            res.status(500).json(new Error(err));
           } else {
             res.json(order);
           }
         });
       } else {
-        res.status(500).json({'error': "Instrument not found."});
+        res.status(500).json(new Error("No such instrument."));
       }
     });
   } else {
     createOrder(req, function(err, order) {
       if (err) {
-        res.status(500).json({'error': err.toString()});
+        res.status(500).json(new Error(err));
       } else {
         res.json(order);
       }
@@ -65,7 +66,7 @@ router.post('/', function(req, res){
 router.put('/:id', function(req, res){
   modifyOrder(req, function(err, order) {
     if (err) {
-      res.status(500).json({'error': err.toString()});
+      res.status(500).json(new Error(err));
     } else {
       res.json(order);
     }
@@ -75,7 +76,7 @@ router.put('/:id', function(req, res){
 router.delete('/:id', function(req, res){
   deleteOrder(req, function(err, order) {
     if (err) {
-      res.status(500).json({'error': err.toString()});
+      res.status(500).json(new Error(err));
     } else {
       res.status(204).end();
     }

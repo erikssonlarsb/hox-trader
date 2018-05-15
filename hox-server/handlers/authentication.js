@@ -3,6 +3,7 @@ var router = express.Router();
 var jwt = require('jsonwebtoken');
 var config = require('../config');
 var User = require('../models/user');
+var Error = require('../utils/error');
 
 router.post('/', function(req, res){
   User.findOne({username: req.body.username.trim().toLowerCase()})
@@ -10,25 +11,21 @@ router.post('/', function(req, res){
   .populate('isAdmin')
   .exec(function(err, user) {
     if (err) {
-      res.status(500).json({'error': err.toString()})
+      res.status(500).json(new Error(err));
     } else {
       if (!user) {
-        res.status(401).json({message: 'Authentication failed. User not found.'});
+        res.status(401).json(new Error('Username or password incorrect.'));
       } else {
         // test a matching password
         user.verifyPassword(req.body.password, function(err, isMatch) {
           if (err) {
-            res.status(401).json({message: err});
+            res.status(401).json(new Error(err));
           } else {
             if (isMatch) {
-              var token = jwt.sign({user: user}, config.jwtSecret, {
-                expiresIn: config.jwtExpiry
-              });
-              res.json({
-                token: token
-              });
+              var token = jwt.sign({user: user}, config.jwtSecret, {expiresIn: config.jwtExpiry});
+              res.json({token: token});
             } else {
-              res.status(401).json({message: 'Authentication failed. Password incorrect.'});
+              res.status(401).json(new Error('Username or password incorrect.'));
             }
           }
         });

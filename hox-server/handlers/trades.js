@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var Trade = require('../models/trade');
+var Error = require('../utils/error');
 
 router.get('/', function(req, res){
   Trade.find(req.query)
@@ -14,7 +15,7 @@ router.get('/', function(req, res){
   })
   .exec(function(err, trades) {
     if (err) {
-      res.status(500).json({'error': err.toString()});
+      res.status(500).json(new Error(err));
     } else {
       res.json(trades);
     }
@@ -34,7 +35,7 @@ router.get('/:id', function(req, res){
   })
   .exec(function(err, trade) {
     if (err) {
-      res.status(500).json({'error': err.toString()})
+      res.status(500).json(new Error(err));
     } else if (trade) {
       res.json(trade);
     } else {

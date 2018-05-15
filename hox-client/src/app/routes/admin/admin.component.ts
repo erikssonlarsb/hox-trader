@@ -69,7 +69,7 @@ export class AdminComponent  implements OnInit  {
     this.apiService.postInstrument(newDerivative)
       .subscribe(
         instrument => this.createDerivativeStatusMessage = instrument.name + " successfully created.",
-        error => this.createDerivativeErrorMessage = error
+        error => this.createDerivativeErrorMessage = error.message
       );
   }
 
@@ -93,7 +93,7 @@ export class AdminComponent  implements OnInit  {
     this.apiService.postPrice(newPrice)
       .subscribe(
         price => this.addSettlementPriceStatusMessage = "Settlement price successfully created.",
-        error => this.addSettlementPriceErrorMessage = error
+        error => this.addSettlementPriceErrorMessage = error.message
       );
   }
 
@@ -104,7 +104,7 @@ export class AdminComponent  implements OnInit  {
     this.apiService.runJob(this.job)
       .subscribe(
         result => this.runJobStatusMessage = this.job + " successfully initiated.",
-        error => this.runJobErrorMessage = error
+        error => this.runJobErrorMessage = error.message
       );
   }
 

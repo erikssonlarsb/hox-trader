@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 var Settlement = require('../models/settlement');
+var Error = require('../utils/error');
 
 router.get('/', function(req, res){
   Settlement.find(req.query)
@@ -14,7 +15,7 @@ router.get('/', function(req, res){
   })
   .exec(function(err, settlements) {
     if (err) {
-      res.status(500).json({'error': err.toString()});
+      res.status(500).json(new Error(err));
     } else {
       res.json(settlements);
     }
@@ -42,7 +43,7 @@ router.get('/:id', function(req, res){
   })
   .exec(function(err, trade) {
     if (err) {
-      res.status(500).json({'error': err.toString()})
+      res.status(500).json(new Error(err));
     } else if (trade) {
       res.json(trade);
     } else {
@@ -55,7 +56,7 @@ router.get('/:id', function(req, res){
 router.put('/:id', function(req, res){
   modifySettlement(req, function(err, settlement) {
     if (err) {
-      res.status(500).json({'error': err.toString()});
+      res.status(500).json(new Error(err));
     } else {
       res.json(settlement);
     }

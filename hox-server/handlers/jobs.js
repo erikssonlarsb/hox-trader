@@ -1,6 +1,7 @@
 var fs = require('fs');
 var express = require('express');
 var router = express.Router();
+var Error = require('../utils/error');
 
 /*
  *  Search the scripts folder and return all script names
@@ -20,8 +21,8 @@ router.put('/:id/run', function(req, res) {
   try {
     require('../jobs/scripts/'+req.params.id).run();
     res.status(204).end();
-  } catch (e) {
-    res.status(500).json(e);
+  } catch (err) {
+    res.status(500).json(new Error(err));
   }
 
 });

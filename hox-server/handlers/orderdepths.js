@@ -3,6 +3,7 @@ var router = express.Router();
 var Instrument = require('../models/instrument');
 var Order = require('../models/order');
 var OrderDepth = require('../models/orderdepth');
+var Error = require('../utils/error');
 
 router.get('/', function(req, res) {
   var orderDepths = {};
@@ -21,7 +22,7 @@ router.get('/', function(req, res) {
       res.json(Object.keys(orderDepths).map(function(key) { return orderDepths[key]; })); // Convert map to array
     })
     .catch(err => {
-      res.status(500).json({ error : err });
+      res.status(500).json(new Error(err));
     });
 });
 
@@ -39,7 +40,7 @@ router.get('/:id', function(req, res) {
     res.json(orderDepth);
   })
   .catch(err => {
-    res.status(500).json({ error : err });
+    res.status(500).json(new Error(err));
   });
 });
 

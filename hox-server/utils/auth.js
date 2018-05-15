@@ -1,5 +1,6 @@
 var jwt = require('jsonwebtoken');
 var config = require('../config');
+var Error = require('../utils/error');
 
 function auth(userField) {
   return function(req, res, next) {
@@ -38,7 +39,7 @@ function auth(userField) {
       next();
 
     } catch (error) {
-      return res.status(error.code).json({message: error.message});
+      return res.status(error.code).json(new Error(error.message));
     }
   }
 }
