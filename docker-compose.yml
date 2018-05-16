@@ -12,10 +12,12 @@ services:
     image: mongo:3.6
     command: bash -c
              "mongoimport --host mongodb --username '${DB_USER-root}' --password '${DB_PASSWORD-Aaa12345}' --authenticationDatabase admin --db test --collection roles --type json --file /roles.json --jsonArray &&
-              mongoimport --host mongodb --username '${DB_USER-root}' --password '${DB_PASSWORD-Aaa12345}' --authenticationDatabase admin --db test --collection users --type json --file /users.json --jsonArray"
+              mongoimport --host mongodb --username '${DB_USER-root}' --password '${DB_PASSWORD-Aaa12345}' --authenticationDatabase admin --db test --collection users --type json --file /users.json --jsonArray &&
+              mongoimport --host mongodb --username '${DB_USER-root}' --password '${DB_PASSWORD-Aaa12345}' --authenticationDatabase admin --db test --collection instruments --type json --file /instruments.json --jsonArray"
     volumes:
       - ./mongo-seed/roles.json:/roles.json
       - ./mongo-seed/users.json:/users.json
+      - ./mongo-seed/instruments.json:/instruments.json
     depends_on:
       - mongodb
     restart: on-failure
