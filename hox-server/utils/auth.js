@@ -25,7 +25,6 @@ function auth(userField) {
 
         User.findOne({username: credentials[0].trim().toLowerCase()})
         .populate('role')
-        .populate('isAdmin')
         .exec(function(err, user) {
           if (err) {
             res.status(500).json(new Error(err));

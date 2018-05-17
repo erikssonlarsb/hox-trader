@@ -8,7 +8,6 @@ var Error = require('../utils/error');
 router.post('/', function(req, res){
   User.findOne({username: req.body.username.trim().toLowerCase()})
   .populate('role')
-  .populate('isAdmin')
   .exec(function(err, user) {
     if (err) {
       res.status(500).json(new Error(err));
