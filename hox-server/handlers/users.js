@@ -3,13 +3,14 @@ var router = express.Router();
 var mongoose = require('mongoose');
 var User = require('../models/user');
 var Role = require('../models/role');
+var Error = require('../utils/error');
 
 router.get('/', function(req, res){
   User.find(req.query)
   .populate('role')
   .exec(function(err, users) {
     if (err) {
-      res.status(500).json({'error': err.toString()})
+      res.status(500).json(new Error(err));
     } else {
       res.json(users);
     }
@@ -23,19 +24,19 @@ router.post('/', function(req, res) {
         req.body.role = role._id;
         createUser(req, function(err, user) {
           if (err) {
-            res.status(500).json({'error': err.toString()});
+            res.status(500).json(new Error(err));
           } else {
             res.json(user);
           }
         });
       } else {
-        res.status(500).json({'error': "Role not found."});
+        res.status(404).json(new Error('Role not found'));
       }
     });
   } else {
     createUser(req, function(err, user) {
       if (err) {
-        res.status(500).json({'error': err.toString()});
+        res.status(500).json(new Error(err));
       } else {
         res.json(user);
       }
@@ -48,11 +49,11 @@ router.get('/:id', function(req, res) {
   User.findOne(req.query)
   .exec(function(err, user) {
     if (err) {
-      res.status(500).json({'error': err.toString()})
+      res.status(500).json(new Error(err));
     } else if (user) {
       res.json(user);
     } else {
-      res.status(404).send();  // No user found
+      res.status(404).json(new Error('User not found'));
     }
   });
 });
@@ -60,7 +61,7 @@ router.get('/:id', function(req, res) {
 router.put('/:id', function(req, res) {
   modifyUser(req, function(err, user) {
     if (err) {
-      res.status(500).json({'error': err.toString()});
+      res.status(500).json(new Error(err));
     } else {
       res.json(user);
     }
