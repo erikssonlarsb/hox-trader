@@ -85,7 +85,7 @@ router.delete('/:id', function(req, res){
 
 function createOrder(req, callback) {
   var order = new Order({
-    user: req.auth.user._id,
+    user: req.user._id,
     instrument: req.body.instrument,
     side: req.body.side,
     price: req.body.price,
