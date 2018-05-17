@@ -13,7 +13,7 @@ app.use(bodyParser.json());
  * Routes
  */
 app.use('/api/registration', require('./handlers/registration'));
-app.use('/api/authentication', require('./handlers/authentication'));
+app.use('/api/token', auth(), require('./handlers/token'));
 app.use('/api/users', auth('_id'), require('./handlers/users'));
 app.use('/api/roles', auth(), require('./handlers/roles'));
 app.use('/api/instruments', auth(), require('./handlers/instruments'));

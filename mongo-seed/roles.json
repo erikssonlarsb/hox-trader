@@ -6,6 +6,12 @@
       "isAdmin" : true,
       "permissions" : [
           {
+              "resource" : "token",
+              "methods" : [
+                  "GET"
+              ]
+          },
+          {
               "resource" : "instruments",
               "methods" : [
                   "GET",
@@ -87,6 +93,12 @@
       "name" : "trader",
       "isAdmin" : false,
       "permissions" : [
+          {
+              "resource" : "token",
+              "methods" : [
+                  "GET"
+              ]
+          },
           {
               "resource" : "instruments",
               "methods" : [

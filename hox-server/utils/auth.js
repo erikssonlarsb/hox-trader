@@ -16,8 +16,12 @@ function auth(userField) {
             res.status(401).json(new Error('Failed to authenticate token.'));
           } else {
             req.user = decoded.user;
-            verifyPermissions(req, res, userField);
-            next();
+            try {
+              verifyPermissions(req, res, userField);
+              next();
+            } catch (error) {
+              res.status(405).json(error);
+            }
           }
         });
       } else if (auth[0] == 'Basic') {
@@ -40,8 +44,12 @@ function auth(userField) {
                   res.status(401).json(new Error('Username or password incorrect.'));
                 } else {
                   req.user = user;
-                  verifyPermissions(req, res, userField);
-                  next();
+                  try {
+                    verifyPermissions(req, res, userField);
+                    next();
+                  } catch (error) {
+                    res.status(405).json(error);
+                  }
                 }
               });
             }
@@ -62,7 +70,7 @@ function verifyPermissions(req, res, userField) {
     }
   });
   if(!permission || permission.methods.indexOf(req.method) <= -1) {
-    res.status(405).json(new Error('Permission denied for method ' + req.method));
+    throw new Error('Permission denied for method ' + req.method);
   }
 
   //  Add user to the request query in order to control access
