@@ -73,5 +73,13 @@ services:
       - openssl
     restart: always
 
+  admin-pwd-config:
+    build: ./admin-pwd-config
+    environment:
+      ADMIN_USER_PASSWORD: ${ADMIN_USER_PASSWORD-admin1}
+    depends_on:
+      - reverseproxy
+    restart: on-failure
+
 volumes:
   certs:
