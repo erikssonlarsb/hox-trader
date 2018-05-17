@@ -103,6 +103,7 @@ function modifyUser(req, callback) {
         if (err) {
           callback(err, null);
         } else {
+          user.password = undefined;  // Remove the password from response
           callback(null, user);
         }
       });
