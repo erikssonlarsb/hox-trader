@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
-import { HttpClient }  from '@angular/common/http';
+import { HttpClient, HttpHeaders }  from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { HttpErrorResponse }  from '@angular/common/http';
@@ -41,12 +41,9 @@ export class AuthService {
   }
 
   login(username: string, password: string): Observable<void> {
-    let body = {
-      username: username,
-      password: password
-    }
+    let headers = new HttpHeaders({'Authorization': 'Basic ' + btoa(username + ':' + password)});
     return this.http
-      .post<any>(`${window.location.origin}/api/authentication`, body)
+      .get<any>(`${window.location.origin}/api/token`, { headers: headers })
       .map(response => {
         var token = response.token;
         localStorage.setItem('token', token);
