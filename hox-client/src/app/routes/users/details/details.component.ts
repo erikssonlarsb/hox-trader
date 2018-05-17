@@ -45,7 +45,8 @@ export class UserDetailsComponent implements OnInit  {
 
     this.apiService.updateUser(this.updatedUser.id, this.updatedUser)
       .subscribe(
-        user => this.updateUserStatusMessage = "User successfully updated."
+        user => this.updateUserStatusMessage = "User successfully updated.",
+        error => this.updateUserErrorMessage = error.message
       );
   }
 
@@ -55,11 +56,14 @@ export class UserDetailsComponent implements OnInit  {
 
     if(this.password == this.confirmPassword) {
       this.apiService.updateUserPassword(this.updatedUser.id, this.password)
-        .subscribe(user => {
-          this.password = null;
-          this.confirmPassword = null;
-          this.changePasswordStatusMessage = "Password successfully changed."
-        });
+        .subscribe(
+          user => {
+            this.password = null;
+            this.confirmPassword = null;
+            this.changePasswordStatusMessage = "Password successfully changed."
+          },
+          error => this.changePasswordErrorMessage = error.message
+        );
     } else {
       this.changePasswordErrorMessage = "Passwords doesn't match."
     }
