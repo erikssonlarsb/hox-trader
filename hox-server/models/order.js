@@ -19,6 +19,8 @@ orderSchema.pre('save', function(next) {
     Instrument.findById(this.instrument, function(err, instrument) {
       if (err) {
         next(err);
+      } else if (!instrument) {
+        next(new Error('Instrument not found.'));
       } else if (instrument.status == 'INACTIVE') {
         next(new Error('Cannot enter/modify order on inactive instrument.'));
       }  else {
