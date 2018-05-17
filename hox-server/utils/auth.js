@@ -10,7 +10,7 @@ function auth(userField) {
       if (!req.headers['authorization']) {
         throw {code: 401, message: 'No token provided.'};
       } else {
-        jwt.verify(req.headers['authorization'].replace('Bearer ', ''), config.jwtSecret, function(err, decoded) {
+        jwt.verify(req.headers['authorization'].replace('Bearer ', ''), new Buffer(config.jwtSecret, 'base64'), function(err, decoded) {
           if (err) {
             throw {code: 401, message: 'Failed to authenticate token.'};
           } else {

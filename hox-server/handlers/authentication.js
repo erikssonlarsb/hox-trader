@@ -22,7 +22,7 @@ router.post('/', function(req, res){
             res.status(401).json(new Error(err));
           } else {
             if (isMatch) {
-              var token = jwt.sign({user: user}, config.jwtSecret, {expiresIn: config.jwtExpiry});
+              var token = jwt.sign({user: user}, new Buffer(config.jwtSecret, 'base64'), {expiresIn: config.jwtExpiry});
               res.json({token: token});
             } else {
               res.status(401).json(new Error('Username or password incorrect.'));
