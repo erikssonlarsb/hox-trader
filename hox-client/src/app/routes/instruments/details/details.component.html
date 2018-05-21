@@ -19,11 +19,11 @@
               </thead>
               <tbody>
                 <tr>
-                  <td>{{orderDepth?.levels[0]?.buyPrice}}</td>
-                  <td>{{orderDepth?.levels[0]?.sellPrice}}</td>
-                  <td>{{last?.value}}</td>
-                  <td>{{high?.value}}</td>
-                  <td>{{low?.value}}</td>
+                  <td>{{orderDepth?.levels[0]?.buyPrice | number:'.0-0'}}</td>
+                  <td>{{orderDepth?.levels[0]?.sellPrice | number:'.0-0'}}</td>
+                  <td>{{(instrument.prices | price:'LAST')?.value | number:'.0-0'}}</td>
+                  <td>{{(instrument.prices | price:'HIGH')?.value | number:'.0-0'}}</td>
+                  <td>{{(instrument.prices | price:'LOW')?.value | number:'.0-0'}}</td>
                 </tr>
               </tbody>
             </table>
@@ -47,13 +47,13 @@
                   <td>
                     <a
                     [routerLink]="['/order', {instrument: orderDepth.instrument.id, side: 'SELL', quantity: level.buyQuantity, price: level.buyPrice}]">
-                    {{level.buyQuantity}}
+                    {{level.buyQuantity | number:'.0-0'}}
                     </a>
                   </td>
                   <td>
                     <a
                     [routerLink]="['/order', {instrument: orderDepth.instrument.id, side: 'SELL', price: level.buyPrice}]">
-                    {{level.buyPrice}}
+                    {{level.buyPrice | number:'.0-0'}}
                     </a>
                   </td>
                   <td class="text-right">
@@ -78,20 +78,20 @@
                   <td class="text-right">
                     <a
                       [routerLink]="['/order', {instrument: orderDepth.instrument.id, side: 'BUY', price: level.sellPrice}]">
-                      {{level.sellPrice}}
+                      {{level.sellPrice | number:'.0-0'}}
                     </a>
                   </td>
                   <td class="text-right">
                     <a
                       [routerLink]="['/order', {instrument: orderDepth.instrument.id, side: 'BUY', quantity: level.sellQuantity, price: level.sellPrice}]">
-                      {{level.sellQuantity}}
+                      {{level.sellQuantity | number:'.0-0'}}
                     </a>
                   </td>
                 </tr>
               </tbody>
               <tfoot>
                 <tr>
-                  <th scope="col">{{orderDepth.totalBuy}}</th>
+                  <th scope="col">{{orderDepth.totalBuy | number:'.0-0'}}</th>
                   <th scope="col"></th>
                   <th scope="col" class="text-right">
                     <div class="progress">
@@ -115,7 +115,7 @@
                     </div>
                   </th>
                   <th scope="col" class="text-right"></th>
-                  <th scope="col" class="text-right">{{orderDepth.totalSell}}</th>
+                  <th scope="col" class="text-right">{{orderDepth.totalSell | number:'.0-0'}}</th>
                 </tr>
               </tfoot>
             </table>
