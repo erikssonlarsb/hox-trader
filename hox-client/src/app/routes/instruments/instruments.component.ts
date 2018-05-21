@@ -22,7 +22,7 @@ export class InstrumentsComponent  implements OnInit  {
         orderDepths => this.orderDepths = orderDepths
       );
 
-    this.apiService.getInstruments(new HttpParams().set('status', 'INACTIVE'))
+    this.apiService.getInstruments(new HttpParams().set('type', 'Index'))
       .subscribe(
         instruments => this.indices = instruments
       );
