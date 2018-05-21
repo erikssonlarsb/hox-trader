@@ -3,7 +3,7 @@ import { HttpParams }  from '@angular/common/http';
 
 import { ApiService } from '../../services/api/api.service';
 
-import { OrderDepth } from '../../models/index';
+import { OrderDepth, Instrument } from '../../models/index';
 
 @Component({
   selector: 'app-instruments',
@@ -12,6 +12,7 @@ import { OrderDepth } from '../../models/index';
 })
 export class InstrumentsComponent  implements OnInit  {
   orderDepths: Array<OrderDepth>;
+  indices: Array<Instrument>;
 
   constructor(private apiService: ApiService) { }
 
@@ -19,6 +20,11 @@ export class InstrumentsComponent  implements OnInit  {
     this.apiService.getOrderDepths(new HttpParams().set('status', 'ACTIVE'))
       .subscribe(
         orderDepths => this.orderDepths = orderDepths
+      );
+
+    this.apiService.getInstruments(new HttpParams().set('status', 'INACTIVE'))
+      .subscribe(
+        instruments => this.indices = instruments
       );
   }
 }

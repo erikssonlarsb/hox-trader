@@ -1,6 +1,6 @@
 <div class="row">
-  <div class="col-md-6" *ngFor="let orderDepth of orderDepths;">
-    <div class="card">
+  <div class="col-md-6">
+    <div class="card" *ngFor="let orderDepth of orderDepths;">
       <div class="card-body">
         <h5 class="card-title">
           <a
@@ -33,6 +33,40 @@
               </div>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">
+          Indices
+        </h5>
+        <div class="table-responsive">
+          <table class="table table-sm table-hover">
+            <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col" class="text-right">Last</th>
+                <th scope="col" class="text-right">1&nbsp;M</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let index of indices;">
+                <tr>
+                  <td>
+                    <a
+                      routerLink="/instruments/{{index.id}}">
+                      {{index.name}}
+                    </a>
+                  </td>
+                  <td class="text-right">{{(index.prices | price:'LAST')?.value |number : '.2'}}</td>
+                  <td class="text-right">{{((index.prices | price: 'CLOSE' : -1)?.value - (index.prices | price: 'CLOSE' : -2)?.value) / (index.prices | price: 'CLOSE' : -2)?.value | percent: '.2'}}</td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
