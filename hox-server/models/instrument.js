@@ -10,10 +10,6 @@ const instrumentSchema = new Schema(
   {discriminatorKey: 'type'}
 );
 
-instrumentSchema.virtual('createTimestamp').get(function() {
-  return this._id.getTimestamp();
-});
-
 instrumentSchema.virtual('prices', {
   ref: 'Price',
   localField: '_id',
