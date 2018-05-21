@@ -31,6 +31,8 @@ import { SettlementsComponent } from './routes/settlements/settlements.component
 import { SettlementDetailsComponent } from './routes/settlements/details/details.component';
 import { AdminComponent } from './routes/admin/admin.component';
 
+import { PricePipe } from './pipes/price.pipe';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -45,7 +47,8 @@ import { AdminComponent } from './routes/admin/admin.component';
     OrdersComponent,
     SettlementsComponent,
     SettlementDetailsComponent,
-    AdminComponent
+    AdminComponent,
+    PricePipe
   ],
   imports: [
     BrowserModule,
