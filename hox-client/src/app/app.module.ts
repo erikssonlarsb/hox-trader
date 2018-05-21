@@ -13,6 +13,7 @@ import { AppComponent } from './app.component';
 
 import { RoutingModule } from './routing.module';
 import { BootstrapModule } from './bootstrap.module';
+import { CustomPipesModule } from './pipes/custom-pipes.module';
 
 import { AuthService } from './services/auth/auth.service';
 import { ApiService } from './services/api/api.service';
@@ -31,8 +32,6 @@ import { SettlementsComponent } from './routes/settlements/settlements.component
 import { SettlementDetailsComponent } from './routes/settlements/details/details.component';
 import { AdminComponent } from './routes/admin/admin.component';
 
-import { PricePipe } from './pipes/price.pipe';
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -47,8 +46,7 @@ import { PricePipe } from './pipes/price.pipe';
     OrdersComponent,
     SettlementsComponent,
     SettlementDetailsComponent,
-    AdminComponent,
-    PricePipe
+    AdminComponent
   ],
   imports: [
     BrowserModule,
@@ -59,7 +57,8 @@ import { PricePipe } from './pipes/price.pipe';
     RoutingModule,
     BootstrapModule,
     ChartsModule,
-    DateOnlyModule
+    DateOnlyModule,
+    CustomPipesModule.forRoot() 
   ],
   providers: [
     AuthService,
