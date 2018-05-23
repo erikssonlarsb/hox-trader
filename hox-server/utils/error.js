@@ -1,5 +1,6 @@
-class Error {
+class CustomError extends Error {
   constructor(error) {
+    super();
     if(error.constructor === String) {
       this.message = error;
       this.code = null;
@@ -32,4 +33,4 @@ class Error {
   }
 }
 
-module.exports = Error
+module.exports = CustomError
