@@ -3,10 +3,71 @@
   <div class="card">
     <div class="card-body">
       <h5 class="card-title">
-        Create derivative
+        Create Instrument
       </h5>
       <div class="form-group">
-        <label for="index">Index</label>
+        <label for="instrumentType">Instrument Type</label>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text"><i class="fa fa-fw fa-th-list" aria-hidden="true"></i></span>
+          </div>
+          <select
+            class="form-control"
+            name="instrumentType"
+            id="instrumentType"
+            [(ngModel)]="instrumentType"
+            required>
+            <option *ngFor="let instrumentType of instrumentTypes | enum">{{instrumentType}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="instrumentType == 'Index'">
+        <label for="instrumentName">Name</label>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text"><i class="fa fa-fw fa-italic" aria-hidden="true"></i></span>
+          </div>
+          <input
+            type="text"
+            class="form-control"
+            name="instrumentName"
+            id="instrumentName"
+            [(ngModel)]="instrumentName"
+            required />
+        </div>
+      </div>
+      <div class="form-group" *ngIf="instrumentType == 'Index'">
+        <label for="instrumentIsin">ISIN</label>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text"><i class="fa fa-fw fa-italic" aria-hidden="true"></i></span>
+          </div>
+          <input
+            type="text"
+            class="form-control"
+            name="instrumentIsin"
+            id="instrumentIsin"
+            [(ngModel)]="instrumentIsin"
+            required />
+        </div>
+      </div>
+      <div class="form-group" *ngIf="instrumentType == 'Index'">
+        <label for="instrumentTicker">Ticker</label>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text"><i class="fa fa-fw fa-italic" aria-hidden="true"></i></span>
+          </div>
+          <input
+            type="text"
+            class="form-control"
+            name="instrumentTicker"
+            id="instrumentTicker"
+            [(ngModel)]="instrumentTicker"
+            required />
+        </div>
+      </div>
+      <div class="form-group" *ngIf="instrumentType == 'Derivative'">
+        <label for="underlying">Underlying</label>
         <div class="input-group mb-3">
           <div class="input-group-prepend">
             <span class="input-group-text"><i class="fa fa-fw fa-newspaper-o" aria-hidden="true"></i></span>
@@ -14,18 +75,19 @@
           <input
             type="text"
             class="form-control"
-            name="index"
-            id="index"
-            [typeahead]="indices"
+            name="underlying"
+            id="underlying"
+            placeholder="Click to select underlying"
+            [typeahead]="underlyings"
             [typeaheadMinLength]="0"
             typeaheadOptionField="name"
-            placeholder="Click to select index"
-            [(ngModel)]="index"
+            (typeaheadOnSelect)="underlying = $event.item"
+            [(ngModel)]="underlyingVal"
             required />
         </div>
       </div>
-      <div class="form-group">
-        <label for="date">Expiry date</label>
+      <div class="form-group" *ngIf="instrumentType == 'Derivative'">
+        <label for="expiryDate">Expiry date</label>
         <div class="input-group mb-3">
           <div class="input-group-prepend">
             <span class="input-group-text"><i class="fa fa-fw fa-calendar" aria-hidden="true"></i></span>
@@ -33,10 +95,10 @@
           <input
             type="date"
             class="form-control"
-            name="settlementDate"
-            id="settlementDate"
+            name="expiryDate"
+            id="expiryDate"
             [min]="minDate"
-            [(ngModel)]="expiry"
+            [(ngModel)]="expiryDate"
             required />
          </div>
       </div>
@@ -45,14 +107,14 @@
       <button
         type="submit"
         class="btn btn-lg btn-primary btn-block"
-        (click)="createDerivative()">
+        (click)="createInstrument()">
         <i class="fa fa-paper-plane-o"></i> Create
       </button>
-      <div [hidden]="!createDerivativeStatusMessage" class="alert alert-success" role="alert">
-        {{createDerivativeStatusMessage}}
+      <div [hidden]="!createInstrumentStatusMessage" class="alert alert-success" role="alert">
+        {{createInstrumentStatusMessage}}
       </div>
-      <div [hidden]="!createDerivativeErrorMessage" class="alert alert-danger" role="alert">
-        {{createDerivativeErrorMessage}}
+      <div [hidden]="!createInstrumentErrorMessage" class="alert alert-danger" role="alert">
+        {{createInstrumentErrorMessage}}
       </div>
     </div>
   </div>
@@ -60,10 +122,27 @@
   <div class="card">
     <div class="card-body">
       <h5 class="card-title">
-        Add Settlement Price
+        Add Price
       </h5>
       <div class="form-group">
-        <label for="derivative">Derivative</label>
+        <label for="priceType">Price Type</label>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text"><i class="fa fa-fw fa-th-list" aria-hidden="true"></i></span>
+          </div>
+          <select
+            class="form-control"
+            name="priceType"
+            id="priceType"
+            [(ngModel)]="priceType"
+            required>
+            <option>SETTLEMENT</option>
+            <option>CLOSE</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="instrument">Instrument</label>
         <div class="input-group mb-3">
           <div class="input-group-prepend">
             <span class="input-group-text"><i class="fa fa-fw fa-newspaper-o" aria-hidden="true"></i></span>
@@ -71,19 +150,19 @@
           <input
             type="text"
             class="form-control"
-            name="derivative"
-            id="derivative"
-            [typeahead]="derivatives"
+            name="instrument"
+            id="instrument"
+            [typeahead]="(priceType == 'SETTLEMENT' ? derivatives : underlyings)"
             [typeaheadMinLength]="0"
             typeaheadOptionField="name"
-            placeholder="Click to select derivative"
-            [(ngModel)]="derivative"
-            (typeaheadOnSelect)="derivativeOnSelect($event)"
+            placeholder="Click to select instrument"
+            (typeaheadOnSelect)="instrument = $event.item"
+            [(ngModel)]="instrumentVal"
             required />
         </div>
       </div>
       <div class="form-group">
-        <label for="settlementDate">Date</label>
+        <label for="priceDate">Date</label>
         <div class="input-group mb-3">
           <div class="input-group-prepend">
             <span class="input-group-text"><i class="fa fa-fw fa-calendar" aria-hidden="true"></i></span>
@@ -91,14 +170,14 @@
           <input
             type="date"
             class="form-control"
-            name="settlementDate"
-            id="settlementDate"
-            [(ngModel)]="settlementDate"
+            name="priceDate"
+            id="priceDate"
+            [(ngModel)]="priceDate"
             required />
          </div>
       </div>
       <div class="form-group">
-        <label for="settlementValue">Value</label>
+        <label for="priceValue">Value</label>
         <div class="input-group mb-3">
           <div class="input-group-prepend">
             <span class="input-group-text"><i class="fa fa-fw fa-money" aria-hidden="true"></i></span>
@@ -106,10 +185,10 @@
           <input
             type="number"
             class="form-control"
-            name="settlementValue"
-            id="settlementValue"
+            name="priceValue"
+            id="priceValue"
             placeholder="Enter value"
-            [(ngModel)]="settlementValue"
+            [(ngModel)]="priceValue"
             required />
         </div>
       </div>
@@ -118,14 +197,14 @@
       <button
         type="submit"
         class="btn btn-lg btn-primary btn-block"
-        (click)="addSettlementPrice()">
-        <i class="fa fa-paper-plane-o"></i> Create
+        (click)="addPrice()">
+        <i class="fa fa-paper-plane-o"></i> Add
       </button>
-      <div [hidden]="!addSettlementPriceStatusMessage" class="alert alert-success" role="alert">
-        {{addSettlementPriceStatusMessage}}
+      <div [hidden]="!addPriceStatusMessage" class="alert alert-success" role="alert">
+        {{addPriceStatusMessage}}
       </div>
-      <div [hidden]="!addSettlementPriceErrorMessage" class="alert alert-danger" role="alert">
-        {{addSettlementPriceErrorMessage}}
+      <div [hidden]="!addPriceErrorMessage" class="alert alert-danger" role="alert">
+        {{addPriceErrorMessage}}
       </div>
     </div>
   </div>

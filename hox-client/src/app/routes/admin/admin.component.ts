@@ -6,7 +6,9 @@ import { DateOnly } from 'angular-date-only';
 
 import { ApiService } from '../../services/api/api.service';
 
-import { INSTRUMENT_STATUS, Index, Derivative, Price, PRICE_TYPE, User } from '../../models/index';
+import { INSTRUMENT_TYPE, INSTRUMENT_STATUS, Instrument, Index, Derivative, Price, PRICE_TYPE, User } from '../../models/index';
+
+import { PricePipe } from '../../pipes/price.pipe';
 
 @Component({
   selector: 'app-order',
@@ -14,19 +16,31 @@ import { INSTRUMENT_STATUS, Index, Derivative, Price, PRICE_TYPE, User } from '.
   styleUrls: ['./admin.component.css']
 })
 export class AdminComponent  implements OnInit  {
-  indices: Array<Index>;
-  minDate: string = new Date().toISOString().slice(0,10);
-  expiry: DateOnly;
-  index: string;
-  createDerivativeStatusMessage: string;
-  createDerivativeErrorMessage: string;
 
+  underlyings: Array<Index>;
   derivatives: Array<Derivative>;
-  derivative: string;
-  settlementDate: Date;
-  settlementValue: number;
-  addSettlementPriceStatusMessage: string;
-  addSettlementPriceErrorMessage: string;
+
+  instrumentTypes: any = INSTRUMENT_TYPE;
+  instrumentType: string;
+  instrumentName: string;
+  instrumentIsin: string;
+  instrumentTicker: string;
+  minDate: string = new DateOnly().toISOString();  // Prevent expiry < Today
+  underlying: Index;
+  underlyingVal: string;  // required for ngModel binding
+  expiryDate: string;  // string required for input type date
+  createInstrumentStatusMessage: string;
+  createInstrumentErrorMessage: string;
+
+
+  priceTypes: any = PRICE_TYPE;
+  priceType: string;
+  instrument: Instrument;
+  instrumentVal: string;  // required for ngModel binding
+  priceDate: string;  // string required for input type date
+  priceValue: number;
+  addPriceStatusMessage: string;
+  addPriceErrorMessage: string;
 
   jobs: Array<string>;
   job: string;
@@ -36,17 +50,19 @@ export class AdminComponent  implements OnInit  {
   users: Array<User>;
   user: User;
 
-  constructor(private router: Router, private apiService: ApiService) { }
+  constructor(private router: Router, private apiService: ApiService, private pricePipe : PricePipe) { }
 
   ngOnInit(): void {
     this.apiService.getInstruments(new HttpParams().set('type', 'Index'))
       .subscribe(
-        instruments => this.indices = <Index[]> instruments
+        instruments => this.underlyings = <Index[]> instruments
       );
 
     this.apiService.getInstruments(new HttpParams().set('type', 'Derivative'))
       .subscribe(
-        instruments => this.derivatives = <Derivative[]> instruments
+        instruments => this.derivatives = <Derivative[]> instruments.filter(
+          instrument => this.pricePipe.transform(instrument.prices, 'SETTLEMENT') == null
+        )
       );
 
     this.apiService.getJobs()
@@ -60,40 +76,32 @@ export class AdminComponent  implements OnInit  {
       );
   }
 
-  createDerivative(): void {
-    this.createDerivativeStatusMessage = null;  // Reset status message
-    this.createDerivativeErrorMessage = null;  // Reset error message
+  createInstrument(): void {
+    this.createInstrumentStatusMessage = null;  // Reset status message
+    this.createInstrumentErrorMessage = null;  // Reset error message
 
-    let underlying = this.indices.find(instrument => instrument.name == this.index);
-    let newDerivative = new Derivative({status: INSTRUMENT_STATUS.ACTIVE, underlying: underlying, expiry: this.expiry});
-    this.apiService.postInstrument(newDerivative)
+    let newInstrument: Instrument;
+    if(this.instrumentType == 'Derivative') {
+      newInstrument = new Derivative({status: INSTRUMENT_STATUS.ACTIVE, underlying: this.underlying, expiry: this.expiryDate});
+    } else if(this.instrumentType == 'Index') {
+      newInstrument = new Index({status: INSTRUMENT_STATUS.INACTIVE, name: this.instrumentName, isin: this.instrumentIsin, ticker: this.instrumentTicker});
+    }
+    this.apiService.postInstrument(newInstrument)
       .subscribe(
-        instrument => this.createDerivativeStatusMessage = instrument.name + " successfully created.",
-        error => this.createDerivativeErrorMessage = error.message
+        instrument => this.createInstrumentStatusMessage = instrument.name + " successfully created.",
+        error => this.createInstrumentErrorMessage = error.message
       );
   }
 
-  derivativeOnSelect(event): void {
-    let settlementPrice = event.item.prices.filter(price => price.type == 'SETTLEMENT');
-    if (settlementPrice.length > 0) {
-      this.settlementDate = settlementPrice[0].date;
-      this.settlementValue = settlementPrice[0].value;
-    } else {
-      this.settlementDate = null;
-      this.settlementValue = null;
-    }
-  }
+  addPrice(): void {
+    this.addPriceStatusMessage = null;  // Reset status message
+    this.addPriceErrorMessage = null;  // Reset error message
 
-  addSettlementPrice(): void {
-    this.addSettlementPriceStatusMessage = null;  // Reset status message
-    this.addSettlementPriceErrorMessage = null;  // Reset error message
-
-    let instrument = this.derivatives.find(instrument => instrument.name == this.derivative);
-    let newPrice = new Price({instrument: instrument, type: PRICE_TYPE.SETTLEMENT, date: this.settlementDate, value: this.settlementValue});
+    let newPrice = new Price({instrument: this.instrument, type: this.priceType, date: this.priceDate, value: this.priceValue});
     this.apiService.postPrice(newPrice)
       .subscribe(
-        price => this.addSettlementPriceStatusMessage = "Settlement price successfully created.",
-        error => this.addSettlementPriceErrorMessage = error.message
+        price => this.addPriceStatusMessage = "Price successfully created.",
+        error => this.addPriceErrorMessage = error.message
       );
   }
 
