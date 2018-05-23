@@ -13,9 +13,9 @@ router.get('/', function(req, res) {
   .populate('instrument')
   .exec(function(err, orders) {
     if (err) {
-      res.status(500).json(new Error(err));
+      return res.status(500).json(new Error(err));
     } else {
-      res.json(orders);
+      return res.json(orders);
     }
   });
 });
@@ -27,11 +27,11 @@ router.get('/:id', function(req, res) {
   .populate('instrument')
   .exec(function(err, order) {
     if (err) {
-      res.status(500).json(new Error(err));
+      return res.status(500).json(new Error(err));
     } else if (order) {
-      res.json(order);
+      return res.json(order);
     } else {
-      res.status(404).send();  // No order found
+      return res.status(404).send();  // No order found
     }
   });
 });
@@ -43,21 +43,21 @@ router.post('/', function(req, res){
         req.body.instrument = instrument._id;
         createOrder(req, function(err, order) {
           if (err) {
-            res.status(500).json(new Error(err));
+            return res.status(500).json(new Error(err));
           } else {
-            res.json(order);
+            return res.json(order);
           }
         });
       } else {
-        res.status(500).json(new Error("No such instrument."));
+        return res.status(500).json(new Error("No such instrument."));
       }
     });
   } else {
     createOrder(req, function(err, order) {
       if (err) {
-        res.status(500).json(new Error(err));
+        return res.status(500).json(new Error(err));
       } else {
-        res.json(order);
+        return res.json(order);
       }
     });
   }
@@ -66,9 +66,9 @@ router.post('/', function(req, res){
 router.put('/:id', function(req, res){
   modifyOrder(req, function(err, order) {
     if (err) {
-      res.status(500).json(new Error(err));
+      return res.status(500).json(new Error(err));
     } else {
-      res.json(order);
+      return res.json(order);
     }
   });
 });
@@ -76,9 +76,9 @@ router.put('/:id', function(req, res){
 router.delete('/:id', function(req, res){
   deleteOrder(req, function(err, order) {
     if (err) {
-      res.status(500).json(new Error(err));
+      return res.status(500).json(new Error(err));
     } else {
-      res.status(204).end();
+      return res.status(204).end();
     }
   });
 });

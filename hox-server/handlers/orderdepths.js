@@ -19,10 +19,10 @@ router.get('/', function(req, res) {
       orders.forEach(function(order) {
         orderDepths[order.instrument].addOrder(order);
       });
-      res.json(Object.keys(orderDepths).map(function(key) { return orderDepths[key]; })); // Convert map to array
+      return res.json(Object.keys(orderDepths).map(function(key) { return orderDepths[key]; })); // Convert map to array
     })
     .catch(err => {
-      res.status(500).json(new Error(err));
+      return res.status(500).json(new Error(err));
     });
 });
 
@@ -37,10 +37,10 @@ router.get('/:id', function(req, res) {
     orders.forEach(function(order) {
       orderDepth.addOrder(order);
     });
-    res.json(orderDepth);
+    return res.json(orderDepth);
   })
   .catch(err => {
-    res.status(500).json(new Error(err));
+    return res.status(500).json(new Error(err));
   });
 });
 

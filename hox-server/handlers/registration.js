@@ -15,9 +15,9 @@ router.post('/', function(req, res){
 
   user.save(function(err) {
     if (err) {
-      res.status(500).json(new Error(err));
+      return res.status(500).json(new Error(err));
     } else {
-      res.status(201).send();
+      return res.status(201).send();
     }
   });
 });

@@ -11,7 +11,7 @@ router.get('/', function(req, res) {
   fs.readdirSync('./jobs/scripts/').forEach(function(fileName) {
     scripts.push(fileName.substring(0, fileName.indexOf('.js')));
   })
-  res.json(scripts);
+  return res.json(scripts);
 });
 
 /*
@@ -20,9 +20,9 @@ router.get('/', function(req, res) {
 router.put('/:id/run', function(req, res) {
   try {
     require('../jobs/scripts/'+req.params.id).run();
-    res.status(204).end();
+    return res.status(204).end();
   } catch (err) {
-    res.status(500).json(new Error(err));
+    return res.status(500).json(new Error(err));
   }
 
 });

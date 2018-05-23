@@ -10,9 +10,9 @@ router.get('/', function(req, res){
   .populate('role')
   .exec(function(err, users) {
     if (err) {
-      res.status(500).json(new Error(err));
+      return res.status(500).json(new Error(err));
     } else {
-      res.json(users);
+      return res.json(users);
     }
   });
 });
@@ -24,21 +24,21 @@ router.post('/', function(req, res) {
         req.body.role = role._id;
         createUser(req, function(err, user) {
           if (err) {
-            res.status(500).json(new Error(err));
+            return res.status(500).json(new Error(err));
           } else {
-            res.json(user);
+            return res.json(user);
           }
         });
       } else {
-        res.status(404).json(new Error('Role not found'));
+        return res.status(404).json(new Error('Role not found'));
       }
     });
   } else {
     createUser(req, function(err, user) {
       if (err) {
-        res.status(500).json(new Error(err));
+        return res.status(500).json(new Error(err));
       } else {
-        res.json(user);
+        return res.json(user);
       }
     });
   }
@@ -49,11 +49,11 @@ router.get('/:id', function(req, res) {
   User.findOne(req.query)
   .exec(function(err, user) {
     if (err) {
-      res.status(500).json(new Error(err));
+      return res.status(500).json(new Error(err));
     } else if (user) {
-      res.json(user);
+      return res.json(user);
     } else {
-      res.status(404).json(new Error('User not found'));
+      return res.status(404).json(new Error('User not found'));
     }
   });
 });
@@ -61,9 +61,9 @@ router.get('/:id', function(req, res) {
 router.put('/:id', function(req, res) {
   modifyUser(req, function(err, user) {
     if (err) {
-      res.status(500).json(new Error(err));
+      return res.status(500).json(new Error(err));
     } else {
-      res.json(user);
+      return res.json(user);
     }
   });
 });

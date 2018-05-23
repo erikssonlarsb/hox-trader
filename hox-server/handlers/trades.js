@@ -15,9 +15,9 @@ router.get('/', function(req, res){
   })
   .exec(function(err, trades) {
     if (err) {
-      res.status(500).json(new Error(err));
+      return res.status(500).json(new Error(err));
     } else {
-      res.json(trades);
+      return res.json(trades);
     }
   });
 });
@@ -35,11 +35,11 @@ router.get('/:id', function(req, res){
   })
   .exec(function(err, trade) {
     if (err) {
-      res.status(500).json(new Error(err));
+      return res.status(500).json(new Error(err));
     } else if (trade) {
-      res.json(trade);
+      return res.json(trade);
     } else {
-      res.status(404).send();  // No order found
+      return res.status(404).send();  // No order found
     }
   });
 });

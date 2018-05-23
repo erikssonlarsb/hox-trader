@@ -6,21 +6,21 @@ var Error = require('../utils/error');
 function auth(userField) {
   return function(req, res, next) {
     if (!req.headers['authorization']) {
-      res.status(401).json(new Error('Authorization required.'));
+      return res.status(401).json(new Error('Authorization required.'));
     } else {
       let auth = req.headers['authorization'].split(' ');
 
       if(auth[0] == 'Bearer') {
         jwt.verify(auth[1], new Buffer(config.jwtSecret, 'base64'), function(err, decoded) {
           if (err) {
-            res.status(401).json(new Error('Failed to authenticate token.'));
+            return res.status(401).json(new Error('Failed to authenticate token.'));
           } else {
             req.user = decoded.user;
             try {
               verifyPermissions(req, res, userField);
               next();
             } catch (error) {
-              res.status(405).json(error);
+              return res.status(405).json(error);
             }
           }
         });
@@ -31,24 +31,24 @@ function auth(userField) {
         .populate('role')
         .exec(function(err, user) {
           if (err) {
-            res.status(500).json(new Error(err));
+            return res.status(500).json(new Error(err));
           } else {
             if (!user) {
-              res.status(401).json(new Error('Username or password incorrect.'));
+              return res.status(401).json(new Error('Username or password incorrect.'));
             } else {
               // test a matching password
               user.verifyPassword(credentials[1], function(err, isMatch) {
                 if(err) {
-                  res.status(500).json(new Error(err));
+                  return res.status(500).json(new Error(err));
                 } else if (!isMatch) {
-                  res.status(401).json(new Error('Username or password incorrect.'));
+                  return res.status(401).json(new Error('Username or password incorrect.'));
                 } else {
                   req.user = user;
                   try {
                     verifyPermissions(req, res, userField);
                     next();
                   } catch (error) {
-                    res.status(405).json(error);
+                    return res.status(405).json(error);
                   }
                 }
               });
@@ -56,7 +56,7 @@ function auth(userField) {
           }
         });
       } else {
-        res.status(401).json(new Error(auth[0] + ' authorization not supported.'));
+        return res.status(401).json(new Error(auth[0] + ' authorization not supported.'));
       }
     }
   }

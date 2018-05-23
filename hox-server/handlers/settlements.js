@@ -15,9 +15,9 @@ router.get('/', function(req, res){
   })
   .exec(function(err, settlements) {
     if (err) {
-      res.status(500).json(new Error(err));
+      return res.status(500).json(new Error(err));
     } else {
-      res.json(settlements);
+      return res.json(settlements);
     }
   });
 });
@@ -43,11 +43,11 @@ router.get('/:id', function(req, res){
   })
   .exec(function(err, trade) {
     if (err) {
-      res.status(500).json(new Error(err));
+      return res.status(500).json(new Error(err));
     } else if (trade) {
-      res.json(trade);
+      return res.json(trade);
     } else {
-      res.status(404).send();  // No order found
+      return res.status(404).send();  // No order found
     }
   });
 });
@@ -56,9 +56,9 @@ router.get('/:id', function(req, res){
 router.put('/:id', function(req, res){
   modifySettlement(req, function(err, settlement) {
     if (err) {
-      res.status(500).json(new Error(err));
+      return res.status(500).json(new Error(err));
     } else {
-      res.json(settlement);
+      return res.json(settlement);
     }
   });
 });

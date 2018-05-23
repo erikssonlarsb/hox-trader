@@ -6,9 +6,9 @@ var Error = require('../utils/error');
 router.get('/', function(req, res){
   Price.find(req.query, function(err, prices) {
     if (err) {
-      res.status(500).json(new Error(err));
+      return res.status(500).json(new Error(err));
     } else {
-      res.json(prices);
+      return res.json(prices);
     }
   });
 });
@@ -22,9 +22,9 @@ router.post('/', function(req, res){
   });
   price.save(function(err) {
     if (err) {
-      res.status(500).json(new Error(err));
+      return res.status(500).json(new Error(err));
     } else {
-      res.json(price);
+      return res.json(price);
     }
   });
 });
