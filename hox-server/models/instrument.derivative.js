@@ -3,14 +3,21 @@ const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
 const DateOnly = require('mongoose-dateonly')(mongoose);
 const Instrument = require('./instrument');
+const Error = require('../utils/error');
 
 module.exports = Instrument.discriminator('Derivative', new Schema({
     underlying: {type: ObjectId, ref: 'Instrument', required: true},
     expiry: {type: DateOnly, required: true}
   })
   .pre('validate', function(next) {
+    // Set dummy name to pass validation of required field.
+    // Name will be set in pre-save hook later
+    this.name = "Dummy";
+    next();
+  })
+  .pre('save', function(next) {
     let derivative = this;
-    Instrument.findById(this.underlying, function(err, underlying) {
+    Instrument.findById(derivative.underlying, function(err, underlying) {
       if(err) {
         next(err);
       } else if (!underlying) {
@@ -19,5 +26,6 @@ module.exports = Instrument.discriminator('Derivative', new Schema({
         derivative.name = underlying.name + " " +  derivative.expiry.toDate().toLocaleString('en', { month: 'short', year: '2-digit'});
         next();
       }
-    })
-}));
+    });
+  })
+);
