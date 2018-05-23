@@ -54,7 +54,7 @@ export class Derivative extends Instrument {
 
   toJSON() {
     return Object.assign({}, this, {
-      underlying: this.underlying.id
+      underlying: this.underlying ? this.underlying.id : null
     });
   }
 }
