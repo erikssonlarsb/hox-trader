@@ -8,7 +8,7 @@ const url = "http://www.nasdaqomxnordic.com/webproxy/DataFeedProxy.aspx?SubSyste
 
 exports.run = function() {
   console.log("### downloadPrices started.");
-  Instrument.find({type: 'Index'})
+  Instrument.find({type: 'Index', isin: {$exists: true}})
   .populate({
     path: 'prices',
     match: { type: { $eq: 'CLOSE'}}
