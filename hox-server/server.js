@@ -5,12 +5,13 @@ var mongoose = require('mongoose');
 require('console-stamp')(console, { pattern: 'yyyy/mm/dd HH:MM:ss.l' });
 var config = require('./config');
 var auth = require('./utils/auth');
+var queryEnhancer = require('./utils/queryEnhancer');
 var scheduler = require('./jobs/scheduler');
 
 app.use(compression());
 app.use(bodyParser.urlencoded({extended: false}));  // Form for authentication
 app.use(bodyParser.json());
-
+app.use(queryEnhancer());
 /*
  * Routes
  */
