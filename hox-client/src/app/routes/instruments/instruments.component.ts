@@ -22,7 +22,13 @@ export class InstrumentsComponent  implements OnInit  {
         orderDepths => this.orderDepths = orderDepths
       );
 
-    this.apiService.getInstruments(new HttpParams().set('type', 'Index'))
+    let instrumentParams = new HttpParams({
+      fromObject: {
+        'type': 'Index',
+        '_populate': 'prices'
+      }
+    });
+    this.apiService.getInstruments(instrumentParams)
       .subscribe(
         instruments => this.indices = instruments
       );

@@ -58,7 +58,13 @@ export class AdminComponent  implements OnInit  {
         instruments => this.underlyings = <Index[]> instruments
       );
 
-    this.apiService.getInstruments(new HttpParams().set('type', 'Derivative'))
+    let derivativeParams = new HttpParams({
+      fromObject: {
+        'type': 'Derivative',
+        '_populate': 'prices'
+      }
+    });
+    this.apiService.getInstruments(derivativeParams)
       .subscribe(
         instruments => this.derivatives = <Derivative[]> instruments.filter(
           instrument => this.pricePipe.transform(instrument.prices, 'SETTLEMENT') == null

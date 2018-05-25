@@ -27,7 +27,13 @@ export class InstrumentDetailsComponent  implements OnInit  {
     this.route
     .paramMap
     .subscribe(params => {
-      this.apiService.getInstrument(params.get('id'))
+      let httpParams = new HttpParams({
+        fromObject: {
+          'type': 'Index',
+          '_populate': ['underlying', 'prices']
+        }
+      });
+      this.apiService.getInstrument(params.get('id'), httpParams)
         .subscribe(
           instrument => {
             this.instrument = instrument;

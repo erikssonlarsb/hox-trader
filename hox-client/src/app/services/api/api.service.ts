@@ -78,10 +78,10 @@ export class ApiService {
       );
   }
 
-  getInstrument(id: string): Observable<Instrument> {
+  getInstrument(id: string, params: HttpParams = new HttpParams()): Observable<Instrument> {
     let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
-      .get<Instrument>(`${window.location.origin}/api/instruments/${id}`, { headers: headers })
+      .get<Instrument>(`${window.location.origin}/api/instruments/${id}`, { headers: headers, params: params })
       .map(instrument => this.instrumentTypeMapper(instrument))
       .pipe(
         catchError(error => this.errorHandler.handleError(error))
