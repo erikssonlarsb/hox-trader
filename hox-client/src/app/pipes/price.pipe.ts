@@ -6,14 +6,18 @@ import { Price } from '../models/index';
 @Injectable()
 export class PricePipe implements PipeTransform  {
   transform(prices: Array<Price>, type: string, index: number = -1): Price|null {
-    prices = prices.filter(price => price.type == type);
-    if(index < 0) {
-      index = prices.length + index;
-    }
-    try {
-      return prices[index];
-    } catch (e) {
+    if(!prices) {
       return null;
+    } else {
+      prices = prices.filter(price => price.type == type);
+      if(index < 0) {
+        index = prices.length + index;
+      }
+      try {
+        return prices[index];
+      } catch (e) {
+        return null;
+      }
     }
   }
 }
