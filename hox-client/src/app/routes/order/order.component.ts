@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { HttpParams }  from '@angular/common/http';
 
 import { ApiService } from '../../services/api/api.service';
 
@@ -26,7 +27,12 @@ export class OrderComponent  implements OnInit  {
       .paramMap
       .subscribe(params => {
         if(params.get('id')) {  // Retrieve existing order
-          this.apiService.getOrder(params.get('id'))
+          let orderParams = new HttpParams({
+            fromObject: {
+              '_populate': ['instrument']
+            }
+          });
+          this.apiService.getOrder(params.get('id'), orderParams)
             .subscribe(order => {
               this.order = order;
               this.instrument = order.instrument.name;

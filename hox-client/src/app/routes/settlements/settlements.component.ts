@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpParams }  from '@angular/common/http';
 import { DatePipe } from '@angular/common';
 import { Http }  from '@angular/http';
 
@@ -23,7 +24,13 @@ export class SettlementsComponent implements OnInit  {
 
   ngOnInit(): void {
     this.user = this.authService.getLoggedInUser();
-    this.apiService.getSettlements()
+
+    let settlementParams = new HttpParams({
+      fromObject: {
+        '_populate': ['user', 'counterpartySettlement']
+      }
+    });
+    this.apiService.getSettlements(settlementParams)
       .subscribe(settlements =>
         this.settlements = settlements.sort((a: Settlement, b: Settlement) => {return a.updateTimestamp.getTime() - b.updateTimestamp.getTime()})
       );

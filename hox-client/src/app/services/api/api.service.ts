@@ -108,10 +108,10 @@ export class ApiService {
       );
   }
 
-  getOrder(id: string): Observable<Order> {
+  getOrder(id: string, params: HttpParams = new HttpParams()): Observable<Order> {
     let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
-      .get<Order>(`${window.location.origin}/api/orders/${id}`, { headers: headers })
+      .get<Order>(`${window.location.origin}/api/orders/${id}`, { headers: headers, params: params })
       .map(order => new Order(order))
       .pipe(
         catchError(error => this.errorHandler.handleError(error))
@@ -157,10 +157,10 @@ export class ApiService {
       );
   }
 
-  getSettlement(id: string): Observable<Settlement> {
+  getSettlement(id: string, params: HttpParams = new HttpParams()): Observable<Settlement> {
     let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
-      .get(`${window.location.origin}/api/settlements/${id}`, { headers: headers })
+      .get(`${window.location.origin}/api/settlements/${id}`, { headers: headers, params: params })
       .map(settlement => new Settlement(settlement))
       .pipe(
         catchError(error => this.errorHandler.handleError(error))

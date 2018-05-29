@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpParams }  from '@angular/common/http';
 
 import { AuthService } from '../../services/auth/auth.service';
 import { ApiService } from '../../services/api/api.service';
@@ -21,7 +22,13 @@ export class OrdersComponent implements OnInit  {
 
   ngOnInit(): void {
     this.user = this.authService.getLoggedInUser();
-    this.ApiService.getOrders()
+
+    let orderParams = new HttpParams({
+      fromObject: {
+        '_populate': ['user', 'instrument']
+      }
+    });
+    this.ApiService.getOrders(orderParams)
       .subscribe(
         orders => this.orders = orders.sort((a: Order, b: Order) => {return a.updateTimestamp.getTime() - b.updateTimestamp.getTime()})
       );
@@ -30,7 +37,12 @@ export class OrdersComponent implements OnInit  {
   withdrawOrder(id): void {
     this.ApiService.withdrawOrder(id)
       .subscribe(() => {
-        this.ApiService.getOrders()
+        let orderParams = new HttpParams({
+          fromObject: {
+            '_populate': ['user', 'instrument']
+          }
+        });
+        this.ApiService.getOrders(orderParams)
           .subscribe(
             orders => this.orders = orders
           )

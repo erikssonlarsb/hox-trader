@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpParams }  from '@angular/common/http';
 
 import { AuthService } from '../../services/auth/auth.service';
 import { ApiService } from '../../services/api/api.service';
@@ -20,7 +21,13 @@ export class TransactionsComponent implements OnInit  {
 
   ngOnInit(): void {
     this.user = this.authService.getLoggedInUser();
-    this.ApiService.getTrades()
+
+    let tradeParams = new HttpParams({
+      fromObject: {
+        '_populate': ['instrument', 'user', 'counterpartyTrade']
+      }
+    });
+    this.ApiService.getTrades(tradeParams)
       .subscribe(trades => {
         this.trades = trades.sort((a: Trade, b: Trade) => {return a.updateTimestamp.getTime() - b.updateTimestamp.getTime()});
       });
