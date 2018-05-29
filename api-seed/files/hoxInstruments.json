@@ -1,0 +1,67 @@
+{
+  "instruments": [
+    {
+      "name" : "HOX Sverige",
+      "type" : "Index",
+      "isin" : "SE0003848852",
+      "ticker" : "HOXSWE",
+      "status" : "INACTIVE"
+    },
+    {
+      "name" : "HOX Sverige BR",
+      "type" : "Index",
+      "isin" : "SE0003330687",
+      "ticker" : "HOXFLATSWE",
+      "status" : "INACTIVE"
+    },
+    {
+      "name" : "HOX Stockholm BR",
+      "type" : "Index",
+      "isin" : "SE0003077577",
+      "ticker" : "HOXFLATSTO",
+      "status" : "INACTIVE"
+    },
+    {
+      "name" : "HOX Göteborg BR",
+      "type" : "Index",
+      "isin" : "SE0003077585",
+      "ticker" : "HOXFLATGBG",
+      "status" : "INACTIVE"
+    },
+    {
+      "name" : "HOX Malmö BR",
+      "type" : "Index",
+      "isin" : "SE0003077593",
+      "ticker" : "HOXFLATMLM",
+      "status" : "INACTIVE"
+    },
+    {
+      "name" : "HOX Sverige Villor",
+      "type" : "Index",
+      "isin" : "SE0003848845",
+      "ticker" : "HOXHOUSESWE",
+      "status" : "INACTIVE"
+    },
+    {
+      "name" : "HOX Stockholm Villor",
+      "type" : "Index",
+      "isin" : "SE0003848803",
+      "ticker" : "HOXHOUSESTO",
+      "status" : "INACTIVE"
+    },
+    {
+      "name" : "HOX Göteborg Villor",
+      "type" : "Index",
+      "isin" : "SE0003848811",
+      "ticker" : "HOXHOUSEGBG",
+      "status" : "INACTIVE"
+    },
+    {
+      "name" : "HOX Malmö Villor",
+      "type" : "Index",
+      "isin" : "SE0003848829",
+      "ticker" : "HOXHOUSEMLM",
+      "status" : "INACTIVE"
+    }
+  ]
+}
