@@ -1,14 +1,11 @@
 /*
 instrumentFactory handles database interaction for the instruments collection.
 */
-
 const async = require('async');
 const Instrument = require('../models/instrument');
 const Index = require('../models/instrument.index');
 const Derivative = require('../models/instrument.derivative');
 const priceFactory = require('./priceFactory');
-const Error = require('../utils/error');
-
 
 module.exports = {
 
@@ -50,8 +47,8 @@ module.exports = {
           callback(err);
         } else {
           /*
-            Embedded documents are async-handled in order to return
-            instrument with id's to embedded documents.
+           * Embedded documents are async-handled in order to return
+           * instrument with id's to embedded documents.
           */
           async.parallel([
             function(callback) {
@@ -102,6 +99,9 @@ module.exports = {
             }
           ],
           function(err) {
+            /*
+             * Return the created instrument including any embedded documents
+             */
             callback(err, instrument);
           });
         }

@@ -1,23 +1,15 @@
-var express = require('express');
-var router = express.Router();
-var User = require('../models/user');
-var Error = require('../utils/error');
+const express = require('express');
+const router = express.Router();
+const userFactory = require('../factories/userFactory');
+const Error = require('../utils/error');
 
-router.post('/', function(req, res){
-  var user = new User({
-    name: req.body.name,
-    role: "000000000000000000000002",
-    username: req.body.username,
-    password: req.body.password,
-    email: req.body.email,
-    phone: req.body.phone
-  });
-
-  user.save(function(err) {
+router.post('/', function(req, res) {
+  req.body.role = "000000000000000000000002";  // Hard code to "trader"
+  userFactory.create(req.body, function(err, user) {
     if (err) {
       return res.status(500).json(new Error(err));
     } else {
-      return res.status(201).send();
+      return res.json(user);
     }
   });
 });

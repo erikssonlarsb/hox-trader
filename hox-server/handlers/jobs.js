@@ -1,30 +1,26 @@
-var fs = require('fs');
-var express = require('express');
-var router = express.Router();
-var Error = require('../utils/error');
+const express = require('express');
+const router = express.Router();
+const jobFactory = require('../factories/jobFactory');
+const Error = require('../utils/error');
 
-/*
- *  Search the scripts folder and return all script names
- */
 router.get('/', function(req, res) {
-  var scripts = [];
-  fs.readdirSync('./jobs/scripts/').forEach(function(fileName) {
-    scripts.push(fileName.substring(0, fileName.indexOf('.js')));
-  })
-  return res.json(scripts);
+  jobFactory.query(req.query, req.queryOptions, function(err, jobs) {
+    if(err) {
+      return res.status(500).json(new Error(err));
+    } else {
+      return res.json(jobs);
+    }
+  });
 });
 
-/*
- *  Run a script
- */
 router.put('/:id/run', function(req, res) {
-  try {
-    require('../jobs/scripts/'+req.params.id).run();
-    return res.status(204).end();
-  } catch (err) {
-    return res.status(500).json(new Error(err));
-  }
-
+  jobFactory.run(req.params.id, function(err, result) {
+    if(err) {
+      return res.status(500).json(new Error(err));
+    } else {
+      return res.status(202).end();
+    }
+  });
 });
 
 module.exports = router

@@ -1,10 +1,10 @@
-var express = require('express');
-var router = express.Router();
-var Role = require('../models/role');
-var Error = require('../utils/error');
+const express = require('express');
+const router = express.Router();
+const roleFactory = require('../factories/roleFactory');
+const Error = require('../utils/error');
 
-router.get('/', function(req, res){
-  Role.find(req.query, function(err, roles) {
+router.get('/', function(req, res) {
+  roleFactory.query(req.query, req.queryOptions, function(err, roles) {
     if (err) {
       return res.status(500).json(new Error(err));
     } else {
@@ -13,13 +13,8 @@ router.get('/', function(req, res){
   });
 });
 
-router.post('/', function(req, res){
-  var role = new Role({
-    name: req.body.name,
-    permissions: req.body.permissions
-  });
-
-  role.save(function(err) {
+router.post('/', function(req, res) {
+  roleFactory.create(req.body, function(err, role) {
     if (err) {
       return res.status(500).json(new Error(err));
     } else {
@@ -28,14 +23,14 @@ router.post('/', function(req, res){
   });
 });
 
-router.get('/:id', function(req, res){
-  Role.findById(req.params.id, function(err, role) {
-    if (err) {
+router.get('/:id', function(req, res) {
+  roleFactory.findOne(req.params.id, req.queryOptions, function(err, role) {
+    if(err) {
       return res.status(500).json(new Error(err));
     } else if (role) {
       return res.json(role);
     } else {
-      return res.status(404).send();  // No user found
+      return res.status(404);
     }
   });
 });

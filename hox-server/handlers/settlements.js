@@ -1,19 +1,10 @@
-var express = require('express');
-var router = express.Router();
-var mongoose = require('mongoose');
-var Settlement = require('../models/settlement');
-var Error = require('../utils/error');
+const express = require('express');
+const router = express.Router();
+const settlementFactory = require('../factories/settlementFactory');
+const Error = require('../utils/error');
 
-router.get('/', function(req, res){
-  Settlement.find(req.query)
-  .populate('user')
-  .populate('trades')
-  .populate({
-    path: 'counterpartySettlement',
-    select: 'user isAcknowledged',
-    populate: {path: 'user', select: 'name email phone'}
-  })
-  .exec(function(err, settlements) {
+router.get('/', function(req, res) {
+  settlementFactory.query(req.query, req.queryOptions, function(err, settlements) {
     if (err) {
       return res.status(500).json(new Error(err));
     } else {
@@ -22,39 +13,8 @@ router.get('/', function(req, res){
   });
 });
 
-router.get('/:id', function(req, res){
-  req.query._id = req.params.id;
-  Settlement.findOne(req.query)
-  .populate('user')
-  .populate({
-    path: 'trades',
-    populate: {
-      path: 'instrument',
-      populate: {
-        path: 'prices',
-        match: { type: { $eq: 'SETTLEMENT'}}
-      }
-    }
-  })
-  .populate({
-    path: 'counterpartySettlement',
-    select: 'user isAcknowledged',
-    populate: {path: 'user', select: 'name email phone'}
-  })
-  .exec(function(err, trade) {
-    if (err) {
-      return res.status(500).json(new Error(err));
-    } else if (trade) {
-      return res.json(trade);
-    } else {
-      return res.status(404).send();  // No order found
-    }
-  });
-});
-
-
-router.put('/:id', function(req, res){
-  modifySettlement(req, function(err, settlement) {
+router.post('/', function(req, res) {
+  settlementFactory.create(req.body, function(err, settlement) {
     if (err) {
       return res.status(500).json(new Error(err));
     } else {
@@ -63,27 +23,28 @@ router.put('/:id', function(req, res){
   });
 });
 
-function modifySettlement(req, callback) {
-  req.query._id = req.params.id;
-  Settlement.findOne(req.query)
-  .exec(function(err, settlement) {
-    if (err) {
-      callback(err, null);
+router.get('/:id', function(req, res) {
+  settlementFactory.findOne(req.params.id, req.queryOptions, function(err, settlement) {
+    if(err) {
+      return res.status(500).json(new Error(err));
     } else if (settlement) {
-      settlement.isAcknowledged = req.body.isAcknowledged;
-
-      settlement.save(function(err) {
-        if (err) {
-          callback(err, null);
-        } else {
-          callback(null, settlement);
-        }
-      });
+      return res.json(settlement);
     } else {
-      callback("Settlement not found", null);
+      return res.status(404);
     }
   });
-}
+});
 
+router.put('/:id', function(req, res) {
+  settlementFactory.update(req.params.id, req.queryOptions, req.body, function(err, settlement) {
+    if (err) {
+      return res.status(500).json(new Error(err));
+    } else if (settlement) {
+      return res.json(settlement);
+    } else {
+      return res.status(404);
+    }
+  });
+});
 
 module.exports = router

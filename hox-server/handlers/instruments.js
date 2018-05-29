@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const async = require('async');
 const instrumentFactory = require('../factories/instrumentFactory');
 const Error = require('../utils/error');
 

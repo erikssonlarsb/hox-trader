@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const deasync = require('deasync');
 const bcrypt = require('bcryptjs');
 const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
@@ -6,7 +7,7 @@ const Role = require('./role');
 
 const userSchema = new Schema({
   name: String,
-  role: {type: ObjectId, ref: 'Role', required: true},
+  role: {type: ObjectId, ref: 'Role', required: true, set: getReferenceId},
   username: {type: String, required: true, unique: true, lowercase: true, trim: true},
   password: {type: String, required: true, select: false},
   email: {
@@ -55,5 +56,40 @@ userSchema.methods.verifyPassword = function(candidatePassword, cb) {
     }
   });
 };
+
+/* Function used to get the ObjectId of referenced objects defined in the
+ * mongoose Schema. If identifier is an object, the key-value-pairs will
+ * be used to query the reference model for an unique object whose ObjectId
+ * will be returned.
+ *
+ * Dynamic referencing is handy when you know a logical identifier
+ * (e.g. instrument name, or role name), and want to avoid an
+ * additional query only to find the ObjectId.
+ */
+function getReferenceId(identifier, field) {
+  if (typeof(identifier) === "string") {
+     // Identifier is ObjectId
+     return identifier;
+  } else {
+    // Identifier is query.
+    let referee;
+    let done = false;
+
+    mongoose.model(field.options.ref).find(identifier, function(err, result) {
+      referee = result;
+      done = true;
+    });
+
+    deasync.loopWhile(() => {
+      return !done;
+    });
+
+    if(referee.length == 1) {
+      return referee[0]._id;
+    } else {
+      return null;
+    }
+  }
+}
 
 module.exports = mongoose.model('User', userSchema);
