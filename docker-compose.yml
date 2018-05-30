@@ -72,23 +72,15 @@ services:
       - openssl
     restart: always
 
-  admin-pwd-config:
-    build: ./admin-pwd-config
-    environment:
-      ADMIN_USER_PASSWORD: ${ADMIN_USER_PASSWORD-admin1}
-    depends_on:
-      - reverseproxy
-    restart: on-failure
-
   api-seed:
     build: ./api-seed
     environment:
       API_URL: http://server:4000/api/
-      ADMIN_USER_NAME: ${ADMIN_USER_NAME-admin1}
-      ADMIN_USER_PASSWORD: ${ADMIN_USER_PASSWORD-admin1}
+      API_USERNAME: admin1
+      API_PASSWORD: ${ADMIN_USER_PASSWORD-admin1}
       IMPORT_FILES: ${IMPORT_FILES-hoxInstruments}
     depends_on:
-      - admin-pwd-config
+      - reverseproxy
     restart: on-failure
 
 
