@@ -45,17 +45,20 @@ module.exports = {
       callback = arguments[1];
     }
     User.findOne({[idField]:id}, function(err, user) {
-      if(err) callback(err);
-      if(updateUser.name) user.name = updateUser.name;
-      if(updateUser.username) user.username = updateUser.username;
-      if(updateUser.email) user.email = updateUser.email;
-      if(updateUser.phone) user.phone = updateUser.phone;
-      if(updateUser.password) user.password = updateUser.password;
-
-      user.save(function(err) {
-        if(user) user.password = undefined;  // Hide password in response.
+      if(err || !user) {
         callback(err, user);
-      });
+      } else {
+        if(updateUser.name) user.name = updateUser.name;
+        if(updateUser.username) user.username = updateUser.username;
+        if(updateUser.email) user.email = updateUser.email;
+        if(updateUser.phone) user.phone = updateUser.phone;
+        if(updateUser.password) user.password = updateUser.password;
+
+        user.save(function(err) {
+          if(user) user.password = undefined;  // Hide password in response.
+          callback(err, user);
+        });
+      }
     });
   }
 }
