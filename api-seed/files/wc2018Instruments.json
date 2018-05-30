@@ -1,0 +1,1284 @@
+{
+  "instruments": [
+    {
+      "name" : "Argentina",
+      "ticker" : "ARG",
+      "type" : "Index",
+      "status" : "INACTIVE",
+      "prices": [
+        {
+          "type": "CLOSE",
+          "date": 19980612,
+          "value": 10
+        },
+        {
+          "type": "CLOSE",
+          "date": 20020530,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20060609,
+          "value": 10
+        },
+        {
+          "type": "CLOSE",
+          "date": 20100611,
+          "value": 10
+        },
+        {
+          "type": "CLOSE",
+          "date": 20140613,
+          "value": 25
+        }
+      ],
+      "derivatives": [
+        {
+          "type" : "Derivative",
+          "status" : "ACTIVE",
+          "expiry" : 20180616
+        }
+      ]
+    },
+    {
+      "name" : "Australia",
+      "ticker" : "AUS",
+      "type" : "Index",
+      "status" : "INACTIVE",
+      "prices": [
+        {
+          "type": "CLOSE",
+          "date": 19980612,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20020530,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20060609,
+          "value": 5
+        },
+        {
+          "type": "CLOSE",
+          "date": 20100611,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20140613,
+          "value": 0
+        }
+      ],
+      "derivatives": [
+        {
+          "type" : "Derivative",
+          "status" : "ACTIVE",
+          "expiry" : 20180616
+        }
+      ]
+    },
+    {
+      "name" : "Belgium",
+      "ticker" : "BEL",
+      "type" : "Index",
+      "status" : "INACTIVE",
+      "prices": [
+        {
+          "type": "CLOSE",
+          "date": 19980612,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20020530,
+          "value": 5
+        },
+        {
+          "type": "CLOSE",
+          "date": 20060609,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20100611,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20140613,
+          "value": 10
+        }
+      ],
+      "derivatives": [
+        {
+          "type" : "Derivative",
+          "status" : "ACTIVE",
+          "expiry" : 20180616
+        }
+      ]
+    },
+    {
+      "name" : "Brazil",
+      "ticker" : "BRA",
+      "type" : "Index",
+      "status" : "INACTIVE",
+      "prices": [
+        {
+          "type": "CLOSE",
+          "date": 19980612,
+          "value": 25
+        },
+        {
+          "type": "CLOSE",
+          "date": 20020530,
+          "value": 30
+        },
+        {
+          "type": "CLOSE",
+          "date": 20060609,
+          "value": 10
+        },
+        {
+          "type": "CLOSE",
+          "date": 20100611,
+          "value": 10
+        },
+        {
+          "type": "CLOSE",
+          "date": 20140613,
+          "value": 15
+        }
+      ],
+      "derivatives": [
+        {
+          "type" : "Derivative",
+          "status" : "ACTIVE",
+          "expiry" : 20180616
+        }
+      ]
+    },
+    {
+      "name" : "Colombia",
+      "ticker" : "COL",
+      "type" : "Index",
+      "status" : "INACTIVE",
+      "prices": [
+        {
+          "type": "CLOSE",
+          "date": 19980612,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20020530,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20060609,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20100611,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20140613,
+          "value": 10
+        }
+      ],
+      "derivatives": [
+        {
+          "type" : "Derivative",
+          "status" : "ACTIVE",
+          "expiry" : 20180616
+        }
+      ]
+    },
+    {
+      "name" : "Costa Rica",
+      "ticker" : "CRC",
+      "type" : "Index",
+      "status" : "INACTIVE",
+      "prices": [
+        {
+          "type": "CLOSE",
+          "date": 19980612,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20020530,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20060609,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20100611,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20140613,
+          "value": 10
+        }
+      ],
+      "derivatives": [
+        {
+          "type" : "Derivative",
+          "status" : "ACTIVE",
+          "expiry" : 20180616
+        }
+      ]
+    },
+    {
+      "name" : "Denmark",
+      "ticker" : "DEN",
+      "type" : "Index",
+      "status" : "INACTIVE",
+      "prices": [
+        {
+          "type": "CLOSE",
+          "date": 19980612,
+          "value": 10
+        },
+        {
+          "type": "CLOSE",
+          "date": 20020530,
+          "value": 5
+        },
+        {
+          "type": "CLOSE",
+          "date": 20060609,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20100611,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20140613,
+          "value": 0
+        }
+      ],
+      "derivatives": [
+        {
+          "type" : "Derivative",
+          "status" : "ACTIVE",
+          "expiry" : 20180616
+        }
+      ]
+    },
+    {
+      "name" : "Egypt",
+      "ticker" : "EGY",
+      "type" : "Index",
+      "status" : "INACTIVE",
+      "prices": [
+        {
+          "type": "CLOSE",
+          "date": 19980612,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20020530,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20060609,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20100611,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20140613,
+          "value": 0
+        }
+      ],
+      "derivatives": [
+        {
+          "type" : "Derivative",
+          "status" : "ACTIVE",
+          "expiry" : 20180616
+        }
+      ]
+    },
+    {
+      "name" : "England",
+      "ticker" : "ENG",
+      "type" : "Index",
+      "status" : "INACTIVE",
+      "prices": [
+        {
+          "type": "CLOSE",
+          "date": 19980612,
+          "value": 5
+        },
+        {
+          "type": "CLOSE",
+          "date": 20020530,
+          "value": 10
+        },
+        {
+          "type": "CLOSE",
+          "date": 20060609,
+          "value": 10
+        },
+        {
+          "type": "CLOSE",
+          "date": 20100611,
+          "value": 5
+        },
+        {
+          "type": "CLOSE",
+          "date": 20140613,
+          "value": 0
+        }
+      ],
+      "derivatives": [
+        {
+          "type" : "Derivative",
+          "status" : "ACTIVE",
+          "expiry" : 20180616
+        }
+      ]
+    },
+    {
+      "name" : "France",
+      "ticker" : "FRA",
+      "type" : "Index",
+      "status" : "INACTIVE",
+      "prices": [
+        {
+          "type": "CLOSE",
+          "date": 19980612,
+          "value": 30
+        },
+        {
+          "type": "CLOSE",
+          "date": 20020530,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20060609,
+          "value": 25
+        },
+        {
+          "type": "CLOSE",
+          "date": 20100611,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20140613,
+          "value": 10
+        }
+      ],
+      "derivatives": [
+        {
+          "type" : "Derivative",
+          "status" : "ACTIVE",
+          "expiry" : 20180616
+        }
+      ]
+    },
+    {
+      "name" : "Germany",
+      "ticker" : "GER",
+      "type" : "Index",
+      "status" : "INACTIVE",
+      "prices": [
+        {
+          "type": "CLOSE",
+          "date": 19980612,
+          "value": 10
+        },
+        {
+          "type": "CLOSE",
+          "date": 20020530,
+          "value": 25
+        },
+        {
+          "type": "CLOSE",
+          "date": 20060609,
+          "value": 20
+        },
+        {
+          "type": "CLOSE",
+          "date": 20100611,
+          "value": 20
+        },
+        {
+          "type": "CLOSE",
+          "date": 20140613,
+          "value": 30
+        }
+      ],
+      "derivatives": [
+        {
+          "type" : "Derivative",
+          "status" : "ACTIVE",
+          "expiry" : 20180616
+        }
+      ]
+    },
+    {
+      "name" : "Iran",
+      "ticker" : "IRN",
+      "type" : "Index",
+      "status" : "INACTIVE",
+      "prices": [
+        {
+          "type": "CLOSE",
+          "date": 19980612,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20020530,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20060609,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20100611,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20140613,
+          "value": 0
+        }
+      ],
+      "derivatives": [
+        {
+          "type" : "Derivative",
+          "status" : "ACTIVE",
+          "expiry" : 20180616
+        }
+      ]
+    },
+    {
+      "name" : "Iceland",
+      "ticker" : "ISL",
+      "type" : "Index",
+      "status" : "INACTIVE",
+      "prices": [
+        {
+          "type": "CLOSE",
+          "date": 19980612,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20020530,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20060609,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20100611,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20140613,
+          "value": 0
+        }
+      ],
+      "derivatives": [
+        {
+          "type" : "Derivative",
+          "status" : "ACTIVE",
+          "expiry" : 20180616
+        }
+      ]
+    },
+    {
+      "name" : "Japan",
+      "ticker" : "JPN",
+      "type" : "Index",
+      "status" : "INACTIVE",
+      "prices": [
+        {
+          "type": "CLOSE",
+          "date": 19980612,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20020530,
+          "value": 5
+        },
+        {
+          "type": "CLOSE",
+          "date": 20060609,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20100611,
+          "value": 5
+        },
+        {
+          "type": "CLOSE",
+          "date": 20140613,
+          "value": 0
+        }
+      ],
+      "derivatives": [
+        {
+          "type" : "Derivative",
+          "status" : "ACTIVE",
+          "expiry" : 20180616
+        }
+      ]
+    },
+    {
+      "name" : "Croatia",
+      "ticker" : "CRO",
+      "type" : "Index",
+      "status" : "INACTIVE",
+      "prices": [
+        {
+          "type": "CLOSE",
+          "date": 19980612,
+          "value": 20
+        },
+        {
+          "type": "CLOSE",
+          "date": 20020530,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20060609,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20100611,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20140613,
+          "value": 0
+        }
+      ],
+      "derivatives": [
+        {
+          "type" : "Derivative",
+          "status" : "ACTIVE",
+          "expiry" : 20180616
+        }
+      ]
+    },
+    {
+      "name" : "Morocco",
+      "ticker" : "MAR",
+      "type" : "Index",
+      "status" : "INACTIVE",
+      "prices": [
+        {
+          "type": "CLOSE",
+          "date": 19980612,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20020530,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20060609,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20100611,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20140613,
+          "value": 0
+        }
+      ],
+      "derivatives": [
+        {
+          "type" : "Derivative",
+          "status" : "ACTIVE",
+          "expiry" : 20180616
+        }
+      ]
+    },
+    {
+      "name" : "Mexico",
+      "ticker" : "MEX",
+      "type" : "Index",
+      "status" : "INACTIVE",
+      "prices": [
+        {
+          "type": "CLOSE",
+          "date": 19980612,
+          "value": 5
+        },
+        {
+          "type": "CLOSE",
+          "date": 20020530,
+          "value": 5
+        },
+        {
+          "type": "CLOSE",
+          "date": 20060609,
+          "value": 5
+        },
+        {
+          "type": "CLOSE",
+          "date": 20100611,
+          "value": 5
+        },
+        {
+          "type": "CLOSE",
+          "date": 20140613,
+          "value": 5
+        }
+      ],
+      "derivatives": [
+        {
+          "type" : "Derivative",
+          "status" : "ACTIVE",
+          "expiry" : 20180616
+        }
+      ]
+    },
+    {
+      "name" : "Nigeria",
+      "ticker" : "NIG",
+      "type" : "Index",
+      "status" : "INACTIVE",
+      "prices": [
+        {
+          "type": "CLOSE",
+          "date": 19980612,
+          "value": 5
+        },
+        {
+          "type": "CLOSE",
+          "date": 20020530,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20060609,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20100611,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20140613,
+          "value": 5
+        }
+      ],
+      "derivatives": [
+        {
+          "type" : "Derivative",
+          "status" : "ACTIVE",
+          "expiry" : 20180616
+        }
+      ]
+    },
+    {
+      "name" : "Panama",
+      "ticker" : "PAN",
+      "type" : "Index",
+      "status" : "INACTIVE",
+      "prices": [
+        {
+          "type": "CLOSE",
+          "date": 19980612,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20020530,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20060609,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20100611,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20140613,
+          "value": 0
+        }
+      ],
+      "derivatives": [
+        {
+          "type" : "Derivative",
+          "status" : "ACTIVE",
+          "expiry" : 20180616
+        }
+      ]
+    },
+    {
+      "name" : "Peru",
+      "ticker" : "PER",
+      "type" : "Index",
+      "status" : "INACTIVE",
+      "prices": [
+        {
+          "type": "CLOSE",
+          "date": 19980612,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20020530,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20060609,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20100611,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20140613,
+          "value": 0
+        }
+      ],
+      "derivatives": [
+        {
+          "type" : "Derivative",
+          "status" : "ACTIVE",
+          "expiry" : 20180616
+        }
+      ]
+    },
+    {
+      "name" : "Poland",
+      "ticker" : "POL",
+      "type" : "Index",
+      "status" : "INACTIVE",
+      "prices": [
+        {
+          "type": "CLOSE",
+          "date": 19980612,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20020530,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20060609,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20100611,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20140613,
+          "value": 0
+        }
+      ],
+      "derivatives": [
+        {
+          "type" : "Derivative",
+          "status" : "ACTIVE",
+          "expiry" : 20180616
+        }
+      ]
+    },
+    {
+      "name" : "Portugal",
+      "ticker" : "POR",
+      "type" : "Index",
+      "status" : "INACTIVE",
+      "prices": [
+        {
+          "type": "CLOSE",
+          "date": 19980612,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20020530,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20060609,
+          "value": 15
+        },
+        {
+          "type": "CLOSE",
+          "date": 20100611,
+          "value": 5
+        },
+        {
+          "type": "CLOSE",
+          "date": 20140613,
+          "value": 0
+        }
+      ],
+      "derivatives": [
+        {
+          "type" : "Derivative",
+          "status" : "ACTIVE",
+          "expiry" : 20180616
+        }
+      ]
+    },
+    {
+      "name" : "Russia",
+      "ticker" : "RUS",
+      "type" : "Index",
+      "status" : "INACTIVE",
+      "prices": [
+        {
+          "type": "CLOSE",
+          "date": 19980612,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20020530,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20060609,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20100611,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20140613,
+          "value": 0
+        }
+      ],
+      "derivatives": [
+        {
+          "type" : "Derivative",
+          "status" : "ACTIVE",
+          "expiry" : 20180616
+        }
+      ]
+    },
+    {
+      "name" : "Saudi Arabia",
+      "ticker" : "KSA",
+      "type" : "Index",
+      "status" : "INACTIVE",
+      "prices": [
+        {
+          "type": "CLOSE",
+          "date": 19980612,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20020530,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20060609,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20100611,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20140613,
+          "value": 0
+        }
+      ],
+      "derivatives": [
+        {
+          "type" : "Derivative",
+          "status" : "ACTIVE",
+          "expiry" : 20180616
+        }
+      ]
+    },
+    {
+      "name" : "Switzerland",
+      "ticker" : "SUI",
+      "type" : "Index",
+      "status" : "INACTIVE",
+      "prices": [
+        {
+          "type": "CLOSE",
+          "date": 19980612,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20020530,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20060609,
+          "value": 5
+        },
+        {
+          "type": "CLOSE",
+          "date": 20100611,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20140613,
+          "value": 5
+        }
+      ],
+      "derivatives": [
+        {
+          "type" : "Derivative",
+          "status" : "ACTIVE",
+          "expiry" : 20180616
+        }
+      ]
+    },
+    {
+      "name" : "Senegal",
+      "ticker" : "SEN",
+      "type" : "Index",
+      "status" : "INACTIVE",
+      "prices": [
+        {
+          "type": "CLOSE",
+          "date": 19980612,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20020530,
+          "value": 10
+        },
+        {
+          "type": "CLOSE",
+          "date": 20060609,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20100611,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20140613,
+          "value": 0
+        }
+      ],
+      "derivatives": [
+        {
+          "type" : "Derivative",
+          "status" : "ACTIVE",
+          "expiry" : 20180616
+        }
+      ]
+    },
+    {
+      "name" : "Serbia",
+      "ticker" : "SRB",
+      "type" : "Index",
+      "status" : "INACTIVE",
+      "prices": [
+        {
+          "type": "CLOSE",
+          "date": 19980612,
+          "value": 5
+        },
+        {
+          "type": "CLOSE",
+          "date": 20020530,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20060609,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20100611,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20140613,
+          "value": 0
+        }
+      ],
+      "derivatives": [
+        {
+          "type" : "Derivative",
+          "status" : "ACTIVE",
+          "expiry" : 20180616
+        }
+      ]
+    },
+    {
+      "name" : "Spain",
+      "ticker" : "ESP",
+      "type" : "Index",
+      "status" : "INACTIVE",
+      "prices": [
+        {
+          "type": "CLOSE",
+          "date": 19980612,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20020530,
+          "value": 10
+        },
+        {
+          "type": "CLOSE",
+          "date": 20060609,
+          "value": 5
+        },
+        {
+          "type": "CLOSE",
+          "date": 20100611,
+          "value": 30
+        },
+        {
+          "type": "CLOSE",
+          "date": 20140613,
+          "value": 0
+        }
+      ],
+      "derivatives": [
+        {
+          "type" : "Derivative",
+          "status" : "ACTIVE",
+          "expiry" : 20180616
+        }
+      ]
+    },
+    {
+      "name" : "Sweden",
+      "ticker" : "SWE",
+      "type" : "Index",
+      "status" : "INACTIVE",
+      "prices": [
+        {
+          "type": "CLOSE",
+          "date": 19980612,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20020530,
+          "value": 5
+        },
+        {
+          "type": "CLOSE",
+          "date": 20060609,
+          "value": 5
+        },
+        {
+          "type": "CLOSE",
+          "date": 20100611,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20140613,
+          "value": 0
+        }
+      ],
+      "derivatives": [
+        {
+          "type" : "Derivative",
+          "status" : "ACTIVE",
+          "expiry" : 20180616
+        }
+      ]
+    },
+    {
+      "name" : "South Korea",
+      "ticker" : "KOR",
+      "type" : "Index",
+      "status" : "INACTIVE",
+      "prices": [
+        {
+          "type": "CLOSE",
+          "date": 19980612,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20020530,
+          "value": 15
+        },
+        {
+          "type": "CLOSE",
+          "date": 20060609,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20100611,
+          "value": 5
+        },
+        {
+          "type": "CLOSE",
+          "date": 20140613,
+          "value": 0
+        }
+      ],
+      "derivatives": [
+        {
+          "type" : "Derivative",
+          "status" : "ACTIVE",
+          "expiry" : 20180616
+        }
+      ]
+    },
+    {
+      "name" : "Tunisia",
+      "ticker" : "TUN",
+      "type" : "Index",
+      "status" : "INACTIVE",
+      "prices": [
+        {
+          "type": "CLOSE",
+          "date": 19980612,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20020530,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20060609,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20100611,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20140613,
+          "value": 0
+        }
+      ],
+      "derivatives": [
+        {
+          "type" : "Derivative",
+          "status" : "ACTIVE",
+          "expiry" : 20180616
+        }
+      ]
+    },
+    {
+      "name" : "Uruguay",
+      "ticker" : "URU",
+      "type" : "Index",
+      "status" : "INACTIVE",
+      "prices": [
+        {
+          "type": "CLOSE",
+          "date": 19980612,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20020530,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20060609,
+          "value": 0
+        },
+        {
+          "type": "CLOSE",
+          "date": 20100611,
+          "value": 15
+        },
+        {
+          "type": "CLOSE",
+          "date": 20140613,
+          "value": 5
+        }
+      ],
+      "derivatives": [
+        {
+          "type" : "Derivative",
+          "status" : "ACTIVE",
+          "expiry" : 20180616
+        }
+      ]
+    }
+  ]
+}

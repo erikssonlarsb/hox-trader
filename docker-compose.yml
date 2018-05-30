@@ -86,7 +86,7 @@ services:
       API_URL: http://server:4000/api/
       ADMIN_USER_NAME: ${ADMIN_USER_NAME-admin1}
       ADMIN_USER_PASSWORD: ${ADMIN_USER_PASSWORD-admin1}
-      IMPORT_FILES: ${IMPORT_FILES-hoxInstruments}
+      IMPORT_FILES: ${IMPORT_FILES-wc2018Instruments}
     depends_on:
       - admin-pwd-config
     restart: on-failure
