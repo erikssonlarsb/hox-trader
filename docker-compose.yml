@@ -16,7 +16,6 @@ services:
     volumes:
       - ./mongo-seed/roles.json:/roles.json
       - ./mongo-seed/users.json:/users.json
-      - ./mongo-seed/instruments.json:/instruments.json
     depends_on:
       - mongodb
     restart: on-failure
