@@ -143,6 +143,7 @@ async.series([
 function(err) {
   if(err) {
     console.error(err);
+    process.exit(1);  // Restart api-seed compose.
   } else {
     console.log("Finished successfully.");
   }
