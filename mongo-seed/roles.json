@@ -6,6 +6,13 @@
       "isAdmin" : true,
       "permissions" : [
           {
+              "resource" : "systeminfo",
+              "methods" : [
+                  "GET",
+                  "PUT"
+              ]
+          },
+          {
               "resource" : "token",
               "methods" : [
                   "GET"

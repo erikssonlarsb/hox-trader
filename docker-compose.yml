@@ -72,7 +72,10 @@ services:
     restart: always
 
   api-seed:
-    build: ./api-seed
+    build:
+      context: ./api-seed
+      args:
+        GIT_COMMIT: ${GIT_COMMIT-dev}
     environment:
       API_URL: http://server:4000/api/
       API_USERNAME: admin1
@@ -81,7 +84,6 @@ services:
     depends_on:
       - reverseproxy
     restart: on-failure
-
 
 volumes:
   certs:
