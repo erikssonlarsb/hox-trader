@@ -7,7 +7,7 @@ Online application for otc trading on the HOX index.
 
 ```sh
 $ git clone https://github.com/erikssonlarsb/hox-trader
-$ docker-compose build
+$ docker-compose build --build-arg GIT_COMMIT=$(git rev-parse --short HEAD)
 $ docker-compose up
 ```
 

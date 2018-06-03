@@ -16,7 +16,6 @@ services:
     volumes:
       - ./mongo-seed/roles.json:/roles.json
       - ./mongo-seed/users.json:/users.json
-      - ./mongo-seed/instruments.json:/instruments.json
     depends_on:
       - mongodb
     restart: on-failure
@@ -72,25 +71,19 @@ services:
       - openssl
     restart: always
 
-  admin-pwd-config:
-    build: ./admin-pwd-config
+  api-seed:
+    build:
+      context: ./api-seed
+      args:
+        GIT_COMMIT: ${GIT_COMMIT-dev}
     environment:
-      ADMIN_USER_PASSWORD: ${ADMIN_USER_PASSWORD-admin1}
+      API_URL: http://server:4000/api/
+      API_USERNAME: admin1
+      API_PASSWORD: ${ADMIN_USER_PASSWORD-admin1}
+      IMPORT_FILES: ${IMPORT_FILES-wc2018Instruments}
     depends_on:
       - reverseproxy
     restart: on-failure
-
-  api-seed:
-    build: ./api-seed
-    environment:
-      API_URL: http://server:4000/api/
-      ADMIN_USER_NAME: ${ADMIN_USER_NAME-admin1}
-      ADMIN_USER_PASSWORD: ${ADMIN_USER_PASSWORD-admin1}
-      IMPORT_FILES: ${IMPORT_FILES-wc2018Instruments}
-    depends_on:
-      - admin-pwd-config
-    restart: on-failure
-
 
 volumes:
   certs:

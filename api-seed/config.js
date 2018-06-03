@@ -1,11 +1,13 @@
-const apiUrl = process.env.API_URL || 'http://localhost:3000/api/';
-const apiUser = process.env.API_USER || 'admin1';
-const apiPassword = process.env.API_PASSWORD || 'admin1';
+const url = process.env.API_URL || 'http://localhost:3000/api/';
+const username = process.env.API_USERNAME || 'admin1';
+const password = process.env.API_PASSWORD || 'admin1';
 const importFiles = process.env.IMPORT_FILES || 'wc2018Instruments';
+const gitCommit = process.env.GIT_COMMIT || 'dev';
 
 module.exports = {
-  'apiUrl': apiUrl,
-  'apiUser': apiUser,
-  'apiPassword': apiPassword,
-  'importFiles': importFiles.split(',')
+  'url': url,
+  'username': username,
+  'password': password,
+  'importFiles': importFiles.split(','),
+  'gitCommit': gitCommit
 };
