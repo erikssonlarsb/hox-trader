@@ -55,7 +55,9 @@
             <tbody>
               <ng-container *ngFor="let index of indices;">
                 <tr>
-                  <td><a routerLink="/instruments/{{index.id}}">{{index.name}}</a></td>
+                  <td><a routerLink="/instruments/{{index.id}}">
+                    <span [ngClass]="'flag-icon flag-icon-' + index.isin" ></span>
+                    {{index.name}}</a></td>
                   <td class="text-right">{{(index.prices | price:'CLOSE')?.value | number:'.0-0'}}</td>
                   <td class="text-right">{{index.prices | averagePrice:'CLOSE' | number:'.0-0'}}</td>
                 </tr>
