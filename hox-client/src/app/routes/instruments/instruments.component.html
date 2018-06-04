@@ -41,28 +41,23 @@
     <div class="card">
       <div class="card-body">
         <h5 class="card-title">
-          Indices
+          Statistics
         </h5>
         <div class="table-responsive">
           <table class="table table-sm table-hover">
             <thead>
               <tr>
                 <th scope="col">Name</th>
-                <th scope="col" class="text-right">Last</th>
-                <th scope="col" class="text-right">1&nbsp;M</th>
+                <th scope="col" class="text-right">2014</th>
+                <th scope="col" class="text-right">Last 5 avg.</th>
               </tr>
             </thead>
             <tbody>
               <ng-container *ngFor="let index of indices;">
                 <tr>
-                  <td>
-                    <a
-                      routerLink="/instruments/{{index.id}}">
-                      {{index.name}}
-                    </a>
-                  </td>
-                  <td class="text-right">{{(index.prices | price:'LAST')?.value | number:'.0-0'}}</td>
-                  <td class="text-right">{{((index.prices | price:'CLOSE':-1)?.value - (index.prices | price:'CLOSE':-2)?.value) / (index.prices | price:'CLOSE':-2)?.value | percent:'.1-1'}}</td>
+                  <td><a routerLink="/instruments/{{index.id}}">{{index.name}}</a></td>
+                  <td class="text-right">{{(index.prices | price:'CLOSE')?.value | number:'.0-0'}}</td>
+                  <td class="text-right">{{index.prices | averagePrice:'CLOSE' | number:'.0-0'}}</td>
                 </tr>
               </ng-container>
             </tbody>
