@@ -3,7 +3,7 @@
     {
       "name" : "Argentina",
       "ticker" : "ARG",
-      "ISIN" : "ar",
+      "isin" : "ar",
       "type" : "Index",
       "status" : "INACTIVE",
       "prices": [
@@ -44,7 +44,7 @@
     {
       "name" : "Australia",
       "ticker" : "AUS",
-      "ISIN" : "at",
+      "isin" : "at",
       "type" : "Index",
       "status" : "INACTIVE",
       "prices": [
@@ -85,7 +85,7 @@
     {
       "name" : "Belgium",
       "ticker" : "BEL",
-      "ISIN" : "be",
+      "isin" : "be",
       "type" : "Index",
       "status" : "INACTIVE",
       "prices": [
@@ -126,7 +126,7 @@
     {
       "name" : "Brazil",
       "ticker" : "BRA",
-      "ISIN" : "br",
+      "isin" : "br",
       "type" : "Index",
       "status" : "INACTIVE",
       "prices": [
@@ -167,7 +167,7 @@
     {
       "name" : "Colombia",
       "ticker" : "COL",
-      "ISIN" : "co",
+      "isin" : "co",
       "type" : "Index",
       "status" : "INACTIVE",
       "prices": [
@@ -208,7 +208,7 @@
     {
       "name" : "Costa Rica",
       "ticker" : "CRC",
-      "ISIN" : "cr",
+      "isin" : "cr",
       "type" : "Index",
       "status" : "INACTIVE",
       "prices": [
@@ -249,7 +249,7 @@
     {
       "name" : "Denmark",
       "ticker" : "DEN",
-      "ISIN" : "dk",
+      "isin" : "dk",
       "type" : "Index",
       "status" : "INACTIVE",
       "prices": [
@@ -290,7 +290,7 @@
     {
       "name" : "Egypt",
       "ticker" : "EGY",
-      "ISIN" : "eg",
+      "isin" : "eg",
       "type" : "Index",
       "status" : "INACTIVE",
       "prices": [
@@ -331,7 +331,7 @@
     {
       "name" : "England",
       "ticker" : "ENG",
-      "ISIN" : "gb",
+      "isin" : "gb",
       "type" : "Index",
       "status" : "INACTIVE",
       "prices": [
@@ -372,7 +372,7 @@
     {
       "name" : "France",
       "ticker" : "FRA",
-      "ISIN" : "fr",
+      "isin" : "fr",
       "type" : "Index",
       "status" : "INACTIVE",
       "prices": [
@@ -413,7 +413,7 @@
     {
       "name" : "Germany",
       "ticker" : "GER",
-      "ISIN" : "de",
+      "isin" : "de",
       "type" : "Index",
       "status" : "INACTIVE",
       "prices": [
@@ -454,7 +454,7 @@
     {
       "name" : "Iran",
       "ticker" : "IRN",
-      "ISIN" : "ir",
+      "isin" : "ir",
       "type" : "Index",
       "status" : "INACTIVE",
       "prices": [
@@ -495,7 +495,7 @@
     {
       "name" : "Iceland",
       "ticker" : "ISL",
-      "ISIN" : "is",
+      "isin" : "is",
       "type" : "Index",
       "status" : "INACTIVE",
       "prices": [
@@ -536,7 +536,7 @@
     {
       "name" : "Japan",
       "ticker" : "JPN",
-      "ISIN" : "jp",
+      "isin" : "jp",
       "type" : "Index",
       "status" : "INACTIVE",
       "prices": [
@@ -577,7 +577,7 @@
     {
       "name" : "Croatia",
       "ticker" : "CRO",
-      "ISIN" : "hr",
+      "isin" : "hr",
       "type" : "Index",
       "status" : "INACTIVE",
       "prices": [
@@ -618,7 +618,7 @@
     {
       "name" : "Morocco",
       "ticker" : "MAR",
-      "ISIN" : "ma",
+      "isin" : "ma",
       "type" : "Index",
       "status" : "INACTIVE",
       "prices": [
@@ -659,7 +659,7 @@
     {
       "name" : "Mexico",
       "ticker" : "MEX",
-      "ISIN" : "mx",
+      "isin" : "mx",
       "type" : "Index",
       "status" : "INACTIVE",
       "prices": [
@@ -700,7 +700,7 @@
     {
       "name" : "Nigeria",
       "ticker" : "NIG",
-      "ISIN" : "ng",
+      "isin" : "ng",
       "type" : "Index",
       "status" : "INACTIVE",
       "prices": [
@@ -741,7 +741,7 @@
     {
       "name" : "Panama",
       "ticker" : "PAN",
-      "ISIN" : "pa",
+      "isin" : "pa",
       "type" : "Index",
       "status" : "INACTIVE",
       "prices": [
@@ -782,7 +782,7 @@
     {
       "name" : "Peru",
       "ticker" : "PER",
-      "ISIN" : "pe",
+      "isin" : "pe",
       "type" : "Index",
       "status" : "INACTIVE",
       "prices": [
@@ -823,7 +823,7 @@
     {
       "name" : "Poland",
       "ticker" : "POL",
-      "ISIN" : "pl",
+      "isin" : "pl",
       "type" : "Index",
       "status" : "INACTIVE",
       "prices": [
@@ -864,7 +864,7 @@
     {
       "name" : "Portugal",
       "ticker" : "POR",
-      "ISIN" : "pt",
+      "isin" : "pt",
       "type" : "Index",
       "status" : "INACTIVE",
       "prices": [
@@ -905,7 +905,7 @@
     {
       "name" : "Russia",
       "ticker" : "RUS",
-      "ISIN" : "ru",
+      "isin" : "ru",
       "type" : "Index",
       "status" : "INACTIVE",
       "prices": [
@@ -946,7 +946,7 @@
     {
       "name" : "Saudi Arabia",
       "ticker" : "KSA",
-      "ISIN" : "sa",
+      "isin" : "sa",
       "type" : "Index",
       "status" : "INACTIVE",
       "prices": [
@@ -987,7 +987,7 @@
     {
       "name" : "Switzerland",
       "ticker" : "SUI",
-      "ISIN" : "ch",
+      "isin" : "ch",
       "type" : "Index",
       "status" : "INACTIVE",
       "prices": [
@@ -1028,7 +1028,7 @@
     {
       "name" : "Senegal",
       "ticker" : "SEN",
-      "ISIN" : "sn",
+      "isin" : "sn",
       "type" : "Index",
       "status" : "INACTIVE",
       "prices": [
@@ -1069,7 +1069,7 @@
     {
       "name" : "Serbia",
       "ticker" : "SRB",
-      "ISIN" : "rs",
+      "isin" : "rs",
       "type" : "Index",
       "status" : "INACTIVE",
       "prices": [
@@ -1110,7 +1110,7 @@
     {
       "name" : "Spain",
       "ticker" : "ESP",
-      "ISIN" : "es",
+      "isin" : "es",
       "type" : "Index",
       "status" : "INACTIVE",
       "prices": [
@@ -1151,7 +1151,7 @@
     {
       "name" : "Sweden",
       "ticker" : "SWE",
-      "ISIN" : "se",
+      "isin" : "se",
       "type" : "Index",
       "status" : "INACTIVE",
       "prices": [
@@ -1192,7 +1192,7 @@
     {
       "name" : "South Korea",
       "ticker" : "KOR",
-      "ISIN" : "kr",
+      "isin" : "kr",
       "type" : "Index",
       "status" : "INACTIVE",
       "prices": [
@@ -1233,7 +1233,7 @@
     {
       "name" : "Tunisia",
       "ticker" : "TUN",
-      "ISIN" : "tn",
+      "isin" : "tn",
       "type" : "Index",
       "status" : "INACTIVE",
       "prices": [
@@ -1274,7 +1274,7 @@
     {
       "name" : "Uruguay",
       "ticker" : "URU",
-      "ISIN" : "uy",
+      "isin" : "uy",
       "type" : "Index",
       "status" : "INACTIVE",
       "prices": [
