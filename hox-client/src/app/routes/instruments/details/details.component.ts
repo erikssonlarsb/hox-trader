@@ -29,8 +29,7 @@ export class InstrumentDetailsComponent  implements OnInit  {
     .subscribe(params => {
       let httpParams = new HttpParams({
         fromObject: {
-          'type': 'Index',
-          '_populate': ['underlying', 'prices']
+          '_populate': ['underlying', 'prices', 'derivatives']
         }
       });
       this.apiService.getInstrument(params.get('id'), httpParams)

@@ -15,6 +15,12 @@ instrumentSchema.virtual('prices', {
   foreignField: 'instrument'
 });
 
+instrumentSchema.virtual('derivatives', {
+  ref: 'Derivative',
+  localField: '_id',
+  foreignField: 'underlying'
+});
+
 instrumentSchema.set('toObject', { virtuals: true });
 
 instrumentSchema.set('toJSON', { virtuals: true });

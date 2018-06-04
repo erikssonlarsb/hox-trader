@@ -8,10 +8,4 @@ const indexSchema = new Schema({
   ticker: {type: String}
 });
 
-indexSchema.virtual('derivatives', {
-  ref: 'Derivative',
-  localField: '_id',
-  foreignField: 'underlying'
-})
-
 module.exports = Instrument.discriminator('Index', indexSchema);
