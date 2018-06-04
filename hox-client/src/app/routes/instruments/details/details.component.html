@@ -5,25 +5,49 @@
         <h5 class="card-title">
           {{instrument.name}}
         </h5>
+        <div class="row" *ngIf="instrument?.status == 'ACTIVE'">
+          <div class="col-sm-6">
+            <div class="row">
+              <div class="col-sm-12">
+                <button
+                  type="button"
+                  class="btn btn-sm btn-primary btn-block"
+                  [routerLink]="['/order', {instrument: orderDepth?.instrument.id, side: 'BUY', price: orderDepth?.levels[0]?.sellPrice}]">
+                  Buy {{orderDepth?.levels[0]?.sellPrice ? '@ ' + (orderDepth?.levels[0]?.sellPrice | number:'.0-0') : ''}}
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="row">
+              <div class="col-sm-12">
+                <button
+                  type="button"
+                  class="btn btn-sm btn-danger btn-block"
+                  [routerLink]="['/order', {instrument: orderDepth?.instrument.id, side: 'SELL', price: orderDepth?.levels[0]?.buyPrice}]">
+                  Sell {{orderDepth?.levels[0]?.buyPrice ? '@ ' + (orderDepth?.levels[0]?.buyPrice | number:'.0-0') : ''}}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="row">
           <div class="col-sm-auto table-responsive">
             <table class="table table-sm">
               <thead>
                 <tr>
-                  <th scope="col" class="border-top-0">Buy</th>
-                  <th scope="col" class="border-top-0">Sell</th>
                   <th scope="col" class="border-top-0">Last</th>
                   <th scope="col" class="border-top-0">High</th>
                   <th scope="col" class="border-top-0">Low</th>
+                  <th scope="col" class="border-top-0">Close</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>{{orderDepth?.levels[0]?.buyPrice | number:'.0-0'}}</td>
-                  <td>{{orderDepth?.levels[0]?.sellPrice | number:'.0-0'}}</td>
-                  <td>{{(instrument.prices | price:'LAST')?.value | number:'.0-0'}}</td>
-                  <td>{{(instrument.prices | price:'HIGH')?.value | number:'.0-0'}}</td>
-                  <td>{{(instrument.prices | price:'LOW')?.value | number:'.0-0'}}</td>
+                  <td>{{((instrument.prices | price:'LAST')?.value | number:'.0-0') || 'N/A'}}</td>
+                  <td>{{((instrument.prices | price:'HIGH')?.value | number:'.0-0') || 'N/A'}}</td>
+                  <td>{{((instrument.prices | price:'LOW')?.value | number:'.0-0') || 'N/A'}}</td>
+                  <td>{{((instrument.prices | price:'CLOSE')?.value | number:'.0-0') || 'N/A'}}</td>
                 </tr>
               </tbody>
             </table>
@@ -146,6 +170,29 @@
               <div class="col-5 col-lg-4"><b>Expiry</b></div>
               <div class="col">{{instrument.expiry | dateonly}}</div>
             </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="instrument?.derivatives.length > 0">
+          <div class="col-sm-auto table-responsive">
+            <table class="table table-sm">
+              <thead>
+                <tr>
+                  <th scope="col" class="border-top-0">Name</th>
+                  <th scope="col" class="border-top-0">Expiry</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let derivative of instrument.derivatives;">
+                  <td>
+                    <a
+                      routerLink="/instruments/{{derivative.id}}">
+                      {{derivative.name}}
+                    </a>
+                  </td>
+                  <td>{{derivative.expiry | dateonly}}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
         <div class="row mt-2" *ngIf="chartLabels?.length > 0">

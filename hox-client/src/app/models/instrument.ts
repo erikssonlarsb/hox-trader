@@ -7,6 +7,7 @@ export class Instrument {
   status: INSTRUMENT_STATUS;
   type: INSTRUMENT_TYPE | string;
   prices: Array<Price>;
+  derivatives: Array<Derivative>;
   updateTimestamp: Date;
 
   constructor(json) {
@@ -15,6 +16,7 @@ export class Instrument {
     this.status = json.status;
     this.type = json.type;
     this.prices = json.prices ? json.prices.map(price => new Price(price)) : null;
+    this.derivatives = json.derivatives ? json.derivatives.map(derivative => new Derivative(derivative)) : null;
     this.updateTimestamp = json.updateTimestamp ? new Date(json.updateTimestamp) : null;
   }
 }
