@@ -17,6 +17,9 @@
       <li class="nav-item">
         <a class="nav-link" routerLink="/settlements" [routerLinkActive]="['active']">Settlements</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/information" [routerLinkActive]="['active']">Info</a>
+      </li>
       <li class="nav-item" *ngIf="user?.role.isAdmin">
         <a class="nav-link" routerLink="/admin" [routerLinkActive]="['active']">Administration</a>
       </li>
