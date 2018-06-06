@@ -1,52 +1,57 @@
-<div class="login-form">
-  <form>
-    <h2>Log in</h2>
+<div class="background">
+  <div class="login-form">
+    <div class="card">
+      <div class="card-body">
+        <form>
 
-    <div class="form-group">
-      <label for="username">Username</label>
-      <div class="input-group mb-3">
-        <div class="input-group-prepend">
-          <span class="input-group-text"><i class="fa fa-fw fa-user" aria-hidden="true"></i></span>
+          <div class="form-group">
+            <h6><label for="username">Username</label></h6>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fa fa-fw fa-user" aria-hidden="true"></i></span>
+              </div>
+              <input
+                name="username"
+                type="text"
+                autocapitalize="none"
+                class="form-control"
+                placeholder="Username"
+                required
+                autofocus
+                [(ngModel)]="username">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <h6><label for="password">Password</label></h6>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fa fa-fw fa-lock" aria-hidden="true"></i></span>
+              </div>
+              <input
+                name="password"
+                type="password"
+                class="form-control"
+                placeholder="Password"
+                required
+                [(ngModel)]="password">
+            </div>
+          </div>
+
+          <button
+            class="btn btn-lg btn-primary btn-block"
+            type="submit"
+            (click)="login()">
+            Sign in
+          </button>
+        </form>
+
+        <div class="register"><a routerLink="/register">Create account</a></div>
+
+        <div [hidden]="!errorMessage" class="alert alert-danger" role="alert">
+          {{errorMessage}}
         </div>
-        <input
-          name="username"
-          type="text"
-          autocapitalize="none"
-          class="form-control"
-          placeholder="Username"
-          required
-          autofocus
-          [(ngModel)]="username">
       </div>
     </div>
-
-    <div class="form-group">
-      <label for="password">Password</label>
-      <div class="input-group mb-3">
-        <div class="input-group-prepend">
-          <span class="input-group-text"><i class="fa fa-fw fa-lock" aria-hidden="true"></i></span>
-        </div>
-        <input
-          name="password"
-          type="password"
-          class="form-control"
-          placeholder="Password"
-          required
-          [(ngModel)]="password">
-      </div>
-    </div>
-
-    <button
-      class="btn btn-lg btn-primary btn-block"
-      type="submit"
-      (click)="login()">
-      Sign in
-    </button>
-  </form>
-
-  <div class="register"><a routerLink="/register">Create account</a></div>
-
-  <div [hidden]="!errorMessage" class="alert alert-danger" role="alert">
-    {{errorMessage}}
   </div>
 </div>

@@ -13,3 +13,7 @@ button {
 .alert {
   margin-top: 1rem;
 }
+h6 {
+  font-size: .7rem;
+  margin-bottom: 0;
+}
