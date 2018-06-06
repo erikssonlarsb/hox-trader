@@ -1,0 +1,167 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">
+          General Information
+        </h5>
+        <p>
+          Welcome to the World Cup 2018 trading application!
+        </p>
+        <p>
+          The trading is modelled as financial forwards, where each participating country
+          has <b>a)</b> an (non-tradable) Index instrument valued according to the team's World Cup results,
+          and <b>b)</b> a (tradable) Derivative (on the Index) that is valued by the market.
+        </p>
+        <p>
+          The Index instrument contains historic values (Closing prices) from previous tournaments,
+          and at the end of World Cup 2018, each index will be updated with a new value.
+          When this is done, the Derivative trades will be settled using the Closing price of the
+          underlying instrument.
+        </p>
+        <p>
+          The Closing prices are calculated as follows:
+        </p>
+        <div class="row">
+          <div class="col-md-4">
+            <ul class="list-group">
+              <li class="list-group-item">
+                <h6>1:st <span class="badge badge-gold pull-right">30</span></h6>
+              </li>
+              <li class="list-group-item">
+                <h6>2:nd <span class="badge badge-silver pull-right">25</span></h6>
+              </li>
+              <li class="list-group-item">
+                <h6>3:rd <span class="badge badge-bronze pull-right">20</span></h6>
+              </li>
+              <li class="list-group-item">
+                <h6>4:th <span class="badge badge-success pull-right">15</span></h6>
+              </li>
+              <li class="list-group-item">
+                <h6>Quarter-finals <span class="badge badge-success pull-right">10</span></h6>
+              </li>
+              <li class="list-group-item">
+                <h6>Round of 16 <span class="badge badge-success pull-right">5</span></h6>
+              </li>
+              <li class="list-group-item">
+                <h6>Group Stage <span class="badge badge-danger pull-right">0</span></h6>
+              </li>
+            </ul>
+          </div>
+          <div class="col-md-8">
+            <p>
+              E.g. in World Cup 2014 England was knocked out in the Group Stage, and thus got 0 points.
+              Switzerland on the other hand advanced to the Round of 16 (but no furher),
+              which gave them 5 points.
+            </p>
+            <p>
+              Costa Rica did an impressive effort and got al the way to the quarter-finals and was
+              therefore awarded 10 points. The home team of Brazil reached 4:th place and got 15 points.
+              And the winner, Germany got the highest score of 30 points!
+            </p>
+          </div>
+        </div>
+        <p>
+          From the scoreboard above it can thus be derived, that (at the end of the tournament) no team
+          will be worth less than 0, and no more than 30. So, if you believe that Germany will repeat the
+          success from laast time, you would want to buy the <i>Germany Jul 18</i> Derivative for a price
+          less than 30 in order to make a profit when (if) the deal settles at 30 at the end of the tournament.
+        </p>
+        <div class="alert alert-info" role="alert">
+          E.g. Buy 10 Germany Jul 18 for 25 SEK each. If settling @ 30 SEK, (i.e. you sell back at 30 SEK),
+          you have made a profit of (30-25) * 10 = 50 SEK.<br>
+          OBSERVE! that if Germany only ends up in 4:th place,
+          you will instead lose on the deal: (15-25) * 10 = -100 SEK.
+        </div>
+        <p>
+          What if you on the other hand believe that Germany won't be able to perform as good as last time,
+          and at best reach the Quarter-finals? Then you should take short position in <i>Germany Jul 18</i> at a price higher than 10,
+          and cross you fingers that they fail miserably.
+        </p>
+        <div class="alert alert-info" role="alert">
+          E.g. Sell 50 Germany Jul 18 for 16 SEK each. What happens? Germany is kicked out in the Round of 16 and
+          only gets 5 points. You have made a profit according to (16-5) * 50 = 550 SEK.<br>
+          OBSERVE! that if Germany ends up in 3'rd place (or higher) you will make a loss.
+        </div>
+
+        <h5 class="card-title">
+          FAQ
+        </h5>
+
+        <div class="list-group">
+          <div class="list-group-item list-group-item-action flex-column align-items-start">
+            <div class="d-flex w-100 justify-content-between">
+              <h6 class="mb-1">
+                Why do the derivative names end with <i>Jul 18</i>?
+              </h6>
+            </div>
+            <p class="mb-1">
+              The derivatives are automatically named after the underlying Index plus the month and year of expiry.
+              Since World Cup ends on the 16:th of July 2018, the naming becomes Jul 18.
+            </p>
+          </div>
+          <div class="list-group-item list-group-item-action flex-column align-items-start">
+            <div class="d-flex w-100 justify-content-between">
+              <h6 class="mb-1">
+                Why is the expiry date July 17:th, when the final is on the 16:th?
+              </h6>
+            </div>
+            <p class="mb-1">
+              The applocation has a builtin restriction that only allows trading up until
+              the day before settlement. But in order to keep betting alive during the final the
+              expiry has been set to the day after. So! When the final is over, make sure that you
+              don't have any active orders left in the market, or you may be hit badly.
+            </p>
+          </div>
+          <div class="list-group-item list-group-item-action flex-column align-items-start">
+            <div class="d-flex w-100 justify-content-between">
+              <h6 class="mb-1">
+                How do I trade?
+              </h6>
+            </div>
+            <p class="mb-1">
+              Tading is made on an open market where you are free to enter Buy and Sell
+              orders according you your market belief. If a Buy Order matches with a Sell
+              Order, this will result in a Trade. There is no central clearing of trades,
+              so you will get a counterparty for each trade that is made. This is the counterparty(s)
+              that you will later on do the settlements with.
+            </p>
+          </div>
+          <div class="list-group-item list-group-item-action flex-column align-items-start">
+            <div class="d-flex w-100 justify-content-between">
+              <h6 class="mb-1">
+                How will the settlement be handled?
+              </h6>
+            </div>
+            <p class="mb-1">
+              Settlement processing is automated, and will be triggered as soon
+              as a settlement price is available. This means that settlements canvas
+              be done throughout the tournament as soon as a team gets kicked out.
+              When a settlement instruction has been created it will appear under the
+              Settlements section.<br>
+              Since trading is settled peer-to-peer, you will get one settlement instruction
+              per counterparty. If you are the payer, you will get a QR code for Swishing
+              the settlement amount to you counterparty.<br>
+              Don't forget to acknowledge when you have swished the settlement amount,
+              and when you have recieved the settlement amount.
+            </p>
+          </div>
+          <div class="list-group-item list-group-item-action flex-column align-items-start">
+            <div class="d-flex w-100 justify-content-between">
+              <h6 class="mb-1">
+                I've found a bug, what do I do?
+              </h6>
+            </div>
+            <p class="mb-1">
+              This application was impelmented for fun, without any commercial interest.
+              If you want to report a bug, or other issues send an e-mail to erikssonlarsb@gmail.com
+              Please! don't exploit any bugs or security issues that you might find.
+              Remember that you are trading wth your friends, and the friends
+              of your friends.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

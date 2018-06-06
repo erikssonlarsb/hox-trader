@@ -1,3 +1,14 @@
+<div class="row" *ngIf="firstVisit">
+  <div class="col-md-12">
+    <div class="alert alert-primary alert-dismissible fade show" role="alert">
+      <strong>First time here?</strong> You should visit the <a routerLink="/information">info page</a>
+      for instructions and important information.
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="dismissInfo()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  </div>
+</div>
 <div class="row">
   <div class="col-md-6">
     <div class="card" *ngFor="let orderDepth of orderDepths;">
