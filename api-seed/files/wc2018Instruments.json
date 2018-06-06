@@ -44,7 +44,7 @@
     {
       "name" : "Australia",
       "ticker" : "AUS",
-      "isin" : "at",
+      "isin" : "au",
       "type" : "Index",
       "status" : "INACTIVE",
       "prices": [
