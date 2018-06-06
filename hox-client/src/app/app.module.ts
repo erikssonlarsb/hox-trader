@@ -21,6 +21,7 @@ import { ApiErrorHandler } from './services/api/apierrorhandler.service';
 
 import { LoginComponent } from './routes/login/login.component';
 import { RegisterComponent } from './routes/register/register.component';
+import { InformationComponent } from './routes/information/information.component';
 import { UsersComponent } from './routes/users/users.component';
 import { UserDetailsComponent } from './routes/users/details/details.component';
 import { InstrumentsComponent } from './routes/instruments/instruments.component';
@@ -36,6 +37,7 @@ import { AdminComponent } from './routes/admin/admin.component';
   declarations: [
     AppComponent,
     LoginComponent,
+    InformationComponent,
     RegisterComponent,
     UsersComponent,
     UserDetailsComponent,

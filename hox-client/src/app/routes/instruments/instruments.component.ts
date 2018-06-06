@@ -13,10 +13,12 @@ import { OrderDepth, Instrument } from '../../models/index';
 export class InstrumentsComponent  implements OnInit  {
   orderDepths: Array<OrderDepth>;
   indices: Array<Instrument>;
+  firstVisit: boolean = true;
 
   constructor(private apiService: ApiService) { }
 
   ngOnInit(): void {
+    this.firstVisit = localStorage.getItem('firstVisit') != null ? JSON.parse(localStorage.getItem('firstVisit')) : true;
     this.apiService.getOrderDepths(new HttpParams().set('status', 'ACTIVE'))
       .subscribe(
         orderDepths => this.orderDepths = orderDepths
@@ -32,5 +34,9 @@ export class InstrumentsComponent  implements OnInit  {
       .subscribe(
         instruments => this.indices = instruments
       );
+  }
+
+  dismissInfo(): void {
+    localStorage.setItem('firstVisit', JSON.stringify(false));
   }
 }
