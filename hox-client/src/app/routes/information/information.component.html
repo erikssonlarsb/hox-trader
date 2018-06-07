@@ -51,13 +51,8 @@
           <div class="col-md-8">
             <p>
               E.g. in World Cup 2014 England was knocked out in the Group Stage, and thus got 0 points.
-              Switzerland on the other hand advanced to the Round of 16 (but no furher),
-              which gave them 5 points.
-            </p>
-            <p>
               Costa Rica did an impressive effort and got al the way to the quarter-finals and was
-              therefore awarded 10 points. The home team of Brazil reached 4:th place and got 15 points.
-              And the winner, Germany got the highest score of 30 points!
+              therefore awarded 10 points. And the winner, Germany got the highest score of 30 points!
             </p>
           </div>
         </div>
@@ -68,15 +63,15 @@
           less than 30 in order to make a profit when (if) the deal settles at 30 at the end of the tournament.
         </p>
         <div class="alert alert-info" role="alert">
-          E.g. Buy 10 Germany Jul 18 for 25 SEK each. If settling @ 30 SEK, (i.e. you sell back at 30 SEK),
+          E.g. Buy 10 Germany Jul 18 for 25 SEK each. If settling @ 30 SEK, (i.e. at settlement you sell back at 30 SEK),
           you have made a profit of (30-25) * 10 = 50 SEK.<br>
           OBSERVE! that if Germany only ends up in 4:th place,
           you will instead lose on the deal: (15-25) * 10 = -100 SEK.
         </div>
         <p>
           What if you on the other hand believe that Germany won't be able to perform as good as last time,
-          and at best reach the Quarter-finals? Then you should take short position in <i>Germany Jul 18</i> at a price higher than 10,
-          and cross you fingers that they fail miserably.
+          and at best reach the Quarter-finals? Then you should take a short position (i.e. sell first and buy back at settlement)
+          in <i>Germany Jul 18</i> at a price higher than 10, and cross you fingers that they fail miserably.
         </p>
         <div class="alert alert-info" role="alert">
           E.g. Sell 50 Germany Jul 18 for 16 SEK each. What happens? Germany is kicked out in the Round of 16 and
@@ -95,14 +90,15 @@
               </h6>
             </div>
             <p class="mb-1">
-              The derivatives are automatically named after the underlying Index plus the month and year of expiry.
-              Since World Cup ends on the 16:th of July 2018, the naming becomes Jul 18.
+              The derivatives are automatically named according to the commodity derivatives
+              convention of using the underlying name plus the month and year of expiry.
+              Since World Cup ends in July 2018, the name becomes e.g. <i>Germany Jul 18</i>.
             </p>
           </div>
           <div class="list-group-item list-group-item-action flex-column align-items-start">
             <div class="d-flex w-100 justify-content-between">
               <h6 class="mb-1">
-                Why is the expiry date July 17:th, when the final is on the 16:th?
+                Why is the expiry date July 16:th, when the final is on the 15:th?
               </h6>
             </div>
             <p class="mb-1">
@@ -110,6 +106,13 @@
               the day before settlement. But in order to keep betting alive during the final the
               expiry has been set to the day after. So! When the final is over, make sure that you
               don't have any active orders left in the market, or you may be hit badly.
+              <br>
+              Actually this is relevant throughout the whole tournament. If e.g. England is
+              kicked out in the group stage, we will then know that their settlement price will
+              be 0. But since all derivatives expire on July 16:th, it will technically be
+              possible to continue trading in England. You should therefore make sure that
+              you don't have any outstanding orders in teams that has been kicked out of the
+              tournament, or you may be hit badly.
             </p>
           </div>
           <div class="list-group-item list-group-item-action flex-column align-items-start">
@@ -134,7 +137,7 @@
             </div>
             <p class="mb-1">
               Settlement processing is automated, and will be triggered as soon
-              as a settlement price is available. This means that settlements canvas
+              as a settlement price is available. This means that settlements can
               be done throughout the tournament as soon as a team gets kicked out.
               When a settlement instruction has been created it will appear under the
               Settlements section.<br>
