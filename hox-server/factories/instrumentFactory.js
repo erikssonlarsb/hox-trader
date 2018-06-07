@@ -107,5 +107,23 @@ module.exports = {
         }
       });
     }
+  },
+
+  // Update an instrument
+  update: function(id, {idField = '_id', populate = []}, updateInstrument, callback) {
+    if (typeof arguments[1] === 'function') {
+      callback = arguments[1];
+    }
+    Instrument.findOne({[idField]:id}, function(err, instrument) {
+      if(err || !instrument) {
+        callback(err, instrument);
+      } else {
+        if(updateInstrument.status) instrument.status = updateInstrument.status;
+
+        instrument.save(function(err) {
+          callback(err, instrument);
+        });
+      }
+    });
   }
 }

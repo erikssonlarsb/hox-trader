@@ -1,292 +1,356 @@
-<div class="card-deck">
+<div class="row">
 
-  <div class="card">
-    <div class="card-body">
-      <h5 class="card-title">
-        Create Instrument
-      </h5>
-      <div class="form-group">
-        <label for="instrumentType">Instrument Type</label>
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text"><i class="fa fa-fw fa-th-list" aria-hidden="true"></i></span>
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">
+          Create Instrument
+        </h5>
+        <div class="form-group">
+          <label for="instrumentType">Instrument Type</label>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-fw fa-th-list" aria-hidden="true"></i></span>
+            </div>
+            <select
+              class="form-control"
+              name="instrumentType"
+              id="instrumentType"
+              [(ngModel)]="instrumentType"
+              required>
+              <option *ngFor="let instrumentType of instrumentTypes | enum">{{instrumentType}}</option>
+            </select>
           </div>
-          <select
-            class="form-control"
-            name="instrumentType"
-            id="instrumentType"
-            [(ngModel)]="instrumentType"
-            required>
-            <option *ngFor="let instrumentType of instrumentTypes | enum">{{instrumentType}}</option>
-          </select>
+        </div>
+        <div class="form-group" *ngIf="instrumentType == 'Index'">
+          <label for="instrumentName">Name</label>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-fw fa-italic" aria-hidden="true"></i></span>
+            </div>
+            <input
+              type="text"
+              class="form-control"
+              name="instrumentName"
+              id="instrumentName"
+              [(ngModel)]="instrumentName"
+              required />
+          </div>
+        </div>
+        <div class="form-group" *ngIf="instrumentType == 'Index'">
+          <label for="instrumentIsin">ISIN</label>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-fw fa-italic" aria-hidden="true"></i></span>
+            </div>
+            <input
+              type="text"
+              class="form-control"
+              name="instrumentIsin"
+              id="instrumentIsin"
+              [(ngModel)]="instrumentIsin"
+              required />
+          </div>
+        </div>
+        <div class="form-group" *ngIf="instrumentType == 'Index'">
+          <label for="instrumentTicker">Ticker</label>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-fw fa-italic" aria-hidden="true"></i></span>
+            </div>
+            <input
+              type="text"
+              class="form-control"
+              name="instrumentTicker"
+              id="instrumentTicker"
+              [(ngModel)]="instrumentTicker"
+              required />
+          </div>
+        </div>
+        <div class="form-group" *ngIf="instrumentType == 'Derivative'">
+          <label for="underlying">Underlying</label>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-fw fa-newspaper-o" aria-hidden="true"></i></span>
+            </div>
+            <input
+              type="text"
+              class="form-control"
+              name="underlying"
+              id="underlying"
+              placeholder="Click to select underlying"
+              [typeahead]="underlyings"
+              [typeaheadMinLength]="0"
+              typeaheadOptionField="name"
+              (typeaheadOnSelect)="underlying = $event.item"
+              [(ngModel)]="underlyingVal"
+              required />
+          </div>
+        </div>
+        <div class="form-group" *ngIf="instrumentType == 'Derivative'">
+          <label for="expiryDate">Expiry date</label>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-fw fa-calendar" aria-hidden="true"></i></span>
+            </div>
+            <input
+              type="date"
+              class="form-control"
+              name="expiryDate"
+              id="expiryDate"
+              [min]="minDate"
+              [(ngModel)]="expiryDate"
+              required />
+           </div>
         </div>
       </div>
-      <div class="form-group" *ngIf="instrumentType == 'Index'">
-        <label for="instrumentName">Name</label>
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text"><i class="fa fa-fw fa-italic" aria-hidden="true"></i></span>
-          </div>
-          <input
-            type="text"
-            class="form-control"
-            name="instrumentName"
-            id="instrumentName"
-            [(ngModel)]="instrumentName"
-            required />
+      <div class="card-footer">
+        <button
+          type="submit"
+          class="btn btn-lg btn-primary btn-block"
+          (click)="createInstrument()">
+          <i class="fa fa-paper-plane-o"></i> Create
+        </button>
+        <div [hidden]="!createInstrumentStatusMessage" class="alert alert-success" role="alert">
+          {{createInstrumentStatusMessage}}
         </div>
-      </div>
-      <div class="form-group" *ngIf="instrumentType == 'Index'">
-        <label for="instrumentIsin">ISIN</label>
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text"><i class="fa fa-fw fa-italic" aria-hidden="true"></i></span>
-          </div>
-          <input
-            type="text"
-            class="form-control"
-            name="instrumentIsin"
-            id="instrumentIsin"
-            [(ngModel)]="instrumentIsin"
-            required />
+        <div [hidden]="!createInstrumentErrorMessage" class="alert alert-danger" role="alert">
+          {{createInstrumentErrorMessage}}
         </div>
-      </div>
-      <div class="form-group" *ngIf="instrumentType == 'Index'">
-        <label for="instrumentTicker">Ticker</label>
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text"><i class="fa fa-fw fa-italic" aria-hidden="true"></i></span>
-          </div>
-          <input
-            type="text"
-            class="form-control"
-            name="instrumentTicker"
-            id="instrumentTicker"
-            [(ngModel)]="instrumentTicker"
-            required />
-        </div>
-      </div>
-      <div class="form-group" *ngIf="instrumentType == 'Derivative'">
-        <label for="underlying">Underlying</label>
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text"><i class="fa fa-fw fa-newspaper-o" aria-hidden="true"></i></span>
-          </div>
-          <input
-            type="text"
-            class="form-control"
-            name="underlying"
-            id="underlying"
-            placeholder="Click to select underlying"
-            [typeahead]="underlyings"
-            [typeaheadMinLength]="0"
-            typeaheadOptionField="name"
-            (typeaheadOnSelect)="underlying = $event.item"
-            [(ngModel)]="underlyingVal"
-            required />
-        </div>
-      </div>
-      <div class="form-group" *ngIf="instrumentType == 'Derivative'">
-        <label for="expiryDate">Expiry date</label>
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text"><i class="fa fa-fw fa-calendar" aria-hidden="true"></i></span>
-          </div>
-          <input
-            type="date"
-            class="form-control"
-            name="expiryDate"
-            id="expiryDate"
-            [min]="minDate"
-            [(ngModel)]="expiryDate"
-            required />
-         </div>
-      </div>
-    </div>
-    <div class="card-footer">
-      <button
-        type="submit"
-        class="btn btn-lg btn-primary btn-block"
-        (click)="createInstrument()">
-        <i class="fa fa-paper-plane-o"></i> Create
-      </button>
-      <div [hidden]="!createInstrumentStatusMessage" class="alert alert-success" role="alert">
-        {{createInstrumentStatusMessage}}
-      </div>
-      <div [hidden]="!createInstrumentErrorMessage" class="alert alert-danger" role="alert">
-        {{createInstrumentErrorMessage}}
       </div>
     </div>
   </div>
 
-  <div class="card">
-    <div class="card-body">
-      <h5 class="card-title">
-        Add Price
-      </h5>
-      <div class="form-group">
-        <label for="priceType">Price Type</label>
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text"><i class="fa fa-fw fa-th-list" aria-hidden="true"></i></span>
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">
+          Edit Derivative Status
+        </h5>
+        <div class="form-group">
+          <label for="derivative">Derivative</label>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-fw fa-newspaper-o" aria-hidden="true"></i></span>
+            </div>
+            <input
+              type="text"
+              class="form-control"
+              name="derivative"
+              id="derivative"
+              [typeahead]="derivatives"
+              [typeaheadMinLength]="0"
+              typeaheadOptionField="name"
+              placeholder="Click to select derivative"
+              (typeaheadOnSelect)="derivative = $event.item"
+              [(ngModel)]="derivativeVal"
+              required />
           </div>
-          <select
-            class="form-control"
-            name="priceType"
-            id="priceType"
-            [(ngModel)]="priceType"
-            required>
-            <option>SETTLEMENT</option>
-            <option>CLOSE</option>
-          </select>
+        </div>
+        <div class="form-group" *ngIf="derivative">
+          <label for="derivativeStatus">Status</label>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-fw fa-th-list" aria-hidden="true"></i></span>
+            </div>
+            <select
+              class="form-control"
+              name="derivativeStatus"
+              id="derivativeStatus"
+              [(ngModel)]="derivative.status"
+              required>
+              <option>ACTIVE</option>
+              <option>INACTIVE</option>
+            </select>
+          </div>
         </div>
       </div>
-      <div class="form-group">
-        <label for="instrument">Instrument</label>
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text"><i class="fa fa-fw fa-newspaper-o" aria-hidden="true"></i></span>
-          </div>
-          <input
-            type="text"
-            class="form-control"
-            name="instrument"
-            id="instrument"
-            [typeahead]="(priceType == 'SETTLEMENT' ? derivatives : underlyings)"
-            [typeaheadMinLength]="0"
-            typeaheadOptionField="name"
-            placeholder="Click to select instrument"
-            (typeaheadOnSelect)="instrument = $event.item"
-            [(ngModel)]="instrumentVal"
-            required />
+      <div class="card-footer">
+        <button
+          type="submit"
+          class="btn btn-lg btn-primary btn-block"
+          (click)="editDerivativeStatus()">
+          <i class="fa fa-paper-plane-o"></i> Update
+        </button>
+        <div [hidden]="!editDerivativeStatusMessage" class="alert alert-success" role="alert">
+          {{editDerivativeStatusMessage}}
         </div>
-      </div>
-      <div class="form-group">
-        <label for="priceDate">Date</label>
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text"><i class="fa fa-fw fa-calendar" aria-hidden="true"></i></span>
-          </div>
-          <input
-            type="date"
-            class="form-control"
-            name="priceDate"
-            id="priceDate"
-            [(ngModel)]="priceDate"
-            required />
-         </div>
-      </div>
-      <div class="form-group">
-        <label for="priceValue">Value</label>
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text"><i class="fa fa-fw fa-money" aria-hidden="true"></i></span>
-          </div>
-          <input
-            type="number"
-            class="form-control"
-            name="priceValue"
-            id="priceValue"
-            placeholder="Enter value"
-            [(ngModel)]="priceValue"
-            required />
+        <div [hidden]="!editDerivativeErrorMessage" class="alert alert-danger" role="alert">
+          {{editDerivativeErrorMessage}}
         </div>
-      </div>
-    </div>
-    <div class="card-footer">
-      <button
-        type="submit"
-        class="btn btn-lg btn-primary btn-block"
-        (click)="addPrice()">
-        <i class="fa fa-paper-plane-o"></i> Add
-      </button>
-      <div [hidden]="!addPriceStatusMessage" class="alert alert-success" role="alert">
-        {{addPriceStatusMessage}}
-      </div>
-      <div [hidden]="!addPriceErrorMessage" class="alert alert-danger" role="alert">
-        {{addPriceErrorMessage}}
       </div>
     </div>
   </div>
 
-</div>
-
-<div class="card-deck mt-4">
-
-  <div class="card">
-    <div class="card-body">
-      <h5 class="card-title">
-        Execute Job
-      </h5>
-      <div class="form-group">
-        <label for="job">Job</label>
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text"><i class="fa fa-fw fa-cogs" aria-hidden="true"></i></span>
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">
+          Add Price
+        </h5>
+        <div class="form-group">
+          <label for="priceType">Price Type</label>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-fw fa-th-list" aria-hidden="true"></i></span>
+            </div>
+            <select
+              class="form-control"
+              name="priceType"
+              id="priceType"
+              [(ngModel)]="priceType"
+              required>
+              <option>SETTLEMENT</option>
+              <option>CLOSE</option>
+            </select>
           </div>
-          <input
-            type="text"
-            class="form-control"
-            name="job"
-            id="job"
-            [typeahead]="jobs"
-            [typeaheadMinLength]="0"
-            placeholder="Click to select job"
-            [(ngModel)]="job"
-            required />
+        </div>
+        <div class="form-group">
+          <label for="instrument">Instrument</label>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-fw fa-newspaper-o" aria-hidden="true"></i></span>
+            </div>
+            <input
+              type="text"
+              class="form-control"
+              name="instrument"
+              id="instrument"
+              [typeahead]="(priceType == 'SETTLEMENT' ? (derivatives | instrument:'INACTIVE') : underlyings)"
+              [typeaheadMinLength]="0"
+              typeaheadOptionField="name"
+              placeholder="Click to select instrument"
+              (typeaheadOnSelect)="instrument = $event.item"
+              [(ngModel)]="instrumentVal"
+              required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="priceDate">Date</label>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-fw fa-calendar" aria-hidden="true"></i></span>
+            </div>
+            <input
+              type="date"
+              class="form-control"
+              name="priceDate"
+              id="priceDate"
+              [(ngModel)]="priceDate"
+              required />
+           </div>
+        </div>
+        <div class="form-group">
+          <label for="priceValue">Value</label>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-fw fa-money" aria-hidden="true"></i></span>
+            </div>
+            <input
+              type="number"
+              class="form-control"
+              name="priceValue"
+              id="priceValue"
+              placeholder="Enter value"
+              [(ngModel)]="priceValue"
+              required />
+          </div>
         </div>
       </div>
-    </div>
-    <div class="card-footer">
-      <button
-        type="submit"
-        class="btn btn-lg btn-primary btn-block"
-        (click)="runJob()">
-        <i class="fa fa-paper-plane-o"></i> Run
-      </button>
-      <div [hidden]="!runJobStatusMessage" class="alert alert-success" role="alert">
-        {{runJobStatusMessage}}
-      </div>
-      <div [hidden]="!runJobErrorMessage" class="alert alert-danger" role="alert">
-        {{runJobErrorMessage}}
+      <div class="card-footer">
+        <button
+          type="submit"
+          class="btn btn-lg btn-primary btn-block"
+          (click)="addPrice()">
+          <i class="fa fa-paper-plane-o"></i> Add
+        </button>
+        <div [hidden]="!addPriceStatusMessage" class="alert alert-success" role="alert">
+          {{addPriceStatusMessage}}
+        </div>
+        <div [hidden]="!addPriceErrorMessage" class="alert alert-danger" role="alert">
+          {{addPriceErrorMessage}}
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="card">
-    <div class="card-body">
-      <h5 class="card-title">
-        Edit Users
-      </h5>
-      <div class="form-group">
-        <label for="user">User</label>
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text"><i class="fa fa-fw fa-user" aria-hidden="true"></i></span>
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">
+          Execute Job
+        </h5>
+        <div class="form-group">
+          <label for="job">Job</label>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-fw fa-cogs" aria-hidden="true"></i></span>
+            </div>
+            <input
+              type="text"
+              class="form-control"
+              name="job"
+              id="job"
+              [typeahead]="jobs"
+              [typeaheadMinLength]="0"
+              placeholder="Click to select job"
+              [(ngModel)]="job"
+              required />
           </div>
-          <input
-            type="text"
-            class="form-control"
-            name="user"
-            id="user"
-            [typeahead]="users"
-            [typeaheadMinLength]="0"
-            typeaheadOptionField="username"
-            placeholder="Click to select user"
-            [(ngModel)]="user"
-            (typeaheadOnSelect)="userOnSelect($event)"
-            required />
+        </div>
+      </div>
+      <div class="card-footer">
+        <button
+          type="submit"
+          class="btn btn-lg btn-primary btn-block"
+          (click)="runJob()">
+          <i class="fa fa-paper-plane-o"></i> Run
+        </button>
+        <div [hidden]="!runJobStatusMessage" class="alert alert-success" role="alert">
+          {{runJobStatusMessage}}
+        </div>
+        <div [hidden]="!runJobErrorMessage" class="alert alert-danger" role="alert">
+          {{runJobErrorMessage}}
         </div>
       </div>
     </div>
-    <div class="card-footer">
-      <button
-        type="button"
-        class="btn btn-lg btn-primary btn-block"
-        routerLink="/users">
-        <i class="fa fa-map-signs"></i> Go to users view
-      </button>
-    </div>
   </div>
 
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">
+          Edit Users
+        </h5>
+        <div class="form-group">
+          <label for="user">User</label>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-fw fa-user" aria-hidden="true"></i></span>
+            </div>
+            <input
+              type="text"
+              class="form-control"
+              name="user"
+              id="user"
+              [typeahead]="users"
+              [typeaheadMinLength]="0"
+              typeaheadOptionField="username"
+              placeholder="Click to select user"
+              [(ngModel)]="user"
+              (typeaheadOnSelect)="userOnSelect($event)"
+              required />
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <button
+          type="button"
+          class="btn btn-lg btn-primary btn-block"
+          routerLink="/users">
+          <i class="fa fa-map-signs"></i> Go to users view
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

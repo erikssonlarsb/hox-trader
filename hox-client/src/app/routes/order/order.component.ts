@@ -75,7 +75,8 @@ export class OrderComponent  implements OnInit  {
     let newOrder = new Order({instrument: instrument, side: this.side, quantity: this.quantity, price: this.price});
     this.apiService.postOrder(newOrder)
       .subscribe(
-        order => this.router.navigate(['/orders'])
+        order => this.router.navigate(['/orders']),
+        error => this.errorMessage = error.message
       );
   }
 }
