@@ -1,7 +1,7 @@
 var CronJob = require('cron').CronJob;
 
 module.exports.init = function() {
-
+  /*
   var downloadPrices = new CronJob({
     cronTime: '0 0 0 * * *',
     onTick: require('./scripts/downloadPrices').run,
@@ -29,5 +29,6 @@ module.exports.init = function() {
   console.log("Download Prices: next scheduled run: " + downloadPrices.nextDates().toString());
   console.log("Expire Instruments: next scheduled run: " + expireInstruments.nextDates().toString());
   console.log("Settle Trades: next scheduled run: " + settleTrades.nextDates().toString());
+  */
 
 };
