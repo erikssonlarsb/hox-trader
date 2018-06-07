@@ -26,8 +26,17 @@ module.exports.init = function() {
     runOnInit: false
   });
 
+  var marktToMarket = new CronJob({
+    cronTime: '0 0 0 * * *',
+    onTick: require('./scripts/markToMarket').run,
+    start: true,
+    timeZone: 'UTC',
+    runOnInit: false
+  });
+
   console.log("Download Prices: next scheduled run: " + downloadPrices.nextDates().toString());
   console.log("Expire Instruments: next scheduled run: " + expireInstruments.nextDates().toString());
   console.log("Settle Trades: next scheduled run: " + settleTrades.nextDates().toString());
+  console.log("Markt to Market: next scheduled run: " + marktToMarket.nextDates().toString());
 
 };
