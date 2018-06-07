@@ -80,6 +80,7 @@ services:
       API_URL: http://server:4000/api/
       API_USERNAME: admin1
       API_PASSWORD: ${ADMIN_USER_PASSWORD-admin1}
+      INVITE_ONLY: ${INVITE_ONLY-false}
       IMPORT_FILES: ${IMPORT_FILES-hoxInstruments}
     depends_on:
       - reverseproxy

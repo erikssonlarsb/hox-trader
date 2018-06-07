@@ -1,156 +1,201 @@
-<div class="card-deck">
+<div class="row">
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">
+          User details
+        </h5>
+        <form *ngIf="updatedUser">
 
-  <div class="card">
-    <div class="card-body">
-      <h5 class="card-title">
-        User details
-      </h5>
-      <form *ngIf="updatedUser">
-
-        <div class="form-group">
-          <label for="name">Name</label>
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text"><i class="fa fa-fw fa-address-card" aria-hidden="true"></i></span>
+          <div class="form-group">
+            <label for="name">Name</label>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fa fa-fw fa-address-card" aria-hidden="true"></i></span>
+              </div>
+              <input
+                name="name"
+                id="name"
+                type="text"
+                class="form-control"
+                placeholder="Full name"
+                required
+                [(ngModel)]="updatedUser.name">
             </div>
-            <input
-              name="name"
-              id="name"
-              type="text"
-              class="form-control"
-              placeholder="Full name"
-              required
-              [(ngModel)]="updatedUser.name">
           </div>
-        </div>
 
-        <div class="form-group">
-          <label for="email">E-mail</label>
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text"><i class="fa fa-fw fa-envelope" aria-hidden="true"></i></span>
+          <div class="form-group">
+            <label for="email">E-mail</label>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fa fa-fw fa-envelope" aria-hidden="true"></i></span>
+              </div>
+              <input
+                name="email"
+                id="email"
+                type="email"
+                class="form-control"
+                placeholder="E-mail"
+                required
+                [(ngModel)]="updatedUser.email">
             </div>
-            <input
-              name="email"
-              id="email"
-              type="email"
-              class="form-control"
-              placeholder="E-mail"
-              required
-              [(ngModel)]="updatedUser.email">
           </div>
-        </div>
 
-        <div class="form-group">
-          <label for="phone">Phone</label>
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text"><i class="fa fa-fw fa-phone" aria-hidden="true"></i></span>
+          <div class="form-group">
+            <label for="phone">Phone</label>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fa fa-fw fa-phone" aria-hidden="true"></i></span>
+              </div>
+              <input
+                name="phone"
+                id="phone"
+                type="tel"
+                class="form-control"
+                placeholder="Phone"
+                required
+                [(ngModel)]="updatedUser.phone">
             </div>
-            <input
-              name="phone"
-              id="phone"
-              type="tel"
-              class="form-control"
-              placeholder="Phone"
-              required
-              [(ngModel)]="updatedUser.phone">
           </div>
-        </div>
 
-        <div class="form-group">
-          <label for="username">Username</label>
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text"><i class="fa fa-fw fa-user" aria-hidden="true"></i></span>
+          <div class="form-group">
+            <label for="username">Username</label>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fa fa-fw fa-user" aria-hidden="true"></i></span>
+              </div>
+              <input
+                name="username"
+                id="username"
+                type="text"
+                autocapitalize="none"
+                class="form-control"
+                placeholder="Login name"
+                required
+                [(ngModel)]="updatedUser.username">
             </div>
-            <input
-              name="username"
-              id="username"
-              type="text"
-              autocapitalize="none"
-              class="form-control"
-              placeholder="Login name"
-              required
-              [(ngModel)]="updatedUser.username">
           </div>
-        </div>
 
-      </form>
-    </div>
-    <div class="card-footer">
-      <button
-        type="submit"
-        class="btn btn-lg btn-primary btn-block"
-        (click)="updateUser()">
-        <i class="fa fa-paper-plane-o"></i> Update user
-      </button>
-      <div [hidden]="!updateUserStatusMessage" class="alert alert-success" role="alert">
-        {{updateUserStatusMessage}}
+        </form>
       </div>
-      <div [hidden]="!updateUserErrorMessage" class="alert alert-danger" role="alert">
-        {{updateUserErrorMessage}}
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-body">
-      <h5 class="card-title">
-        Change password
-      </h5>
-      <form *ngIf="updatedUser">
-
-        <div class="form-group">
-          <label for="password">New password</label>
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text"><i class="fa fa-fw fa-lock" aria-hidden="true"></i></span>
-            </div>
-            <input
-              name="password"
-              id="password"
-              type="password"
-              class="form-control"
-              placeholder="New password"
-              required
-              [(ngModel)]="password">
-          </div>
+      <div class="card-footer">
+        <button
+          type="submit"
+          class="btn btn-lg btn-primary btn-block"
+          (click)="updateUser()">
+          <i class="fa fa-paper-plane-o"></i> Update user
+        </button>
+        <div [hidden]="!updateUserStatusMessage" class="alert alert-success" role="alert">
+          {{updateUserStatusMessage}}
         </div>
-
-        <div class="form-group">
-          <label for="confirmPassword">Confirm new password</label>
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text"><i class="fa fa-fw fa-lock" aria-hidden="true"></i></span>
-            </div>
-            <input
-              name="confirmPassword"
-              id="confirmPassword"
-              type="password"
-              class="form-control"
-              placeholder="New password again"
-              required
-              [(ngModel)]="confirmPassword">
-          </div>
+        <div [hidden]="!updateUserErrorMessage" class="alert alert-danger" role="alert">
+          {{updateUserErrorMessage}}
         </div>
-
-      </form>
-    </div>
-    <div class="card-footer">
-      <button
-        type="submit"
-        class="btn btn-lg btn-primary btn-block"
-        (click)="changePassword()">
-        <i class="fa fa-paper-plane-o"></i> Change password
-      </button>
-      <div [hidden]="!changePasswordStatusMessage" class="alert alert-success" role="alert">
-        {{changePasswordStatusMessage}}
-      </div>
-      <div [hidden]="!changePasswordErrorMessage" class="alert alert-danger" role="alert">
-        {{changePasswordErrorMessage}}
       </div>
     </div>
   </div>
 
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">
+          Change password
+        </h5>
+        <form *ngIf="updatedUser">
+
+          <div class="form-group">
+            <label for="password">New password</label>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fa fa-fw fa-lock" aria-hidden="true"></i></span>
+              </div>
+              <input
+                name="password"
+                id="password"
+                type="password"
+                class="form-control"
+                placeholder="New password"
+                required
+                [(ngModel)]="password">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="confirmPassword">Confirm new password</label>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fa fa-fw fa-lock" aria-hidden="true"></i></span>
+              </div>
+              <input
+                name="confirmPassword"
+                id="confirmPassword"
+                type="password"
+                class="form-control"
+                placeholder="New password again"
+                required
+                [(ngModel)]="confirmPassword">
+            </div>
+          </div>
+
+        </form>
+      </div>
+      <div class="card-footer">
+        <button
+          type="submit"
+          class="btn btn-lg btn-primary btn-block"
+          (click)="changePassword()">
+          <i class="fa fa-paper-plane-o"></i> Change password
+        </button>
+        <div [hidden]="!changePasswordStatusMessage" class="alert alert-success" role="alert">
+          {{changePasswordStatusMessage}}
+        </div>
+        <div [hidden]="!changePasswordErrorMessage" class="alert alert-danger" role="alert">
+          {{changePasswordErrorMessage}}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">
+          Invites
+        </h5>
+        <ul class="list-group">
+          <li class="list-group-item" *ngFor="let invite of invites">
+            <div *ngIf="invite.invitee">
+              {{invite.invitee.name}}
+            </div>
+            <div *ngIf="!invite.invitee">
+              {{invite.code}}
+              <span class="pull-right">
+                <button
+                  type="button"
+                  class="btn btn-sm btn-default"
+                  title="Copy link to clipboard"
+                  (click)="copyToClipboard(invite.code)">
+                  <i class="fa fa-copy"></i>
+                </button>
+              </span>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="card-footer">
+        <button
+          type="submit"
+          class="btn btn-lg btn-primary btn-block"
+          (click)="generateInvite()">
+          <i class="fa fa-paper-plane-o"></i> New invite
+        </button>
+        <div [hidden]="!generateInviteStatusMessage" class="alert alert-success" role="alert">
+          {{generateInviteStatusMessage}}
+        </div>
+        <div [hidden]="!generateInviteErrorMessage" class="alert alert-danger" role="alert">
+          {{generateInviteErrorMessage}}
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

@@ -19,6 +19,7 @@ const routes: Routes = [
   { path: '', redirectTo: '/instruments', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'register/:invite', component: RegisterComponent },
   { path: 'information', component: InformationComponent },
   { path: 'users', component: UsersComponent },
   { path: 'users/:id', component: UserDetailsComponent },

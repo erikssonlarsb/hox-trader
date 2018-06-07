@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const systemInfoSchema = new Schema({
   version: {type: String, required: true},
   isSeeded: {type: Boolean, default: false},
+  inviteOnly: {type: Boolean, default: false},
   updateTimestamp: Date
 }, {
   collection: 'systeminfo'  // Singular name since collection is singleton.

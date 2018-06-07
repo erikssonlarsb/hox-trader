@@ -3,6 +3,23 @@
     <h2 class="form-register-heading">Register new user</h2>
 
     <div class="form-group">
+      <label for="invite">Invite</label>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text"><i class="fa fa-fw fa-font" aria-hidden="true"></i></span>
+        </div>
+        <input
+          name="invite"
+          type="text"
+          class="form-control"
+          placeholder="Invitation code"
+          required
+          autofocus
+          [(ngModel)]="invite">
+      </div>
+    </div>
+
+    <div class="form-group">
       <label for="name">Name</label>
       <div class="input-group mb-3">
         <div class="input-group-prepend">

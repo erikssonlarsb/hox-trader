@@ -13,6 +13,13 @@
               ]
           },
           {
+              "resource" : "invites",
+              "methods" : [
+                  "GET",
+                  "POST"
+              ]
+          },
+          {
               "resource" : "token",
               "methods" : [
                   "GET"
@@ -100,6 +107,13 @@
       "name" : "trader",
       "isAdmin" : false,
       "permissions" : [
+          {
+              "resource" : "invites",
+              "methods" : [
+                  "GET",
+                  "POST"
+              ]
+          },
           {
               "resource" : "token",
               "methods" : [

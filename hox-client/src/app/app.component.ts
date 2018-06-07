@@ -45,7 +45,9 @@ export class AppComponent implements OnInit {
 
     this.authService.init().then(() => {
       if(!this.authService.isAuthenticated()) {
-        this.router.navigate(['/login']);
+        if(!window.location.pathname.startsWith('/register')) {
+          this.router.navigate(['/login']);
+        }
       } else {
         this.user = this.authService.getLoggedInUser();
         this.toggleNavbar('visible');
