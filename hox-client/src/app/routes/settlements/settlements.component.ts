@@ -37,9 +37,14 @@ export class SettlementsComponent implements OnInit  {
   }
 
   acknowledgeSettlement(id): void {
+    let settlementParams = new HttpParams({
+      fromObject: {
+        '_populate': ['user', 'counterpartySettlement']
+      }
+    });
     this.apiService.acknowledgeSettlement(id)
       .subscribe(() => {
-        this.apiService.getSettlements()
+        this.apiService.getSettlements(settlementParams)
           .subscribe(settlements => {
             this.settlements = settlements.sort((a: Settlement, b: Settlement) => {return a.updateTimestamp.getTime() - b.updateTimestamp.getTime()})
           });
