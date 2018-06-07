@@ -17,9 +17,11 @@ import { PricePipe } from '../../pipes/price.pipe';
 })
 export class AdminComponent  implements OnInit  {
 
+  // General variables
   underlyings: Array<Index>;
   derivatives: Array<Derivative>;
 
+  // Creat instrument
   instrumentTypes: any = INSTRUMENT_TYPE;
   instrumentType: string;
   instrumentName: string;
@@ -32,7 +34,13 @@ export class AdminComponent  implements OnInit  {
   createInstrumentStatusMessage: string;
   createInstrumentErrorMessage: string;
 
+  // Instrument management
+  derivative: Derivative;
+  derivativeVal: string;  // required for ngModel binding
+  editDerivativeStatusMessage: string;
+  editDerivativeErrorMessage: string;
 
+  // Add Price
   priceTypes: any = PRICE_TYPE;
   priceType: string;
   instrument: Instrument;
@@ -42,11 +50,13 @@ export class AdminComponent  implements OnInit  {
   addPriceStatusMessage: string;
   addPriceErrorMessage: string;
 
+  // Job execution
   jobs: Array<string>;
   job: string;
   runJobStatusMessage: string;
   runJobErrorMessage: string;
 
+  // User management
   users: Array<User>;
   user: User;
 
@@ -66,9 +76,7 @@ export class AdminComponent  implements OnInit  {
     });
     this.apiService.getInstruments(derivativeParams)
       .subscribe(
-        instruments => this.derivatives = <Derivative[]> instruments.filter(
-          instrument => this.pricePipe.transform(instrument.prices, 'SETTLEMENT') == null
-        )
+        instruments => this.derivatives = <Derivative[]> instruments
       );
 
     this.apiService.getJobs()
@@ -96,6 +104,16 @@ export class AdminComponent  implements OnInit  {
       .subscribe(
         instrument => this.createInstrumentStatusMessage = instrument.name + " successfully created.",
         error => this.createInstrumentErrorMessage = error.message
+      );
+  }
+
+  editDerivativeStatus(): void {
+    this.editDerivativeStatusMessage = null;  // Reset status message
+    this.editDerivativeErrorMessage = null;  // Reset error message
+    this.apiService.updateInstrument(this.derivative.id, this.derivative)
+      .subscribe(
+        instrument => this.editDerivativeStatusMessage = instrument.name + " successfully updated.",
+        error => this.editDerivativeErrorMessage = error.message
       );
   }
 

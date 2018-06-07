@@ -35,4 +35,16 @@ router.get('/:id', function(req, res) {
   });
 });
 
+router.put('/:id', function(req, res) {
+  instrumentFactory.update(req.params.id, req.queryOptions, req.body, function(err, instrument) {
+    if (err) {
+      return res.status(500).json(new Error(err));
+    } else if (instrument) {
+      return res.json(instrument);
+    } else {
+      return res.status(404);
+    }
+  });
+});
+
 module.exports = router;

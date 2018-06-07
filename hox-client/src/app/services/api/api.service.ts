@@ -119,6 +119,16 @@ export class ApiService {
       );
   }
 
+  updateInstrument(id: string, instrument: Instrument): Observable<Instrument> {
+    let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
+    return this.http
+      .put<Instrument>(`${window.location.origin}/api/instruments/${id}`, instrument, { headers: headers })
+      .map(instrument => this.instrumentTypeMapper(instrument))
+      .pipe(
+        catchError(error => this.errorHandler.handleError(error))
+      );
+  }
+
   getOrders(params: HttpParams = new HttpParams()): Observable<Order[]> {
     let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
