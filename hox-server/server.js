@@ -17,6 +17,7 @@ app.use(queryEnhancer());
  */
 app.use('/api/registration', require('./handlers/registration'));
 app.use('/api/systeminfo', auth(), require('./handlers/systemInfo'));
+app.use('/api/invites', auth('inviter'), require('./handlers/invites'));
 app.use('/api/token', auth(), require('./handlers/token'));
 app.use('/api/users', auth('_id'), require('./handlers/users'));
 app.use('/api/roles', auth(), require('./handlers/roles'));

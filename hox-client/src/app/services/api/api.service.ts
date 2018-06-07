@@ -6,15 +6,16 @@ import { catchError } from 'rxjs/operators';
 import { AuthService } from '../../services/auth/auth.service';
 import { ApiErrorHandler } from './apierrorhandler.service';
 
-import { User, Instrument, INSTRUMENT_TYPE, Index, Derivative, Order, Trade, OrderDepth, Settlement, Price } from '../../models/index';
+import { Invite, User, Instrument, INSTRUMENT_TYPE, Index, Derivative, Order, Trade, OrderDepth, Settlement, Price } from '../../models/index';
 
 @Injectable()
 export class ApiService {
 
   constructor(private http: HttpClient, private authService: AuthService, private errorHandler: ApiErrorHandler) { }
 
-  postRegistration(name: string, username: string, password: string, email: string, phone: string): Observable<void> {
+  postRegistration(invite: string, name: string, username: string, password: string, email: string, phone: string): Observable<void> {
     let body = {
+      invite: invite,
       name: name,
       username: username,
       password: password,
@@ -23,6 +24,26 @@ export class ApiService {
     }
     return this.http
       .post<void>(`${window.location.origin}/api/registration`, body)
+      .pipe(
+        catchError(error => this.errorHandler.handleError(error))
+      );
+  }
+
+  getInvites(params: HttpParams = new HttpParams()): Observable<Invite[]> {
+    let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
+    return this.http
+      .get<Invite[]>(`${window.location.origin}/api/invites`, { headers: headers, params: params })
+      .map(invites => invites.map(invite => new Invite(invite)))
+      .pipe(
+        catchError(error => this.errorHandler.handleError(error))
+      );
+  }
+
+  postInvite(invite: Invite): Observable<Invite> {
+    let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
+    return this.http
+      .post<Invite>(`${window.location.origin}/api/invites`, invite, { headers: headers })
+      .map(invite => new Invite(invite))
       .pipe(
         catchError(error => this.errorHandler.handleError(error))
       );

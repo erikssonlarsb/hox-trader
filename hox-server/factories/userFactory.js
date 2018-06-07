@@ -2,6 +2,8 @@
 userFactory handles database interaction for the users collection.
 */
 const User = require('../models/user');
+const inviteFactory = require('../factories/inviteFactory');
+const systemInfoFactory = require('../factories/systemInfoFactory');
 
 module.exports = {
 
@@ -13,8 +15,8 @@ module.exports = {
 
     User.find(params)
     .populate(populate.join(' '))
-    .exec(function(err, prices) {
-      callback(err, prices);
+    .exec(function(err, users) {
+      callback(err, users);
     });
   },
 
@@ -33,9 +35,37 @@ module.exports = {
 
   // Create a user.
   create: function(user, callback) {
-    User.create(user, function(err, user) {
-      if(user) user.password = undefined;  // Hide password in response.
-      callback(err, user);
+    systemInfoFactory.findOne({}, function(err, systemInfo) {
+      if (err) {
+        callback(err);
+      } else {
+        if (systemInfo.inviteOnly) {
+          inviteFactory.findOne(user.invite, {idField: 'code'}, function(err, invite) {
+            if (err) {
+              callback(err);
+            } else if (!invite) {
+              callback("Invalid invite.");
+            } else if(invite.invitee) {
+              callback("Invite has already been used.");
+            } else {
+              user.invite = undefined;
+              User.create(user, function(err, user) {
+                if(user) {
+                  user.password = undefined;  // Hide password in response.
+                  invite.invitee = user._id;  // Set invitee to prevent invite from being reused.
+                  invite.save();
+                }
+                callback(err, user);
+              });
+            }
+          })
+        } else {
+          User.create(user, function(err, user) {
+            if(user) user.password = undefined;  // Hide password in response.
+            callback(err, user);
+          });
+        }
+      }
     });
   },
 

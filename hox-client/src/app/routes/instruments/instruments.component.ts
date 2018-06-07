@@ -14,6 +14,7 @@ export class InstrumentsComponent  implements OnInit  {
   orderDepths: Array<OrderDepth>;
   indices: Array<Instrument>;
   firstVisit: boolean = true;
+  orderDepthFilter: string = null;
 
   constructor(private apiService: ApiService) { }
 

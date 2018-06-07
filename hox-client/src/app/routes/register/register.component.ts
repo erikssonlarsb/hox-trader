@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import { ApiService } from '../../services/api/api.service';
 
@@ -7,7 +8,8 @@ import { ApiService } from '../../services/api/api.service';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
+  invite: string;
   name: string;
   email: string;
   phone: string;
@@ -18,14 +20,24 @@ export class RegisterComponent {
   errorMessage: string;
 
 
-  constructor(private apiService: ApiService) { }
+  constructor(private route: ActivatedRoute, private apiService: ApiService) { }
+
+  ngOnInit(): void {
+    this.route
+      .paramMap
+      .subscribe(params => {
+        if(params.get('invite')) {  // Retrieve invite from url
+          this.invite = params.get('invite');
+        }
+      });
+  }
 
   register(): void {
     this.errorMessage = null;
     if(this.password != this.confirmPassword) {
       this.errorMessage = "Passwords doesn't match."
     } else {
-      this.apiService.postRegistration(this.name, this.username, this.password, this.email, this.phone)
+      this.apiService.postRegistration(this.invite, this.name, this.username, this.password, this.email, this.phone)
         .subscribe(
           () => this.success = true,
           error => this.errorMessage = error.message

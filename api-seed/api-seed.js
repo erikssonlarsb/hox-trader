@@ -68,7 +68,8 @@ async.series([
       console.log("Deploying new version: " + config.gitCommit);
       let systemInfo = {
         version: config.gitCommit,
-        isSeeded: true
+        isSeeded: true,
+        inviteOnly: config.inviteOnly
       };
       // First do a trial request with custom password to see if it's already set.
       let options = {

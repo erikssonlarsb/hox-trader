@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { PricePipe } from './price.pipe';
 import { AveragePricePipe } from './averagePrice.pipe';
 import { EnumPipe } from './enum.pipe';
+import { OrderDepthPipe } from './orderDepth.pipe'
 
 @NgModule({
   imports: [
@@ -12,12 +13,14 @@ import { EnumPipe } from './enum.pipe';
   declarations: [
     PricePipe,
     AveragePricePipe,
-    EnumPipe
+    EnumPipe,
+    OrderDepthPipe
   ],
   exports: [
     PricePipe,
     AveragePricePipe,
-    EnumPipe
+    EnumPipe,
+    OrderDepthPipe
   ]
 })
 
@@ -25,7 +28,7 @@ export class CustomPipesModule {
   static forRoot(): ModuleWithProviders {
     return {
       ngModule: CustomPipesModule,
-      providers: [PricePipe, AveragePricePipe, EnumPipe]
+      providers: [PricePipe, AveragePricePipe, EnumPipe, OrderDepthPipe]
     };
   }
 }
