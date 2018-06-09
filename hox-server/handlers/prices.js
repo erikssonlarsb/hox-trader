@@ -30,7 +30,7 @@ router.get('/:id', function(req, res) {
     } else if (price) {
       return res.json(price);
     } else {
-      return res.status(404);
+      return res.status(404).json(new Error("Not found"));
     }
   });
 });

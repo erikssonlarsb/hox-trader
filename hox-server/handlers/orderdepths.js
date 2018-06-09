@@ -20,7 +20,7 @@ router.get('/:id', function(req, res) {
     } else if (orderDepth) {
       return res.json(orderDepth);
     } else {
-      return res.status(404);
+      return res.status(404).json(new Error("Not found"));
     }
   });
 });

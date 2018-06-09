@@ -31,7 +31,7 @@ router.get('/:id', function(req, res) {
     } else if (order) {
       return res.json(order);
     } else {
-      return res.status(404);
+      return res.status(404).json(new Error("Not found"));
     }
   });
 });
@@ -43,7 +43,7 @@ router.put('/:id', function(req, res) {
     } else if (order) {
       return res.json(order);
     } else {
-      return res.status(404);
+      return res.status(404).json(new Error("Not found"));
     }
   });
 });
@@ -55,7 +55,7 @@ router.delete('/:id', function(req, res) {
     } else if (order) {
       return res.json(order);
     } else {
-      return res.status(404);
+      return res.status(404).json(new Error("Not found"));
     }
   });
 });
