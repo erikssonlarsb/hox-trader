@@ -31,7 +31,7 @@ module.exports.init = function() {
     cronTime: '0 0 0 * * *',
     onTick: require('./scripts/markToMarket').run,
     start: true,
-    timeZone: 'UTC',
+    timeZone: 'Europe/Stockholm',
     runOnInit: false
   });
 
@@ -40,6 +40,6 @@ module.exports.init = function() {
   console.log("Expire Instruments: next scheduled run: " + expireInstruments.nextDates().toString());
   console.log("Settle Trades: next scheduled run: " + settleTrades.nextDates().toString());
   */
-  
+
   console.log("Markt to Market: next scheduled run: " + marktToMarket.nextDates().toString());
 };
