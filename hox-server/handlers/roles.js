@@ -30,7 +30,7 @@ router.get('/:id', function(req, res) {
     } else if (role) {
       return res.json(role);
     } else {
-      return res.status(404);
+      return res.status(404).json(new Error("Not found"));
     }
   });
 });

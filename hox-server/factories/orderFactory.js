@@ -8,11 +8,12 @@ const priceFactory = require('../factories/priceFactory');
 module.exports = {
 
   // Query orders.
-  query: function(params, {populate = [], sort = []}, callback) {
+  query: function(params, {auth = {}, populate = [], sort = []}, callback) {
     if (typeof arguments[1] === 'function') {
       callback = arguments[1];
     }
-    
+    params[auth.userField] = auth.userId;
+
     Order.find(params)
     .populate(populate.join(' '))
     .exec(function(err, orders) {
@@ -21,14 +22,17 @@ module.exports = {
   },
 
   // Find a single order.
-  findOne: function(id, {idField = '_id', populate = []}, callback) {
+  findOne: function(id, {idField = '_id', auth = {}, populate = []}, callback) {
     if (typeof arguments[1] === 'function') {
       callback = arguments[1];
     }
 
-    Order.findOne({[idField]:id})
+    console.log(auth);
+
+    Order.findOne({[idField]: id, [auth.userField]: auth.userId})
     .populate(populate.join(' '))
     .exec(function(err, order) {
+      console.log("callback");
       callback(err, order);
     });
   },

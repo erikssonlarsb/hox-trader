@@ -30,7 +30,7 @@ router.get('/:id', function(req, res) {
     } else if (instrument) {
       return res.json(instrument);
     } else {
-      return res.status(404);
+      return res.status(404).json(new Error("Not found"));
     }
   });
 });
@@ -42,7 +42,7 @@ router.put('/:id', function(req, res) {
     } else if (instrument) {
       return res.json(instrument);
     } else {
-      return res.status(404);
+      return res.status(404).json(new Error("Not found"));
     }
   });
 });
