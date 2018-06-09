@@ -9,18 +9,21 @@
           Welcome to the World Cup 2018 trading application!
         </p>
         <p>
-          The trading is modelled as financial forwards, where each participating country
-          has <b>a)</b> an (non-tradable) Index instrument valued according to the team's World Cup results,
-          and <b>b)</b> a (tradable) Derivative (on the Index) that is valued by the market.
+          The trading is modelled as financial forwards, where each participating team
+          is represented by a tradable instrument. You can both buy and sell a team
+          depending on your belief in the teams performance in the tournament. The
+          teams are traded on an open market, where the price is decided by what
+          other traders are willing to buy and sell the teams for.
         </p>
         <p>
-          The Index instrument contains historic values (Closing prices) from previous tournaments,
-          and at the end of World Cup 2018, each index will be updated with a new value.
-          When this is done, the Derivative trades will be settled using the Closing price of the
-          underlying instrument.
+          At the end of the tournament (or when a team is eleminated), each trade is
+          settled according to a price decided on how the team performs in the tournament.
+          I.e. if you buy a team at a price decided by the market, you will then sell
+          at a settlement price decided by the teams placement. In the same way, if you instead
+          sell a team on the market, at settlement you will buy back at the settlement price.
         </p>
         <p>
-          The Closing prices are calculated as follows:
+          The Settlement prices are calculated as follows:
         </p>
         <div class="row">
           <div class="col-md-4">
@@ -51,33 +54,129 @@
           <div class="col-md-8">
             <p>
               E.g. in World Cup 2014 England was knocked out in the Group Stage, and thus got 0 points.
-              Costa Rica did an impressive effort and got al the way to the quarter-finals and was
-              therefore awarded 10 points. And the winner, Germany got the highest score of 30 points!
+              Costa Rica did an impressive effort and got all the way to the quarter-finals and was
+              therefore awarded 10 points. And the winner, Germany, got the highest score of 30 points!
             </p>
+            <p>
+              So, in short, if you belive that a team will perform good in the tournament,
+              you should aim to buy that team for a price lower than what you think think their settlement price will be.<br>
+              If you on the other hand believe a team will perform badly, you should sell that team to a price
+              higher that what you think they will settle at in the end.
+            </p>
+            <p>
+              Calculating the result is fairly simple. You buy a quantity <var>q</var> at a price <var>p<sub>B</sub></var> with
+              a total value of <var>v<sub>B</sub></var>. And you sell the same quantity <var>q</var> at a price <var>p<sub>S</sub></var> with
+              a total value of <var>v<sub>S</sub></var>. The profit/loss (<var>PnL</var>) is calculated as the difference between the total sell value and the
+              total buy value as follows:
+            </p>
+            <samp>
+              PnL = v<sub>S</sub> - v<sub>B</sub> = q * (p<sub>S</sub> - p<sub>B</sub>)
+            </samp>
           </div>
         </div>
         <p>
-          From the scoreboard above it can thus be derived, that (at the end of the tournament) no team
-          will be worth less than 0, and no more than 30. So, if you believe that Germany will repeat the
-          success from laast time, you would want to buy the <i>Germany Jul 18</i> Derivative for a price
-          less than 30 in order to make a profit when (if) the deal settles at 30 at the end of the tournament.
+          The calculation is the same wheter you buy or sell in the open market, it's just a matter in which order the transactions
+          take place. If you take a long position (i.e. buy in the open market), <var>p<sub>B</sub></var> is the price that you paid,
+          and <var>p<sub>S</sub></var> will be the settlement price. Conversely, if you take a short position (i.e. sell in the open market),
+          <var>p<sub>S</sub></var> is the price that you sold for, and <var>p<sub>B</sub></var> will be the settlement price.
         </p>
         <div class="alert alert-info" role="alert">
-          E.g. Buy 10 Germany Jul 18 for 25 SEK each. If settling @ 30 SEK, (i.e. at settlement you sell back at 30 SEK),
-          you have made a profit of (30-25) * 10 = 50 SEK.<br>
-          OBSERVE! that if Germany only ends up in 4:th place,
-          you will instead lose on the deal: (15-25) * 10 = -100 SEK.
+          <h6>Example: Long position</h6>
+          <p>
+            You are convinced that Germany will win this year again. From the settlement table above you can see that if they win,
+            they will settle at 30 SEK. The market on the other hand don't believe as strongly in Germany, and the price to buy
+            is therefore only 20 SEK. A bargin you think, and therefore buy a quantity of 10.
+          </p>
+          <samp>
+            v<sub>B</sub> = q * p<sub>B</sub> = 10 * 20 = 200 SEK
+          </samp>
+          <p>
+            In this example Germany goes to final, but loses (i.e. end up in 2:nd place). The settlement will thus be done at 25 SEK per contract.
+          </p>
+          <samp>
+            v<sub>S</sub> = q * p<sub>S</sub> = 10 * 25 = 250 SEK =><br>
+            PnL = v<sub>S</sub> - v<sub>B</sub> = q * (p<sub>S</sub> - p<sub>B</sub>) = 10 * (25 - 20) = 50 SEK.
+          </samp>
+          <p>
+            So, even though Germany didn't score gold, the settlement price was still higher than the price you paid in the open market,
+            and therefore you made a profit of 50 SEK.
+          </p>
+          <p>
+            <b>OBSERVE!</b><br>
+            If Germany would instead end up in 4:th place (settlement price of 15 SEK) you would instead lose money on the bet.
+          </p>
+          <samp>
+            PnL = q * (p<sub>S</sub> - p<sub>B</sub>) = 10 * (15 - 20) = -50 SEK.
+          </samp>
         </div>
+        <div class="alert alert-info" role="alert">
+          <h6>Example: Short position</h6>
+          <p>
+            What if you believe that Germany won't be able to perform as good as last time, and at best reach the Quarter-finals?
+            Then you should take a short position (i.e. sell in the open market) at a price higher than 10 SEK. The market offers
+            to buy at 14 SEK, so you proceed to buy 20 contracts.
+          </p>
+          <samp>
+            v<sub>S</sub> = q * p<sub>S</sub> = 20 * 14 = 280 SEK
+          </samp>
+          <p>
+            Your prediction becomes true. Germany is kicked out in the quarter finals, and is therefore settled at 10 SEK.
+          </p>
+          <samp>
+            v<sub>B</sub> = q * p<sub>B</sub> = 20 * 10 = 200 SEK =><br>
+            PnL = v<sub>S</sub> - v<sub>B</sub> = q * (p<sub>S</sub> - p<sub>B</sub>) = 20 * (14 - 10) = 80 SEK.
+          </samp>
+          <p>
+            Betting on a team to perform badly can be just as fruitful, and you made a profit of 80 SEK.
+          </p>
+        </div>
+
+        <h5 class="card-title">
+          Trading
+        </h5>
         <p>
-          What if you on the other hand believe that Germany won't be able to perform as good as last time,
-          and at best reach the Quarter-finals? Then you should take a short position (i.e. sell first and buy back at settlement)
-          in <i>Germany Jul 18</i> at a price higher than 10, and cross you fingers that they fail miserably.
+          On the <a routerLink="/instruments">Overview</a> page you'll find a list of all the teams with the current price to Buy or Sell.
+          Click the blue Buy button, or the red Sell button to go to the order entry page. Fill out the form
+          and press Submit to send the order to the market. The orders that you create will be visible on the
+          <a routerLink="/orders">Orders</a> page.
         </p>
-        <div class="alert alert-info" role="alert">
-          E.g. Sell 50 Germany Jul 18 for 16 SEK each. What happens? Germany is kicked out in the Round of 16 and
-          only gets 5 points. You have made a profit according to (16-5) * 50 = 550 SEK.<br>
-          OBSERVE! that if Germany ends up in 3'rd place (or higher) you will make a loss.
-        </div>
+        <p>
+          If there's an order on the opposite side with the same (or more favourable) price,
+          the orders will be matched and you will get a trade which can be seen on the <a routerLink="/transactions">Trades</a> page.
+          If the order is not matched directly, you can either wait for it to be matched when someone enters
+          a matching order. Or you can withdraw the order by clicking the <i>Withdraw</i> button next to the order.
+        </p>
+        <p>
+          There's also a possibility to click the team name on the overview page, to get to the details page.
+          On the details page you can see a complete view of all the Buy and Sell levels on the market. You can
+          also see a chart of how the team has been traded historically.
+        </p>
+        <p>
+          Furthermore the overview also contains a Statistics table where you can see how each team
+          succeeded in the last World Cup (2014), and an average of the team's results for the last 5 World Cups.
+          Click the team name (with a flag in front) to see a more detailed view.
+        </p>
+
+        <h5 class="card-title">
+          Settlement
+        </h5>
+        <p>
+          Settlement processing is automated, and will be triggered as soon as a settlement price can be decided
+          (i.e. when a team's final placement in the tournament is known). This means that settlements can
+          be done throughout the tournament as soon as a team gets kicked out. When a settlement instruction has been
+          created it will appear on the <a routerLink="/settlements">Settlements</a> page.
+        </p>
+        <p>
+          Since trading is settled peer-to-peer, you will get one settlement instruction
+          per counterparty. If you are the payer, you will get a QR code for Swishing
+          the settlement amount to you counterparty. Don't forget to acknowledge when you have swished the settlement amount,
+          and when you have recieved the settlement amount.
+        </p>
+        <p>
+          OBSERVE!<br>
+          For Swish settlement to work, make sure that you have filled out a Swish-connected phone number on your User profile page.
+          Click the User silhouette in the menu bar to view and edit your user.
+        </p>
 
         <h5 class="card-title">
           FAQ
@@ -90,7 +189,7 @@
               </h6>
             </div>
             <p class="mb-1">
-              The derivatives are automatically named according to the commodity derivatives
+              The instruments are automatically named according to the commodity derivatives
               convention of using the underlying name plus the month and year of expiry.
               Since World Cup ends in July 2018, the name becomes e.g. <i>Germany Jul 18</i>.
             </p>
@@ -118,34 +217,17 @@
           <div class="list-group-item list-group-item-action flex-column align-items-start">
             <div class="d-flex w-100 justify-content-between">
               <h6 class="mb-1">
-                How do I trade?
+                How do I invite someone to the game?
               </h6>
             </div>
             <p class="mb-1">
-              Tading is made on an open market where you are free to enter Buy and Sell
-              orders according you your market belief. If a Buy Order matches with a Sell
-              Order, this will result in a Trade. There is no central clearing of trades,
-              so you will get a counterparty for each trade that is made. This is the counterparty(s)
-              that you will later on do the settlements with.
-            </p>
-          </div>
-          <div class="list-group-item list-group-item-action flex-column align-items-start">
-            <div class="d-flex w-100 justify-content-between">
-              <h6 class="mb-1">
-                How will the settlement be handled?
-              </h6>
-            </div>
-            <p class="mb-1">
-              Settlement processing is automated, and will be triggered as soon
-              as a settlement price is available. This means that settlements can
-              be done throughout the tournament as soon as a team gets kicked out.
-              When a settlement instruction has been created it will appear under the
-              Settlements section.<br>
-              Since trading is settled peer-to-peer, you will get one settlement instruction
-              per counterparty. If you are the payer, you will get a QR code for Swishing
-              the settlement amount to you counterparty.<br>
-              Don't forget to acknowledge when you have swished the settlement amount,
-              and when you have recieved the settlement amount.
+              Navigate to the User profile page. Under <i>Invites</i>
+              click the <i>New invite</i> button to generate a new invite code.<br>
+              Click the copy icon next to the code to copy a complete invite link to the clipboard.
+              The invite is valid for one registration, and when it has been used you will instead
+              see the name of the person that used the invite.<br>
+              You can create as many invites as you like. But be aware of that it is logged who you
+              invite; so <b>do</b> feel responsible for whom you invite.
             </p>
           </div>
           <div class="list-group-item list-group-item-action flex-column align-items-start">
@@ -155,7 +237,7 @@
               </h6>
             </div>
             <p class="mb-1">
-              This application was impelmented for fun, without any commercial interest.
+              This application was implemented for fun, without any commercial interest.
               If you want to report a bug, or other issues send an e-mail to erikssonlarsb@gmail.com
               Please! don't exploit any bugs or security issues that you might find.
               Remember that you are trading wth your friends, and the friends
