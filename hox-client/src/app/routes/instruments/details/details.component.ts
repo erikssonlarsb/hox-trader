@@ -21,7 +21,12 @@ export class InstrumentDetailsComponent  implements OnInit  {
   chartData: Array<any>;
   chartLabels: Array<string>;
 
-  constructor(private dateOnlyPipe: DateOnlyPipe, private router: Router, private route: ActivatedRoute, private apiService: ApiService) { }
+  constructor(private dateOnlyPipe: DateOnlyPipe, private router: Router, private route: ActivatedRoute, private apiService: ApiService) {
+    // TODO: Remove below when changed to other graph library that supports dynamic update.
+    this.router.routeReuseStrategy.shouldReuseRoute = function() {
+      return false;
+    }
+  }
 
   ngOnInit(): void {
     this.route
