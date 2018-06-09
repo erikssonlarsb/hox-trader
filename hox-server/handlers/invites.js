@@ -31,7 +31,7 @@ router.get('/:id', function(req, res) {
     } else if (invite) {
       return res.json(invite);
     } else {
-      return res.status(404);
+      return res.status(404).json(new Error("Not found"));
     }
   });
 });
