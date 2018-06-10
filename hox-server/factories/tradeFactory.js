@@ -6,10 +6,11 @@ const Trade = require('../models/trade');
 module.exports = {
 
   // Query trades.
-  query: function(params, {populate = []}, callback) {
+  query: function(params, {auth = {}, populate = []}, callback) {
     if (typeof arguments[1] === 'function') {
       callback = arguments[1];
     }
+    params[auth.userField] = auth.userId;
 
     let tradeQuery = Trade.find(params);
 
@@ -21,12 +22,12 @@ module.exports = {
   },
 
   // Find a single trade.
-  findOne: function(id, {idField = '_id', populate = []}, callback) {
+  findOne: function(id, {idField = '_id', auth = {}, populate = []}, callback) {
     if (typeof arguments[1] === 'function') {
       callback = arguments[1];
     }
 
-    let tradeQuery = Trade.findOne({[idField]:id});
+    let tradeQuery = Trade.findOne({[idField]: id, [auth.userField]: auth.userId});
 
     tradeQuery = populateQuery(tradeQuery, populate);
 

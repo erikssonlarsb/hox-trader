@@ -8,7 +8,7 @@ const priceFactory = require('../factories/priceFactory');
 module.exports = {
 
   // Query orders.
-  query: function(params, {auth = {}, populate = [], sort = []}, callback) {
+  query: function(params, {auth = {}, populate = []}, callback) {
     if (typeof arguments[1] === 'function') {
       callback = arguments[1];
     }
@@ -27,12 +27,9 @@ module.exports = {
       callback = arguments[1];
     }
 
-    console.log(auth);
-
     Order.findOne({[idField]: id, [auth.userField]: auth.userId})
     .populate(populate.join(' '))
     .exec(function(err, order) {
-      console.log("callback");
       callback(err, order);
     });
   },
@@ -46,11 +43,13 @@ module.exports = {
   },
 
   // Update an order.
-  update: function(id, {idField = '_id', populate = []}, updateOrder, callback) {
+  update: function(id, {idField = '_id', auth = {}}, updateOrder, callback) {
     if (typeof arguments[1] === 'function') {
       callback = arguments[1];
     }
-    Order.findOne({[idField]:id}, function(err, order) {
+
+    Order.findOne({[idField]: id, [auth.userField]: auth.userId})
+    .exec(function(err, order) {
       if(err) callback(err);
       else if(order.status != 'ACTIVE') {
         callback("Cannot modify non-active order.")
@@ -67,12 +66,12 @@ module.exports = {
   },
 
   // Delete an order. (i.e. set status to WITHDRAW).
-  delete: function(id, {idField = '_id'}, callback) {
+  delete: function(id, {idField = '_id', auth = {}}, callback) {
     if (typeof arguments[1] === 'function') {
       callback = arguments[1];
     }
 
-    Order.findOne({[idField]:id})
+    Order.findOne({[idField]: id, [auth.userField]: auth.userId})
     .exec(function(err, order) {
       if (err) {
         callback(err);

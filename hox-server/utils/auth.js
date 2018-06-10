@@ -76,7 +76,16 @@ function verifyPermissions(req, res, userField) {
   //  Add user to the request query in order to control access
   //  to user-specific documents in handlers.
   if (userField && !req.user.role.isAdmin) {
-    req.query[userField] = req.user._id;
+    req.queryOptions.auth = {
+      'userField': userField,
+      'userId': req.user._id
+
+    }
+  } else {
+    req.queryOptions.auth = {
+      'userField': null,
+      'userId': null
+    }
   }
 }
 
