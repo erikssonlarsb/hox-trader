@@ -8,10 +8,11 @@ const systemInfoFactory = require('../factories/systemInfoFactory');
 module.exports = {
 
   // Query users.
-  query: function(params, {populate = []}, callback) {
+  query: function(params, {auth = {}, populate = []}, callback) {
     if (typeof arguments[1] === 'function') {
       callback = arguments[1];
     }
+    params[auth.userField] = auth.userId;
 
     User.find(params)
     .populate(populate.join(' '))
@@ -21,12 +22,12 @@ module.exports = {
   },
 
   // Find a single user
-  findOne: function(id, {idField = '_id', populate = []}, callback) {
+  findOne: function(id, {idField = '_id', auth = {}, populate = []}, callback) {
     if (typeof arguments[1] === 'function') {
       callback = arguments[1];
     }
-
-    User.findOne({[idField]:id})
+    
+    User.findOne({[idField]: id, [auth.userField]: auth.userId})
     .populate(populate.join(' '))
     .exec(function(err, user) {
       callback(err, user);
@@ -70,11 +71,13 @@ module.exports = {
   },
 
   // Update a user
-  update: function(id, {idField = '_id', populate = []}, updateUser, callback) {
+  update: function(id, {idField = '_id', auth = {}}, updateUser, callback) {
     if (typeof arguments[1] === 'function') {
       callback = arguments[1];
     }
-    User.findOne({[idField]:id}, function(err, user) {
+
+    User.findOne({[idField]:id, [auth.userField]: auth.userId})
+    .exec(function(err, user) {
       if(err || !user) {
         callback(err, user);
       } else {

@@ -6,10 +6,11 @@ const Invite = require('../models/invite');
 module.exports = {
 
   // Query invites.
-  query: function(params, {populate = []}, callback) {
+  query: function(params, {auth = {}, populate = []}, callback) {
     if (typeof arguments[1] === 'function') {
       callback = arguments[1];
     }
+    params[auth.userField] = auth.userId;
 
     let inviteQuery = Invite.find(params);
 
@@ -21,12 +22,12 @@ module.exports = {
   },
 
   // Find a single invite
-  findOne: function(id, {idField = '_id', populate = []}, callback) {
+  findOne: function(id, {idField = '_id', auth = {}, populate = []}, callback) {
     if (typeof arguments[1] === 'function') {
       callback = arguments[1];
     }
 
-    Invite.findOne({[idField]:id})
+    Invite.findOne({[idField]: id, [auth.userField]: auth.userId})
     .populate(populate.join(' '))
     .exec(function(err, invite) {
       callback(err, invite);

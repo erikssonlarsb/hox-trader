@@ -6,10 +6,11 @@ const Settlement = require('../models/settlement');
 module.exports = {
 
   // Query settlements.
-  query: function(params, {populate = []}, callback) {
+  query: function(params, {auth = {}, populate = []}, callback) {
     if (typeof arguments[1] === 'function') {
       callback = arguments[1];
     }
+    params[auth.userField] = auth.userId;
 
     let settlementQuery = Settlement.find(params);
 
@@ -21,12 +22,12 @@ module.exports = {
   },
 
   // Find a single settlement.
-  findOne: function(id, {idField = '_id', populate = []}, callback) {
+  findOne: function(id, {idField = '_id', auth = {}, populate = []}, callback) {
     if (typeof arguments[1] === 'function') {
       callback = arguments[1];
     }
 
-    let settlementQuery = Settlement.findOne({[idField]:id});
+    let settlementQuery = Settlement.findOne({[idField]: id, [auth.userField]: auth.userId});
 
     settlementQuery = populateQuery(settlementQuery, populate);
 
@@ -43,11 +44,13 @@ module.exports = {
   },
 
   // Update a settlement
-  update: function(id, {idField = '_id', populate = []}, updateSettlement, callback) {
+  update: function(id, {idField = '_id', auth = {}}, updateSettlement, callback) {
     if (typeof arguments[1] === 'function') {
       callback = arguments[1];
     }
-    Settlement.findOne({[idField]:id}, function(err, settlement) {
+
+    Settlement.findOne({[idField]:id, [auth.userField]: auth.userId})
+    .exec(function(err, settlement) {
       if(err) callback(err);
       if(updateSettlement.isAcknowledged) settlement.isAcknowledged = updateSettlement.isAcknowledged;
 
