@@ -43,10 +43,12 @@ export class TransactionsComponent implements OnInit, OnDestroy  {
         }
       };
     }
+
+    // Force ngOnDestroy on page refresh (F5).
+    window.onbeforeunload = () => this.ngOnDestroy();
   }
 
   ngOnDestroy(): void {
-    console.log("Ddestroy");
     // Save config to local storage when component is destroyed.
     localStorage.setItem("transactionsConfig", JSON.stringify(this.configOptions));
   }
