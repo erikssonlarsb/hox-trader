@@ -1,0 +1,40 @@
+.config-menu {
+    position: fixed;
+    bottom: 5%;
+    left: calc(-50% - 8px);
+    width: 100%
+}
+
+.config-menu .row {
+  margin: 0;
+}
+
+.config-menu .col {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.config-options, .config-cog {
+  box-shadow: 5px 5px 5px gray;
+  background-color: lightgray;
+}
+
+.config-options {
+  padding-left: 35px;
+  border-radius: 0px 5px 5px 0px;
+  min-height: 150px;
+  padding-top: 10px;
+}
+
+.config-cog {
+  width: 32px;
+  padding: 6px;
+  padding-left: 10px;
+  border-radius: 0px 5px 5px 0px;
+  margin-left: -2px;
+  margin-bottom: 30px;
+}
+.config-cog:hover {
+  transform: scale(1.1);
+  cursor: pointer;
+}

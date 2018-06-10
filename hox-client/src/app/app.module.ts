@@ -19,6 +19,8 @@ import { AuthService } from './services/auth/auth.service';
 import { ApiService } from './services/api/api.service';
 import { ApiErrorHandler } from './services/api/apierrorhandler.service';
 
+import { ConfigMenuComponent } from './components/configMenu/configMenu.component';
+
 import { LoginComponent } from './routes/login/login.component';
 import { RegisterComponent } from './routes/register/register.component';
 import { InformationComponent } from './routes/information/information.component';
@@ -36,6 +38,7 @@ import { AdminComponent } from './routes/admin/admin.component';
 @NgModule({
   declarations: [
     AppComponent,
+    ConfigMenuComponent,
     LoginComponent,
     InformationComponent,
     RegisterComponent,
@@ -60,7 +63,7 @@ import { AdminComponent } from './routes/admin/admin.component';
     BootstrapModule,
     ChartsModule,
     DateOnlyModule,
-    CustomPipesModule.forRoot() 
+    CustomPipesModule.forRoot()
   ],
   providers: [
     AuthService,
