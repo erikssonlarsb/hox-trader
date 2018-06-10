@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpParams }  from '@angular/common/http';
 
 import { AuthService } from '../../services/auth/auth.service';
@@ -12,11 +12,10 @@ import { Order, User } from '../../models/index';
   styleUrls: ['./orders.component.css']
 })
 
-export class OrdersComponent implements OnInit  {
+export class OrdersComponent implements OnInit, OnDestroy  {
   user: User;
   orders: Array<Order>;
-  hideInactive: boolean = true;
-  dateNow: Date = new Date();
+  configOptions: Object;
 
   constructor(private authService: AuthService, private ApiService: ApiService) { }
 
@@ -29,23 +28,43 @@ export class OrdersComponent implements OnInit  {
       }
     });
     this.ApiService.getOrders(orderParams)
-      .subscribe(
-        orders => this.orders = orders.sort((a: Order, b: Order) => {return a.updateTimestamp.getTime() - b.updateTimestamp.getTime()})
-      );
+    .subscribe(
+      orders => this.orders = orders.sort((a: Order, b: Order) => {return a.updateTimestamp.getTime() - b.updateTimestamp.getTime()})
+    );
+
+    // Get config from local storage, or initialize new if not stored.
+    this.configOptions = JSON.parse(localStorage.getItem("ordersConfig"));
+    if (!this.configOptions) {
+      this.configOptions = {
+        'hideInactive': {
+          value: true,
+          caption: "Hide inactive",
+          explanation: "Hides orders in inactive instruments."
+        }
+      };
+    }
+
+    // Force ngOnDestroy on page refresh (F5).
+    window.onbeforeunload = () => this.ngOnDestroy();
   }
 
   withdrawOrder(id): void {
     this.ApiService.withdrawOrder(id)
-      .subscribe(() => {
-        let orderParams = new HttpParams({
-          fromObject: {
-            '_populate': ['user', 'instrument']
-          }
-        });
-        this.ApiService.getOrders(orderParams)
-          .subscribe(
-            orders => this.orders = orders
-          )
-      })
+    .subscribe(() => {
+      let orderParams = new HttpParams({
+        fromObject: {
+          '_populate': ['user', 'instrument']
+        }
+      });
+      this.ApiService.getOrders(orderParams)
+        .subscribe(
+          orders => this.orders = orders
+        )
+    });
+  }
+
+  ngOnDestroy(): void {
+    // Save config to local storage when component is destroyed.
+    localStorage.setItem("ordersConfig", JSON.stringify(this.configOptions));
   }
 }

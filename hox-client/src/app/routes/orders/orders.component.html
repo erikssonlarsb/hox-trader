@@ -5,10 +5,6 @@
         <h5 class="card-title">
           Orders
         </h5>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="checkbox" id="hideInactive" [checked]="hideInactive" (change)="hideInactive = !hideInactive">
-          <label class="form-check-label" for="hideInactive">Hide inactive instruments</label>
-        </div>
         <div class="table-responsive">
           <table class="table table-sm table-hover">
             <thead>
@@ -26,7 +22,7 @@
             </thead>
             <tbody>
               <ng-container *ngFor="let order of orders;">
-                <tr *ngIf="!hideInactive || order.instrument.status == 'ACTIVE'">
+                <tr *ngIf="!configOptions?.hideInactive.value || order.instrument.status == 'ACTIVE'">
                   <td>{{order.updateTimestamp | date}}</td>
                   <td *ngIf="user?.role.isAdmin" scope="col">{{order.user.name}}</td>
                   <td>{{order.instrument.name}}</td>
@@ -53,3 +49,5 @@
     </div>
   </div>
 </div>
+
+<config-menu [(options)]="configOptions"></config-menu>
