@@ -39,7 +39,7 @@ export class TransactionsComponent implements OnInit, OnDestroy  {
         'hideSettled': {
           value: true,
           caption: "Hide settled",
-          explanation: "Hides traded that has already been settled."
+          explanation: "Hides trades that's already been settled."
         }
       };
     }
