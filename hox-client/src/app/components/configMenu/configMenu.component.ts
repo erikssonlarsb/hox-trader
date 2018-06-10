@@ -27,6 +27,10 @@ export class ConfigMenuComponent {
   visible: boolean = false;
 
   getKeys(configOptions: Object) {
-    return Object.keys(configOptions);
+    if(configOptions) {
+      return Object.keys(configOptions);
+    } else {
+      return null;
+    }
   }
 }
