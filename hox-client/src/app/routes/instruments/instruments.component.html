@@ -43,7 +43,7 @@
                   type="button"
                   class="btn btn-sm btn-primary btn-block"
                   [routerLink]="['/order', {instrument: orderDepth.instrument.id, side: 'BUY', price: orderDepth.levels[0]?.sellPrice}]">
-                  Buy {{orderDepth.levels[0]?.sellPrice ? '@ ' + (orderDepth.levels[0]?.sellPrice | number:'.0-0') : ''}}
+                  Buy {{orderDepth.levels[0]?.sellPrice ? '@ ' + (orderDepth.levels[0]?.sellPrice | number:'.2-2') : ''}}
                 </button>
               </div>
             </div>
@@ -55,7 +55,7 @@
                   type="button"
                   class="btn btn-sm btn-danger btn-block"
                   [routerLink]="['/order', {instrument: orderDepth.instrument.id, side: 'SELL', price: orderDepth.levels[0]?.buyPrice}]">
-                  Sell {{orderDepth.levels[0]?.buyPrice ? '@ ' + (orderDepth.levels[0]?.buyPrice | number:'.0-0') : ''}}
+                  Sell {{orderDepth.levels[0]?.buyPrice ? '@ ' + (orderDepth.levels[0]?.buyPrice | number:'.2-2') : ''}}
                 </button>
               </div>
             </div>

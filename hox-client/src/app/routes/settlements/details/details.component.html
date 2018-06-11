@@ -30,19 +30,19 @@
                 <td>{{trade.instrument.name}}</td>
                 <td>{{trade.instrument.expiry | date}}</td>
                 <td>{{trade.side}}</td>
-                <td class="text-right">{{trade.quantity}}</td>
-                <td class="text-right">{{trade.price}}</td>
-                <td class="text-right">{{trade.quantity * trade.price}}</td>
-                <td class="text-right">{{trade.instrument.prices[0].value}}</td>
-                <td class="text-right">{{trade.quantity * trade.instrument.prices[0].value}}</td>
-                <td class="text-right">{{trade.side == 'BUY' ? trade.quantity * trade.instrument.prices[0].value - trade.quantity * trade.price : trade.quantity * trade.price -trade.quantity * trade.instrument.prices[0].value}}</td>
+                <td class="text-right">{{trade.quantity  | number:'.0-0'}}</td>
+                <td class="text-right">{{trade.price  | number:'.2-2'}}</td>
+                <td class="text-right">{{trade.quantity * trade.price  | number:'.2-2'}}</td>
+                <td class="text-right">{{trade.instrument.prices[0].value  | number:'.2-2'}}</td>
+                <td class="text-right">{{trade.quantity * trade.instrument.prices[0].value  | number:'.2-2'}}</td>
+                <td class="text-right">{{(trade.side == 'BUY' ? trade.quantity * trade.instrument.prices[0].value - trade.quantity * trade.price : trade.quantity * trade.price -trade.quantity * trade.instrument.prices[0].value)  | number:'.2-2'}}</td>
               </tr>
             </tbody>
             <tfoot>
               <tr>
                 <th colspan="8"></th>
                 <th class="text-right">Total: </th>
-                <th class="text-right">{{settlement?.amount}}</th>
+                <th class="text-right">{{settlement?.amount | number:'.2-2'}}</th>
               </tr>
             </tfoot>
           </table>

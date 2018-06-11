@@ -1,0 +1,20 @@
+<div class="config-menu" [@slideInOut]="visible">
+  <div class="row">
+    <div class="col">
+      <div class="config-options">
+        <div *ngFor="let option of getKeys(options)" class="custom-control custom-checkbox">
+          <input
+            type="checkbox"
+            class="custom-control-input"
+            id="options-{{option}}"
+            [checked]="options[option].value"
+            (change)="options[option].value = !options[option].value">
+          <label class="custom-control-label" for="options-{{option}}" title="{{options[option].explanation}}">{{options[option].caption}}</label>
+        </div>
+      </div>
+    </div>
+    <div class="col align-self-end">
+      <i class="fa fa-cog fa-lg config-cog" (click)="visible = !visible"></i>
+    </div>
+  </div>
+</div>

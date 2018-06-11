@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpParams }  from '@angular/common/http';
 import { DatePipe } from '@angular/common';
 import { Http }  from '@angular/http';
@@ -15,10 +15,10 @@ import { Settlement, User } from '../../models/index';
   providers: [DatePipe]
 })
 
-export class SettlementsComponent implements OnInit  {
+export class SettlementsComponent implements OnInit, OnDestroy  {
   user: User;
   settlements: Array<Settlement>;
-  hideFinished: boolean = true;
+  configOptions: Object;
 
   constructor(private datePipe: DatePipe, private http: Http, private authService: AuthService, private apiService: ApiService) { }
 
@@ -31,9 +31,24 @@ export class SettlementsComponent implements OnInit  {
       }
     });
     this.apiService.getSettlements(settlementParams)
-      .subscribe(settlements =>
-        this.settlements = settlements.sort((a: Settlement, b: Settlement) => {return a.updateTimestamp.getTime() - b.updateTimestamp.getTime()})
-      );
+    .subscribe(settlements =>
+      this.settlements = settlements.sort((a: Settlement, b: Settlement) => {return a.updateTimestamp.getTime() - b.updateTimestamp.getTime()})
+    );
+
+    // Get config from local storage, or initialize new if not stored.
+    this.configOptions = JSON.parse(localStorage.getItem("settlementsConfig"));
+    if (!this.configOptions) {
+      this.configOptions = {
+        'hideFinished': {
+          value: true,
+          caption: "Hide finished",
+          explanation: "Hides settlements that has been fully processed."
+        }
+      };
+    }
+
+    // Force ngOnDestroy on page refresh (F5).
+    window.onbeforeunload = () => this.ngOnDestroy();
   }
 
   acknowledgeSettlement(id): void {
@@ -69,5 +84,10 @@ export class SettlementsComponent implements OnInit  {
       .catch(function(error) {
         console.log(error);
       });
+  }
+
+  ngOnDestroy(): void {
+    // Save config to local storage when component is destroyed.
+    localStorage.setItem("settlementsConfig", JSON.stringify(this.configOptions));
   }
 }

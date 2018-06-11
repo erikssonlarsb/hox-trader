@@ -5,10 +5,6 @@
         <h5 class="card-title">
           Transactions
         </h5>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="checkbox" id="hideSettled" [checked]="hideSettled" (change)="hideSettled = !hideSettled">
-          <label class="form-check-label" for="hideSettled">Hide settled trades</label>
-        </div>
         <div class="table-responsive">
           <table class="table table-sm table-hover">
             <thead>
@@ -24,13 +20,13 @@
             </thead>
             <tbody>
               <ng-container *ngFor="let trade of trades;">
-                <tr *ngIf="!hideSettled || !trade.isSettled">
+                <tr *ngIf="!configOptions?.hideSettled.value || !trade.isSettled">
                   <td>{{trade.updateTimestamp | date}}</td>
                   <td *ngIf="user?.role.isAdmin" scope="col">{{trade.user.name}}</td>
                   <td>{{trade.instrument.name}}</td>
                   <td>{{trade.side}}</td>
-                  <td class="text-right">{{trade.quantity}}</td>
-                  <td class="text-right">{{trade.price}}</td>
+                  <td class="text-right">{{trade.quantity  | number:'.0-0'}}</td>
+                  <td class="text-right">{{trade.price  | number:'.2-2'}}</td>
                   <td>{{trade.counterpartyTrade.user.name}}</td>
                 </tr>
               </ng-container>
@@ -41,3 +37,5 @@
     </div>
   </div>
 </div>
+
+<config-menu [(options)]="configOptions"></config-menu>

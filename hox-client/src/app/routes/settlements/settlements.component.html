@@ -5,11 +5,6 @@
         <h5 class="card-title">
           Settlements
         </h5>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="checkbox" id="hideFinished" [checked]="hideFinished" (change)="hideFinished = !hideFinished">
-          <label class="form-check-label" for="hideFinished">Hide finished</label>
-        </div>
-        <br>
         <span class="badge badge-danger">Action required</span>
         <span class="badge badge-warning">Awaiting counterparty</span>
         <span class="badge badge-success">Settlement finished</span>
@@ -28,7 +23,7 @@
             </thead>
             <tbody>
               <ng-container *ngFor="let settlement of settlements;">
-                <tr *ngIf="!hideFinished || !settlement.isAcknowledged || !settlement.counterpartySettlement.isAcknowledged"
+                <tr *ngIf="!configOptions?.hideFinished.value || !settlement.isAcknowledged || !settlement.counterpartySettlement.isAcknowledged"
                   [ngClass]="[
                     (settlement.isAcknowledged && settlement.counterpartySettlement.isAcknowledged) ? 'table-success' : '',
                     (settlement.isAcknowledged && !settlement.counterpartySettlement.isAcknowledged) || (!settlement.counterpartySettlement.isAcknowledged && settlement.amount > 0) ? 'table-warning' : '',
@@ -36,7 +31,7 @@
                     ]">
                   <td>{{settlement.updateTimestamp | date}}</td>
                   <td *ngIf="user?.role.isAdmin" scope="col">{{settlement.user.name}}</td>
-                  <td class="text-right">{{settlement.amount}}</td>
+                  <td class="text-right">{{settlement.amount  | number:'.2-2'}}</td>
                   <td>{{settlement.counterpartySettlement.user.name}}</td>
                   <td>
                     <button
@@ -73,3 +68,5 @@
     </div>
   </div>
 </div>
+
+<config-menu [(options)]="configOptions"></config-menu>
