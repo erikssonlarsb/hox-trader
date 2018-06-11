@@ -68,10 +68,13 @@
                     </div>
                     <input
                       type="number"
+                      step="1"
+                      min="0"
                       class="form-control"
                       name="quantity"
                       id="quantity"
-                      [(ngModel)]="quantity"
+                      (ngModelChange)="quantity=$event"
+                      [ngModel]="quantity | number:'.0-0'"
                       required />
                   </div>
                 </div>
@@ -83,10 +86,13 @@
                     </div>
                     <input
                       type="number"
+                      step="0.01"
+                      min="0"
                       class="form-control"
                       name="price"
                       id="price"
-                      [(ngModel)]="price"
+                      (ngModelChange)="price=$event"
+                      [ngModel]="price | number:'.2-2'"
                       required />
                   </div>
                 </div>

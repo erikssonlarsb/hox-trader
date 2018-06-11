@@ -33,22 +33,24 @@ export class OrderComponent  implements OnInit  {
             }
           });
           this.apiService.getOrder(params.get('id'), orderParams)
-            .subscribe(order => {
-              this.order = order;
-              this.instrument = order.instrument.name;
-              this.side = order.side;
-              this.quantity = order.quantity - order.tradedQuantity;
-              this.price = order.price;
-            });
+          .subscribe(order => {
+            this.order = order;
+            this.instrument = order.instrument.name;
+            this.side = order.side;
+            this.quantity = order.quantity - order.tradedQuantity;
+            this.price = order.price;
+          });
+
         } else if(params.get('instrument')) {  // Populate details from router params
           this.apiService.getInstrument(params.get('instrument'))
-            .subscribe(instrument => {
-              this.instrument = instrument.name;
-              this.instruments = [instrument];
-            });
+          .subscribe(instrument => {
+            this.instrument = instrument.name;
+            this.instruments = [instrument];
+          });
+
           this.side = ORDER_SIDE[params.get('side')];
-          this.quantity = Number(params.get('quantity')) | 0;
-          this.price = Number(params.get('price')) | 0;
+          this.quantity = Number(params.get('quantity')) || 0;
+          this.price = Number(params.get('price')) || 0;
         } else {  // Get all instruments for client to fill in order details
           this.apiService.getInstruments()
             .subscribe(
