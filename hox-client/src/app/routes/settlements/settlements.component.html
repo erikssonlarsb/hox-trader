@@ -31,7 +31,7 @@
                     ]">
                   <td>{{settlement.updateTimestamp | date}}</td>
                   <td *ngIf="user?.role.isAdmin" scope="col">{{settlement.user.name}}</td>
-                  <td class="text-right">{{settlement.amount}}</td>
+                  <td class="text-right">{{settlement.amount  | number:'.2-2'}}</td>
                   <td>{{settlement.counterpartySettlement.user.name}}</td>
                   <td>
                     <button

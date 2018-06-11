@@ -13,7 +13,7 @@
                   type="button"
                   class="btn btn-sm btn-primary btn-block"
                   [routerLink]="['/order', {instrument: orderDepth?.instrument.id, side: 'BUY', price: orderDepth?.levels[0]?.sellPrice}]">
-                  Buy {{orderDepth?.levels[0]?.sellPrice ? '@ ' + (orderDepth?.levels[0]?.sellPrice | number:'.0-0') : ''}}
+                  Buy {{orderDepth?.levels[0]?.sellPrice ? '@ ' + (orderDepth?.levels[0]?.sellPrice | number:'.2-2') : ''}}
                 </button>
               </div>
             </div>
@@ -25,7 +25,7 @@
                   type="button"
                   class="btn btn-sm btn-danger btn-block"
                   [routerLink]="['/order', {instrument: orderDepth?.instrument.id, side: 'SELL', price: orderDepth?.levels[0]?.buyPrice}]">
-                  Sell {{orderDepth?.levels[0]?.buyPrice ? '@ ' + (orderDepth?.levels[0]?.buyPrice | number:'.0-0') : ''}}
+                  Sell {{orderDepth?.levels[0]?.buyPrice ? '@ ' + (orderDepth?.levels[0]?.buyPrice | number:'.2-2') : ''}}
                 </button>
               </div>
             </div>
@@ -44,10 +44,10 @@
               </thead>
               <tbody>
                 <tr>
-                  <td>{{((instrument.prices | price:'LAST')?.value | number:'.0-0') || 'N/A'}}</td>
-                  <td>{{((instrument.prices | price:'HIGH')?.value | number:'.0-0') || 'N/A'}}</td>
-                  <td>{{((instrument.prices | price:'LOW')?.value | number:'.0-0') || 'N/A'}}</td>
-                  <td>{{((instrument.prices | price:'CLOSE')?.value | number:'.0-0') || 'N/A'}}</td>
+                  <td>{{((instrument.prices | price:'LAST')?.value | number:'.2-2') || 'N/A'}}</td>
+                  <td>{{((instrument.prices | price:'HIGH')?.value | number:'.2-2') || 'N/A'}}</td>
+                  <td>{{((instrument.prices | price:'LOW')?.value | number:'.2-2') || 'N/A'}}</td>
+                  <td>{{((instrument.prices | price:'CLOSE')?.value | number:'.2-2') || 'N/A'}}</td>
                 </tr>
               </tbody>
             </table>
@@ -71,13 +71,13 @@
                   <td>
                     <a
                     [routerLink]="['/order', {instrument: orderDepth.instrument.id, side: 'SELL', quantity: level.buyQuantity, price: level.buyPrice}]">
-                    {{level.buyQuantity | number:'.0-0'}}
+                    {{level.buyQuantity | number:'.2-2'}}
                     </a>
                   </td>
                   <td>
                     <a
                     [routerLink]="['/order', {instrument: orderDepth.instrument.id, side: 'SELL', price: level.buyPrice}]">
-                    {{level.buyPrice | number:'.0-0'}}
+                    {{level.buyPrice | number:'.2-2'}}
                     </a>
                   </td>
                   <td class="text-right">
@@ -102,20 +102,20 @@
                   <td class="text-right">
                     <a
                       [routerLink]="['/order', {instrument: orderDepth.instrument.id, side: 'BUY', price: level.sellPrice}]">
-                      {{level.sellPrice | number:'.0-0'}}
+                      {{level.sellPrice | number:'.2-2'}}
                     </a>
                   </td>
                   <td class="text-right">
                     <a
                       [routerLink]="['/order', {instrument: orderDepth.instrument.id, side: 'BUY', quantity: level.sellQuantity, price: level.sellPrice}]">
-                      {{level.sellQuantity | number:'.0-0'}}
+                      {{level.sellQuantity | number:'.2-2'}}
                     </a>
                   </td>
                 </tr>
               </tbody>
               <tfoot>
                 <tr>
-                  <th scope="col">{{orderDepth.totalBuy | number:'.0-0'}}</th>
+                  <th scope="col">{{orderDepth.totalBuy | number:'.2-2'}}</th>
                   <th scope="col"></th>
                   <th scope="col" class="text-right">
                     <div class="progress">
@@ -139,7 +139,7 @@
                     </div>
                   </th>
                   <th scope="col" class="text-right"></th>
-                  <th scope="col" class="text-right">{{orderDepth.totalSell | number:'.0-0'}}</th>
+                  <th scope="col" class="text-right">{{orderDepth.totalSell | number:'.2-2'}}</th>
                 </tr>
               </tfoot>
             </table>

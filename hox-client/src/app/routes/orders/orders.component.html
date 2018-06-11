@@ -27,9 +27,9 @@
                   <td *ngIf="user?.role.isAdmin" scope="col">{{order.user.name}}</td>
                   <td>{{order.instrument.name}}</td>
                   <td>{{order.side}}</td>
-                  <td class="text-right">{{order.quantity}}</td>
-                  <td class="text-right">{{order.tradedQuantity}}</td>
-                  <td class="text-right">{{order.price}}</td>
+                  <td class="text-right">{{order.quantity | number:'.0-0'}}</td>
+                  <td class="text-right">{{order.tradedQuantity  | number:'.0-0'}}</td>
+                  <td class="text-right">{{order.price | number:'.2-2'}}</td>
                   <td>{{order.status}}</td>
                   <td>
                     <button
