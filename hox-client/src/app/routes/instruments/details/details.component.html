@@ -71,7 +71,7 @@
                   <td>
                     <a
                     [routerLink]="['/order', {instrument: orderDepth.instrument.id, side: 'SELL', quantity: level.buyQuantity, price: level.buyPrice}]">
-                    {{level.buyQuantity | number:'.2-2'}}
+                    {{level.buyQuantity | number:'.0-0'}}
                     </a>
                   </td>
                   <td>
@@ -108,14 +108,14 @@
                   <td class="text-right">
                     <a
                       [routerLink]="['/order', {instrument: orderDepth.instrument.id, side: 'BUY', quantity: level.sellQuantity, price: level.sellPrice}]">
-                      {{level.sellQuantity | number:'.2-2'}}
+                      {{level.sellQuantity | number:'.0-0'}}
                     </a>
                   </td>
                 </tr>
               </tbody>
               <tfoot>
                 <tr>
-                  <th scope="col">{{orderDepth.totalBuy | number:'.2-2'}}</th>
+                  <th scope="col">{{orderDepth.totalBuy | number:'.0-0'}}</th>
                   <th scope="col"></th>
                   <th scope="col" class="text-right">
                     <div class="progress">
@@ -139,7 +139,7 @@
                     </div>
                   </th>
                   <th scope="col" class="text-right"></th>
-                  <th scope="col" class="text-right">{{orderDepth.totalSell | number:'.2-2'}}</th>
+                  <th scope="col" class="text-right">{{orderDepth.totalSell | number:'.0-0'}}</th>
                 </tr>
               </tfoot>
             </table>
