@@ -13,8 +13,8 @@
         </div>
       </div>
     </div>
-    <div class="col align-self-end">
-      <i class="fa fa-cog fa-lg config-cog" (click)="visible = !visible"></i>
+    <div class="col-auto align-self-end">
+      <i class="fa fa-cog fa-lg config-cog" [ngClass]="spin ? 'fa-spin' : ''" (click)="visible = !visible"></i>
     </div>
   </div>
 </div>
