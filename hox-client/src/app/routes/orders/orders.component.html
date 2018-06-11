@@ -22,7 +22,8 @@
             </thead>
             <tbody>
               <ng-container *ngFor="let order of orders;">
-                <tr *ngIf="!configOptions?.hideInactive.value || order.instrument.status == 'ACTIVE'">
+                <tr *ngIf="(!configOptions?.hideExpiredInstruments?.value || order.instrument.status == 'ACTIVE') &&
+                           (!configOptions?.hideNonActiveOrders?.value || order.status == 'ACTIVE')">
                   <td>{{order.updateTimestamp | date}}</td>
                   <td *ngIf="user?.role.isAdmin" scope="col">{{order.user.name}}</td>
                   <td>{{order.instrument.name}}</td>

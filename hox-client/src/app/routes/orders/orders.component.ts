@@ -36,10 +36,15 @@ export class OrdersComponent implements OnInit, OnDestroy  {
     this.configOptions = JSON.parse(localStorage.getItem("ordersConfig"));
     if (!this.configOptions) {
       this.configOptions = {
-        'hideInactive': {
+        'hideExpiredInstruments': {
           value: true,
-          caption: "Hide inactive",
-          explanation: "Hides orders in inactive instruments."
+          caption: "Hide expired instruments",
+          explanation: "Hides orders in expired instruments."
+        },
+        'hideNonActiveOrders': {
+          value: true,
+          caption: "Hide non-active orders",
+          explanation: "Hides orders that are not in state Active."
         }
       };
     }
