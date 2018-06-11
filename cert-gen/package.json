@@ -1,0 +1,12 @@
+{
+  "name": "cert-gen",
+  "description": "Generates SSL certificate for reverse proxy",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node cert-gen.js"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "pem": "^1.12.5"
+  }
+}
