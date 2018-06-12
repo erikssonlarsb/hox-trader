@@ -4,3 +4,9 @@
 .row {
   margin-bottom: 15px;
 }
+
+/* Makes first column text-overflow:ellipsis  */
+td:nth-child(1), th:nth-child(1) {
+  width: 100%;
+  max-width: 0;
+}

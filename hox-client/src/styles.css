@@ -28,6 +28,9 @@ td > button.btn-sm {
 }
 .table td, th {
   font-size: small;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 
