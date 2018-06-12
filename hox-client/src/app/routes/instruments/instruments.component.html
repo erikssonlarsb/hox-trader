@@ -10,7 +10,9 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-md-6">
+
+  <!-- Reduced view -->
+  <div class="col-md-7" *ngIf="!configOptions.classicView.value">
     <div class="form-group">
       <div class="input-group mb-3">
         <div class="input-group-prepend">
@@ -64,7 +66,72 @@
       </div>
     </div>
   </div>
-  <div class="col-md-6">
+
+  <!-- Classic view -->
+  <div class="col-md-7" *ngIf="configOptions.classicView.value">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">
+          Market
+        </h5>
+        <div class="table-responsive">
+          <table class="table table-sm table-hover">
+            <thead>
+              <tr>
+                <th scope="col" class="border-top-0"></th>
+                <th scope="col" class="border-top-0"></th>
+                <th scope="col" colspan="2" class="text-center border-top-0">Bid</th>
+                <th scope="col" colspan="2" class="text-center border-top-0">Ask</th>
+              </tr>
+              <tr>
+                <th scope="col">Instrument</th>
+                <th scope="col" class="text-right">Last</th>
+                <th scope="col" class="text-right"><i class="fa fa-fw fa-balance-scale"></i></th>
+                <th scope="col" class="text-right"><i class="fa fa-fw fa-money"></i></th>
+                <th scope="col" class="text-right"><i class="fa fa-fw fa-money"></i></th>
+                <th scope="col" class="text-right"><i class="fa fa-fw fa-balance-scale"></i></th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let orderDepth of orderDepths">
+                <tr>
+                  <td>
+                    <a
+                      routerLink="/instruments/{{orderDepth.instrument.id}}">
+                      {{orderDepth.instrument.name}}
+                    </a>
+                  </td>
+                  <td class="text-right">{{((orderDepth.instrument.prices | price:'LAST')?.value | number:'.2-2') || 'N/A'}}</td>
+                  <td class="text-right">
+                    <a [routerLink]="['/order', {instrument: orderDepth.instrument.id, side: 'SELL', quantity: orderDepth.levels[0]?.buyQuantity, price: orderDepth.levels[0]?.buyPrice}]">
+                      {{orderDepth.levels[0]?.buyQuantity | number:'.0-0'}}
+                    </a>
+                  </td>
+                  <td class="text-right">
+                    <a [routerLink]="['/order', {instrument: orderDepth.instrument.id, side: 'SELL', price: orderDepth.levels[0]?.buyPrice}]">
+                      {{orderDepth.levels[0]?.buyPrice | number:'.2-2'}}
+                    </a>
+                  </td>
+                  <td class="text-right">
+                    <a [routerLink]="['/order', {instrument: orderDepth.instrument.id, side: 'BUY', price: orderDepth.levels[0]?.sellPrice}]">
+                      {{orderDepth.levels[0]?.sellPrice | number:'.2-2'}}
+                    </a>
+                  </td>
+                  <td class="text-right">
+                    <a [routerLink]="['/order', {instrument: orderDepth.instrument.id, side: 'BUY', quantity: orderDepth.levels[0]?.sellQuantity, price: orderDepth.levels[0]?.sellPrice}]">
+                      {{orderDepth.levels[0]?.sellQuantity | number:'.0-0'}}
+                    </a>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-5">
     <div class="card">
       <div class="card-body">
         <h5 class="card-title">
@@ -73,6 +140,9 @@
         <div class="table-responsive">
           <table class="table table-sm table-hover">
             <thead>
+              <tr>
+                <th scope="col" colspan="3" class="border-top-0">&nbsp;</th>
+              </tr>
               <tr>
                 <th scope="col">Name</th>
                 <th scope="col" class="text-right">Last</th>
@@ -99,3 +169,5 @@
     </div>
   </div>
 </div>
+
+<config-menu [(options)]="configOptions" [spin]="configSpin"></config-menu>
