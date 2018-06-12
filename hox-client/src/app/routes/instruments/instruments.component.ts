@@ -61,7 +61,9 @@ export class InstrumentsComponent  implements OnInit  {
     // the case when new default settings are added.
     let storedConfig = JSON.parse(localStorage.getItem("instrumentsConfig"));
     for (let key in storedConfig) {
-      this.configOptions[key] = storedConfig[key];
+      if(this.configOptions[key]) {
+        this.configOptions[key] = storedConfig[key];
+      }
     }
 
     // Force ngOnDestroy on page refresh (F5).
