@@ -30,6 +30,10 @@ td > button.btn-sm {
   vertical-align: top;
   border-bottom: 1px solid #dee2e6;
 }
+.table td, th {
+  font-size: small;
+}
+
 
 /* Fix height for iOS */
 input {

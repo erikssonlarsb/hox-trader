@@ -8,10 +8,10 @@ import { trigger, style, state, transition, animate } from '@angular/animations'
   animations: [
     trigger('slideInOut', [
       state('true', style({
-      transform: 'translateX(50%)'
+      transform: 'translateX(0%)'
       })),
       state('false',   style({
-        transform: 'translateX(0%)'
+        transform: 'translateX(calc(-100% + 20px))'
       })),
       transition('false => true', animate('100ms ease-in')),
       transition('true => false', animate('100ms ease-out'))
@@ -21,6 +21,7 @@ import { trigger, style, state, transition, animate } from '@angular/animations'
 
 export class ConfigMenuComponent {
 
+  @Input() spin: boolean;
   @Input() options: Object;
   @Output() optionsChange: EventEmitter<Object> = new EventEmitter<Object>();
 
