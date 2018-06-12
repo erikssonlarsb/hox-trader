@@ -43,7 +43,9 @@ export class TransactionsComponent implements OnInit, OnDestroy  {
     // the case when new default settings are added.
     let storedConfig = JSON.parse(localStorage.getItem("transactionsConfig"));
     for (let key in storedConfig) {
-      this.configOptions[key] = storedConfig[key];
+      if(this.configOptions[key]) {
+        this.configOptions[key] = storedConfig[key];
+      }
     }
 
     // Force ngOnDestroy on page refresh (F5).

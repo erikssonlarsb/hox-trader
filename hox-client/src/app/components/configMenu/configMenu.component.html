@@ -14,7 +14,7 @@
       </div>
     </div>
     <div class="col-auto align-self-end">
-      <i class="fa fa-cog fa-lg config-cog" [ngClass]="spin ? 'fa-spin' : ''" (click)="visible = !visible"></i>
+      <i class="fa fa-cog fa-lg config-cog" [ngClass]="spin ? 'fa-spin' : ''" (mouseover)="spin = !spin!" (mouseout)="spin = !spin" (click)="visible = !visible"></i>
     </div>
   </div>
 </div>

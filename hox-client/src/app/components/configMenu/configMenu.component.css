@@ -33,7 +33,6 @@
 }
 
 .config-cog:hover {
-  transform: scale(1.3);
   cursor: pointer;
 }
 
