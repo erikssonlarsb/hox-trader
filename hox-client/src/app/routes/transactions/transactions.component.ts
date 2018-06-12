@@ -15,7 +15,7 @@ import { Trade, User } from '../../models/index';
 export class TransactionsComponent implements OnInit, OnDestroy  {
   user: User;
   trades: Array<Trade>;
-  configOptions: Object = {
+  configOptions: any = {
     'hideSettled': {
       value: true,
       caption: "Hide settled",

@@ -18,7 +18,7 @@ import { Settlement, User } from '../../models/index';
 export class SettlementsComponent implements OnInit, OnDestroy  {
   user: User;
   settlements: Array<Settlement>;
-  configOptions: Object= {
+  configOptions: any= {
     'hideFinished': {
       value: true,
       caption: "Hide finished",

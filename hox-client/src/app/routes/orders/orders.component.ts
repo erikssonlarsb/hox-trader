@@ -15,7 +15,7 @@ import { Order, User } from '../../models/index';
 export class OrdersComponent implements OnInit, OnDestroy  {
   user: User;
   orders: Array<Order>;
-  configOptions: Object = {
+  configOptions: any = {
     'hideExpiredInstruments': {
       value: true,
       caption: "Hide expired instruments",
