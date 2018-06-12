@@ -15,7 +15,13 @@ import { Trade, User } from '../../models/index';
 export class TransactionsComponent implements OnInit, OnDestroy  {
   user: User;
   trades: Array<Trade>;
-  configOptions: Object;
+  configOptions: Object = {
+    'hideSettled': {
+      value: true,
+      caption: "Hide settled",
+      explanation: "Hides trades that's already been settled."
+    }
+  };
 
   constructor(private authService: AuthService, private ApiService: ApiService) { }
 
@@ -32,16 +38,12 @@ export class TransactionsComponent implements OnInit, OnDestroy  {
       this.trades = trades.sort((a: Trade, b: Trade) => {return a.updateTimestamp.getTime() - b.updateTimestamp.getTime()});
     });
 
-    // Get config from local storage, or initialize new if not stored.
-    this.configOptions = JSON.parse(localStorage.getItem("transactionsConfig"));
-    if (!this.configOptions) {
-      this.configOptions = {
-        'hideSettled': {
-          value: true,
-          caption: "Hide settled",
-          explanation: "Hides trades that's already been settled."
-        }
-      };
+    // Get config from local storage and replace defaults.
+    // Iterate and replace wtih stored settings in order to handle
+    // the case when new default settings are added.
+    let storedConfig = JSON.parse(localStorage.getItem("transactionsConfig"));
+    for (let key in storedConfig) {
+      this.configOptions[key] = storedConfig[key];
     }
 
     // Force ngOnDestroy on page refresh (F5).

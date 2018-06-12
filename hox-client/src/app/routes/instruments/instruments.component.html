@@ -1,4 +1,4 @@
-<div class="row" *ngIf="firstVisit">
+<div class="row" *ngIf="!reVisit">
   <div class="col-md-12">
     <div class="alert alert-primary alert-dismissible fade show" role="alert">
       <strong>First time here?</strong> You should visit the <a routerLink="/information">info page</a>
@@ -12,7 +12,7 @@
 <div class="row">
 
   <!-- Reduced view -->
-  <div class="col-md-7" *ngIf="!configOptions.classicView.value">
+  <div class="col-md-7" *ngIf="!configOptions?.classicView?.value">
     <div class="form-group">
       <div class="input-group mb-3">
         <div class="input-group-prepend">
@@ -68,7 +68,7 @@
   </div>
 
   <!-- Classic view -->
-  <div class="col-md-7" *ngIf="configOptions.classicView.value">
+  <div class="col-md-7" *ngIf="configOptions?.classicView?.value">
     <div class="card">
       <div class="card-body">
         <h5 class="card-title">
@@ -86,10 +86,10 @@
               <tr>
                 <th scope="col">Instrument</th>
                 <th scope="col" class="text-right">Last</th>
-                <th scope="col" class="text-right"><i class="fa fa-fw fa-balance-scale"></i></th>
-                <th scope="col" class="text-right"><i class="fa fa-fw fa-money"></i></th>
-                <th scope="col" class="text-right"><i class="fa fa-fw fa-money"></i></th>
-                <th scope="col" class="text-right"><i class="fa fa-fw fa-balance-scale"></i></th>
+                <th scope="col" class="text-right">Qty</th>
+                <th scope="col" class="text-right">Price</th>
+                <th scope="col" class="text-right">Price</th>
+                <th scope="col" class="text-right">Qty</th>
               </tr>
             </thead>
             <tbody>

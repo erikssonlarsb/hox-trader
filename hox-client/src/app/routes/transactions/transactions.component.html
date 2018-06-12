@@ -13,14 +13,14 @@
                 <th *ngIf="user?.role.isAdmin" scope="col">User</th>
                 <th scope="col">Instrument</th>
                 <th scope="col">Type</th>
-                <th scope="col" class="text-right">Quantity</th>
+                <th scope="col" class="text-right">Qty</th>
                 <th scope="col" class="text-right">Price</th>
                 <th scope="col">Counterparty</th>
               </tr>
             </thead>
             <tbody>
               <ng-container *ngFor="let trade of trades;">
-                <tr *ngIf="!configOptions?.hideSettled.value || !trade.isSettled">
+                <tr *ngIf="!configOptions?.hideSettled?.value || !trade.isSettled">
                   <td>{{trade.updateTimestamp | date}}</td>
                   <td *ngIf="user?.role.isAdmin" scope="col">{{trade.user.name}}</td>
                   <td>{{trade.instrument.name}}</td>

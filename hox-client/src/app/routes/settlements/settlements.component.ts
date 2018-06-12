@@ -18,7 +18,13 @@ import { Settlement, User } from '../../models/index';
 export class SettlementsComponent implements OnInit, OnDestroy  {
   user: User;
   settlements: Array<Settlement>;
-  configOptions: Object;
+  configOptions: Object= {
+    'hideFinished': {
+      value: true,
+      caption: "Hide finished",
+      explanation: "Hides settlements that has been fully processed."
+    }
+  };
 
   constructor(private datePipe: DatePipe, private http: Http, private authService: AuthService, private apiService: ApiService) { }
 
@@ -35,16 +41,12 @@ export class SettlementsComponent implements OnInit, OnDestroy  {
       this.settlements = settlements.sort((a: Settlement, b: Settlement) => {return a.updateTimestamp.getTime() - b.updateTimestamp.getTime()})
     );
 
-    // Get config from local storage, or initialize new if not stored.
-    this.configOptions = JSON.parse(localStorage.getItem("settlementsConfig"));
-    if (!this.configOptions) {
-      this.configOptions = {
-        'hideFinished': {
-          value: true,
-          caption: "Hide finished",
-          explanation: "Hides settlements that has been fully processed."
-        }
-      };
+    // Get config from local storage and replace defaults.
+    // Iterate and replace wtih stored settings in order to handle
+    // the case when new default settings are added.
+    let storedConfig = JSON.parse(localStorage.getItem("settlementsConfig"));
+    for (let key in storedConfig) {
+      this.configOptions[key] = storedConfig[key];
     }
 
     // Force ngOnDestroy on page refresh (F5).

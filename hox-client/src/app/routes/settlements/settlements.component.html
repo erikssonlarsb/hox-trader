@@ -23,7 +23,7 @@
             </thead>
             <tbody>
               <ng-container *ngFor="let settlement of settlements;">
-                <tr *ngIf="!configOptions?.hideFinished.value || !settlement.isAcknowledged || !settlement.counterpartySettlement.isAcknowledged"
+                <tr *ngIf="!configOptions?.hideFinished?.value || !settlement.isAcknowledged || !settlement.counterpartySettlement.isAcknowledged"
                   [ngClass]="[
                     (settlement.isAcknowledged && settlement.counterpartySettlement.isAcknowledged) ? 'table-success' : '',
                     (settlement.isAcknowledged && !settlement.counterpartySettlement.isAcknowledged) || (!settlement.counterpartySettlement.isAcknowledged && settlement.amount > 0) ? 'table-warning' : '',
