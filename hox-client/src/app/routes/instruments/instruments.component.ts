@@ -16,7 +16,7 @@ export class InstrumentsComponent  implements OnInit  {
   reVisit: boolean = true;
   orderDepthFilter: string = null;
   configSpin: boolean = false;
-  configOptions: Object = {
+  configOptions: any = {
     'classicView': {
       value: false,
       caption: "Classic view",
