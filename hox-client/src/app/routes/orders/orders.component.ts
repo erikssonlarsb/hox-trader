@@ -15,7 +15,18 @@ import { Order, User } from '../../models/index';
 export class OrdersComponent implements OnInit, OnDestroy  {
   user: User;
   orders: Array<Order>;
-  configOptions: Object;
+  configOptions: Object = {
+    'hideExpiredInstruments': {
+      value: true,
+      caption: "Hide expired instruments",
+      explanation: "Hides orders in expired instruments."
+    },
+    'hideNonActiveOrders': {
+      value: true,
+      caption: "Hide non-active orders",
+      explanation: "Hides orders that are not in state Active."
+    }
+  };
 
   constructor(private authService: AuthService, private ApiService: ApiService) { }
 
@@ -32,21 +43,12 @@ export class OrdersComponent implements OnInit, OnDestroy  {
       orders => this.orders = orders.sort((a: Order, b: Order) => {return a.updateTimestamp.getTime() - b.updateTimestamp.getTime()})
     );
 
-    // Get config from local storage, or initialize new if not stored.
-    this.configOptions = JSON.parse(localStorage.getItem("ordersConfig"));
-    if (!this.configOptions) {
-      this.configOptions = {
-        'hideExpiredInstruments': {
-          value: true,
-          caption: "Hide expired instruments",
-          explanation: "Hides orders in expired instruments."
-        },
-        'hideNonActiveOrders': {
-          value: true,
-          caption: "Hide non-active orders",
-          explanation: "Hides orders that are not in state Active."
-        }
-      };
+    // Get config from local storage and replace defaults.
+    // Iterate and replace wtih stored settings in order to handle
+    // the case when new default settings are added.
+    let storedConfig = JSON.parse(localStorage.getItem("ordersConfig"));
+    for (let key in storedConfig) {
+      this.configOptions[key] = storedConfig[key];
     }
 
     // Force ngOnDestroy on page refresh (F5).

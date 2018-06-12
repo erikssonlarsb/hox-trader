@@ -13,16 +13,20 @@ import { OrderDepth, Instrument } from '../../models/index';
 export class InstrumentsComponent  implements OnInit  {
   orderDepths: Array<OrderDepth>;
   indices: Array<Instrument>;
-  firstVisit: boolean = true;
+  reVisit: boolean = true;
   orderDepthFilter: string = null;
-  configOptions: Object;
   configSpin: boolean = false;
+  configOptions: Object = {
+    'classicView': {
+      value: false,
+      caption: "Classic view",
+      explanation: "Show classic market overview table."
+    }
+  };
 
   constructor(private apiService: ApiService) { }
 
   ngOnInit(): void {
-    this.firstVisit = localStorage.getItem('firstVisit') != null ? JSON.parse(localStorage.getItem('firstVisit')) : true;
-
     let orderDepthParams = new HttpParams({
       fromObject: {
         'status': 'ACTIVE',
@@ -45,22 +49,19 @@ export class InstrumentsComponent  implements OnInit  {
       instruments => this.indices = instruments
     );
 
-    // Get config from local storage, or initialize new if not stored.
-    this.configOptions = JSON.parse(localStorage.getItem("instrumentsConfig"));
-    if (!this.configOptions) {
-      this.configOptions = {
-        'classicView': {
-          value: false,
-          caption: "Classic view",
-          explanation: "Show classic market overview table."
-        }
-      };
-    }
-
-    // Spin config cog for 10 s to raise awareness.
-    if (this.firstVisit) {
+    this.reVisit = JSON.parse(localStorage.getItem('reVisit')) || false;
+    // Spin config cog for 10 s to raise awareness on first visit.
+    if (!this.reVisit) {
       this.configSpin = true;
       setTimeout(() => this.configSpin = false, 10000);
+    }
+
+    // Get config from local storage and replace defaults.
+    // Iterate and replace wtih stored settings in order to handle
+    // the case when new default settings are added.
+    let storedConfig = JSON.parse(localStorage.getItem("instrumentsConfig"));
+    for (let key in storedConfig) {
+      this.configOptions[key] = storedConfig[key];
     }
 
     // Force ngOnDestroy on page refresh (F5).
@@ -68,7 +69,7 @@ export class InstrumentsComponent  implements OnInit  {
   }
 
   dismissInfo(): void {
-    localStorage.setItem('firstVisit', JSON.stringify(false));
+    localStorage.setItem('reVisit', JSON.stringify(true));
   }
 
   ngOnDestroy(): void {
