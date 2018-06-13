@@ -1,15 +1,18 @@
 import { Instrument } from './instrument';
+import { User } from './user';
 import { ORDER_SIDE } from './order';
 import { Trade } from './trade';
 
 export class Position {
   instrument: Instrument;
+  user: User;
   side: ORDER_SIDE;
   trades: Array<Trade> = [];
 
   constructor(json) {
-    this.instrument = json.instrument ? new Instrument(json.instrument) : null;
-    this.trades = json.trades ? json.trades.map(trade => new Trade(trade)) : null;
+    this.instrument = json.instrument;
+    this.user = json.user;
+    this.trades = json.trades;
   }
 
   get buyTrades(): Array<Trade> {

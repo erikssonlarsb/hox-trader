@@ -38,9 +38,9 @@ export class TransactionsComponent implements OnInit, OnDestroy  {
     .subscribe(trades => {
       this.trades = trades.sort((a: Trade, b: Trade) => {return a.updateTimestamp.getTime() - b.updateTimestamp.getTime()});
       for (let trade of this.trades) {
-        let position = this.positions.find(position => position.instrument.id == trade.instrument.id);
+        let position = this.positions.find(position => position.instrument.id == trade.instrument.id && position.user.id == trade.user.id);
         if (!position) {
-          this.positions.push(new Position({instrument: trade.instrument, trades: [trade]}));
+          this.positions.push(new Position({instrument: trade.instrument, user: trade.user, trades: [trade]}));
         } else {
           position.addTrade(trade);
         }
