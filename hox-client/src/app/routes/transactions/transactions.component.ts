@@ -4,7 +4,7 @@ import { HttpParams }  from '@angular/common/http';
 import { AuthService } from '../../services/auth/auth.service';
 import { ApiService } from '../../services/api/api.service';
 
-import { Trade, User } from '../../models/index';
+import { Trade, Position, User } from '../../models/index';
 
 @Component({
   selector: 'app-transactions',
@@ -15,6 +15,7 @@ import { Trade, User } from '../../models/index';
 export class TransactionsComponent implements OnInit, OnDestroy  {
   user: User;
   trades: Array<Trade>;
+  positions: Array<Position> = [];
   configOptions: any = {
     'hideSettled': {
       value: true,
@@ -36,6 +37,14 @@ export class TransactionsComponent implements OnInit, OnDestroy  {
     this.ApiService.getTrades(tradeParams)
     .subscribe(trades => {
       this.trades = trades.sort((a: Trade, b: Trade) => {return a.updateTimestamp.getTime() - b.updateTimestamp.getTime()});
+      for (let trade of this.trades) {
+        let position = this.positions.find(position => position.instrument.id == trade.instrument.id);
+        if (!position) {
+          this.positions.push(new Position({instrument: trade.instrument, trades: [trade]}));
+        } else {
+          position.addTrade(trade);
+        }
+      }
     });
 
     // Get config from local storage and replace defaults.
