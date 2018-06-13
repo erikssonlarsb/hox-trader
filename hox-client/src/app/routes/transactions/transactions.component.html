@@ -16,6 +16,7 @@
                 <th scope="col" class="text-right">Buy Price</th>
                 <th scope="col" class="text-right">Sell Price</th>
                 <th scope="col" class="text-right">RPL</th>
+                <th scope="col" class="text-right">Exposure</th>
               </tr>
             </thead>
             <tbody>
@@ -28,9 +29,15 @@
                   <td class="text-right">{{(position.averageBuyPrice | number:'.2-2') || 'N/A'}}</td>
                   <td class="text-right">{{(position.averageSellPrice | number:'.2-2') || 'N/A'}}</td>
                   <td class="text-right">{{position.realizedProfitLoss | number:'.2-2'}}</td>
+                  <td class="text-right">{{position.exposure | number:'.2-2'}}</td>
                 </tr>
               </ng-container>
             </tbody>
+            <tfoot>
+              <th colspan="100"class="text-right"> <!-- Span "all" columns to work with both admin and not admin columns -->
+                {{(configOptions?.hideSettled?.value ? (positions | fieldSum:'exposure':{isSettled: false}) : (positions | fieldSum:'exposure')) | number:'.2-2'}}
+              </th>
+            </tfoot>
           </table>
         </div>
       </div>

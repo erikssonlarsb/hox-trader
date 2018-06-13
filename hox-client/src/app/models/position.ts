@@ -59,6 +59,16 @@ export class Position {
     return this.closedQuantity * (this.averageSellPrice - this.averageBuyPrice) || 0;
   }
 
+  get exposure(): number {
+    let quantity = this.openQuantity;
+    if (quantity > 0) {
+      return quantity * this.averageBuyPrice;
+    } else {
+      // Worst case for short position is team wins, i.e. sells
+      return Math.abs(quantity) * (30 - this.averageSellPrice);  // Subtract from 30 since it's the highest price a
+    }
+  }
+
   addTrade(trade: Trade): void {
     this.trades.push(trade);
   }
