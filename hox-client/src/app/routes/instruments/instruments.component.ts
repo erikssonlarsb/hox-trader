@@ -35,7 +35,11 @@ export class InstrumentsComponent  implements OnInit  {
     });
     this.apiService.getOrderDepths(orderDepthParams)
     .subscribe(
-      orderDepths => this.orderDepths = orderDepths
+      orderDepths => this.orderDepths = orderDepths.sort((a: OrderDepth, b: OrderDepth) => {
+        if(a.instrument.name < b.instrument.name) return -1;
+        if(a.instrument.name > b.instrument.name) return 1;
+        return 0;
+      })
     );
 
     let indexParams = new HttpParams({
@@ -46,7 +50,11 @@ export class InstrumentsComponent  implements OnInit  {
     });
     this.apiService.getInstruments(indexParams)
     .subscribe(
-      instruments => this.indices = instruments
+      instruments => this.indices = instruments.sort((a: Instrument, b: Instrument) => {
+        if(a.name < b.name) return -1;
+        if(a.name > b.name) return 1;
+        return 0;
+      })
     );
 
     this.reVisit = JSON.parse(localStorage.getItem('reVisit')) || false;

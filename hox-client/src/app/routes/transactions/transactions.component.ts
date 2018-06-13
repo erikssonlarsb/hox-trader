@@ -45,6 +45,11 @@ export class TransactionsComponent implements OnInit, OnDestroy  {
           position.addTrade(trade);
         }
       }
+      this.positions = this.positions.sort((a: Position, b: Position) => {
+        if(a.instrument.name < b.instrument.name) return -1;
+        if(a.instrument.name > b.instrument.name) return 1;
+        return 0;
+      });
     });
 
     // Get config from local storage and replace defaults.
