@@ -10,6 +10,7 @@
             <thead>
               <tr>
                 <th scope="col">Instrument</th>
+                <th *ngIf="user?.role.isAdmin" scope="col">User</th>
                 <th scope="col" class="text-right">Open</th>
                 <th scope="col" class="text-right">Closed</th>
                 <th scope="col" class="text-right">Buy Price</th>
@@ -21,6 +22,7 @@
               <ng-container *ngFor="let position of positions;">
                 <tr *ngIf="!configOptions?.hideSettled?.value || !position.trades[0].isSettled">
                   <td>{{position.instrument.name}}</td>
+                  <td *ngIf="user?.role.isAdmin">{{position.user.name}}</td>
                   <td class="text-right">{{position.openQuantity  | number:'.0-0'}}</td>
                   <td class="text-right">{{position.closedQuantity  | number:'.0-0'}}</td>
                   <td class="text-right">{{(position.averageBuyPrice  | number:'.2-2') || 'N/A'}}</td>
