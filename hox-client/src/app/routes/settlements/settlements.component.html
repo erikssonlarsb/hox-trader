@@ -29,7 +29,7 @@
                     (settlement.isAcknowledged && !settlement.counterpartySettlement.isAcknowledged) || (!settlement.counterpartySettlement.isAcknowledged && settlement.amount > 0) ? 'table-warning' : '',
                     (!settlement.isAcknowledged && settlement.counterpartySettlement.isAcknowledged) || (!settlement.isAcknowledged && settlement.amount < 0) ? 'table-danger' : ''
                     ]">
-                  <td>{{settlement.updateTimestamp | date}}</td>
+                  <td title="{{settlement.createTimestamp}}">{{settlement.createTimestamp | date}}</td>
                   <td *ngIf="user?.role.isAdmin" scope="col">{{settlement.user.name}}</td>
                   <td class="text-right">{{settlement.amount  | number:'.2-2'}}</td>
                   <td>{{settlement.counterpartySettlement.user.name}}</td>

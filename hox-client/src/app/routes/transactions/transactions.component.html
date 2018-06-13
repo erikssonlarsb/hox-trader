@@ -61,7 +61,7 @@
             <tbody>
               <ng-container *ngFor="let trade of trades;">
                 <tr *ngIf="!configOptions?.hideSettled?.value || !trade.isSettled">
-                  <td>{{trade.updateTimestamp | date}}</td>
+                  <td title="{{trade.createTimestamp}}">{{trade.createTimestamp | date}}</td>
                   <td *ngIf="user?.role.isAdmin" scope="col">{{trade.user.name}}</td>
                   <td>{{trade.instrument.name}}</td>
                   <td>{{trade.side}}</td>

@@ -36,7 +36,7 @@ export class TransactionsComponent implements OnInit, OnDestroy  {
     });
     this.ApiService.getTrades(tradeParams)
     .subscribe(trades => {
-      this.trades = trades.sort((a: Trade, b: Trade) => {return a.updateTimestamp.getTime() - b.updateTimestamp.getTime()});
+      this.trades = trades.sort((a: Trade, b: Trade) => {return a.createTimestamp.getTime() - b.createTimestamp.getTime()});
       for (let trade of this.trades) {
         let position = this.positions.find(position => position.instrument.id == trade.instrument.id && position.user.id == trade.user.id);
         if (!position) {

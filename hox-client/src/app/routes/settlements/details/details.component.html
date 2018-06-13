@@ -5,7 +5,7 @@
         <h5 class="card-title">
           Settlement details
         </h5>
-        <p><b>Date:</b> {{settlement?.updateTimestamp | date}}</p>
+        <p><b>Date:</b> {{settlement?.createTimestamp | date}}</p>
         <p><b>Counterparty:</b> {{settlement?.counterpartySettlement.user.name}}</p>
         <p><b>Phone:</b> {{settlement?.counterpartySettlement.user.phone}}</p>
         <div class="table-responsive">
@@ -26,7 +26,7 @@
             </thead>
             <tbody>
               <tr *ngFor="let trade of settlement?.trades;">
-                <td>{{trade.updateTimestamp | date}}</td>
+                <td>{{trade.createTimestamp | date}}</td>
                 <td>{{trade.instrument.name}}</td>
                 <td>{{trade.instrument.expiry | date}}</td>
                 <td>{{trade.side}}</td>

@@ -40,7 +40,7 @@ export class OrdersComponent implements OnInit, OnDestroy  {
     });
     this.ApiService.getOrders(orderParams)
     .subscribe(
-      orders => this.orders = orders.sort((a: Order, b: Order) => {return a.updateTimestamp.getTime() - b.updateTimestamp.getTime()})
+      orders => this.orders = orders.sort((a: Order, b: Order) => {return a.createTimestamp.getTime() - b.createTimestamp.getTime()})
     );
 
     // Get config from local storage and replace defaults.

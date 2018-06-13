@@ -14,6 +14,10 @@ export class User {
     this.phone = json.phone;
     this.role = json.role ? new Role(json.role) : null;
   }
+
+  get createTimestamp(): Date {
+    return this.id ? new Date(parseInt(this.id.toString().substring(0, 8), 16) * 1000) : null;
+  }
 }
 
 class Role {
