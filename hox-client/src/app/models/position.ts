@@ -15,6 +15,10 @@ export class Position {
     this.trades = json.trades;
   }
 
+  get isSettled(): boolean {
+    return this.trades ? this.trades[0].isSettled : null;
+  }
+
   get buyTrades(): Array<Trade> {
     return this.trades.filter((trade) => trade.side == ORDER_SIDE.BUY);
   }

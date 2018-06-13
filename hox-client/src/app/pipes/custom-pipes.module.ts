@@ -4,8 +4,9 @@ import { CommonModule } from '@angular/common';
 import { PricePipe } from './price.pipe';
 import { AveragePricePipe } from './averagePrice.pipe';
 import { EnumPipe } from './enum.pipe';
-import { OrderDepthPipe } from './orderDepth.pipe'
-import { InstrumentPipe } from './instrument.pipe'
+import { OrderDepthPipe } from './orderDepth.pipe';
+import { InstrumentPipe } from './instrument.pipe';
+import { FieldSumPipe } from './fieldSum.pipe';
 
 @NgModule({
   imports: [
@@ -16,14 +17,16 @@ import { InstrumentPipe } from './instrument.pipe'
     AveragePricePipe,
     EnumPipe,
     OrderDepthPipe,
-    InstrumentPipe
+    InstrumentPipe,
+    FieldSumPipe
   ],
   exports: [
     PricePipe,
     AveragePricePipe,
     EnumPipe,
     OrderDepthPipe,
-    InstrumentPipe
+    InstrumentPipe,
+    FieldSumPipe
   ]
 })
 
@@ -36,7 +39,8 @@ export class CustomPipesModule {
         AveragePricePipe,
         EnumPipe,
         OrderDepthPipe,
-        InstrumentPipe
+        InstrumentPipe,
+        FieldSumPipe
       ]
     };
   }
