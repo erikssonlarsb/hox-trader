@@ -104,22 +104,22 @@
                   <td class="text-right">{{((orderDepth.instrument.prices | price:'LAST')?.value | number:'.2-2') || 'N/A'}}</td>
                   <td class="text-right">
                     <a [routerLink]="['/order', {instrument: orderDepth.instrument.id, side: 'SELL', quantity: orderDepth.levels[0]?.buyQuantity, price: orderDepth.levels[0]?.buyPrice}]">
-                      {{orderDepth.levels[0]?.buyQuantity | number:'.0-0'}}
+                      {{(orderDepth.levels[0]?.buyQuantity | number:'.0-0') || 'N/A'}}
                     </a>
                   </td>
                   <td class="text-right">
                     <a [routerLink]="['/order', {instrument: orderDepth.instrument.id, side: 'SELL', price: orderDepth.levels[0]?.buyPrice}]">
-                      {{orderDepth.levels[0]?.buyPrice | number:'.2-2'}}
+                      {{(orderDepth.levels[0]?.buyPrice | number:'.2-2') || 'N/A'}}
                     </a>
                   </td>
                   <td class="text-right">
                     <a [routerLink]="['/order', {instrument: orderDepth.instrument.id, side: 'BUY', price: orderDepth.levels[0]?.sellPrice}]">
-                      {{orderDepth.levels[0]?.sellPrice | number:'.2-2'}}
+                      {{(orderDepth.levels[0]?.sellPrice | number:'.2-2') || 'N/A'}}
                     </a>
                   </td>
                   <td class="text-right">
                     <a [routerLink]="['/order', {instrument: orderDepth.instrument.id, side: 'BUY', quantity: orderDepth.levels[0]?.sellQuantity, price: orderDepth.levels[0]?.sellPrice}]">
-                      {{orderDepth.levels[0]?.sellQuantity | number:'.0-0'}}
+                      {{(orderDepth.levels[0]?.sellQuantity | number:'.0-0') || 'N/A'}}
                     </a>
                   </td>
                 </tr>
