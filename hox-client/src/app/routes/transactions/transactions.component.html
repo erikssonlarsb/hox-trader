@@ -3,6 +3,44 @@
     <div class="card">
       <div class="card-body">
         <h5 class="card-title">
+          Positions
+        </h5>
+        <div class="table-responsive">
+          <table class="table table-sm table-hover">
+            <thead>
+              <tr>
+                <th scope="col">Instrument</th>
+                <th scope="col" class="text-right">Open</th>
+                <th scope="col" class="text-right">Closed</th>
+                <th scope="col" class="text-right">Buy Price</th>
+                <th scope="col" class="text-right">Sell Price</th>
+                <th scope="col" class="text-right">RPL</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let position of positions;">
+                <tr *ngIf="!configOptions?.hideSettled?.value || !position.trades[0].isSettled">
+                  <td>{{position.instrument.name}}</td>
+                  <td class="text-right">{{position.openQuantity  | number:'.0-0'}}</td>
+                  <td class="text-right">{{position.closedQuantity  | number:'.0-0'}}</td>
+                  <td class="text-right">{{(position.averageBuyPrice  | number:'.2-2') || 'N/A'}}</td>
+                  <td class="text-right">{{(position.averageSellPrice  | number:'.2-2') || 'N/A'}}</td>
+                  <td class="text-right">{{position.realizedProfitLoss  | number:'.2-2'}}</td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">
           Transactions
         </h5>
         <div class="table-responsive">
