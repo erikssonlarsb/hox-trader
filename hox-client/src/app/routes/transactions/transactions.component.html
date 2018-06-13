@@ -20,14 +20,14 @@
             </thead>
             <tbody>
               <ng-container *ngFor="let position of positions;">
-                <tr *ngIf="!configOptions?.hideSettled?.value || !position.trades[0].isSettled">
+                <tr *ngIf="!configOptions?.hideSettled?.value || !position.isSettled">
                   <td>{{position.instrument.name}}</td>
-                  <td *ngIf="user?.role.isAdmin">{{position.user.name}}</td>
-                  <td class="text-right">{{position.openQuantity  | number:'.0-0'}}</td>
-                  <td class="text-right">{{position.closedQuantity  | number:'.0-0'}}</td>
-                  <td class="text-right">{{(position.averageBuyPrice  | number:'.2-2') || 'N/A'}}</td>
-                  <td class="text-right">{{(position.averageSellPrice  | number:'.2-2') || 'N/A'}}</td>
-                  <td class="text-right">{{position.realizedProfitLoss  | number:'.2-2'}}</td>
+                  <td *ngIf="user?.role.isAdmin" scope="col">{{position.user.name}}</td>
+                  <td class="text-right">{{position.openQuantity | number:'.0-0'}}</td>
+                  <td class="text-right">{{position.closedQuantity | number:'.0-0'}}</td>
+                  <td class="text-right">{{(position.averageBuyPrice | number:'.2-2') || 'N/A'}}</td>
+                  <td class="text-right">{{(position.averageSellPrice | number:'.2-2') || 'N/A'}}</td>
+                  <td class="text-right">{{position.realizedProfitLoss | number:'.2-2'}}</td>
                 </tr>
               </ng-container>
             </tbody>
