@@ -14,4 +14,8 @@ export class Invite {
     this.code = json.code ? json.code : null;
     this.updateTimestamp = json.updateTimestamp ? new Date(json.updateTimestamp) : null;
   }
+
+  get createTimestamp(): Date {
+    return this.id ? new Date(parseInt(this.id.toString().substring(0, 8), 16) * 1000) : null;
+  }
 }

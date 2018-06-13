@@ -38,7 +38,7 @@ export class SettlementsComponent implements OnInit, OnDestroy  {
     });
     this.apiService.getSettlements(settlementParams)
     .subscribe(settlements =>
-      this.settlements = settlements.sort((a: Settlement, b: Settlement) => {return a.updateTimestamp.getTime() - b.updateTimestamp.getTime()})
+      this.settlements = settlements.sort((a: Settlement, b: Settlement) => {return a.createTimestamp.getTime() - b.createTimestamp.getTime()})
     );
 
     // Get config from local storage and replace defaults.
@@ -65,7 +65,7 @@ export class SettlementsComponent implements OnInit, OnDestroy  {
       .subscribe(() => {
         this.apiService.getSettlements(settlementParams)
           .subscribe(settlements => {
-            this.settlements = settlements.sort((a: Settlement, b: Settlement) => {return a.updateTimestamp.getTime() - b.updateTimestamp.getTime()})
+            this.settlements = settlements.sort((a: Settlement, b: Settlement) => {return a.createTimestamp.getTime() - b.createTimestamp.getTime()})
           });
       });
   }
@@ -75,7 +75,7 @@ export class SettlementsComponent implements OnInit, OnDestroy  {
       format: "svg",
       payee: {value: settlement.counterpartySettlement.user.phone},
   	  amount: {value: -settlement.amount},
-  	  message: {value: settlement.user.name + " " + this.datePipe.transform(settlement.updateTimestamp)}
+  	  message: {value: settlement.user.name + " " + this.datePipe.transform(settlement.createTimestamp)}
     }
 
     var wnd = window.open("", "_blank", "width=500, height=500");

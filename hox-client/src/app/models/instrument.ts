@@ -19,6 +19,10 @@ export class Instrument {
     this.derivatives = json.derivatives ? json.derivatives.map(derivative => new Derivative(derivative)) : null;
     this.updateTimestamp = json.updateTimestamp ? new Date(json.updateTimestamp) : null;
   }
+
+  get createTimestamp(): Date {
+    return this.id ? new Date(parseInt(this.id.toString().substring(0, 8), 16) * 1000) : null;
+  }
 }
 
 export enum INSTRUMENT_STATUS {

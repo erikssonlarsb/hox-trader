@@ -92,7 +92,7 @@ function matchOrder(order) {
     instrument: order.instrument,  // Match orders in same instrument
     status: 'ACTIVE'  // Match only active orders
   };
-  let sorting = [['updateTimestamp', 'ascending']];  // sort to match oldest order first
+  let sorting = [['_id', 'ascending']];  // sort to match oldest order first
 
   if (order.side == 'BUY') {  // Specific query params for BUY orders
     query.side = 'SELL';  // Match with SELL orders

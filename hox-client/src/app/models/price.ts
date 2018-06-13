@@ -18,6 +18,10 @@ export class Price {
     this.updateTimestamp = json.updateTimestamp ? new Date(json.updateTimestamp) : null;
   }
 
+  get createTimestamp(): Date {
+    return this.id ? new Date(parseInt(this.id.toString().substring(0, 8), 16) * 1000) : null;
+  }
+
   toJSON() {
     return Object.assign({}, this, {
       instrument: this.instrument.id
