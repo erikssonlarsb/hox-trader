@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef  } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpParams }  from '@angular/common/http';
+
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 
 import { ApiService } from '../../services/api/api.service';
 
@@ -20,7 +23,9 @@ export class OrderComponent  implements OnInit  {
   order: Order;
   errorMessage: string;
 
-  constructor(private router: Router, private route: ActivatedRoute, private apiService: ApiService) { }
+  confirmationModal: BsModalRef;
+
+  constructor(private router: Router, private route: ActivatedRoute, private modalService: BsModalService, private apiService: ApiService) { }
 
   ngOnInit(): void {
     this.route
@@ -76,9 +81,14 @@ export class OrderComponent  implements OnInit  {
     let instrument = this.instruments.find(instrument => instrument.name == this.instrument);
     let newOrder = new Order({instrument: instrument, side: this.side, quantity: this.quantity, price: this.price});
     this.apiService.postOrder(newOrder)
-      .subscribe(
-        order => this.router.navigate(['/orders']),
-        error => this.errorMessage = error.message
-      );
+    .subscribe(
+      order => this.router.navigate(['/orders']),
+      error => this.errorMessage = error.message
+    );
+    this.confirmationModal.hide();
+  }
+
+  openModal(template: TemplateRef<any>) {
+    this.confirmationModal = this.modalService.show(template);
   }
 }
