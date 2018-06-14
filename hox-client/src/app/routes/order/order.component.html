@@ -144,11 +144,10 @@
           <div class="col-5 col-lg-4"><b>Price</b></div>
           <div class="col">{{price | number:'.2-2'}}</div>
         </div>
-        <div class="row">
-          <div class="col-5 col-lg-4"><b>Value</b></div>
-          <div class="col">{{quantity * price | number:'.2-2'}}</div>
-        </div>
         <br>
+        <p>
+          Maximum potential loss for this order is {{(side == 'BUY' ? quantity * price : quantity * (30-price)) | number:'.2-2'}} SEK.
+        </p>
         <button type="button" class="btn btn-success mr-2" (click)="placeOrder()" ><i class="fa fa-paper-plane-o"></i> Submit</button>
         <button type="button" class="btn btn-danger" (click)="confirmationModal.hide()" ><i class="fa fa-times"></i> Abort</button>
       </div>
