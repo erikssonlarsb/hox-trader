@@ -6,7 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 
 import { ChartsModule } from 'ng2-charts';
-import { ClipboardModule } from 'ngx-clipboard';
+
 import { DateOnlyModule }  from 'angular-date-only';
 
 import { AppComponent } from './app.component';
@@ -62,7 +62,6 @@ import { AdminComponent } from './routes/admin/admin.component';
     RoutingModule,
     BootstrapModule,
     ChartsModule,
-    ClipboardModule,
     DateOnlyModule,
     CustomPipesModule.forRoot()
   ],

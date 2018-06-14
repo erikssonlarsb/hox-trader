@@ -172,9 +172,9 @@
               <span class="pull-right">
                 <button
                   type="button"
-                  class="btn btn-sm btn-primary"
+                  class="btn btn-sm btn-default"
                   title="Copy link to clipboard"
-                  ngxClipboard [cbContent]="registerUrl + invite.code">
+                  (click)="copyToClipboard(invite.code)">
                   <i class="fa fa-copy"></i>
                 </button>
               </span>
