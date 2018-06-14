@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Location  } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { HttpParams }  from '@angular/common/http';
 
@@ -25,11 +24,10 @@ export class UserDetailsComponent implements OnInit  {
   changePasswordErrorMessage: string;
 
   invites: Array<Invite>;
-  registerUrl: string;
   generateInviteStatusMessage: string;
   generateInviteErrorMessage: string;
 
-  constructor(private location: Location, private route: ActivatedRoute, private apiService: ApiService) { }
+  constructor(private route: ActivatedRoute, private apiService: ApiService) { }
 
   ngOnInit(): void {
     this.route
@@ -50,11 +48,9 @@ export class UserDetailsComponent implements OnInit  {
       }
     });
     this.apiService.getInvites(intiveParams)
-    .subscribe(invites => {
-      this.invites = invites;
-    });
-
-    this.registerUrl = location.origin + '/register/';
+      .subscribe(invites => {
+        this.invites = invites;
+      });
   }
 
   updateUser(): void {
@@ -85,6 +81,15 @@ export class UserDetailsComponent implements OnInit  {
     } else {
       this.changePasswordErrorMessage = "Passwords doesn't match."
     }
+  }
+
+  copyToClipboard(code: string): void {
+    const event = (e: ClipboardEvent) => {
+      e.clipboardData.setData('text/plain', document.location.origin + '/register/' + code);
+      e.preventDefault();
+    }
+    document.addEventListener('copy', event);
+    document.execCommand('copy');
   }
 
   generateInvite(): void {
