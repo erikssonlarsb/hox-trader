@@ -73,8 +73,7 @@
                       class="form-control"
                       name="quantity"
                       id="quantity"
-                      (ngModelChange)="quantity=$event"
-                      [ngModel]="quantity | number:'.0-0'"
+                      [(ngModel)]="quantity"
                       required />
                   </div>
                 </div>
@@ -91,8 +90,7 @@
                       class="form-control"
                       name="price"
                       id="price"
-                      (ngModelChange)="price=$event"
-                      [ngModel]="price | number:'.2-2'"
+                      [(ngModel)]="price"
                       required />
                   </div>
                 </div>
