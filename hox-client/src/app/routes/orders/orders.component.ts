@@ -1,5 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, TemplateRef, OnDestroy } from '@angular/core';
 import { HttpParams }  from '@angular/common/http';
+
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 
 import { AuthService } from '../../services/auth/auth.service';
 import { ApiService } from '../../services/api/api.service';
@@ -15,6 +18,10 @@ import { Order, User } from '../../models/index';
 export class OrdersComponent implements OnInit, OnDestroy  {
   user: User;
   orders: Array<Order>;
+
+  orderToWithdraw: Order;
+  withdrawModal: BsModalRef;
+
   configOptions: any = {
     'hideExpiredInstruments': {
       value: true,
@@ -28,7 +35,7 @@ export class OrdersComponent implements OnInit, OnDestroy  {
     }
   };
 
-  constructor(private authService: AuthService, private ApiService: ApiService) { }
+  constructor(private modalService: BsModalService, private authService: AuthService, private ApiService: ApiService) { }
 
   ngOnInit(): void {
     this.user = this.authService.getLoggedInUser();
@@ -66,10 +73,17 @@ export class OrdersComponent implements OnInit, OnDestroy  {
         }
       });
       this.ApiService.getOrders(orderParams)
-        .subscribe(
-          orders => this.orders = orders
-        )
+      .subscribe(
+        orders => this.orders = orders
+      );
+      this.orderToWithdraw = null;
+      this.withdrawModal.hide();
     });
+  }
+
+  openWithdrawModal(template: TemplateRef<any>, order: Order) {
+    this.orderToWithdraw = order;
+    this.withdrawModal = this.modalService.show(template);
   }
 
   ngOnDestroy(): void {
