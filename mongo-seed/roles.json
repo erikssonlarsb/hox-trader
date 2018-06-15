@@ -2,7 +2,7 @@
   {
       "_id" : ObjectId("000000000000000000000001"),
       "__v" : NumberInt(0),
-      "name" : "superadmin",
+      "name" : "admin",
       "isAdmin" : true,
       "permissions" : [
           {
@@ -37,19 +37,13 @@
           {
               "resource" : "orders",
               "methods" : [
-                  "GET",
-                  "POST",
-                  "PUT",
-                  "DELETE"
+                  "GET"
               ]
           },
           {
               "resource" : "trades",
               "methods" : [
-                  "GET",
-                  "POST",
-                  "PUT",
-                  "DELETE"
+                  "GET"
               ]
           },
           {
@@ -88,8 +82,7 @@
           {
               "resource" : "settlements",
               "methods" : [
-                  "GET",
-                  "PUT"
+                  "GET"
               ]
           },
           {
