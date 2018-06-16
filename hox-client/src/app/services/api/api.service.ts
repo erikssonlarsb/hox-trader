@@ -6,7 +6,7 @@ import { catchError } from 'rxjs/operators';
 import { AuthService } from '../../services/auth/auth.service';
 import { ApiErrorHandler } from './apierrorhandler.service';
 
-import { Invite, User, Instrument, INSTRUMENT_TYPE, Index, Derivative, Order, Trade, OrderDepth, Settlement, Price } from '../../models/index';
+import { Invite, User, Instrument, INSTRUMENT_TYPE, Index, Derivative, Order, Trade, Ticker, OrderDepth, Settlement, Price } from '../../models/index';
 
 @Injectable()
 export class ApiService {
@@ -173,6 +173,16 @@ export class ApiService {
     return this.http
       .get<Trade[]>(`${window.location.origin}/api/trades`, { headers: headers, params: params })
       .map(trades => trades.map(trade => new Trade(trade)))
+      .pipe(
+        catchError(error => this.errorHandler.handleError(error))
+      );
+  }
+
+  getTickers(params: HttpParams = new HttpParams()): Observable<Ticker[]> {
+    let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
+    return this.http
+      .get<Ticker[]>(`${window.location.origin}/api/tickers`, { headers: headers, params: params })
+      .map(tickers => tickers.map(ticker => new Ticker(ticker)))
       .pipe(
         catchError(error => this.errorHandler.handleError(error))
       );

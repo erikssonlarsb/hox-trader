@@ -135,6 +135,44 @@
     <div class="card">
       <div class="card-body">
         <h5 class="card-title">
+          Ticker
+        </h5>
+        <div class="table-responsive">
+          <table class="table table-sm table-hover">
+            <thead>
+              <tr>
+                <th scope="col" colspan="3" class="border-top-0">&nbsp;</th>
+              </tr>
+              <tr>
+                <th scope="col">Instrument</th>
+                <th scope="col" class="text-right">Qty</th>
+                <th scope="col" class="text-right">Price</th>
+                <th scope="col">Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let ticker of tickers;">
+                <tr>
+                  <td>
+                    <a
+                      routerLink="/instruments/{{ticker.instrument.id}}">
+                      {{ticker.instrument.name}}
+                    </a>
+                  </td>
+                  <td class="text-right">{{ticker.quantity | number:'.0-0'}}</td>
+                  <td class="text-right">{{ticker.price | number:'.2-2'}}</td>
+                  <td>{{ticker.timestamp | date:'HH:mm, MMM, d'}}</td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">
           Indices
         </h5>
         <div class="table-responsive">
