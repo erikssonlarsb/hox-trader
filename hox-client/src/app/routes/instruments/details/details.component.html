@@ -54,8 +54,11 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-md-6 table-responsive">
-            <table *ngIf="orderDepth?.levels.length > 0" class="table table-sm table-hover">
+          <div class="col-md-6 table-responsive" *ngIf="orderDepth?.levels.length > 0" >
+            <h6 class="card-title">
+              Order depth
+            </h6>
+            <table class="table table-sm table-hover">
               <thead>
                 <tr>
                   <th scope="col" class="border-top-0"><i class="fa fa-fw fa-balance-scale"></i></th>
@@ -144,22 +147,23 @@
               </tfoot>
             </table>
           </div>
-          <div class="col-md-6 order-md-first">
-            <div class="row">
+          <div class="col-md-6 order-md-first instrument-info mb-3">
+            <h6 class="card-title">
+              Information
+            </h6>
+            <div class="row mb-0">
               <div class="col-5 col-lg-4"><b>Type</b></div>
               <div class="col">{{instrument.type}}</div>
             </div>
-            <!--
-            <div *ngIf="instrument.ticker" class="row">
+            <div *ngIf="instrument.ticker" class="row mb-0">
               <div class="col-5 col-lg-4"><b>Ticker</b></div>
               <div class="col">{{instrument.ticker}}</div>
             </div>
-            <div *ngIf="instrument.isin" class="row">
+            <div *ngIf="instrument.isin" class="row mb-0">
               <div class="col-5 col-lg-4"><b>ISIN</b></div>
               <div class="col">{{instrument.isin}}</div>
             </div>
-            -->
-            <div *ngIf="instrument.underlying" class="row">
+            <div *ngIf="instrument.underlying" class="row mb-0">
               <div class="col-5 col-lg-4"><b>Underlying</b></div>
               <div class="col">
                 <a
@@ -168,14 +172,15 @@
                 </a>
               </div>
             </div>
-            <div *ngIf="instrument.underlying" class="row">
+            <div *ngIf="instrument.underlying" class="row mb-0">
               <div class="col-5 col-lg-4"><b>Expiry</b></div>
               <div class="col">{{instrument.expiry | dateonly}}</div>
             </div>
           </div>
-        </div>
-        <div class="row" *ngIf="instrument?.derivatives.length > 0">
-          <div class="col-sm-auto table-responsive">
+          <div class="col-md-6 table-responsive" *ngIf="instrument?.derivatives.length > 0">
+            <h6 class="card-title">
+              Derivatives
+            </h6>
             <table class="table table-sm">
               <thead>
                 <tr>
@@ -196,17 +201,46 @@
               </tbody>
             </table>
           </div>
-        </div>
-        <div class="row mt-2" *ngIf="chartLabels?.length > 0">
-          <div class="col-sm-12">
+          <div class="col-md-6" *ngIf="chartLabels?.length > 0">
+            <h6 class="card-title">
+              History
+            </h6>
             <canvas
+              class="mt-2 mb-3"
               baseChart
               [chartType]="'line'"
               [datasets]="chartData"
               [labels]="chartLabels"
               [options]="chartOptions"
               [legend]="false">
-          </canvas>
+            </canvas>
+          </div>
+          <div class="col-md-6" *ngIf="tickers?.length > 0">
+            <h6 class="card-title">
+              Ticker
+            </h6>
+            <div class="table-responsive">
+              <table class="table table-sm table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col" class="border-top-0">Instrument</th>
+                    <th scope="col" class="text-right border-top-0">Qty</th>
+                    <th scope="col" class="text-right border-top-0">Price</th>
+                    <th scope="col" class="border-top-0">Time</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <ng-container *ngFor="let ticker of tickers;">
+                    <tr>
+                      <td>{{ticker.instrument.name}}</td>
+                      <td class="text-right">{{ticker.quantity | number:'.0-0'}}</td>
+                      <td class="text-right">{{ticker.price | number:'.2-2'}}</td>
+                      <td>{{ticker.timestamp | date:'HH:mm, MMM, d'}}</td>
+                    </tr>
+                  </ng-container>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>

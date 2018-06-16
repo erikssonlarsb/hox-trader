@@ -25,6 +25,7 @@ app.use('/api/instruments', auth(), require('./handlers/instruments'));
 app.use('/api/orders', auth('user'), require('./handlers/orders'));
 app.use('/api/prices', auth(), require('./handlers/prices'));
 app.use('/api/trades', auth('user'), require('./handlers/trades'));
+app.use('/api/tickers', auth(), require('./handlers/tickers'));
 app.use('/api/orderdepths', auth(), require('./handlers/orderdepths'));
 app.use('/api/settlements', auth('user'), require('./handlers/settlements'));
 app.use('/api/jobs', auth(), require('./handlers/jobs'));

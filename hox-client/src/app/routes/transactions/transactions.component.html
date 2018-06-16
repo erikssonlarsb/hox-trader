@@ -12,9 +12,9 @@
                 <th scope="col">Instrument</th>
                 <th *ngIf="user?.role.isAdmin" scope="col">User</th>
                 <th scope="col" class="text-right">Open</th>
-                <th scope="col" class="text-right">Closed</th>
-                <th scope="col" class="text-right">Buy Price</th>
-                <th scope="col" class="text-right">Sell Price</th>
+                <th scope="col" class="text-right">Clsd</th>
+                <th scope="col" class="text-right">B. price</th>
+                <th scope="col" class="text-right">S. price</th>
                 <th scope="col" class="text-right">RPL</th>
                 <th scope="col" class="text-right">Exposure</th>
               </tr>
@@ -56,25 +56,25 @@
           <table class="table table-sm table-hover">
             <thead>
               <tr>
-                <th scope="col">Date</th>
                 <th *ngIf="user?.role.isAdmin" scope="col">User</th>
                 <th scope="col">Instrument</th>
-                <th scope="col">Type</th>
+                <th scope="col">Side</th>
                 <th scope="col" class="text-right">Qty</th>
                 <th scope="col" class="text-right">Price</th>
                 <th scope="col">Counterparty</th>
+                <th scope="col">Time</th>
               </tr>
             </thead>
             <tbody>
               <ng-container *ngFor="let trade of trades;">
                 <tr *ngIf="!configOptions?.hideSettled?.value || !trade.isSettled">
-                  <td title="{{trade.createTimestamp}}">{{trade.createTimestamp | date}}</td>
                   <td *ngIf="user?.role.isAdmin" scope="col">{{trade.user.name}}</td>
                   <td>{{trade.instrument.name}}</td>
                   <td>{{trade.side}}</td>
                   <td class="text-right">{{trade.quantity  | number:'.0-0'}}</td>
                   <td class="text-right">{{trade.price  | number:'.2-2'}}</td>
                   <td>{{trade.counterpartyTrade.user.name}}</td>
+                  <td title="{{trade.createTimestamp}}">{{trade.createTimestamp | date:'HH:mm, MMM, d'}}</td>
                 </tr>
               </ng-container>
             </tbody>

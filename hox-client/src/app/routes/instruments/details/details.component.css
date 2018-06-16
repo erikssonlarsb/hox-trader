@@ -4,3 +4,9 @@
 .row {
   margin-bottom: 10px;
 }
+.card-title {
+  margin-bottom: 5px
+}
+.instrument-info {
+  font-size: small;
+}

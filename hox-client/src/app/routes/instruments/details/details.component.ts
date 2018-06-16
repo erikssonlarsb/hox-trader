@@ -6,7 +6,7 @@ import { ApiService } from '../../../services/api/api.service';
 
 import { DateOnlyPipe } from 'angular-date-only';
 
-import { Instrument, OrderDepth, Price } from '../../../models/index';
+import { Instrument, OrderDepth, Price, Ticker } from '../../../models/index';
 
 @Component({
   selector: 'app-instrument-details',
@@ -17,6 +17,7 @@ import { Instrument, OrderDepth, Price } from '../../../models/index';
 export class InstrumentDetailsComponent  implements OnInit  {
   instrument: Instrument;
   orderDepth: OrderDepth;
+  tickers: Array<Ticker>;
 
   chartData: Array<any>;
   chartLabels: Array<string>;
@@ -38,24 +39,36 @@ export class InstrumentDetailsComponent  implements OnInit  {
         }
       });
       this.apiService.getInstrument(params.get('id'), httpParams)
-        .subscribe(
-          instrument => {
-            this.instrument = instrument;
-            this.chartData = new Array();
-            this.chartLabels = new Array();
-            this.chartData[0] = {data: new Array(), label: '', fill: false, lineTension: 0};
-            instrument.prices.filter(price => price.type == 'CLOSE').forEach((price, index) => {
-              this.chartData[0].data[index] = price.value;
-              this.chartLabels[index] = this.dateOnlyPipe.transform(price.date);
-            });
+      .subscribe(
+        instrument => {
+          this.instrument = instrument;
+          this.chartData = new Array();
+          this.chartLabels = new Array();
+          this.chartData[0] = {data: new Array(), label: '', fill: false, lineTension: 0};
+          instrument.prices.filter(price => price.type == 'CLOSE').forEach((price, index) => {
+            this.chartData[0].data[index] = price.value;
+            this.chartLabels[index] = this.dateOnlyPipe.transform(price.date);
+          });
 
-          }
-        );
+        }
+      );
 
       this.apiService.getOrderDepth(params.get('id'))
-        .subscribe(
-          orderDepth => this.orderDepth = orderDepth
-        );
+      .subscribe(
+        orderDepth => this.orderDepth = orderDepth
+      );
+
+      let tickerParams = new HttpParams({
+        fromObject: {
+          'instrument': params.get('id'),
+          '_limit': '5',
+          '_populate': 'instrument'
+        }
+      });
+      this.apiService.getTickers(tickerParams)
+      .subscribe(
+        tickers => this.tickers = tickers
+      );
     })
   }
 }

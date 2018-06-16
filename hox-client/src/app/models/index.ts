@@ -1,6 +1,7 @@
 export { Instrument, INSTRUMENT_STATUS, INSTRUMENT_TYPE, Index, Derivative } from './instrument';
 export { Order, ORDER_SIDE, ORDER_STATUS } from './order';
 export { Trade } from './trade';
+export { Ticker } from './ticker';
 export { Position } from './position';
 export { OrderDepth } from './orderdepth';
 export { User } from './user';

@@ -6,7 +6,7 @@ const Trade = require('../models/trade');
 module.exports = {
 
   // Query trades.
-  query: function(params, {auth = {}, populate = []}, callback) {
+  query: function(params, {auth = {}, populate = [], sort = null, limit = null}, callback) {
     if (typeof arguments[1] === 'function') {
       callback = arguments[1];
     }
@@ -16,7 +16,7 @@ module.exports = {
 
     tradeQuery = populateQuery(tradeQuery, populate);
 
-    tradeQuery.exec(function(err, trades) {
+    tradeQuery.sort(sort).limit(limit).exec(function(err, trades) {
       callback(err, trades);
     });
   },

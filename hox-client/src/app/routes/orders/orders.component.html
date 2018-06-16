@@ -9,14 +9,14 @@
           <table class="table table-sm table-hover">
             <thead>
               <tr>
-                <th scope="col">Date</th>
                 <th *ngIf="user?.role.isAdmin" scope="col">User</th>
                 <th scope="col">Instrument</th>
                 <th scope="col">Side</th>
                 <th scope="col" class="text-right">Qty</th>
-                <th scope="col" class="text-right">Traded</th>
+                <th scope="col" class="text-right">Trd</th>
                 <th scope="col" class="text-right">Price</th>
                 <th scope="col">Status</th>
+                <th scope="col">Time</th>
                 <th scope="col"></th>
               </tr>
             </thead>
@@ -24,7 +24,7 @@
               <ng-container *ngFor="let order of orders;">
                 <tr *ngIf="(!configOptions?.hideExpiredInstruments?.value || order.instrument.status == 'ACTIVE') &&
                            (!configOptions?.hideNonActiveOrders?.value || order.status == 'ACTIVE')">
-                  <td title="{{order.createTimestamp}}">{{order.createTimestamp | date}}</td>
+
                   <td *ngIf="user?.role.isAdmin" scope="col">{{order.user.name}}</td>
                   <td>{{order.instrument.name}}</td>
                   <td>{{order.side}}</td>
@@ -32,11 +32,12 @@
                   <td class="text-right">{{order.tradedQuantity  | number:'.0-0'}}</td>
                   <td class="text-right">{{order.price | number:'.2-2'}}</td>
                   <td>{{order.status}}</td>
+                  <td title="{{order.createTimestamp}}">{{order.createTimestamp | date:'HH:mm, MMM, d'}}</td>
                   <td>
                     <button
                       type="button"
                       class="btn btn-sm btn-danger btn-block"
-                      (click)="withdrawOrder(order.id)"
+                      (click)="openWithdrawModal(orderWithdraw, order)"
                       [hidden]="order.status != 'ACTIVE'">
                       <i class="fa fa-trash"></i> Withdraw
                     </button>
@@ -52,3 +53,32 @@
 </div>
 
 <config-menu [(options)]="configOptions"></config-menu>
+
+<ng-template #orderWithdraw>
+    <div class="card" *ngIf="orderToWithdraw">
+      <div class="card-body">
+        <h5 class="card-title">
+          Withdraw order
+        </h5>
+        <div class="row">
+          <div class="col-5 col-lg-4"><b>Instrument</b></div>
+          <div class="col">{{orderToWithdraw.instrument.name}}</div>
+        </div>
+        <div class="row">
+          <div class="col-5 col-lg-4"><b>Side</b></div>
+          <div class="col">{{orderToWithdraw.side}}</div>
+        </div>
+        <div class="row">
+          <div class="col-5 col-lg-4"><b>Quantity</b></div>
+          <div class="col">{{orderToWithdraw.quantity | number:'.0-0'}}</div>
+        </div>
+        <div class="row">
+          <div class="col-5 col-lg-4"><b>Price</b></div>
+          <div class="col">{{orderToWithdraw.price | number:'.2-2'}}</div>
+        </div>
+        <br>
+        <button type="button" class="btn btn-success mr-2" (click)="withdrawOrder(orderToWithdraw.id)" ><i class="fa fa-paper-plane-o"></i> Submit</button>
+        <button type="button" class="btn btn-danger" (click)="withdrawModal.hide()" ><i class="fa fa-times"></i> Abort</button>
+      </div>
+    </div>
+</ng-template>

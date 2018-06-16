@@ -3,7 +3,7 @@ import { HttpParams }  from '@angular/common/http';
 
 import { ApiService } from '../../services/api/api.service';
 
-import { OrderDepth, Instrument } from '../../models/index';
+import { OrderDepth, Instrument, Ticker } from '../../models/index';
 
 @Component({
   selector: 'app-instruments',
@@ -12,6 +12,7 @@ import { OrderDepth, Instrument } from '../../models/index';
 })
 export class InstrumentsComponent  implements OnInit  {
   orderDepths: Array<OrderDepth>;
+  tickers: Array<Ticker>;
   indices: Array<Instrument>;
   reVisit: boolean = true;
   orderDepthFilter: string = null;
@@ -41,6 +42,18 @@ export class InstrumentsComponent  implements OnInit  {
         return 0;
       })
     );
+
+    let tickerParams = new HttpParams({
+      fromObject: {
+        '_limit': '15',
+        '_populate': 'instrument'
+      }
+    });
+    this.apiService.getTickers(tickerParams)
+    .subscribe(
+      tickers => this.tickers = tickers
+    );
+
 
     let indexParams = new HttpParams({
       fromObject: {
