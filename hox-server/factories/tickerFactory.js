@@ -12,6 +12,8 @@ module.exports = {
       callback = arguments[1];
     }
 
+    params.side = 'BUY';
+
     tradeFactory.query(params, {populate: populate, sort: sort, limit: limit}, function(err, trades) {
       if(err) {
         callback(err);
