@@ -47,6 +47,12 @@
               ]
           },
           {
+              "resource" : "tickers",
+              "methods" : [
+                  "GET"
+              ]
+          },
+          {
               "resource" : "users",
               "methods" : [
                   "GET",
@@ -130,6 +136,12 @@
           },
           {
               "resource" : "trades",
+              "methods" : [
+                  "GET"
+              ]
+          },
+          {
+              "resource" : "tickers",
               "methods" : [
                   "GET"
               ]
