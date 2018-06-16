@@ -19,7 +19,7 @@ export class Trade {
     this.order = json.order ? new Order(json.order) : null;
     this.user = json.user ? new User(json.user) : null;
     this.counterpartyTrade = json.counterpartyTrade ? new Trade(json.counterpartyTrade) : null;
-    this.instrument = json.instrument ? new Instrument(json.instrument) : null;
+    this.instrument = json.instrument ? Instrument.typeMapper(json.instrument) : null;
     this.side = json.side;
     this.price = json.price;
     this.quantity = json.quantity;

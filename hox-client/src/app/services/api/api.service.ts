@@ -93,7 +93,7 @@ export class ApiService {
     let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
       .get<Instrument[]>(`${window.location.origin}/api/instruments`, { headers: headers, params: params })
-      .map(instruments => instruments.map(instrument => this.instrumentTypeMapper(instrument)))
+      .map(instruments => instruments.map(instrument => Instrument.typeMapper(instrument)))
       .pipe(
         catchError(error => this.errorHandler.handleError(error))
       );
@@ -103,7 +103,7 @@ export class ApiService {
     let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
       .get<Instrument>(`${window.location.origin}/api/instruments/${id}`, { headers: headers, params: params })
-      .map(instrument => this.instrumentTypeMapper(instrument))
+      .map(instrument => Instrument.typeMapper(instrument))
       .pipe(
         catchError(error => this.errorHandler.handleError(error))
       );
@@ -113,7 +113,7 @@ export class ApiService {
     let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
       .post<Instrument>(`${window.location.origin}/api/instruments`, instrument, { headers: headers })
-      .map(instrument => this.instrumentTypeMapper(instrument))
+      .map(instrument => Instrument.typeMapper(instrument))
       .pipe(
         catchError(error => this.errorHandler.handleError(error))
       );
@@ -123,7 +123,7 @@ export class ApiService {
     let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
       .put<Instrument>(`${window.location.origin}/api/instruments/${id}`, instrument, { headers: headers })
-      .map(instrument => this.instrumentTypeMapper(instrument))
+      .map(instrument => Instrument.typeMapper(instrument))
       .pipe(
         catchError(error => this.errorHandler.handleError(error))
       );
@@ -274,19 +274,5 @@ export class ApiService {
       .pipe(
         catchError(error => this.errorHandler.handleError(error))
       );
-  }
-
-  private instrumentTypeMapper(instrument): Instrument {
-    switch(instrument.type) {
-      case INSTRUMENT_TYPE.Index: {
-        return new Index(instrument);
-      }
-      case INSTRUMENT_TYPE.Derivative: {
-        return new Derivative(instrument);
-      }
-      default: {
-        return new Instrument(instrument);
-      }
-    }
   }
 }
