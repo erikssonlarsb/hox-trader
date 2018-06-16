@@ -8,7 +8,7 @@ export class OrderDepth {
   max: number;
 
   constructor(json) {
-    this.instrument = json.instrument ? new Instrument(json.instrument) : null;
+    this.instrument = json.instrument ? Instrument.typeMapper(json.instrument) : null;
     this.levels = json.levels ? json.levels.map(level => new Level(level)) : null;
     this.totalBuy = json.totalBuy;
     this.totalSell = json.totalSell;

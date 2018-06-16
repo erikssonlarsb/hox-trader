@@ -7,7 +7,7 @@ export class Ticker {
   timestamp: Date;
 
   constructor(json) {
-    this.instrument = json.instrument ? new Instrument(json.instrument) : null;
+    this.instrument = json.instrument ? Instrument.typeMapper(json.instrument) : null;
     this.price = json.price;
     this.quantity = json.quantity;
     this.timestamp = json.timestamp ? new Date(json.timestamp) : null;

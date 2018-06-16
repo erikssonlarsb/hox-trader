@@ -23,6 +23,20 @@ export class Instrument {
   get createTimestamp(): Date {
     return this.id ? new Date(parseInt(this.id.toString().substring(0, 8), 16) * 1000) : null;
   }
+
+  static typeMapper(instrument): Instrument {
+    switch(instrument.type) {
+      case INSTRUMENT_TYPE.Index: {
+        return new Index(instrument);
+      }
+      case INSTRUMENT_TYPE.Derivative: {
+        return new Derivative(instrument);
+      }
+      default: {
+        return new Instrument(instrument);
+      }
+    }
+  }
 }
 
 export enum INSTRUMENT_STATUS {
@@ -54,7 +68,7 @@ export class Derivative extends Instrument {
   constructor(json) {
     json.type = INSTRUMENT_TYPE.Derivative;
     super(json);
-    this.underlying = json.underlying ? new Instrument(json.underlying) : null;
+    this.underlying = json.underlying ? Instrument.typeMapper(json.underlying) : null;
     this.expiry = json.expiry ? new DateOnly(json.expiry) : null;
   }
 

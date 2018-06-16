@@ -14,7 +14,7 @@ export class Order {
   constructor(json) {
     this.id = json._id;
     this.user = json.user;
-    this.instrument = json.instrument ? new Instrument(json.instrument) : null;
+    this.instrument = json.instrument ? Instrument.typeMapper(json.instrument) : null;
     this.side = json.side;
     this.price = json.price;
     this.quantity = json.quantity;
