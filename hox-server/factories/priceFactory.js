@@ -12,7 +12,7 @@ module.exports = {
     }
 
     Price.find(params)
-    .populate(populate.join(' '))
+    .populate(populate)
     .exec(function(err, prices) {
       callback(err, prices);
     });
@@ -25,7 +25,7 @@ module.exports = {
     }
 
     Price.findOne({[idField]:id})
-    .populate(populate.join(' '))
+    .populate(populate)
     .exec(function(err, price) {
       callback(err, price);
     });

@@ -15,7 +15,7 @@ module.exports = {
     params[auth.userField] = auth.userId;
 
     User.find(params)
-    .populate(populate.join(' '))
+    .populate(populate)
     .exec(function(err, users) {
       callback(err, users);
     });
@@ -26,9 +26,9 @@ module.exports = {
     if (typeof arguments[1] === 'function') {
       callback = arguments[1];
     }
-    
+
     User.findOne({[idField]: id, [auth.userField]: auth.userId})
-    .populate(populate.join(' '))
+    .populate(populate)
     .exec(function(err, user) {
       callback(err, user);
     });

@@ -15,7 +15,7 @@ module.exports = {
     params[auth.userField] = auth.userId;
 
     Order.find(params)
-    .populate(populate.join(' '))
+    .populate(populate)
     .exec(function(err, orders) {
       callback(err, orders);
     });
@@ -28,7 +28,7 @@ module.exports = {
     }
 
     Order.findOne({[idField]: id, [auth.userField]: auth.userId})
-    .populate(populate.join(' '))
+    .populate(populate)
     .exec(function(err, order) {
       callback(err, order);
     });

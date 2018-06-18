@@ -12,7 +12,7 @@ module.exports = {
     }
 
     Role.find(params)
-    .populate(populate.join(' '))
+    .populate(populate)
     .exec(function(err, roles) {
       callback(err, roles);
     });
@@ -25,7 +25,7 @@ module.exports = {
     }
 
     Role.findOne({[idField]:id})
-    .populate(populate.join(' '))
+    .populate(populate)
     .exec(function(err, role) {
       callback(err, role);
     });
