@@ -6,11 +6,14 @@
           Order
         </h5>
         <div class="row">
-          <div class="col-md-12">
+          <div class="col-md-6">
+            <h6 class="card-title">
+              Details
+            </h6>
             <form>
               <div class="form-group">
                 <label for="instrument">Instrument</label>
-                <div class="input-group mb-3">
+                <div class="input-group">
                   <div class="input-group-prepend">
                     <span class="input-group-text"><i class="fa fa-fw fa-newspaper-o" aria-hidden="true"></i></span>
                   </div>
@@ -62,7 +65,7 @@
               <div class="form-row">
                 <div class="form-group col-md-6">
                   <label for="quantity">Quantity</label>
-                  <div class="input-group mb-3">
+                  <div class="input-group">
                     <div class="input-group-prepend">
                       <span class="input-group-text"><i class="fa fa-fw fa-balance-scale" aria-hidden="true"></i></span>
                     </div>
@@ -79,7 +82,7 @@
                 </div>
                 <div class="form-group col-md-6">
                   <label for="price">Price</label>
-                  <div class="input-group mb-3">
+                  <div class="input-group">
                     <div class="input-group-prepend">
                       <span class="input-group-text"><i class="fa fa-fw fa-money" aria-hidden="true"></i></span>
                     </div>
@@ -103,6 +106,12 @@
                 <i class="fa fa-unlock"></i> Verify
               </button>
             </form>
+          </div>
+          <div class="col-md-6">
+            <h6 class="card-title">
+              Order Depth
+            </h6>
+            <order-depth [orderDepth]="orderDepth"></order-depth>
           </div>
         </div>
         <div class="row">

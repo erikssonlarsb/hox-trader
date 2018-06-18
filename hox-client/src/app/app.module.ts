@@ -20,6 +20,7 @@ import { ApiService } from './services/api/api.service';
 import { ApiErrorHandler } from './services/api/apierrorhandler.service';
 
 import { ConfigMenuComponent } from './components/configMenu/configMenu.component';
+import { OrderDepthComponent } from './components/orderDepth/orderDepth.component';
 
 import { LoginComponent } from './routes/login/login.component';
 import { RegisterComponent } from './routes/register/register.component';
@@ -39,6 +40,7 @@ import { AdminComponent } from './routes/admin/admin.component';
   declarations: [
     AppComponent,
     ConfigMenuComponent,
+    OrderDepthComponent,
     LoginComponent,
     InformationComponent,
     RegisterComponent,

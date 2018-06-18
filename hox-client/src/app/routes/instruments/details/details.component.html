@@ -5,7 +5,7 @@
         <h5 class="card-title">
           {{instrument.name}}
         </h5>
-        <div class="row" *ngIf="instrument?.status == 'ACTIVE'">
+        <div class="row pb-2" *ngIf="instrument?.status == 'ACTIVE'">
           <div class="col-sm-6">
             <div class="row">
               <div class="col-sm-12">
@@ -54,98 +54,11 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-md-6 table-responsive" *ngIf="orderDepth?.levels.length > 0" >
+          <div class="col-md-6">
             <h6 class="card-title">
-              Order depth
+              Order Depth
             </h6>
-            <table class="table table-sm table-hover">
-              <thead>
-                <tr>
-                  <th scope="col" class="border-top-0"><i class="fa fa-fw fa-balance-scale"></i></th>
-                  <th scope="col" class="border-top-0"><i class="fa fa-fw fa-money"></i></th>
-                  <th scope="col" class="border-top-0 text-center">Bid</th>
-                  <th scope="col" class="border-top-0 text-center">Ask</th>
-                  <th scope="col" class="border-top-0 text-right"><i class="fa fa-fw fa-money"></i></th>
-                  <th scope="col" class="border-top-0 text-right"><i class="fa fa-fw fa-balance-scale"></i></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let level of orderDepth.levels;">
-                  <td>
-                    <a
-                    [routerLink]="['/order', {instrument: orderDepth.instrument.id, side: 'SELL', quantity: level.buyQuantity, price: level.buyPrice}]">
-                    {{level.buyQuantity | number:'.0-0'}}
-                    </a>
-                  </td>
-                  <td>
-                    <a
-                    [routerLink]="['/order', {instrument: orderDepth.instrument.id, side: 'SELL', price: level.buyPrice}]">
-                    {{level.buyPrice | number:'.2-2'}}
-                    </a>
-                  </td>
-                  <td class="text-right">
-                    <div class="progress">
-                      <div
-                        class="progress-bar"
-                        role="progressbar"
-                        [style.width.%]="(level.buyQuantity*100)/orderDepth.max"
-                        [style.margin-left.%]="100-(level.buyQuantity*100)/orderDepth.max">
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="progress">
-                      <div
-                        class="progress-bar bg-danger"
-                        role="progressbar"
-                        [style.width.%]="(level.sellQuantity*100)/orderDepth.max">
-                      </div>
-                    </div>
-                  </td>
-                  <td class="text-right">
-                    <a
-                      [routerLink]="['/order', {instrument: orderDepth.instrument.id, side: 'BUY', price: level.sellPrice}]">
-                      {{level.sellPrice | number:'.2-2'}}
-                    </a>
-                  </td>
-                  <td class="text-right">
-                    <a
-                      [routerLink]="['/order', {instrument: orderDepth.instrument.id, side: 'BUY', quantity: level.sellQuantity, price: level.sellPrice}]">
-                      {{level.sellQuantity | number:'.0-0'}}
-                    </a>
-                  </td>
-                </tr>
-              </tbody>
-              <tfoot>
-                <tr>
-                  <th scope="col">{{orderDepth.totalBuy | number:'.0-0'}}</th>
-                  <th scope="col"></th>
-                  <th scope="col" class="text-right">
-                    <div class="progress">
-                      <div
-                        *ngIf="orderDepth.totalBuy"
-                        class="progress-bar"
-                        role="progressbar"
-                        [style.width.%]="(orderDepth.totalBuy*100)/(orderDepth.totalBuy + orderDepth.totalSell)"
-                        [style.margin-left.%]="100-(orderDepth.totalBuy*100)/(orderDepth.totalBuy + orderDepth.totalSell)">
-                      </div>
-                    </div>
-                  </th>
-                  <th scope="col">
-                    <div class="progress">
-                      <div
-                        *ngIf="orderDepth.totalSell"
-                        class="progress-bar bg-danger"
-                        role="progressbar"
-                        [style.width.%]="(orderDepth.totalSell*100)/(orderDepth.totalBuy + orderDepth.totalSell)">
-                      </div>
-                    </div>
-                  </th>
-                  <th scope="col" class="text-right"></th>
-                  <th scope="col" class="text-right">{{orderDepth.totalSell | number:'.0-0'}}</th>
-                </tr>
-              </tfoot>
-            </table>
+            <order-depth [orderDepth]="orderDepth"></order-depth>
           </div>
           <div class="col-md-6 order-md-first instrument-info mb-3">
             <h6 class="card-title">
