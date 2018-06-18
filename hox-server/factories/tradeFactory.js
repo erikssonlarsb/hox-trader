@@ -12,11 +12,11 @@ module.exports = {
     }
     params[auth.userField] = auth.userId;
 
-    let tradeQuery = Trade.find(params);
-
-    tradeQuery = populateQuery(tradeQuery, populate);
-
-    tradeQuery.sort(sort).limit(limit).exec(function(err, trades) {
+    Trade.find(params)
+    .populate(sanitizePopulate(populate))
+    .sort(sort)
+    .limit(limit)
+    .exec(function(err, trades) {
       callback(err, trades);
     });
   },
@@ -27,11 +27,9 @@ module.exports = {
       callback = arguments[1];
     }
 
-    let tradeQuery = Trade.findOne({[idField]: id, [auth.userField]: auth.userId});
-
-    tradeQuery = populateQuery(tradeQuery, populate);
-
-    tradeQuery.exec(function(err, trade) {
+    Trade.findOne({[idField]: id, [auth.userField]: auth.userId})
+    .populate(sanitizePopulate(populate))
+    .exec(function(err, trade) {
       callback(err, trade);
     });
   },
@@ -44,23 +42,19 @@ module.exports = {
   }
 }
 
-function populateQuery(query, populate) {
-  /* Function for dynamic population of query.
-   * Argument populate contains array of strings which are added to
-   * the query. Certain populates are altered, in order to either add
-   * sub references, or to protect data on private (user) documents.
+function sanitizePopulate(populate) {
+  /*
+  Restrict access to the Trade object referred to in path 'counterpartyTrade'
    */
-
-  query.populate(populate.join(' '));
-
-  if(populate.includes('counterpartyTrade')) {
-    // Restrict access to information on counterparty trade
-    query.populate({
-      path: 'counterpartyTrade',
-      select: 'user',
-      populate: {path: 'user', select: 'name email phone'}
-    });
-  }
-
-  return query;
+  return populate.map(path => {
+    if(path.path == 'counterpartyTrade') {
+      return {
+        path: 'counterpartyTrade',
+        select: 'user',
+        populate: {path: 'user', select: 'name email phone'}
+      };
+    } else {
+      return path;
+    }
+  });
 }

@@ -17,7 +17,7 @@ module.exports = {
     }
 
     Instrument.find(params)
-    .populate(populate.join(' '))  // Populate any fields in the populate option.
+    .populate(populate)  // Populate any fields in the populate option.
     .exec(function(err, instruments) {
       callback(err, instruments);
     });
@@ -31,7 +31,7 @@ module.exports = {
     }
 
     Instrument.findOne({[idField]:id})
-    .populate(populate.join(' ')) // Populate any fields in the populate option.
+    .populate(populate) // Populate any fields in the populate option.
     .exec(function(err, instrument) {
       callback(err, instrument);
     });

@@ -12,11 +12,9 @@ module.exports = {
     }
     params[auth.userField] = auth.userId;
 
-    let inviteQuery = Invite.find(params);
-
-    inviteQuery = populateQuery(inviteQuery, populate);
-
-    inviteQuery.exec(function(err, invites) {
+    Invite.find(params)
+    .populate(sanitizePopulate(populate))
+    .exec(function(err, invites) {
       callback(err, invites);
     });
   },
@@ -28,7 +26,7 @@ module.exports = {
     }
 
     Invite.findOne({[idField]: id, [auth.userField]: auth.userId})
-    .populate(populate.join(' '))
+    .populate(sanitizePopulate(populate))
     .exec(function(err, invite) {
       callback(err, invite);
     });
@@ -42,22 +40,18 @@ module.exports = {
   }
 }
 
-function populateQuery(query, populate) {
-  /* Function for dynamic population of query.
-   * Argument populate contains array of strings which are added to
-   * the query. Certain populates are altered, in order to either add
-   * sub references, or to protect data on private (user) documents.
+function sanitizePopulate(populate) {
+  /*
+  Restrict access to the User object referred to in path 'invitee'
    */
-
-  query.populate(populate.join(' '));
-
-  if(populate.includes('invitee')) {
-    // Restrict access to information on invitee
-    query.populate({
-      path: 'invitee',
-      select: 'name'
-    });
-  }
-
-  return query;
+  return populate.map(path => {
+    if(path.path == 'invitee') {
+      return {
+        path: 'invitee',
+        select: 'name'
+      };
+    } else {
+      return path;
+    }
+  });
 }

@@ -12,11 +12,9 @@ module.exports = {
     }
     params[auth.userField] = auth.userId;
 
-    let settlementQuery = Settlement.find(params);
-
-    settlementQuery = populateQuery(settlementQuery, populate);
-
-    settlementQuery.exec(function(err, settlement) {
+    Settlement.find(params)
+    .populate(sanitizePopulate(populate))
+    .exec(function(err, settlement) {
       callback(err, settlement);
     });
   },
@@ -27,11 +25,9 @@ module.exports = {
       callback = arguments[1];
     }
 
-    let settlementQuery = Settlement.findOne({[idField]: id, [auth.userField]: auth.userId});
-
-    settlementQuery = populateQuery(settlementQuery, populate);
-
-    settlementQuery.exec(function(err, settlement) {
+    Settlement.findOne({[idField]: id, [auth.userField]: auth.userId})
+    .populate(sanitizePopulate(populate))
+    .exec(function(err, settlement) {
       callback(err, settlement);
     });
   },
@@ -61,37 +57,19 @@ module.exports = {
   }
 }
 
-function populateQuery(query, populate) {
-  /* Function for dynamic population of query.
-   * Argument populate contains array of strings which are added to
-   * the query. Certain populates are altered, in order to either add
-   * sub references, or to protect data on private (user) documents.
+function sanitizePopulate(populate) {
+  /*
+  Restrict access to the Settlement object referred to in path 'counterpartySettlement'
    */
-
-  query.populate(populate.join(' '));
-
-  if(populate.includes('trades')) {
-    // Add additional data required for settlement details in client.
-    query.populate({
-      path: 'trades',
-      populate: {
-        path: 'instrument',
-        populate: {
-          path: 'prices',
-          match: { type: { $eq: 'SETTLEMENT'}}
-        }
-      }
-    })
-  }
-
-  if(populate.includes('counterpartySettlement')) {
-    // Restrict access to information on counterparty settlement.
-    query.populate({
-      path: 'counterpartySettlement',
-      select: 'user isAcknowledged',
-      populate: {path: 'user', select: 'name email phone'}
-    });
-  }
-
-  return query;
+  return populate.map(path => {
+    if(path.path == 'counterpartySettlement') {
+      return {
+        path: 'counterpartySettlement',
+        select: 'user isAcknowledged',
+        populate: {path: 'user', select: 'name email phone'}
+      };
+    } else {
+      return path;
+    }
+  });
 }
