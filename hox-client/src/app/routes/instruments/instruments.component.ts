@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpParams }  from '@angular/common/http';
 
-import { ApiService } from '../../services/api/api.service';
+import { ApiService } from '../../services/api/index';
 
 import { OrderDepth, Instrument, Ticker } from '../../models/index';
 
@@ -28,13 +27,7 @@ export class InstrumentsComponent  implements OnInit  {
   constructor(private apiService: ApiService) { }
 
   ngOnInit(): void {
-    let orderDepthParams = new HttpParams({
-      fromObject: {
-        'status': 'ACTIVE',
-        '_populate': 'prices'
-      }
-    });
-    this.apiService.getOrderDepths(orderDepthParams)
+    this.apiService.getOrderDepths({'status': 'ACTIVE', '$populate': 'prices'})
     .subscribe(
       orderDepths => this.orderDepths = orderDepths.sort((a: OrderDepth, b: OrderDepth) => {
         if(a.instrument.name < b.instrument.name) return -1;
@@ -43,25 +36,12 @@ export class InstrumentsComponent  implements OnInit  {
       })
     );
 
-    let tickerParams = new HttpParams({
-      fromObject: {
-        '_limit': '15',
-        '_populate': 'instrument'
-      }
-    });
-    this.apiService.getTickers(tickerParams)
+    this.apiService.getTickers({'$limit': '15', '$populate': 'instrument'})
     .subscribe(
       tickers => this.tickers = tickers
     );
 
-
-    let indexParams = new HttpParams({
-      fromObject: {
-        'type': 'Index',
-        '_populate': 'prices'
-      }
-    });
-    this.apiService.getInstruments(indexParams)
+    this.apiService.getInstruments({'type': 'Index', '$populate': 'prices'})
     .subscribe(
       instruments => this.indices = instruments.sort((a: Instrument, b: Instrument) => {
         if(a.name < b.name) return -1;

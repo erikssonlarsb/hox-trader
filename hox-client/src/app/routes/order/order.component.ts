@@ -1,11 +1,10 @@
 import { Component, OnInit, TemplateRef  } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { HttpParams }  from '@angular/common/http';
 
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 
-import { ApiService } from '../../services/api/api.service';
+import { ApiService } from '../../services/api/index';
 
 import { Instrument, Order, ORDER_SIDE } from '../../models/index';
 
@@ -32,12 +31,7 @@ export class OrderComponent  implements OnInit  {
       .paramMap
       .subscribe(params => {
         if(params.get('id')) {  // Retrieve existing order
-          let orderParams = new HttpParams({
-            fromObject: {
-              '_populate': ['instrument']
-            }
-          });
-          this.apiService.getOrder(params.get('id'), orderParams)
+          this.apiService.getOrder(params.get('id'), {'@populate': 'instrument'})
           .subscribe(order => {
             this.order = order;
             this.instrument = order.instrument.name;
@@ -45,7 +39,6 @@ export class OrderComponent  implements OnInit  {
             this.quantity = order.quantity - order.tradedQuantity;
             this.price = order.price;
           });
-
         } else if(params.get('instrument')) {  // Populate details from router params
           this.apiService.getInstrument(params.get('instrument'))
           .subscribe(instrument => {
@@ -58,9 +51,9 @@ export class OrderComponent  implements OnInit  {
           this.price = Number(params.get('price')) || 0;
         } else {  // Get all instruments for client to fill in order details
           this.apiService.getInstruments()
-            .subscribe(
-              instruments => this.instruments = instruments
-            );
+          .subscribe(
+            instruments => this.instruments = instruments
+          );
         }
       });
   }

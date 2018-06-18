@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { HttpParams }  from '@angular/common/http';
 
-import { ApiService } from '../../../services/api/api.service';
+import { ApiService } from '../../../services/api/index';
 
 import { User, Invite } from '../../../models/index';
 
@@ -35,22 +34,17 @@ export class UserDetailsComponent implements OnInit  {
     .subscribe(params => {
       if(params.get('id')) {  // Retrieve existing order
         this.apiService.getUser(params.get('id'))
-          .subscribe(user => {
-            this.originalUser = Object.assign({}, user);
-            this.updatedUser = Object.assign({}, user);
-          });
-        }
-      });
-
-    let intiveParams = new HttpParams({
-      fromObject: {
-        '_populate': 'invitee'
+        .subscribe(user => {
+          this.originalUser = Object.assign({}, user);
+          this.updatedUser = Object.assign({}, user);
+        });
       }
     });
-    this.apiService.getInvites(intiveParams)
-      .subscribe(invites => {
-        this.invites = invites;
-      });
+
+    this.apiService.getInvites({'$populate': 'invitee'})
+    .subscribe(invites => {
+      this.invites = invites;
+    });
   }
 
   updateUser(): void {
@@ -58,10 +52,10 @@ export class UserDetailsComponent implements OnInit  {
     this.updateUserErrorMessage = null;  // Reset error message
 
     this.apiService.updateUser(this.updatedUser.id, this.updatedUser)
-      .subscribe(
-        user => this.updateUserStatusMessage = "User successfully updated.",
-        error => this.updateUserErrorMessage = error.message
-      );
+    .subscribe(
+      user => this.updateUserStatusMessage = "User successfully updated.",
+      error => this.updateUserErrorMessage = error.message
+    );
   }
 
   changePassword(): void {
@@ -70,14 +64,14 @@ export class UserDetailsComponent implements OnInit  {
 
     if(this.password == this.confirmPassword) {
       this.apiService.updateUserPassword(this.updatedUser.id, this.password)
-        .subscribe(
-          user => {
-            this.password = null;
-            this.confirmPassword = null;
-            this.changePasswordStatusMessage = "Password successfully changed."
-          },
-          error => this.changePasswordErrorMessage = error.message
-        );
+      .subscribe(
+        user => {
+          this.password = null;
+          this.confirmPassword = null;
+          this.changePasswordStatusMessage = "Password successfully changed."
+        },
+        error => this.changePasswordErrorMessage = error.message
+      );
     } else {
       this.changePasswordErrorMessage = "Passwords doesn't match."
     }
@@ -96,12 +90,12 @@ export class UserDetailsComponent implements OnInit  {
     this.generateInviteStatusMessage = null;  // Reset status message
     this.generateInviteErrorMessage = null;  // Reset error message
     this.apiService.postInvite(new Invite({}))
-      .subscribe(
-        invite => {
-          this.invites.push(invite);
-          this.generateInviteStatusMessage = "Generated new invite " + invite.code;
-        },
-        error => this.generateInviteErrorMessage = error.message
-      );
+    .subscribe(
+      invite => {
+        this.invites.push(invite);
+        this.generateInviteStatusMessage = "Generated new invite " + invite.code;
+      },
+      error => this.generateInviteErrorMessage = error.message
+    );
   }
 }
