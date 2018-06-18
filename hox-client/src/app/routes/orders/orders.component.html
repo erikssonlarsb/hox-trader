@@ -9,8 +9,8 @@
           <table class="table table-sm table-hover">
             <thead>
               <tr>
-                <th *ngIf="user?.role.isAdmin" scope="col">User</th>
                 <th scope="col">Instrument</th>
+                <th *ngIf="user?.role.isAdmin" scope="col">User</th>
                 <th scope="col">Side</th>
                 <th scope="col" class="text-right">Qty</th>
                 <th scope="col" class="text-right">Trd</th>
@@ -24,14 +24,13 @@
               <ng-container *ngFor="let order of orders;">
                 <tr *ngIf="(!configOptions?.hideExpiredInstruments?.value || order.instrument.status == 'ACTIVE') &&
                            (!configOptions?.hideNonActiveOrders?.value || order.status == 'ACTIVE')">
-
-                  <td *ngIf="user?.role.isAdmin" scope="col">{{order.user.name}}</td>
                   <td>
                     <a routerLink="/instruments/{{order.instrument.id}}">
                       <span [ngClass]="'flag-icon flag-icon-' + order.instrument.underlying.isin" ></span>
                       {{order.instrument.name}}
                     </a>
                   </td>
+                  <td *ngIf="user?.role.isAdmin" scope="col">{{order.user.name}}</td>
                   <td>{{order.side}}</td>
                   <td class="text-right">{{order.quantity | number:'.0-0'}}</td>
                   <td class="text-right">{{order.tradedQuantity  | number:'.0-0'}}</td>
