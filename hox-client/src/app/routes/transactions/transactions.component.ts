@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { AuthService } from '../../services/auth/auth.service';
-import { ApiService } from '../../services/api/index';
+import { ApiService, ApiParams } from '../../services/api/index';
 
 import { Trade, Position, User } from '../../models/index';
 
@@ -28,7 +28,18 @@ export class TransactionsComponent implements OnInit, OnDestroy  {
   ngOnInit(): void {
     this.user = this.authService.getLoggedInUser();
 
-    this.ApiService.getTrades({'$populate': ['instrument', 'user', 'counterpartyTrade']})
+    let tradeParams = new ApiParams({
+        '$populate': [
+          'user',
+          'counterpartyTrade',
+          {
+            path: 'instrument',
+            populate: {
+              path: 'underlying'
+            }
+        }]
+    });
+    this.ApiService.getTrades(tradeParams)
     .subscribe(trades => {
       this.trades = trades.sort((a: Trade, b: Trade) => {return a.createTimestamp.getTime() - b.createTimestamp.getTime()});
       for (let trade of this.trades) {

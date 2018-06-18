@@ -98,6 +98,7 @@
                   <td>
                     <a
                       routerLink="/instruments/{{orderDepth.instrument.id}}">
+                      <span [ngClass]="'flag-icon flag-icon-' + orderDepth.instrument.underlying.isin"></span>
                       {{orderDepth.instrument.name}}
                     </a>
                   </td>
@@ -156,6 +157,7 @@
                   <td>
                     <a
                       routerLink="/instruments/{{ticker.instrument.id}}">
+                      <span [ngClass]="'flag-icon flag-icon-' + ticker.instrument.underlying.isin"></span>
                       {{ticker.instrument.name}}
                     </a>
                   </td>
@@ -190,9 +192,12 @@
             <tbody>
               <ng-container *ngFor="let index of indices;">
                 <tr>
-                  <td><a routerLink="/instruments/{{index.id}}">
-                    <span [ngClass]="'flag-icon flag-icon-' + index.isin" ></span>
-                    {{index.name}}</a></td>
+                  <td>
+                    <a routerLink="/instruments/{{index.id}}">
+                      <span [ngClass]="'flag-icon flag-icon-' + index.isin" ></span>
+                      {{index.name}}
+                    </a>
+                  </td>
                   <td class="text-right">{{(index.prices | price:'CLOSE')?.value | number:'.0-0'}}</td>
                   <td class="text-right">{{index.prices | averagePrice:'CLOSE' | number:'.0-0'}}</td>
                 </tr>

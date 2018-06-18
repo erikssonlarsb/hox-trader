@@ -3,7 +3,7 @@
     <div class="card">
       <div *ngIf="instrument" class="card-body">
         <h5 class="card-title">
-          {{instrument.name}}
+          <span [ngClass]="'flag-icon flag-icon-' + (instrument.isin ? instrument.isin : instrument.underlying.isin)"></span> {{instrument.name}}
         </h5>
         <div class="row" *ngIf="instrument?.status == 'ACTIVE'">
           <div class="col-sm-6">
@@ -223,19 +223,17 @@
               <table class="table table-sm table-hover">
                 <thead>
                   <tr>
-                    <th scope="col" class="border-top-0">Instrument</th>
+                    <th scope="col" class="border-top-0">Time</th>
                     <th scope="col" class="text-right border-top-0">Qty</th>
                     <th scope="col" class="text-right border-top-0">Price</th>
-                    <th scope="col" class="border-top-0">Time</th>
                   </tr>
                 </thead>
                 <tbody>
                   <ng-container *ngFor="let ticker of tickers;">
                     <tr>
-                      <td>{{ticker.instrument.name}}</td>
+                      <td>{{ticker.timestamp | date:'HH:mm, MMM, d'}}</td>
                       <td class="text-right">{{ticker.quantity | number:'.0-0'}}</td>
                       <td class="text-right">{{ticker.price | number:'.2-2'}}</td>
-                      <td>{{ticker.timestamp | date:'HH:mm, MMM, d'}}</td>
                     </tr>
                   </ng-container>
                 </tbody>
