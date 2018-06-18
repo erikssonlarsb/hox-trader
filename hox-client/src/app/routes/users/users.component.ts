@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpParams }  from '@angular/common/http';
 
-import { ApiService } from '../../services/api/api.service';
+import { ApiService } from '../../services/api/index';
 
 import { User } from '../../models/index';
 
@@ -16,9 +15,9 @@ export class UsersComponent  implements OnInit  {
   constructor(private apiService: ApiService) { }
 
   ngOnInit(): void {
-    this.apiService.getUsers(new HttpParams().set('_populate', 'role'))
-      .subscribe(
-        users =>  this.users = users
-      );
+    this.apiService.getUsers({'$populate': 'role'})
+    .subscribe(
+      users =>  this.users = users
+    );
   }
 }

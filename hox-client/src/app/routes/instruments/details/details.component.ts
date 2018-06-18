@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { HttpParams }  from '@angular/common/http';
 
-import { ApiService } from '../../../services/api/api.service';
+import { ApiService, ApiParams } from '../../../services/api/index';
 
 import { DateOnlyPipe } from 'angular-date-only';
 
@@ -33,12 +32,10 @@ export class InstrumentDetailsComponent  implements OnInit  {
     this.route
     .paramMap
     .subscribe(params => {
-      let httpParams = new HttpParams({
-        fromObject: {
-          '_populate': ['underlying', 'prices', 'derivatives']
-        }
+      let instrumentParams = new ApiParams({
+        '$populate': ['underlying', 'prices', 'derivatives']
       });
-      this.apiService.getInstrument(params.get('id'), httpParams)
+      this.apiService.getInstrument(params.get('id'), instrumentParams)
       .subscribe(
         instrument => {
           this.instrument = instrument;
@@ -49,7 +46,6 @@ export class InstrumentDetailsComponent  implements OnInit  {
             this.chartData[0].data[index] = price.value;
             this.chartLabels[index] = this.dateOnlyPipe.transform(price.date);
           });
-
         }
       );
 
@@ -58,12 +54,10 @@ export class InstrumentDetailsComponent  implements OnInit  {
         orderDepth => this.orderDepth = orderDepth
       );
 
-      let tickerParams = new HttpParams({
-        fromObject: {
-          'instrument': params.get('id'),
-          '_limit': '5',
-          '_populate': 'instrument'
-        }
+      let tickerParams = new ApiParams({
+        'instrument': params.get('id'),
+        '$limit': '5',
+        '$populate': 'instrument'
       });
       this.apiService.getTickers(tickerParams)
       .subscribe(

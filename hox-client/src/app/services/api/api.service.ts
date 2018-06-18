@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 import { AuthService } from '../../services/auth/auth.service';
+import { ApiParams } from './apiparams';
 import { ApiErrorHandler } from './apierrorhandler.service';
 
 import { Invite, User, Instrument, INSTRUMENT_TYPE, Index, Derivative, Order, Trade, Ticker, OrderDepth, Settlement, Price } from '../../models/index';
@@ -29,10 +30,10 @@ export class ApiService {
       );
   }
 
-  getInvites(params: HttpParams = new HttpParams()): Observable<Invite[]> {
+  getInvites(params: ApiParams | Object = {}): Observable<Invite[]> {
     let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
-      .get<Invite[]>(`${window.location.origin}/api/invites`, { headers: headers, params: params })
+      .get<Invite[]>(`${window.location.origin}/api/invites`, { headers: headers, params: this.toHttpParams(params) })
       .map(invites => invites.map(invite => new Invite(invite)))
       .pipe(
         catchError(error => this.errorHandler.handleError(error))
@@ -49,10 +50,10 @@ export class ApiService {
       );
   }
 
-  getUsers(params: HttpParams = new HttpParams()): Observable<User[]> {
+  getUsers(params: ApiParams | Object = {}): Observable<User[]> {
     let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
-      .get<User[]>(`${window.location.origin}/api/users`, { headers: headers, params: params })
+      .get<User[]>(`${window.location.origin}/api/users`, { headers: headers, params: this.toHttpParams(params) })
       .map(users => users.map(user => new User(user)))
       .pipe(
         catchError(error => this.errorHandler.handleError(error))
@@ -89,20 +90,20 @@ export class ApiService {
       );
   }
 
-  getInstruments(params: HttpParams = new HttpParams()): Observable<Instrument[]> {
+  getInstruments(params: ApiParams | Object = {}): Observable<Instrument[]> {
     let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
-      .get<Instrument[]>(`${window.location.origin}/api/instruments`, { headers: headers, params: params })
+      .get<Instrument[]>(`${window.location.origin}/api/instruments`, { headers: headers, params: this.toHttpParams(params) })
       .map(instruments => instruments.map(instrument => Instrument.typeMapper(instrument)))
       .pipe(
         catchError(error => this.errorHandler.handleError(error))
       );
   }
 
-  getInstrument(id: string, params: HttpParams = new HttpParams()): Observable<Instrument> {
+  getInstrument(id: string, params: ApiParams | Object = {}): Observable<Instrument> {
     let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
-      .get<Instrument>(`${window.location.origin}/api/instruments/${id}`, { headers: headers, params: params })
+      .get<Instrument>(`${window.location.origin}/api/instruments/${id}`, { headers: headers, params: this.toHttpParams(params) })
       .map(instrument => Instrument.typeMapper(instrument))
       .pipe(
         catchError(error => this.errorHandler.handleError(error))
@@ -129,20 +130,20 @@ export class ApiService {
       );
   }
 
-  getOrders(params: HttpParams = new HttpParams()): Observable<Order[]> {
+  getOrders(params: ApiParams | Object = {}): Observable<Order[]> {
     let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
-      .get<Order[]>(`${window.location.origin}/api/orders`, { headers: headers, params: params })
+      .get<Order[]>(`${window.location.origin}/api/orders`, { headers: headers, params: this.toHttpParams(params) })
       .map(orders => orders.map(order => new Order(order)))
       .pipe(
         catchError(error => this.errorHandler.handleError(error))
       );
   }
 
-  getOrder(id: string, params: HttpParams = new HttpParams()): Observable<Order> {
+  getOrder(id: string, params: ApiParams | Object = {}): Observable<Order> {
     let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
-      .get<Order>(`${window.location.origin}/api/orders/${id}`, { headers: headers, params: params })
+      .get<Order>(`${window.location.origin}/api/orders/${id}`, { headers: headers, params: this.toHttpParams(params) })
       .map(order => new Order(order))
       .pipe(
         catchError(error => this.errorHandler.handleError(error))
@@ -168,40 +169,40 @@ export class ApiService {
       );
   }
 
-  getTrades(params: HttpParams = new HttpParams()): Observable<Trade[]> {
+  getTrades(params: ApiParams | Object = {}): Observable<Trade[]> {
     let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
-      .get<Trade[]>(`${window.location.origin}/api/trades`, { headers: headers, params: params })
+      .get<Trade[]>(`${window.location.origin}/api/trades`, { headers: headers, params: this.toHttpParams(params) })
       .map(trades => trades.map(trade => new Trade(trade)))
       .pipe(
         catchError(error => this.errorHandler.handleError(error))
       );
   }
 
-  getTickers(params: HttpParams = new HttpParams()): Observable<Ticker[]> {
+  getTickers(params: ApiParams | Object = {}): Observable<Ticker[]> {
     let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
-      .get<Ticker[]>(`${window.location.origin}/api/tickers`, { headers: headers, params: params })
+      .get<Ticker[]>(`${window.location.origin}/api/tickers`, { headers: headers, params: this.toHttpParams(params) })
       .map(tickers => tickers.map(ticker => new Ticker(ticker)))
       .pipe(
         catchError(error => this.errorHandler.handleError(error))
       );
   }
 
-  getSettlements(params: HttpParams = new HttpParams()): Observable<Settlement[]> {
+  getSettlements(params: ApiParams | Object = {}): Observable<Settlement[]> {
     let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
-      .get<Settlement[]>(`${window.location.origin}/api/settlements`, { headers: headers, params: params })
+      .get<Settlement[]>(`${window.location.origin}/api/settlements`, { headers: headers, params: this.toHttpParams(params) })
       .map(settlements => settlements.map(settlement => new Settlement(settlement)))
       .pipe(
         catchError(error => this.errorHandler.handleError(error))
       );
   }
 
-  getSettlement(id: string, params: HttpParams = new HttpParams()): Observable<Settlement> {
+  getSettlement(id: string, params: ApiParams | Object = {}): Observable<Settlement> {
     let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
-      .get(`${window.location.origin}/api/settlements/${id}`, { headers: headers, params: params })
+      .get(`${window.location.origin}/api/settlements/${id}`, { headers: headers, params: this.toHttpParams(params) })
       .map(settlement => new Settlement(settlement))
       .pipe(
         catchError(error => this.errorHandler.handleError(error))
@@ -218,10 +219,10 @@ export class ApiService {
       );
   }
 
-  getOrderDepths(params: HttpParams = new HttpParams()): Observable<OrderDepth[]> {
+  getOrderDepths(params: ApiParams | Object = {}): Observable<OrderDepth[]> {
     let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
-      .get<OrderDepth[]>(`${window.location.origin}/api/orderdepths`, { headers: headers, params: params })
+      .get<OrderDepth[]>(`${window.location.origin}/api/orderdepths`, { headers: headers, params: this.toHttpParams(params) })
       .map(orderDepths => orderDepths.map(orderDepth => new OrderDepth(orderDepth)))
       .pipe(
         catchError(error => this.errorHandler.handleError(error))
@@ -238,10 +239,10 @@ export class ApiService {
       );
   }
 
-  getPrices(params: HttpParams = new HttpParams()): Observable<Price[]> {
+  getPrices(params: ApiParams | Object = {}): Observable<Price[]> {
     let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
-      .get<Price[]>(`${window.location.origin}/api/prices`, { headers: headers, params: params })
+      .get<Price[]>(`${window.location.origin}/api/prices`, { headers: headers, params: this.toHttpParams(params) })
       .map(prices => prices.map(price => new Price(price)))
       .pipe(
         catchError(error => this.errorHandler.handleError(error))
@@ -258,10 +259,10 @@ export class ApiService {
       );
   }
 
-  getJobs(params: HttpParams = new HttpParams()): Observable<string[]> {
+  getJobs(params: ApiParams | Object = {}): Observable<string[]> {
     let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
-      .get<string[]>(`${window.location.origin}/api/jobs`, { headers: headers, params: params })
+      .get<string[]>(`${window.location.origin}/api/jobs`, { headers: headers, params: this.toHttpParams(params) })
       .pipe(
         catchError(error => this.errorHandler.handleError(error))
       );
@@ -274,5 +275,13 @@ export class ApiService {
       .pipe(
         catchError(error => this.errorHandler.handleError(error))
       );
+  }
+
+  private toHttpParams(params: ApiParams | Object): HttpParams {
+    if(params instanceof ApiParams ) {
+      return params.toHttpParams();
+    } else {
+      return new ApiParams(params).toHttpParams();
+    }
   }
 }

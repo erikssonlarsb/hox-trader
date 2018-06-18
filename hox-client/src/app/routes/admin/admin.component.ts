@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpParams }  from '@angular/common/http';
 
 import { DateOnly } from 'angular-date-only';
 
-import { ApiService } from '../../services/api/api.service';
+import { ApiService } from '../../services/api/index';
 
 import { INSTRUMENT_TYPE, INSTRUMENT_STATUS, Instrument, Index, Derivative, Price, PRICE_TYPE, User } from '../../models/index';
 
@@ -63,31 +62,25 @@ export class AdminComponent  implements OnInit  {
   constructor(private router: Router, private apiService: ApiService, private pricePipe : PricePipe) { }
 
   ngOnInit(): void {
-    this.apiService.getInstruments(new HttpParams().set('type', 'Index'))
-      .subscribe(
-        instruments => this.underlyings = <Index[]> instruments
-      );
+    this.apiService.getInstruments({'type': 'Index'})
+    .subscribe(
+      instruments => this.underlyings = <Index[]> instruments
+    );
 
-    let derivativeParams = new HttpParams({
-      fromObject: {
-        'type': 'Derivative',
-        '_populate': 'prices'
-      }
-    });
-    this.apiService.getInstruments(derivativeParams)
-      .subscribe(
-        instruments => this.derivatives = <Derivative[]> instruments
-      );
+    this.apiService.getInstruments({'type': 'Derivative', '$populate': 'prices'})
+    .subscribe(
+      instruments => this.derivatives = <Derivative[]> instruments
+    );
 
     this.apiService.getJobs()
-      .subscribe(
-        jobs => this.jobs = jobs
-      );
+    .subscribe(
+      jobs => this.jobs = jobs
+    );
 
     this.apiService.getUsers()
-      .subscribe(
-        users => this.users = users
-      );
+    .subscribe(
+      users => this.users = users
+    );
   }
 
   createInstrument(): void {

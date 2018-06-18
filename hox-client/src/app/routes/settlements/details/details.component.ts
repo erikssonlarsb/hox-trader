@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
-import { HttpParams }  from '@angular/common/http';
 
-import { ApiService } from '../../../services/api/api.service';
+import { ApiService, ApiParams } from '../../../services/api/index';
 
 import { Settlement } from '../../../models/index';
 
@@ -24,10 +23,20 @@ export class SettlementDetailsComponent implements OnInit  {
     .paramMap
     .subscribe(params => {
       if(params.get('id')) {
-        let settlementParams = new HttpParams({
-          fromObject: {
-            '_populate': ['trades', 'counterpartySettlement']
-          }
+        let settlementParams = new ApiParams({
+          '$populate': [{
+              path: 'counterpartySettlement'
+            },
+            {
+              path: 'trades',
+              populate: {
+              path: 'instrument',
+              populate: {
+                path: 'prices',
+                match: { type: { $eq: 'SETTLEMENT'}}
+              }
+            }
+          }]
         });
         this.apiService.getSettlement(params.get('id'), settlementParams)
           .subscribe(

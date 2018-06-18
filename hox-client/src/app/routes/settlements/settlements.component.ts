@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpParams }  from '@angular/common/http';
 import { DatePipe } from '@angular/common';
 import { Http }  from '@angular/http';
 
@@ -31,12 +30,7 @@ export class SettlementsComponent implements OnInit, OnDestroy  {
   ngOnInit(): void {
     this.user = this.authService.getLoggedInUser();
 
-    let settlementParams = new HttpParams({
-      fromObject: {
-        '_populate': ['user', 'counterpartySettlement']
-      }
-    });
-    this.apiService.getSettlements(settlementParams)
+    this.apiService.getSettlements({'$populate': ['user', 'counterpartySettlement']})
     .subscribe(settlements =>
       this.settlements = settlements.sort((a: Settlement, b: Settlement) => {return a.createTimestamp.getTime() - b.createTimestamp.getTime()})
     );
@@ -56,14 +50,9 @@ export class SettlementsComponent implements OnInit, OnDestroy  {
   }
 
   acknowledgeSettlement(id): void {
-    let settlementParams = new HttpParams({
-      fromObject: {
-        '_populate': ['user', 'counterpartySettlement']
-      }
-    });
     this.apiService.acknowledgeSettlement(id)
       .subscribe(() => {
-        this.apiService.getSettlements(settlementParams)
+        this.apiService.getSettlements({'$populate': ['user', 'counterpartySettlement']})
           .subscribe(settlements => {
             this.settlements = settlements.sort((a: Settlement, b: Settlement) => {return a.createTimestamp.getTime() - b.createTimestamp.getTime()})
           });

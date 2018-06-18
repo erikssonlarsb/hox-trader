@@ -1,11 +1,10 @@
 import { Component, OnInit, TemplateRef, OnDestroy } from '@angular/core';
-import { HttpParams }  from '@angular/common/http';
 
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 
 import { AuthService } from '../../services/auth/auth.service';
-import { ApiService } from '../../services/api/api.service';
+import { ApiService } from '../../services/api/index';
 
 import { Order, User } from '../../models/index';
 
@@ -40,12 +39,7 @@ export class OrdersComponent implements OnInit, OnDestroy  {
   ngOnInit(): void {
     this.user = this.authService.getLoggedInUser();
 
-    let orderParams = new HttpParams({
-      fromObject: {
-        '_populate': ['user', 'instrument']
-      }
-    });
-    this.ApiService.getOrders(orderParams)
+    this.ApiService.getOrders({'$populate': ['user', 'instrument']})
     .subscribe(
       orders => this.orders = orders.sort((a: Order, b: Order) => {return a.createTimestamp.getTime() - b.createTimestamp.getTime()})
     );
@@ -67,12 +61,7 @@ export class OrdersComponent implements OnInit, OnDestroy  {
   withdrawOrder(id): void {
     this.ApiService.withdrawOrder(id)
     .subscribe(() => {
-      let orderParams = new HttpParams({
-        fromObject: {
-          '_populate': ['user', 'instrument']
-        }
-      });
-      this.ApiService.getOrders(orderParams)
+      this.ApiService.getOrders({'$populate': ['user', 'instrument']})
       .subscribe(
         orders => this.orders = orders
       );
