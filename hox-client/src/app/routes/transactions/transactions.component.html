@@ -53,8 +53,8 @@
           <table class="table table-sm table-hover">
             <thead>
               <tr>
-                <th *ngIf="user?.role.isAdmin" scope="col">User</th>
                 <th scope="col">Instrument</th>
+                <th *ngIf="user?.role.isAdmin" scope="col">User</th>
                 <th scope="col">Side</th>
                 <th scope="col" class="text-right">Qty</th>
                 <th scope="col" class="text-right">Price</th>
@@ -65,12 +65,12 @@
             <tbody>
               <ng-container *ngFor="let trade of trades;">
                 <tr *ngIf="!configOptions?.hideSettled?.value || !trade.isSettled">
-                  <td *ngIf="user?.role.isAdmin" scope="col">{{trade.user.name}}</td>
                   <td>
                     <a routerLink="/instruments/{{trade.instrument.id}}">
                       {{trade.instrument.name}}
                     </a>
                   </td>
+                  <td *ngIf="user?.role.isAdmin" scope="col">{{trade.user.name}}</td>
                   <td>{{trade.side}}</td>
                   <td class="text-right">{{trade.quantity  | number:'.0-0'}}</td>
                   <td class="text-right">{{trade.price  | number:'.2-2'}}</td>
