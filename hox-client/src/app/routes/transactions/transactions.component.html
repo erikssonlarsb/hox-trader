@@ -29,7 +29,11 @@
                     </a>
                   </td>
                   <td *ngIf="user?.role.isAdmin" scope="col">{{position.user.name}}</td>
-                  <td class="text-right">{{position.openQuantity | number:'.0-0'}}</td>
+                  <td class="text-right">
+                    <a [routerLink]="['/order', {instrument: position.instrument.id, side: (position.openQuantity > 0 ? 'SELL' : 'BUY'), quantity: (position.openQuantity > 0 ? position.openQuantity : -position.openQuantity)}]">
+                      {{position.openQuantity | number:'.0-0'}}
+                    </a>
+                  </td>
                   <td class="text-right">{{position.closedQuantity | number:'.0-0'}}</td>
                   <td class="text-right">{{(position.averageBuyPrice | number:'.2-2') || 'N/A'}}</td>
                   <td class="text-right">{{(position.averageSellPrice | number:'.2-2') || 'N/A'}}</td>

@@ -41,16 +41,27 @@ export class OrderComponent  implements OnInit  {
             this.price = order.price;
           });
         } else if(params.get('instrument')) {  // Populate details from router params
+          this.side = ORDER_SIDE[params.get('side')];
+          this.quantity = Number(params.get('quantity')) || 0;
+
           this.apiService.getOrderDepth(params.get('instrument'))
           .subscribe(orderDepth => {
             this.orderDepth = orderDepth;
             this.instrument = orderDepth.instrument.name;
             this.instruments = [orderDepth.instrument];
-          });
 
-          this.side = ORDER_SIDE[params.get('side')];
-          this.quantity = Number(params.get('quantity')) || 0;
-          this.price = Number(params.get('price')) || 0;
+            if(params.get('price')) {
+              this.price = Number(params.get('price')) || 0;
+            } else if (this.orderDepth.levels[0]) {
+               if (this.side == ORDER_SIDE.BUY) {
+                 this.price = this.orderDepth.levels[0].sellPrice || 0;
+               } else {
+                 this.price = this.orderDepth.levels[0].buyPrice || 0;
+               }
+            } else {
+              this.price = 0;
+            }
+          });
         } else {  // Get all instruments for client to fill in order details
           this.apiService.getInstruments()
           .subscribe(
