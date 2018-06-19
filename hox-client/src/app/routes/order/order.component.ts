@@ -6,7 +6,7 @@ import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 
 import { ApiService } from '../../services/api/index';
 
-import { Instrument, Order, ORDER_SIDE } from '../../models/index';
+import { Instrument, Order, ORDER_SIDE, OrderDepth } from '../../models/index';
 
 @Component({
   selector: 'app-order',
@@ -16,6 +16,7 @@ import { Instrument, Order, ORDER_SIDE } from '../../models/index';
 export class OrderComponent  implements OnInit  {
   instruments: Array<Instrument>;
   instrument: string;
+  orderDepth: OrderDepth;
   side: ORDER_SIDE;
   quantity: number;
   price: number;
@@ -40,10 +41,11 @@ export class OrderComponent  implements OnInit  {
             this.price = order.price;
           });
         } else if(params.get('instrument')) {  // Populate details from router params
-          this.apiService.getInstrument(params.get('instrument'))
-          .subscribe(instrument => {
-            this.instrument = instrument.name;
-            this.instruments = [instrument];
+          this.apiService.getOrderDepth(params.get('instrument'))
+          .subscribe(orderDepth => {
+            this.orderDepth = orderDepth;
+            this.instrument = orderDepth.instrument.name;
+            this.instruments = [orderDepth.instrument];
           });
 
           this.side = ORDER_SIDE[params.get('side')];
