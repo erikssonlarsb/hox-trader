@@ -24,7 +24,7 @@
                 <tr *ngIf="!configOptions?.hideSettled?.value || !position.isSettled">
                   <td>
                     <a routerLink="/instruments/{{position.instrument.id}}">
-                      <span [ngClass]="'flag-icon flag-icon-' + position.instrument.underlying.isin" ></span>
+                      <span [ngClass]="'flag-icon flag-icon-' + position.instrument.underlying.isin"></span>
                       {{position.instrument.name}}
                     </a>
                   </td>
@@ -75,7 +75,7 @@
                 <tr *ngIf="!configOptions?.hideSettled?.value || !trade.isSettled">
                   <td>
                     <a routerLink="/instruments/{{trade.instrument.id}}">
-                      <span [ngClass]="'flag-icon flag-icon-' + trade.instrument.underlying.isin" ></span>
+                      <span [ngClass]="'flag-icon flag-icon-' + trade.instrument.underlying.isin"></span>
                       {{trade.instrument.name}}
                     </a>
                   </td>

@@ -26,7 +26,7 @@
                            (!configOptions?.hideNonActiveOrders?.value || order.status == 'ACTIVE')">
                   <td>
                     <a routerLink="/instruments/{{order.instrument.id}}">
-                      <span [ngClass]="'flag-icon flag-icon-' + order.instrument.underlying.isin" ></span>
+                      <span [ngClass]="'flag-icon flag-icon-' + order.instrument.underlying.isin"></span>
                       {{order.instrument.name}}
                     </a>
                   </td>
