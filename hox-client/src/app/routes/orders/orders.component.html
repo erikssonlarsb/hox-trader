@@ -26,7 +26,11 @@
                            (!configOptions?.hideNonActiveOrders?.value || order.status == 'ACTIVE')">
 
                   <td *ngIf="user?.role.isAdmin" scope="col">{{order.user.name}}</td>
-                  <td>{{order.instrument.name}}</td>
+                  <td>
+                    <a routerLink="/instruments/{{order.instrument.id}}">
+                      {{order.instrument.name}}
+                    </a>
+                  </td>
                   <td>{{order.side}}</td>
                   <td class="text-right">{{order.quantity | number:'.0-0'}}</td>
                   <td class="text-right">{{order.tradedQuantity  | number:'.0-0'}}</td>
