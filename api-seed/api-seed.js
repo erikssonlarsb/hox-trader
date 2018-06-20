@@ -37,7 +37,7 @@ async.series([
          // Request unauthorized. Change from default to custom password.
          options = {
            method: 'PUT',
-           uri: config.url + 'users/admin1?_idField=username',
+           uri: config.url + 'users/admin1?$idField=username',
            auth: { user: 'admin1', password: 'admin1' },  // Default values from mongo-seed
            json: { 'password': config.password },  // Update to custom password
            rejectUnauthorized: false
