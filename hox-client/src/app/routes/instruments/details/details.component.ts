@@ -46,6 +46,13 @@ export class InstrumentDetailsComponent  implements OnInit  {
             this.chartData[0].data[index] = price.value;
             this.chartLabels[index] = this.dateOnlyPipe.transform(price.date);
           });
+
+          // Add LAST price to time series if not same as latest CLOSE price.
+          let lastPrice = instrument.prices.find(price => price.type == 'LAST');
+          if(lastPrice && this.dateOnlyPipe.transform(lastPrice.date) != this.chartLabels[this.chartLabels.length-1]) {
+            this.chartData[0].data.push(lastPrice.value);
+            this.chartLabels.push(this.dateOnlyPipe.transform(lastPrice.date));
+          }
         }
       );
 
