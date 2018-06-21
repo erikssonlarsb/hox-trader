@@ -20,6 +20,16 @@ export class InstrumentDetailsComponent  implements OnInit  {
 
   chartData: Array<any>;
   chartLabels: Array<string>;
+  chartOptions: any = {
+    scales: {
+      yAxes: [{
+        ticks: {
+          min: 0,
+          max: 30
+        }
+      }]
+    }
+  }
 
   constructor(private dateOnlyPipe: DateOnlyPipe, private router: Router, private route: ActivatedRoute, private apiService: ApiService) {
     // TODO: Remove below when changed to other graph library that supports dynamic update.
