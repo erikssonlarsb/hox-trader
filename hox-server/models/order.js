@@ -19,6 +19,8 @@ const orderSchema = new Schema({
   updateTimestamp: Date
 });
 
+require("../utils/findUnique")(orderSchema);
+
 orderSchema.pre('save', function(next) {
   if(this.status != 'EXPIRED') {
     Instrument.findById(this.instrument, function(err, instrument) {

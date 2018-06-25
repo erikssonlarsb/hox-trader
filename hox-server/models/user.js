@@ -20,6 +20,8 @@ const userSchema = new Schema({
   updateTimestamp: Date
 });
 
+require("../utils/findUnique")(userSchema);
+
 userSchema.pre('save', function(next) {
   this.updateTimestamp = new Date();
   next();

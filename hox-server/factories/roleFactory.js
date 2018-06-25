@@ -24,9 +24,7 @@ module.exports = {
       callback = arguments[1];
     }
 
-    Role.findOne({[idField]:id})
-    .populate(populate)
-    .exec(function(err, role) {
+    Role.findUnique({[idField]:id}, populate, function(err, role) {
       callback(err, role);
     });
   },

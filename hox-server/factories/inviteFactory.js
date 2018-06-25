@@ -25,9 +25,7 @@ module.exports = {
       callback = arguments[1];
     }
 
-    Invite.findOne({[idField]: id, [auth.userField]: auth.userId})
-    .populate(sanitizePopulate(populate))
-    .exec(function(err, invite) {
+    Invite.findUnique({[idField]: id, [auth.userField]: auth.userId}, sanitizePopulate(populate), function(err, invite) {
       callback(err, invite);
     });
   },

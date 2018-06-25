@@ -27,9 +27,7 @@ module.exports = {
       callback = arguments[1];
     }
 
-    User.findOne({[idField]: id, [auth.userField]: auth.userId})
-    .populate(populate)
-    .exec(function(err, user) {
+    User.findUnique({[idField]: id, [auth.userField]: auth.userId}, populate, function(err, user) {
       callback(err, user);
     });
   },
@@ -71,13 +69,12 @@ module.exports = {
   },
 
   // Update a user
-  update: function(id, {idField = '_id', auth = {}}, updateUser, callback) {
+  update: function(id, {idField = '_id', auth = {}, populate = []}, updateUser, callback) {
     if (typeof arguments[1] === 'function') {
       callback = arguments[1];
     }
 
-    User.findOne({[idField]:id, [auth.userField]: auth.userId})
-    .exec(function(err, user) {
+    User.findUnique({[idField]: id, [auth.userField]: auth.userId}, populate, function(err, user) {
       if(err || !user) {
         callback(err, user);
       } else {

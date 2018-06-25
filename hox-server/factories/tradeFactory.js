@@ -27,9 +27,7 @@ module.exports = {
       callback = arguments[1];
     }
 
-    Trade.findOne({[idField]: id, [auth.userField]: auth.userId})
-    .populate(sanitizePopulate(populate))
-    .exec(function(err, trade) {
+    Trade.findUnique({[idField]: id, [auth.userField]: auth.userId}, sanitizePopulate(populate), function(err, trade) {
       callback(err, trade);
     });
   },

@@ -10,6 +10,8 @@ const systemInfoSchema = new Schema({
   collection: 'systeminfo'  // Singular name since collection is singleton.
 });
 
+require("../utils/findUnique")(systemInfoSchema);
+
 systemInfoSchema.pre('save', function(next) {
   this.updateTimestamp = new Date();
   next();

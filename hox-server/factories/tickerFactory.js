@@ -6,7 +6,7 @@ const tradeFactory = require('../factories/tradeFactory');
 
 module.exports = {
 
-  // Query orderDepths.
+  // Query tickers.
   query: function(params, {populate = [], sort = {'_id': 'desc'}, limit = null}, callback) {
     if (typeof arguments[1] === 'function') {
       callback = arguments[1];

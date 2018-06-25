@@ -30,9 +30,7 @@ module.exports = {
       callback = arguments[1];
     }
 
-    Instrument.findOne({[idField]:id})
-    .populate(populate) // Populate any fields in the populate option.
-    .exec(function(err, instrument) {
+    Instrument.findUnique({[idField]:id}, populate, function(err, instrument) {
       callback(err, instrument);
     });
   },
@@ -114,7 +112,8 @@ module.exports = {
     if (typeof arguments[1] === 'function') {
       callback = arguments[1];
     }
-    Instrument.findOne({[idField]:id}, function(err, instrument) {
+
+    Instrument.findUnique({[idField]:id}, populate, function(err, instrument) {
       if(err || !instrument) {
         callback(err, instrument);
       } else {

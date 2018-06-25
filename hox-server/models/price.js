@@ -13,6 +13,8 @@ const priceSchema = new Schema({
 
 priceSchema.index({instrument: 1, type: 1, date: 1}, {unique: true});
 
+require("../utils/findUnique")(priceSchema);
+
 priceSchema.pre('save', function(next) {
   this.updateTimestamp = new Date();
   next();

@@ -12,8 +12,8 @@ module.exports = {
     if (typeof arguments[1] === 'function') {
       callback = arguments[1];
     }
-    SystemInfo.findOne(params)
-    .exec(function(err, systemInfo) {
+
+    SystemInfo.findUnique(params, function(err, systemInfo) {
       callback(err, systemInfo);
     });
   },
@@ -23,7 +23,7 @@ module.exports = {
     if (typeof arguments[1] === 'function') {
       callback = arguments[1];
     }
-    SystemInfo.findOne({}, function(err, systemInfo) {
+    SystemInfo.findUnique({}, function(err, systemInfo) {
       if(err) {
         callback(err);
       } else if(!systemInfo) {
