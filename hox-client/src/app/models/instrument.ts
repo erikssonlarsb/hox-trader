@@ -5,19 +5,23 @@ export class Instrument {
   id: string;
   name: string;
   status: INSTRUMENT_STATUS;
-  type: INSTRUMENT_TYPE | string;
+  type: INSTRUMENT_TYPE;
   prices: Array<Price>;
   derivatives: Array<Derivative>;
   updateTimestamp: Date;
 
-  constructor(json) {
-    this.id = json.id;
-    this.name = json.name;
-    this.status = json.status;
-    this.type = json.type;
-    this.prices = json.prices ? json.prices.map(price => new Price(price)) : null;
-    this.derivatives = json.derivatives ? json.derivatives.map(derivative => new Derivative(derivative)) : null;
-    this.updateTimestamp = json.updateTimestamp ? new Date(json.updateTimestamp) : null;
+  constructor(data) {
+    if(typeof(data) == 'string') {
+      this.id = data;
+    } else {
+      this.id = data._id || data.id;
+      this.name = data.name;
+      this.status = data.status;
+      this.type = data.type;
+      this.prices = data.prices ? data.prices.map(price => new Price(price)) : null;
+      this.derivatives = data.derivatives ? data.derivatives.map(derivative => new Derivative(derivative)) : null;
+      this.updateTimestamp = data.updateTimestamp ? new Date(data.updateTimestamp) : null;
+    }
   }
 
   get createTimestamp(): Date {
@@ -53,11 +57,13 @@ export class Index extends Instrument {
   isin: string;
   ticker: string;
 
-  constructor(json) {
-    json.type = INSTRUMENT_TYPE.Index;
-    super(json);
-    this.isin = json.isin;
-    this.ticker = json.ticker;
+  constructor(data) {
+    super(data);
+    this.type = INSTRUMENT_TYPE.Index;
+    if(typeof(data) != 'string') {
+      this.isin = data.isin;
+      this.ticker = data.ticker;
+    }
   }
 }
 
@@ -65,11 +71,13 @@ export class Derivative extends Instrument {
   underlying: Instrument;
   expiry: DateOnly;
 
-  constructor(json) {
-    json.type = INSTRUMENT_TYPE.Derivative;
-    super(json);
-    this.underlying = json.underlying ? Instrument.typeMapper(json.underlying) : null;
-    this.expiry = json.expiry ? new DateOnly(json.expiry) : null;
+  constructor(data) {
+    super(data);
+    this.type = INSTRUMENT_TYPE.Derivative;
+    if(typeof(data) != 'string') {
+      this.underlying = data.underlying ? Instrument.typeMapper(data.underlying) : null;
+      this.expiry = data.expiry ? new DateOnly(data.expiry) : null;
+    }
   }
 
   toJSON() {

@@ -6,13 +6,17 @@ export class User {
   phone: string;
   role: Role;
 
-  constructor(json) {
-    this.id = json._id;
-    this.name = json.name;
-    this.username = json.username;
-    this.email = json.email;
-    this.phone = json.phone;
-    this.role = json.role ? new Role(json.role) : null;
+  constructor(data) {
+    if(typeof(data) == 'string') {
+      this.id = data;
+    } else {
+      this.id = data._id || data.id;
+      this.name = data.name;
+      this.username = data.username;
+      this.email = data.email;
+      this.phone = data.phone;
+      this.role = data.role ? new Role(data.role) : null;
+    }
   }
 
   get createTimestamp(): Date {
@@ -21,14 +25,24 @@ export class User {
 }
 
 class Role {
+  id: string;
   name: string;
   isAdmin: boolean;
   permissions: Array<Permission>;
 
-  constructor(json) {
-    this.name = json.name;
-    this.isAdmin = json.isAdmin;
-    this.permissions = json.permissions ? json.permissions.map(permission => new Permission(permission)) : null;
+  constructor(data) {
+    if(typeof(data) == 'string') {
+      this.id = data;
+    } else {
+      this.id = data._id || data.id;
+      this.name = data.name;
+      this.isAdmin = data.isAdmin;
+      this.permissions = data.permissions ? data.permissions.map(permission => new Permission(permission)) : null;
+    }
+  }
+
+  get createTimestamp(): Date {
+    return this.id ? new Date(parseInt(this.id.toString().substring(0, 8), 16) * 1000) : null;
   }
 }
 
@@ -36,9 +50,12 @@ class Permission {
   resource: string;
   methods: Array<Method>;
 
-  constructor(json) {
-    this.resource = json.resource;
-    this.methods = json.methods ? json.methods.map(method => Method[method]) : null;
+  constructor(data) {
+    if(typeof(data) != 'string') {
+      this.resource = data.resource;
+      this.methods = data.methods ? data.methods.map(method => Method[method]) : null;
+    }
+
   }
 }
 

@@ -9,13 +9,17 @@ export class Price {
   value: number;
   updateTimestamp: Date;
 
-  constructor(json) {
-    this.id = json._id;
-    this.instrument = json.instrument;
-    this.type = json.type;
-    this.date = json.date ? new DateOnly(json.date) : null;
-    this.value = json.value;
-    this.updateTimestamp = json.updateTimestamp ? new Date(json.updateTimestamp) : null;
+  constructor(data) {
+    if(typeof(data) == 'string') {
+      this.id = data;
+    } else {
+      this.id = data._id || data.id;
+      this.instrument = data.instrument ? Instrument.typeMapper(data.instrument) : null;
+      this.type = data.type;
+      this.date = data.date ? new DateOnly(data.date) : null;
+      this.value = data.value;
+      this.updateTimestamp = data.updateTimestamp ? new Date(data.updateTimestamp) : null;
+    }
   }
 
   get createTimestamp(): Date {

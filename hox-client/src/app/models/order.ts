@@ -1,8 +1,9 @@
+import { User } from './user';
 import { Instrument } from './instrument';
 
 export class Order {
   id: string;
-  user: string;
+  user: User;
   instrument: Instrument;
   side: ORDER_SIDE;
   price: number;
@@ -11,16 +12,20 @@ export class Order {
   status: ORDER_STATUS;
   updateTimestamp: Date;
 
-  constructor(json) {
-    this.id = json._id;
-    this.user = json.user;
-    this.instrument = json.instrument ? Instrument.typeMapper(json.instrument) : null;
-    this.side = json.side;
-    this.price = json.price;
-    this.quantity = json.quantity;
-    this.tradedQuantity = json.tradedQuantity;
-    this.status= json.status;
-    this.updateTimestamp = json.updateTimestamp ? new Date(json.updateTimestamp) : null;
+  constructor(data) {
+    if(typeof(data) == 'string') {
+      this.id = data;
+    } else {
+      this.id = data._id || data.id;
+      this.user = data.user ? new User(data.user) : null;
+      this.instrument = data.instrument ? Instrument.typeMapper(data.instrument) : null;
+      this.side = data.side;
+      this.price = data.price;
+      this.quantity = data.quantity;
+      this.tradedQuantity = data.tradedQuantity;
+      this.status= data.status;
+      this.updateTimestamp = data.updateTimestamp ? new Date(data.updateTimestamp) : null;
+    }
   }
 
   get createTimestamp(): Date {

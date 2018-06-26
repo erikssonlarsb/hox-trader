@@ -6,10 +6,14 @@ export class Ticker {
   quantity: number;
   timestamp: Date;
 
-  constructor(json) {
-    this.instrument = json.instrument ? Instrument.typeMapper(json.instrument) : null;
-    this.price = json.price;
-    this.quantity = json.quantity;
-    this.timestamp = json.timestamp ? new Date(json.timestamp) : null;
+  constructor(data) {
+    if(typeof(data) == 'string') {
+      this.instrument = Instrument.typeMapper(data);
+    } else {
+      this.instrument = data.instrument ? Instrument.typeMapper(data.instrument) : null;
+      this.price = data.price;
+      this.quantity = data.quantity;
+      this.timestamp = data.timestamp ? new Date(data.timestamp) : null;
+    }
   }
 }

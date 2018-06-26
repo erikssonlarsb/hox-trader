@@ -9,10 +9,14 @@ export class Position {
   side: ORDER_SIDE;
   trades: Array<Trade> = [];
 
-  constructor(json) {
-    this.instrument = json.instrument;
-    this.user = json.user;
-    this.trades = json.trades;
+  constructor(data) {
+    if(typeof(data) == 'string') {
+      this.instrument = Instrument.typeMapper(data);
+    } else {
+      this.instrument = data.instrument ? Instrument.typeMapper(data.instrument) : null;
+      this.user = data.user ? new User(data.user) : null;
+      this.trades = data.trades ? data.trades.map(trade => new Trade(trade)) : null;
+    }
   }
 
   get isSettled(): boolean {

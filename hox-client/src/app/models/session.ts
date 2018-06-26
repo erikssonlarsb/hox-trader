@@ -5,12 +5,16 @@ export class Session {
   iat: number;
   exp: number;
 
-  constructor(json) {
-    this.user = json.user ? new User(json.user) : null;
-    this.iat = json.iat;
-    this.exp = json.exp;
+  constructor(data) {
+    if(typeof(data) == 'string') {
+      this.user = new User(data);
+    } else {
+      this.user = data.user ? new User(data.user) : null;
+      this.iat = data.iat;
+      this.exp = data.exp;
+    }
   }
-  
+
   isValid(): boolean {
     return this.exp >= new Date().getTime() / 1000;
   }
