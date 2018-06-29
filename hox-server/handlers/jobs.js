@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
+const HttpStatus = require('http-status-codes');
 const jobFactory = require('../factories/jobFactory');
 const Error = require('../utils/error');
 
 router.get('/', function(req, res) {
   jobFactory.query(req.query, req.queryOptions, function(err, jobs) {
     if(err) {
-      return res.status(err.code || 500).json(new Error(err));
+      return res.status(HttpStatus.hasOwnProperty(err.code) ? err.code : 500).json(new Error(err));
     } else {
       return res.json(jobs);
     }
@@ -16,7 +17,7 @@ router.get('/', function(req, res) {
 router.put('/:id/run', function(req, res) {
   jobFactory.run(req.params.id, function(err, result) {
     if(err) {
-      return res.status(err.code || 500).json(new Error(err));
+      return res.status(HttpStatus.hasOwnProperty(err.code) ? err.code : 500).json(new Error(err));
     } else {
       return res.status(202).end();
     }
