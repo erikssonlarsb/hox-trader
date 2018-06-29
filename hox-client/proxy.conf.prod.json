@@ -3,6 +3,11 @@
     "target": "http://server:4000",
     "secure": false
   },
+  "/ws": {
+    "target": "ws://localhost:4000",
+    "secure": false,
+    "ws": true
+  },
   "/qr": {
     "target": "https://www.swish.bankgirot.se/qrg-swish/api/v1/prefilled",
     "secure": true,

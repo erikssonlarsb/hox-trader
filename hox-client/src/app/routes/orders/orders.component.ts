@@ -5,6 +5,7 @@ import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 
 import { AuthService } from '../../services/auth/auth.service';
 import { ApiService } from '../../services/api/index';
+import { WebSocketService, Event, EVENT_TYPE } from '../../services/websocket/index';
 
 import { Order, User } from '../../models/index';
 
@@ -16,7 +17,7 @@ import { Order, User } from '../../models/index';
 
 export class OrdersComponent implements OnInit, OnDestroy  {
   user: User;
-  orders: Array<Order>;
+  orders: Array<Order> = new Array<Order>();
 
   orderToWithdraw: Order;
   withdrawModal: BsModalRef;
@@ -34,10 +35,20 @@ export class OrdersComponent implements OnInit, OnDestroy  {
     }
   };
 
-  constructor(private modalService: BsModalService, private authService: AuthService, private ApiService: ApiService) { }
+  constructor(private modalService: BsModalService, private authService: AuthService, private ApiService: ApiService, private webSocketService: WebSocketService) { }
 
   ngOnInit(): void {
     this.user = this.authService.getLoggedInUser();
+
+    this.webSocketService.populate('Order', ['user', 'instrument']);
+
+    this.webSocketService.events.subscribe(
+      event => {
+        if(event.eventType == EVENT_TYPE.Create) {
+          this.orders.push(event.document);
+        }
+      }
+    )
 
     this.ApiService.getOrders({'$populate': ['user', 'instrument']})
     .subscribe(

@@ -24,6 +24,7 @@
     "mongoose": "^4.13.12",
     "mongoose-dateonly": "^1.0.4",
     "nodemon": "^1.17.3",
-    "request": "^2.85.0"
+    "request": "^2.85.0",
+    "ws": "^5.2.1"
   }
 }

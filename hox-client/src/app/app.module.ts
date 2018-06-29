@@ -16,6 +16,7 @@ import { BootstrapModule } from './bootstrap.module';
 import { CustomPipesModule } from './pipes/custom-pipes.module';
 
 import { AuthService } from './services/auth/auth.service';
+import { WebSocketService } from './services/websocket/websocket.service';
 import { ApiService } from './services/api/api.service';
 import { ApiErrorHandler } from './services/api/apierrorhandler.service';
 
@@ -69,10 +70,9 @@ import { AdminComponent } from './routes/admin/admin.component';
   ],
   providers: [
     AuthService,
+    WebSocketService,
     ApiService,
     ApiErrorHandler
-
-
   ],
   bootstrap: [AppComponent]
 })
