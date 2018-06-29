@@ -11,6 +11,8 @@ const settlementSchema = new Schema({
   updateTimestamp: Date
 });
 
+require("../utils/findUnique")(settlementSchema);
+
 settlementSchema.pre('save', function(next) {
   this.updateTimestamp = new Date();
   next();

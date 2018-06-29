@@ -27,9 +27,7 @@ module.exports = {
       callback = arguments[1];
     }
 
-    Order.findOne({[idField]: id, [auth.userField]: auth.userId})
-    .populate(populate)
-    .exec(function(err, order) {
+    Order.findUnique({[idField]: id, [auth.userField]: auth.userId}, populate, function(err, order) {
       callback(err, order);
     });
   },
@@ -43,13 +41,12 @@ module.exports = {
   },
 
   // Update an order.
-  update: function(id, {idField = '_id', auth = {}}, updateOrder, callback) {
+  update: function(id, {idField = '_id', auth = {}, populate = []}, updateOrder, callback) {
     if (typeof arguments[1] === 'function') {
       callback = arguments[1];
     }
 
-    Order.findOne({[idField]: id, [auth.userField]: auth.userId})
-    .exec(function(err, order) {
+    Order.findUnique({[idField]: id, [auth.userField]: auth.userId}, populate, function(err, order) {
       if(err) callback(err);
       else if(order.status != 'ACTIVE') {
         callback("Cannot modify non-active order.")
@@ -71,8 +68,7 @@ module.exports = {
       callback = arguments[1];
     }
 
-    Order.findOne({[idField]: id, [auth.userField]: auth.userId})
-    .exec(function(err, order) {
+    Order.findUnique({[idField]: id, [auth.userField]: auth.userId}, function(err, order) {
       if (err) {
         callback(err);
       } else if(order.status != 'ACTIVE') {

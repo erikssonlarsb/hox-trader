@@ -14,17 +14,21 @@ export class Trade {
   isSettled: boolean;
   updateTimestamp: Date;
 
-  constructor(json) {
-    this.id = json._id;
-    this.order = json.order ? new Order(json.order) : null;
-    this.user = json.user ? new User(json.user) : null;
-    this.counterpartyTrade = json.counterpartyTrade ? new Trade(json.counterpartyTrade) : null;
-    this.instrument = json.instrument ? Instrument.typeMapper(json.instrument) : null;
-    this.side = json.side;
-    this.price = json.price;
-    this.quantity = json.quantity;
-    this.isSettled = json.isSettled;
-    this.updateTimestamp = json.updateTimestamp ? new Date(json.updateTimestamp) : null;
+  constructor(data) {
+    if(typeof(data) == 'string') {
+      this.id = data;
+    } else {
+      this.id = data._id || data.id;
+      this.order = data.order ? new Order(data.order) : null;
+      this.user = data.user ? new User(data.user) : null;
+      this.counterpartyTrade = data.counterpartyTrade ? new Trade(data.counterpartyTrade) : null;
+      this.instrument = data.instrument ? Instrument.typeMapper(data.instrument) : null;
+      this.side = data.side;
+      this.price = data.price;
+      this.quantity = data.quantity;
+      this.isSettled = data.isSettled;
+      this.updateTimestamp = data.updateTimestamp ? new Date(data.updateTimestamp) : null;
+    }
   }
 
   get createTimestamp(): Date {

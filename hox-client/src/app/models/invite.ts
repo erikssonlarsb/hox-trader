@@ -7,12 +7,16 @@ export class Invite {
   code: string
   updateTimestamp: Date;
 
-  constructor(json) {
-    this.id = json._id;
-    this.inviter = json.inviter ? new User(json.inviter) : null;
-    this.invitee = json.invitee ? new User(json.invitee) : null;
-    this.code = json.code ? json.code : null;
-    this.updateTimestamp = json.updateTimestamp ? new Date(json.updateTimestamp) : null;
+  constructor(data) {
+    if(typeof(data) == 'string') {
+      this.id = data;
+    } else {
+      this.id = data._id || data.id;
+      this.inviter = data.inviter ? new User(data.inviter) : null;
+      this.invitee = data.invitee ? new User(data.invitee) : null;
+      this.code = data.code ? data.code : null;
+      this.updateTimestamp = data.updateTimestamp ? new Date(data.updateTimestamp) : null;
+    }
   }
 
   get createTimestamp(): Date {

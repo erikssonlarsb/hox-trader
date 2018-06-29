@@ -16,6 +16,8 @@ const inviteSchema = new Schema({
   updateTimestamp: Date
 });
 
+require("../utils/findUnique")(inviteSchema);
+
 inviteSchema.pre('save', function(next) {
   this.updateTimestamp = new Date();
   next();

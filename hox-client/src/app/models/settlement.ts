@@ -10,14 +10,18 @@ export class Settlement {
   amount: number;
   updateTimestamp: Date;
 
-  constructor(json) {
-    this.id = json._id;
-    this.user = json.user ? new User(json.user) : null;
-    this.counterpartySettlement = json.counterpartySettlement ? new Settlement(json.counterpartySettlement) : null;
-    this.trades = json.trades ? json.trades.map(trade => new Trade(trade)) : null;
-    this.isAcknowledged = json.isAcknowledged;
-    this.amount = json.amount;
-    this.updateTimestamp = json.updateTimestamp ? new Date(json.updateTimestamp) : null;
+  constructor(data) {
+    if(typeof(data) == 'string') {
+      this.id = data;
+    } else {
+      this.id = data._id || data.id;
+      this.user = data.user ? new User(data.user) : null;
+      this.counterpartySettlement = data.counterpartySettlement ? new Settlement(data.counterpartySettlement) : null;
+      this.trades = data.trades ? data.trades.map(trade => new Trade(trade)) : null;
+      this.isAcknowledged = data.isAcknowledged;
+      this.amount = data.amount;
+      this.updateTimestamp = data.updateTimestamp ? new Date(data.updateTimestamp) : null;
+    }
   }
 
   get createTimestamp(): Date {

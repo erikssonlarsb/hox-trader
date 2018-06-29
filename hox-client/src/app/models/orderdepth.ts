@@ -7,12 +7,16 @@ export class OrderDepth {
   totalSell: number;
   max: number;
 
-  constructor(json) {
-    this.instrument = json.instrument ? Instrument.typeMapper(json.instrument) : null;
-    this.levels = json.levels ? json.levels.map(level => new Level(level)) : null;
-    this.totalBuy = json.totalBuy;
-    this.totalSell = json.totalSell;
-    this.max = json.max;
+  constructor(data) {
+    if(typeof(data) == 'string') {
+      this.instrument = Instrument.typeMapper(data);
+    } else {
+      this.instrument = data.instrument ? Instrument.typeMapper(data.instrument) : null;
+      this.levels = data.levels ? data.levels.map(level => new Level(level)) : null;
+      this.totalBuy = data.totalBuy;
+      this.totalSell = data.totalSell;
+      this.max = data.max;
+    }
   }
 }
 
@@ -22,10 +26,12 @@ class Level {
   sellPrice: number;
   sellQuantity: number;
 
-  constructor(json) {
-    this.buyPrice = json.buyPrice;
-    this.buyQuantity = json.buyQuantity;
-    this.sellPrice = json.sellPrice;
-    this.sellQuantity = json.sellQuantity;
+  constructor(data) {
+    if(typeof(data) != 'string') {
+      this.buyPrice = data.buyPrice;
+      this.buyQuantity = data.buyQuantity;
+      this.sellPrice = data.sellPrice;
+      this.sellQuantity = data.sellQuantity;
+    }
   }
 }

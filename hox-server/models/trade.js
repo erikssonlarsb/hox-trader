@@ -14,6 +14,8 @@ const tradeSchema = new Schema({
   updateTimestamp: Date
 });
 
+require("../utils/findUnique")(tradeSchema);
+
 tradeSchema.pre('save', function(next) {
   this.updateTimestamp = new Date();
   next();

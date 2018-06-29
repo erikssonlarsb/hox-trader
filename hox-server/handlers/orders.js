@@ -6,7 +6,7 @@ const Error = require('../utils/error');
 router.get('/', function(req, res) {
   orderFactory.query(req.query, req.queryOptions, function(err, orders) {
     if (err) {
-      return res.status(500).json(new Error(err));
+      return res.status(err.code || 500).json(new Error(err));
     } else {
       return res.json(orders);
     }
@@ -17,7 +17,7 @@ router.post('/', function(req, res) {
   req.body.user = req.user._id;  // Hard set user
   orderFactory.create(req.body, function(err, order) {
     if (err) {
-      return res.status(500).json(new Error(err));
+      return res.status(err.code || 500).json(new Error(err));
     } else {
       return res.json(order);
     }
@@ -27,7 +27,7 @@ router.post('/', function(req, res) {
 router.get('/:id', function(req, res) {
   orderFactory.findOne(req.params.id, req.queryOptions, function(err, order) {
     if(err) {
-      return res.status(500).json(new Error(err));
+      return res.status(err.code || 500).json(new Error(err));
     } else if (order) {
       return res.json(order);
     } else {
@@ -39,7 +39,7 @@ router.get('/:id', function(req, res) {
 router.put('/:id', function(req, res) {
   orderFactory.update(req.params.id, req.queryOptions, function(err, order) {
     if(err) {
-      return res.status(500).json(new Error(err));
+      return res.status(err.code || 500).json(new Error(err));
     } else if (order) {
       return res.json(order);
     } else {
@@ -51,7 +51,7 @@ router.put('/:id', function(req, res) {
 router.delete('/:id', function(req, res) {
   orderFactory.delete(req.params.id, req.queryOptions, function(err, order) {
     if(err) {
-      return res.status(500).json(new Error(err));
+      return res.status(err.code || 500).json(new Error(err));
     } else if (order) {
       return res.json(order);
     } else {

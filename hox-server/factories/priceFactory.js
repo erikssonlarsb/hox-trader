@@ -24,9 +24,7 @@ module.exports = {
       callback = arguments[1];
     }
 
-    Price.findOne({[idField]:id})
-    .populate(populate)
-    .exec(function(err, price) {
+    Price.findUnique({[idField]:id}, populate, function(err, price) {
       callback(err, price);
     });
   },

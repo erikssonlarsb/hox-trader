@@ -6,7 +6,7 @@ const Error = require('../utils/error');
 router.get('/', function(req, res) {
   userFactory.query(req.query, req.queryOptions, function(err, users) {
     if (err) {
-      return res.status(500).json(new Error(err));
+      return res.status(err.code || 500).json(new Error(err));
     } else {
       return res.json(users);
     }
@@ -16,7 +16,7 @@ router.get('/', function(req, res) {
 router.post('/', function(req, res) {
   userFactory.create(req.body, function(err, user) {
     if (err) {
-      return res.status(500).json(new Error(err));
+      return res.status(err.code || 500).json(new Error(err));
     } else {
       return res.json(user);
     }
@@ -26,7 +26,7 @@ router.post('/', function(req, res) {
 router.get('/:id', function(req, res) {
   userFactory.findOne(req.params.id, req.queryOptions, function(err, user) {
     if(err) {
-      return res.status(500).json(new Error(err));
+      return res.status(err.code || 500).json(new Error(err));
     } else if (user) {
       return res.json(user);
     } else {
@@ -38,7 +38,7 @@ router.get('/:id', function(req, res) {
 router.put('/:id', function(req, res) {
   userFactory.update(req.params.id, req.queryOptions, req.body, function(err, user) {
     if (err) {
-      return res.status(500).json(new Error(err));
+      return res.status(err.code || 500).json(new Error(err));
     } else if (user) {
       return res.json(user);
     } else {

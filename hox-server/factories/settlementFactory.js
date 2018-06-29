@@ -25,9 +25,7 @@ module.exports = {
       callback = arguments[1];
     }
 
-    Settlement.findOne({[idField]: id, [auth.userField]: auth.userId})
-    .populate(sanitizePopulate(populate))
-    .exec(function(err, settlement) {
+    Settlement.findUnique({[idField]: id, [auth.userField]: auth.userId}, sanitizePopulate(populate), function(err, settlement) {
       callback(err, settlement);
     });
   },
@@ -40,13 +38,12 @@ module.exports = {
   },
 
   // Update a settlement
-  update: function(id, {idField = '_id', auth = {}}, updateSettlement, callback) {
+  update: function(id, {idField = '_id', auth = {}, populate = []}, updateSettlement, callback) {
     if (typeof arguments[1] === 'function') {
       callback = arguments[1];
     }
 
-    Settlement.findOne({[idField]:id, [auth.userField]: auth.userId})
-    .exec(function(err, settlement) {
+    Settlement.findUnique({[idField]: id, [auth.userField]: auth.userId}, sanitizePopulate(populate), function(err, settlement) {
       if(err) callback(err);
       if(updateSettlement.isAcknowledged) settlement.isAcknowledged = updateSettlement.isAcknowledged;
 
