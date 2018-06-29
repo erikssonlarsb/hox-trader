@@ -5,9 +5,23 @@
         <h5 class="card-title">
           Settlement details
         </h5>
-        <p><b>Date:</b> {{settlement?.createTimestamp | date}}</p>
-        <p><b>Counterparty:</b> {{settlement?.counterpartySettlement.user.name}}</p>
-        <p><b>Phone:</b> {{settlement?.counterpartySettlement.user.phone}}</p>
+
+        <div class="row mb-0">
+          <div class="col-3 col-lg-2"><b>Date</b></div>
+          <div class="col">{{settlement?.createTimestamp | date}}</div>
+        </div>
+        <div class="row mb-0">
+          <div class="col-3 col-lg-2"><b>Counterparty</b></div>
+          <div class="col">{{settlement?.counterpartySettlement.user.name}}</div>
+        </div>
+        <div class="row mb-0">
+          <div class="col-3 col-lg-2"><b>Phone</b></div>
+          <div class="col">{{settlement?.counterpartySettlement.user.phone}}</div>
+        </div>
+
+        <h6 class="card-title">
+          Trades
+        </h6>
         <div class="table-responsive">
           <table class="table table-sm table-hover">
             <thead>
@@ -28,7 +42,7 @@
               <tr *ngFor="let trade of settlement?.trades;">
                 <td>{{trade.createTimestamp | date}}</td>
                 <td>{{trade.instrument.name}}</td>
-                <td>{{trade.instrument.expiry | date}}</td>
+                <td>{{trade.instrument.expiry  | dateonly}}</td>
                 <td>{{trade.side}}</td>
                 <td class="text-right">{{trade.quantity  | number:'.0-0'}}</td>
                 <td class="text-right">{{trade.price  | number:'.2-2'}}</td>
