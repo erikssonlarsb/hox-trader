@@ -3,7 +3,7 @@ import { Injectable, PipeTransform, Pipe } from '@angular/core';
 @Pipe({name: 'fieldSum', pure: false})
 @Injectable()
 export class FieldSumPipe implements PipeTransform  {
-  transform(objects: Array<any>, field: string, filters: any, onlyPositive: false): number|null {
+  transform(objects: Array<any>, field: string, filters: any): number|null {
     if(!objects) {
       return null;
     } else {
@@ -16,7 +16,7 @@ export class FieldSumPipe implements PipeTransform  {
           }
           return true;  // All filters passed. Include object.
         });
-        return objects.reduce((sum, object) => sum + (onlyPositive ? object[field] > 0 ? object[field] : 0 : object[field]), 0);
+        return objects.reduce((sum, object) => sum + object[field], 0);
       } catch (e) {
         return null;
       }

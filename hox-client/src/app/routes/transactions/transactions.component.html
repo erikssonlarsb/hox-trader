@@ -43,7 +43,7 @@
               <th *ngIf="user?.role.isAdmin"></th>
               <th colspan="5"></th>
               <th class="text-right">
-                {{(configOptions?.hideSettled?.value ? (positions | fieldSum:'realizedProfitLoss':{isSettled: false}:user?.role.isAdmin) : (positions | fieldSum:'realizedProfitLoss':null:user?.role.isAdmin)) | number:'.2-2'}}
+                {{(configOptions?.hideSettled?.value ? (positions | fieldSum:'realizedProfitLoss':{isSettled: false}) : (positions | fieldSum:'realizedProfitLoss')) | number:'.2-2'}}
               </th>
             </tfoot>
           </table>
