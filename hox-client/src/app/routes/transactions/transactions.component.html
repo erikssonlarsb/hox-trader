@@ -46,7 +46,7 @@
               <th *ngIf="user?.role.isAdmin"></th>
               <th colspan="5"></th>
               <th class="text-right">
-                {{(configOptions?.hideSettled?.value ? (positions | fieldSum:'realizedProfitLoss':{isSettled: false}:user?.role.isAdmin) : (positions | fieldSum:'realizedProfitLoss':null:user?.role.isAdmin)) | number:'.2-2'}}
+                {{(configOptions?.hideSettled?.value ? (positions | fieldSum:'realizedProfitLoss':{isSettled: false}) : (positions | fieldSum:'realizedProfitLoss')) | number:'.2-2'}}
               </th>
               <th class="text-right"> <!-- Span "all" columns to work with both admin and not admin columns -->
                 {{(configOptions?.hideSettled?.value ? (positions | fieldSum:'exposure':{isSettled: false}) : (positions | fieldSum:'exposure')) | number:'.2-2'}}
