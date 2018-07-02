@@ -62,6 +62,16 @@
                 </tr>
               </ng-container>
             </tbody>
+            <tfoot>
+              <th *ngIf="user?.role.isAdmin"></th>
+              <th colspan="1"></th>
+              <th class="text-right">
+                {{(configOptions?.hideFinished?.value ?
+                  (settlements | fieldSum:'amount':{isAcknowledged: true, counterpartySettlement: {isAcknowledged: true} }:'Exclude':user?.role.isAdmin) :
+                  (settlements | fieldSum:'amount':undefined:undefined:user?.role.isAdmin)) | number:'.2-2'}}
+              </th>
+              <th colspan="4"></th>
+            </tfoot>
           </table>
         </div>
       </div>

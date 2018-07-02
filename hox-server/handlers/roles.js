@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
+const HttpStatus = require('http-status-codes');
 const roleFactory = require('../factories/roleFactory');
 const Error = require('../utils/error');
 
 router.get('/', function(req, res) {
   roleFactory.query(req.query, req.queryOptions, function(err, roles) {
     if (err) {
-      return res.status(err.code || 500).json(new Error(err));
+      return res.status(HttpStatus.hasOwnProperty(err.code) ? err.code : 500).json(new Error(err));
     } else {
       return res.json(roles);
     }
@@ -16,7 +17,7 @@ router.get('/', function(req, res) {
 router.post('/', function(req, res) {
   roleFactory.create(req.body, function(err, role) {
     if (err) {
-      return res.status(err.code || 500).json(new Error(err));
+      return res.status(HttpStatus.hasOwnProperty(err.code) ? err.code : 500).json(new Error(err));
     } else {
       return res.json(role);
     }
@@ -26,7 +27,7 @@ router.post('/', function(req, res) {
 router.get('/:id', function(req, res) {
   roleFactory.findOne(req.params.id, req.queryOptions, function(err, role) {
     if(err) {
-      return res.status(err.code || 500).json(new Error(err));
+      return res.status(HttpStatus.hasOwnProperty(err.code) ? err.code : 500).json(new Error(err));
     } else if (role) {
       return res.json(role);
     } else {

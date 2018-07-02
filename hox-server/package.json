@@ -20,6 +20,7 @@
     "dateonly": "^1.2.0",
     "deasync": "^0.1.13",
     "express": "^4.16.3",
+    "http-status-codes": "^1.3.0",
     "jsonwebtoken": "^8.2.1",
     "mongoose": "^4.13.12",
     "mongoose-dateonly": "^1.0.4",
