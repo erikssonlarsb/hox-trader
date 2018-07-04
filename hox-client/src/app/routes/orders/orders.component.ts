@@ -5,7 +5,7 @@ import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 
 import { AuthService } from '../../services/auth/auth.service';
 import { ApiService } from '../../services/api/index';
-import { WebSocketService, Event, EVENT_TYPE } from '../../services/websocket/index';
+import { WebSocketService, DocumentEvent, DOCUMENT_OPERATION, DOCUMENT_TYPE } from '../../services/websocket/index';
 
 import { Order, User } from '../../models/index';
 
@@ -44,11 +44,25 @@ export class OrdersComponent implements OnInit, OnDestroy  {
 
     this.webSocketService.events.subscribe(
       event => {
-        if(event.eventType == EVENT_TYPE.Create) {
-          this.orders.push(event.document);
+        if(event.docType == DOCUMENT_TYPE.Order) {
+          switch (event.operation) {
+            case DOCUMENT_OPERATION.Create:
+              this.orders.push(event.document);
+              break;
+            case DOCUMENT_OPERATION.Update:
+              this.orders.forEach((order, i) => {
+                if(order.id == event.document.id) this.orders[i] = event.document;
+              });
+              break;
+            case DOCUMENT_OPERATION.Delete:
+              this.orders.forEach((order, i) => {
+                if(order.id == event.document.id) this.orders.splice(i, 1);
+              });
+              break;
+          }
         }
       }
-    )
+    );
 
     this.ApiService.getOrders({'$populate': ['user', 'instrument']})
     .subscribe(
@@ -72,10 +86,6 @@ export class OrdersComponent implements OnInit, OnDestroy  {
   withdrawOrder(id): void {
     this.ApiService.withdrawOrder(id)
     .subscribe(() => {
-      this.ApiService.getOrders({'$populate': ['user', 'instrument']})
-      .subscribe(
-        orders => this.orders = orders
-      );
       this.orderToWithdraw = null;
       this.withdrawModal.hide();
     });

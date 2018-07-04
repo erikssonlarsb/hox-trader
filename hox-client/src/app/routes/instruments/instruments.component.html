@@ -94,7 +94,7 @@
             </thead>
             <tbody>
               <ng-container *ngFor="let orderDepth of orderDepths">
-                <tr>
+                <tr *ngIf="orderDepth.instrument.status == 'ACTIVE'">
                   <td>
                     <a
                       routerLink="/instruments/{{orderDepth.instrument.id}}">

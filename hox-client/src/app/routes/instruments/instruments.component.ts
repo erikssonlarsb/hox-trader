@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
 import { ApiService } from '../../services/api/index';
+import { WebSocketService, DocumentEvent, DOCUMENT_OPERATION, DOCUMENT_TYPE } from '../../services/websocket/index';
 
-import { OrderDepth, Instrument, Ticker } from '../../models/index';
+import { OrderDepth, Instrument, INSTRUMENT_TYPE, Ticker } from '../../models/index';
 
 @Component({
   selector: 'app-instruments',
@@ -24,10 +25,67 @@ export class InstrumentsComponent  implements OnInit  {
     }
   };
 
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService, private webSocketService: WebSocketService) { }
 
   ngOnInit(): void {
-    this.apiService.getOrderDepths({'status': 'ACTIVE', '$populate': 'prices'})
+    this.webSocketService.populate('OrderDepth', ['prices']);
+    this.webSocketService.populate('Ticker', ['instrument']);
+    this.webSocketService.populate('Instrument', ['prices']);
+
+    this.webSocketService.events.subscribe(
+      event => {
+        if(event.docType == DOCUMENT_TYPE.OrderDepth) {
+          switch (event.operation) {
+            case DOCUMENT_OPERATION.Create:
+              this.orderDepths.push(event.document);
+              break;
+            case DOCUMENT_OPERATION.Update:
+              this.orderDepths.forEach((orderDepth, i) => {
+                if(orderDepth.instrument.id == event.document.instrument.id) {
+                  this.orderDepths[i] = event.document;
+                }
+              });
+              break;
+            case DOCUMENT_OPERATION.Delete:
+              this.orderDepths.forEach((orderDepth, i) => {
+                if(orderDepth.instrument.id == event.document.instrument.id) this.orderDepths.splice(i, 1);
+              });
+              break;
+          }
+        } else if(event.docType == DOCUMENT_TYPE.Ticker) {
+          switch (event.operation) {
+            case DOCUMENT_OPERATION.Create:
+              this.tickers.unshift(event.document);
+              if(this.tickers.length > 15) {
+                this.tickers.pop();
+              }
+              break;
+          }
+        } else if(event.docType == DOCUMENT_TYPE.Instrument && event.document.type == INSTRUMENT_TYPE.Index) {
+          switch (event.operation) {
+            case DOCUMENT_OPERATION.Create:
+              this.indices.push(event.document);
+              break;
+            case DOCUMENT_OPERATION.Update:
+              this.indices.forEach((index, i) => {
+                if(index.id == event.document.id) this.indices[i] = event.document;
+              });
+              break;
+          }
+        }
+      }
+    );
+
+    this.apiService.getOrderDepths({
+      'type': 'Derivative',
+      '$populate': {
+        path: 'instrument',
+        populate: {
+          path: 'prices',
+          match: { type: { $eq: 'LAST'}}
+        }
+      }
+    })
     .subscribe(
       orderDepths => this.orderDepths = orderDepths.sort((a: OrderDepth, b: OrderDepth) => {
         if(a.instrument.name < b.instrument.name) return -1;

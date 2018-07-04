@@ -229,10 +229,10 @@ export class ApiService {
       );
   }
 
-  getOrderDepth(id: string): Observable<OrderDepth> {
+  getOrderDepth(id: string, params: ApiParams | Object = {}): Observable<OrderDepth> {
     let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
-      .get<OrderDepth>(`${window.location.origin}/api/orderdepths/${id}`, { headers: headers })
+      .get<OrderDepth>(`${window.location.origin}/api/orderdepths/${id}`, { headers: headers, params: this.toHttpParams(params) })
       .map(orderDepth => new OrderDepth(orderDepth))
       .pipe(
         catchError(error => this.errorHandler.handleError(error))

@@ -1,10 +1,11 @@
 import { Component, OnInit, TemplateRef  } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 
 import { ApiService } from '../../services/api/index';
+import { WebSocketService, DocumentEvent, DOCUMENT_OPERATION, DOCUMENT_TYPE } from '../../services/websocket/index';
 
 import { Instrument, Order, ORDER_SIDE, OrderDepth } from '../../models/index';
 
@@ -25,14 +26,26 @@ export class OrderComponent  implements OnInit  {
 
   confirmationModal: BsModalRef;
 
-  constructor(private router: Router, private route: ActivatedRoute, private modalService: BsModalService, private apiService: ApiService) { }
+  constructor(private route: ActivatedRoute, private modalService: BsModalService, private apiService: ApiService, private webSocketService: WebSocketService) { }
 
   ngOnInit(): void {
+    this.webSocketService.events.subscribe(
+      event => {
+        if(event.docType == DOCUMENT_TYPE.Order) {
+          switch (event.operation) {
+            case DOCUMENT_OPERATION.Update:
+              if(this.order.id == event.document.id) this.order = event.document;
+              break;
+          }
+        }
+      }
+    );
+
     this.route
       .paramMap
       .subscribe(params => {
         if(params.get('id')) {  // Retrieve existing order
-          this.apiService.getOrder(params.get('id'), {'@populate': 'instrument'})
+          this.apiService.getOrder(params.get('id'), {'$populate': 'instrument'})
           .subscribe(order => {
             this.order = order;
             this.instrument = order.instrument.name;
@@ -44,7 +57,7 @@ export class OrderComponent  implements OnInit  {
           this.side = ORDER_SIDE[params.get('side')];
           this.quantity = Number(params.get('quantity')) || 0;
 
-          this.apiService.getOrderDepth(params.get('instrument'))
+          this.apiService.getOrderDepth(params.get('instrument'), {'$populate': 'instrument'})
           .subscribe(orderDepth => {
             this.orderDepth = orderDepth;
             this.instrument = orderDepth.instrument.name;
@@ -88,7 +101,9 @@ export class OrderComponent  implements OnInit  {
     let newOrder = new Order({instrument: instrument, side: this.side, quantity: this.quantity, price: this.price});
     this.apiService.postOrder(newOrder)
     .subscribe(
-      order => this.router.navigate(['/orders']),
+      order => {
+        this.order = order;
+      },
       error => this.errorMessage = error.message
     );
     this.confirmationModal.hide();
