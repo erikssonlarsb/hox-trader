@@ -14,7 +14,7 @@ class OrderDepth {
     let orderDepth = this;
     async.each(populate, function(path, callback) {
       if(path.path == 'instrument') {
-        instrumentFactory.findOne(ticker.instrument, {populate: path.populate}, function(err, instrument) {
+        instrumentFactory.findOne(orderDepth.instrument, {populate: path.populate}, function(err, instrument) {
           if(err) {
             callback(err);
           } else {
