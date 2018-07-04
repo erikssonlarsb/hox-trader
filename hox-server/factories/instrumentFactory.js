@@ -102,12 +102,8 @@ module.exports = {
             /*
              * Return the created instrument including any embedded documents
              */
-             if(err) {
-               callback(err);
-             } else {
-               callback(null, instrument);
-               eventEmitter.emit('DocumentEvent', new DocumentEvent('Create', 'Instrument', instrument));
-             }
+             callback(err, instrument);
+             if(instrument) eventEmitter.emit('DocumentEvent', new DocumentEvent('Create', 'Instrument', instrument));
           });
         }
       });
@@ -127,12 +123,8 @@ module.exports = {
         if(updateInstrument.status) instrument.status = updateInstrument.status;
 
         instrument.save(function(err) {
-          if(err) {
-            callback(err);
-          } else {
-            callback(null, instrument);
-            eventEmitter.emit('DocumentEvent', new DocumentEvent('Update', 'Instrument', instrument));
-          }
+          callback(err, instrument);
+          if(!err) eventEmitter.emit('DocumentEvent', new DocumentEvent('Update', 'Instrument', instrument));
         });
       }
     });

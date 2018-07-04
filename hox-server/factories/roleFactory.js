@@ -2,6 +2,8 @@
 roleFactory handles database interaction for the roles collection.
 */
 const Role = require('../models/role');
+const eventEmitter = require('../events/eventEmitter');
+const DocumentEvent = require('../events/event.document');
 
 module.exports = {
 
@@ -29,10 +31,11 @@ module.exports = {
     });
   },
 
-  // Create a price.
+  // Create a role.
   create: function(role, callback) {
     Role.create(role, function(err, role) {
       callback(err, role);
+      if(role) eventEmitter.emit('DocumentEvent', new DocumentEvent('Create', 'Role', role));
     });
   }
 }

@@ -4,6 +4,8 @@ Since systemInfo is a singleton (only one document in collection),
 handling differs somewhat from normal procedure.
 */
 const SystemInfo = require('../models/systemInfo');
+const eventEmitter = require('../events/eventEmitter');
+const DocumentEvent = require('../events/event.document');
 
 module.exports = {
 
@@ -29,6 +31,7 @@ module.exports = {
       } else if(!systemInfo) {
         SystemInfo.create(createSystemInfo, function(err, systemInfo) {
           callback(err, systemInfo);
+          if(systemInfo) eventEmitter.emit('DocumentEvent', new DocumentEvent('Create', 'SystemInfo', systemInfo));
         });
       } else {
         if(createSystemInfo.version) systemInfo.version = createSystemInfo.version;
@@ -36,6 +39,7 @@ module.exports = {
 
         systemInfo.save(function(err) {
           callback(err, systemInfo);
+          if(!err) eventEmitter.emit('DocumentEvent', new DocumentEvent('Update', 'SystemInfo', systemInfo));
         });
       }
     });

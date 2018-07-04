@@ -2,6 +2,8 @@
 inviteFactory handles database interaction for the invites collection.
 */
 const Invite = require('../models/invite');
+const eventEmitter = require('../events/eventEmitter');
+const DocumentEvent = require('../events/event.document');
 
 module.exports = {
 
@@ -34,6 +36,7 @@ module.exports = {
   create: function(invite, callback) {
     Invite.create(invite, function(err, invite) {
       callback(err, invite);
+      if(invite) eventEmitter.emit('DocumentEvent', new DocumentEvent('Create', 'Invite', invite));
     });
   }
 }

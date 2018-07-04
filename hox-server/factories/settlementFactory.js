@@ -2,6 +2,8 @@
 settlementFactory handles database interaction for the settlements collection.
 */
 const Settlement = require('../models/settlement');
+const eventEmitter = require('../events/eventEmitter');
+const DocumentEvent = require('../events/event.document');
 
 module.exports = {
 
@@ -34,6 +36,7 @@ module.exports = {
   create: function(settlement, callback) {
     Settlement.create(settlement, function(err, settlement) {
       callback(err, settlement);
+      if(settlement) eventEmitter.emit('DocumentEvent', new DocumentEvent('Create', 'Settlement', settlement));
     });
   },
 
@@ -49,6 +52,7 @@ module.exports = {
 
       settlement.save(function(err) {
         callback(err, settlement);
+        if(!err) eventEmitter.emit('DocumentEvent', new DocumentEvent('Update', 'Settlement', settlement));
       });
     });
   }

@@ -2,6 +2,8 @@
 tradeFactory handles database interaction for the trades collection.
 */
 const Trade = require('../models/trade');
+const eventEmitter = require('../events/eventEmitter');
+const DocumentEvent = require('../events/event.document');
 
 module.exports = {
 
@@ -36,6 +38,7 @@ module.exports = {
   create: function(trade, callback) {
     Trade.create(trade, function(err, trade) {
       callback(err, trade);
+      if(trade) eventEmitter.emit('DocumentEvent', new DocumentEvent('Create', 'Trade', trade));
     });
   }
 }

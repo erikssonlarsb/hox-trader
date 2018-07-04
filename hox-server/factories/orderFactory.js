@@ -37,10 +37,8 @@ module.exports = {
   // Create an order.
   create: function(order, callback) {
     Order.create(order, function(err, order) {
-      if(err) {
-        callback(err);
-      } else {
-        callback(null, order);
+      callback(err, order);
+      if(order) {
         eventEmitter.emit('DocumentEvent', new DocumentEvent('Create', 'Order', order));
         matchOrder(order);
       }
@@ -62,10 +60,8 @@ module.exports = {
         if(updateOrder.quantity) order.quantity = updateOrder.quantity;
 
         order.save(function(err) {
-          if(err) {
-            callback(err);
-          } else {
-            callback(null, order);
+          callback(err, order);
+          if(!err) {
             eventEmitter.emit('DocumentEvent', new DocumentEvent('Update', 'Order', order));
             matchOrder(order);
           }
@@ -88,12 +84,8 @@ module.exports = {
       } else {
         order.status = "WITHDRAWN";
         order.save(function(err) {
-          if(err) {
-            callback(err);
-          } else {
-            callback(null, order);
-            eventEmitter.emit('DocumentEvent', new DocumentEvent('Update', 'Order', order));
-          }
+          callback(err, order);
+          if(!err) eventEmitter.emit('DocumentEvent', new DocumentEvent('Update', 'Order', order));
         });
       }
     });
@@ -176,9 +168,7 @@ function matchOrder(order) {
             value: trade.price
           };
           priceFactory.newTradePrice(newTradePrice, function(err) {
-            if (err) {
-              console.error(err);
-            }
+            if(err) console.error(err);
           });
         })
         .catch(function(err) {
