@@ -22,6 +22,7 @@ export class OrderComponent  implements OnInit  {
   quantity: number;
   price: number;
   order: Order;
+  orderUpdates: Array<Order> = [];
   errorMessage: string;
 
   confirmationModal: BsModalRef;
@@ -34,7 +35,12 @@ export class OrderComponent  implements OnInit  {
         if(event.docType == DOCUMENT_TYPE.Order) {
           switch (event.operation) {
             case DOCUMENT_OPERATION.Update:
-              if(this.order.id == event.document.id) this.order = event.document;
+              if(this.order) {
+                if(this.order.id == event.document.id) this.order = event.document;
+              } else {
+                this.orderUpdates.unshift(event.document);
+              }
+
               break;
           }
         }
@@ -101,8 +107,19 @@ export class OrderComponent  implements OnInit  {
     let newOrder = new Order({instrument: instrument, side: this.side, quantity: this.quantity, price: this.price});
     this.apiService.postOrder(newOrder)
     .subscribe(
-      order => {
-        this.order = order;
+      createdOrder => {
+        if(this.orderUpdates.length == 0) {
+          this.order = createdOrder;
+        } else {
+          let latestOrderUpdate = this.orderUpdates.find(orderUpdate => orderUpdate.id == createdOrder.id);
+          this.orderUpdates = [];
+          if(latestOrderUpdate && latestOrderUpdate.updateTimestamp > createdOrder.updateTimestamp) {
+            this.order = latestOrderUpdate;
+          } else {
+            this.order = createdOrder;
+          }
+        }
+
       },
       error => this.errorMessage = error.message
     );
