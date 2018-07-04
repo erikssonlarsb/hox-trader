@@ -93,13 +93,15 @@ eventEmitter.on('DocumentEvent', function(event) {
   // Trigger events for any dependent models
   switch (event.docType) {
     case 'Instrument':
-      orderDepthFactory.findOne(event.document._id, function(err, orderDepth) {
-        if(err) {
-          console.error(err);
-        } else if (orderDepth) {
-          eventEmitter.emit('DocumentEvent', new DocumentEvent('Update', 'OrderDepth', orderDepth));
-        }
-      });
+      if(event.operation == 'Create') {
+        orderDepthFactory.findOne(event.document._id, function(err, orderDepth) {
+          if(err) {
+            console.error(err);
+          } else if (orderDepth) {
+            eventEmitter.emit('DocumentEvent', new DocumentEvent('Create', 'OrderDepth', orderDepth));
+          }
+        });
+      }
       break;
     case 'Order':
       orderDepthFactory.findOne(event.document.instrument, function(err, orderDepth) {
