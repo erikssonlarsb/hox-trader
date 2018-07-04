@@ -60,6 +60,16 @@ export class OrdersComponent implements OnInit, OnDestroy  {
               });
               break;
           }
+        } else if(event.docType == DOCUMENT_TYPE.Instrument) {
+          switch (event.operation) {
+            case DOCUMENT_OPERATION.Update:
+              this.orders.forEach((order, i) => {
+                if(order.instrument.id == event.document.id) {
+                  this.orders[i].instrument = event.document;
+                }
+              });
+              break;
+          }
         }
       }
     );

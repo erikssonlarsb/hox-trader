@@ -28,7 +28,7 @@ export class InstrumentsComponent  implements OnInit  {
   constructor(private apiService: ApiService, private webSocketService: WebSocketService) { }
 
   ngOnInit(): void {
-    this.webSocketService.populate('OrderDepth', ['prices']);
+    this.webSocketService.populate('OrderDepth', [{path: 'instrument', populate: {path: 'prices', match: { type: { $eq: 'LAST'}}}}]);
     this.webSocketService.populate('Ticker', ['instrument']);
     this.webSocketService.populate('Instrument', ['prices']);
 
@@ -38,6 +38,11 @@ export class InstrumentsComponent  implements OnInit  {
           switch (event.operation) {
             case DOCUMENT_OPERATION.Create:
               this.orderDepths.push(event.document);
+              this.orderDepths.sort((a: OrderDepth, b: OrderDepth) => {
+                if(a.instrument.name < b.instrument.name) return -1;
+                if(a.instrument.name > b.instrument.name) return 1;
+                return 0;
+              });
               break;
             case DOCUMENT_OPERATION.Update:
               this.orderDepths.forEach((orderDepth, i) => {
@@ -61,16 +66,33 @@ export class InstrumentsComponent  implements OnInit  {
               }
               break;
           }
-        } else if(event.docType == DOCUMENT_TYPE.Instrument && event.document.type == INSTRUMENT_TYPE.Index) {
-          switch (event.operation) {
-            case DOCUMENT_OPERATION.Create:
-              this.indices.push(event.document);
-              break;
-            case DOCUMENT_OPERATION.Update:
-              this.indices.forEach((index, i) => {
-                if(index.id == event.document.id) this.indices[i] = event.document;
-              });
-              break;
+        } else if(event.docType == DOCUMENT_TYPE.Instrument) {
+          if(event.document.type == INSTRUMENT_TYPE.Index) {
+            switch (event.operation) {
+              case DOCUMENT_OPERATION.Create:
+                this.indices.push(event.document);
+                this.indices.sort((a: Instrument, b: Instrument) => {
+                  if(a.name < b.name) return -1;
+                  if(a.name > b.name) return 1;
+                  return 0;
+                });
+                break;
+              case DOCUMENT_OPERATION.Update:
+                this.indices.forEach((index, i) => {
+                  if(index.id == event.document.id) this.indices[i] = event.document;
+                });
+                break;
+            }
+          } else if(event.document.type == INSTRUMENT_TYPE.Derivative) {
+            switch (event.operation) {
+              case DOCUMENT_OPERATION.Update:
+                this.orderDepths.forEach((orderDepth, i) => {
+                  if(orderDepth.instrument.id == event.document.id) {
+                    this.orderDepths[i].instrument = event.document;
+                  }
+                });
+                break;
+            }
           }
         }
       }
@@ -78,13 +100,7 @@ export class InstrumentsComponent  implements OnInit  {
 
     this.apiService.getOrderDepths({
       'type': 'Derivative',
-      '$populate': {
-        path: 'instrument',
-        populate: {
-          path: 'prices',
-          match: { type: { $eq: 'LAST'}}
-        }
-      }
+      '$populate': {path: 'instrument', populate: {path: 'prices', match: { type: { $eq: 'LAST'}}}}
     })
     .subscribe(
       orderDepths => this.orderDepths = orderDepths.sort((a: OrderDepth, b: OrderDepth) => {

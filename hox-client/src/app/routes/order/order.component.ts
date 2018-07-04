@@ -30,9 +30,20 @@ export class OrderComponent  implements OnInit  {
   constructor(private route: ActivatedRoute, private modalService: BsModalService, private apiService: ApiService, private webSocketService: WebSocketService) { }
 
   ngOnInit(): void {
+
+    this.webSocketService.populate('OrderDepth', ['instrument']);
+
     this.webSocketService.events.subscribe(
       event => {
-        if(event.docType == DOCUMENT_TYPE.Order) {
+        if(event.docType == DOCUMENT_TYPE.OrderDepth) {
+          switch (event.operation) {
+            case DOCUMENT_OPERATION.Update:
+              if(this.orderDepth.instrument.id == event.document.instrument.id) {
+                this.orderDepth = event.document;
+              }
+              break;
+          }
+        } else if(event.docType == DOCUMENT_TYPE.Order) {
           switch (event.operation) {
             case DOCUMENT_OPERATION.Update:
               if(this.order) {
@@ -40,7 +51,6 @@ export class OrderComponent  implements OnInit  {
               } else {
                 this.orderUpdates.unshift(event.document);
               }
-
               break;
           }
         }
