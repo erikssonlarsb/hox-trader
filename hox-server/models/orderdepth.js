@@ -26,7 +26,7 @@ class OrderDepth {
         callback();
       }
     }, function(err) {
-      callback(err, ticker);
+      callback(err, orderDepth);
     });
   }
 
