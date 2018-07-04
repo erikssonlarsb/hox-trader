@@ -112,7 +112,7 @@ eventEmitter.on('DocumentEvent', function(event) {
       });
       break;
     case 'Trade':
-      if(event.document.side == 'BUY') {  // Only create ticker for 1 side of the trade-pairs
+      if(event.operation == 'Create' && event.document.side == 'BUY') {  // Only create ticker for 1 side of the trade-pairs
         tickerFactory.findOne(event.document._id, function(err, ticker) {
           if(err) {
           } else if (ticker) {
