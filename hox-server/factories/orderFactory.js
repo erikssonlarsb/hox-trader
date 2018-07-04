@@ -4,6 +4,8 @@ orderFactory handles database interaction for the orders collection.
 const Order = require('../models/order');
 const Trade = require('../models/trade');
 const priceFactory = require('../factories/priceFactory');
+const eventEmitter = require('../events/eventEmitter');
+const DocumentEvent = require('../events/event.document');
 
 module.exports = {
 
@@ -35,8 +37,13 @@ module.exports = {
   // Create an order.
   create: function(order, callback) {
     Order.create(order, function(err, order) {
-      callback(err, order);
-      matchOrder(order);
+      if(err) {
+        callback(err);
+      } else {
+        callback(null, order);
+        eventEmitter.emit('DocumentEvent', new DocumentEvent('Create', 'Order', order));
+        matchOrder(order);
+      }
     });
   },
 
@@ -55,8 +62,13 @@ module.exports = {
         if(updateOrder.quantity) order.quantity = updateOrder.quantity;
 
         order.save(function(err) {
-          callback(err, order);
-          matchOrder(order);
+          if(err) {
+            callback(err);
+          } else {
+            callback(null, order);
+            eventEmitter.emit('DocumentEvent', new DocumentEvent('Update', 'Order', order));
+            matchOrder(order);
+          }
         });
       }
     });
@@ -75,8 +87,13 @@ module.exports = {
         callback("Cannot delete non-active order.");
       } else {
         order.status = "WITHDRAWN";
-        order.save(function(err, order) {
-          callback(err, order);
+        order.save(function(err) {
+          if(err) {
+            callback(err);
+          } else {
+            callback(null, order);
+            eventEmitter.emit('DocumentEvent', new DocumentEvent('Update', 'Order', order));
+          }
         });
       }
     });
@@ -145,6 +162,14 @@ function matchOrder(order) {
           return matchingOrder.save();
         })
         .then(function() {
+          // Emit Create Trade events
+          eventEmitter.emit('DocumentEvent', new DocumentEvent('Create', 'Trade', trade));
+          eventEmitter.emit('DocumentEvent', new DocumentEvent('Create', 'Trade', matchingTrade));
+
+          // Emit Update Order events
+          eventEmitter.emit('DocumentEvent', new DocumentEvent('Update', 'Order', order));
+          eventEmitter.emit('DocumentEvent', new DocumentEvent('Update', 'Order', matchingOrder));
+
           // Update price for instrument
           let newTradePrice = {
             instrument: order.instrument,

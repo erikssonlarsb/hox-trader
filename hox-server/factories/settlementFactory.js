@@ -13,7 +13,7 @@ module.exports = {
     params[auth.userField] = auth.userId;
 
     Settlement.find(params)
-    .populate(sanitizePopulate(populate))
+    .populate(Settlement.sanitizePopulate(populate))
     .exec(function(err, settlement) {
       callback(err, settlement);
     });
@@ -25,7 +25,7 @@ module.exports = {
       callback = arguments[1];
     }
 
-    Settlement.findUnique({[idField]: id, [auth.userField]: auth.userId}, sanitizePopulate(populate), function(err, settlement) {
+    Settlement.findUnique({[idField]: id, [auth.userField]: auth.userId}, Settlement.sanitizePopulate(populate), function(err, settlement) {
       callback(err, settlement);
     });
   },
@@ -43,7 +43,7 @@ module.exports = {
       callback = arguments[1];
     }
 
-    Settlement.findUnique({[idField]: id, [auth.userField]: auth.userId}, sanitizePopulate(populate), function(err, settlement) {
+    Settlement.findUnique({[idField]: id, [auth.userField]: auth.userId}, Settlement.sanitizePopulate(populate), function(err, settlement) {
       if(err) callback(err);
       if(updateSettlement.isAcknowledged) settlement.isAcknowledged = updateSettlement.isAcknowledged;
 
@@ -52,21 +52,4 @@ module.exports = {
       });
     });
   }
-}
-
-function sanitizePopulate(populate) {
-  /*
-  Restrict access to the Settlement object referred to in path 'counterpartySettlement'
-   */
-  return populate.map(path => {
-    if(path.path == 'counterpartySettlement') {
-      return {
-        path: 'counterpartySettlement',
-        select: 'user isAcknowledged',
-        populate: {path: 'user', select: 'name email phone'}
-      };
-    } else {
-      return path;
-    }
-  });
 }

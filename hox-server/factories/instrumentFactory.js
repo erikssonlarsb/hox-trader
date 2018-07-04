@@ -6,6 +6,8 @@ const Instrument = require('../models/instrument');
 const Index = require('../models/instrument.index');
 const Derivative = require('../models/instrument.derivative');
 const priceFactory = require('./priceFactory');
+const eventEmitter = require('../events/eventEmitter');
+const DocumentEvent = require('../events/event.document');
 
 module.exports = {
 
@@ -100,7 +102,12 @@ module.exports = {
             /*
              * Return the created instrument including any embedded documents
              */
-            callback(err, instrument);
+             if(err) {
+               callback(err);
+             } else {
+               callback(null, instrument);
+               eventEmitter.emit('DocumentEvent', new DocumentEvent('Create', 'Instrument', instrument));
+             }
           });
         }
       });
@@ -120,7 +127,12 @@ module.exports = {
         if(updateInstrument.status) instrument.status = updateInstrument.status;
 
         instrument.save(function(err) {
-          callback(err, instrument);
+          if(err) {
+            callback(err);
+          } else {
+            callback(null, instrument);
+            eventEmitter.emit('DocumentEvent', new DocumentEvent('Update', 'Instrument', instrument));
+          }
         });
       }
     });

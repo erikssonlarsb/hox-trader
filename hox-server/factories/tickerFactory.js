@@ -22,5 +22,16 @@ module.exports = {
         callback(err, tickers);
       }
     });
+  },
+
+  // Find a single ticker.
+  findOne: function(id, {idField = '_id', populate = []}, callback) {
+    if (typeof arguments[1] === 'function') {
+      callback = arguments[1];
+    }
+
+    tradeFactory.findOne(id, {idField: idField, populate: populate}, function(err, trade) {
+      callback(err, trade ? new Ticker(trade) : trade);
+    });
   }
 }

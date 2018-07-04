@@ -1,8 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
-const eventEmitter = require('../events/eventEmitter');
-const Event = require('../events/event');
 
 const tradeSchema = new Schema({
   order: {type: ObjectId, ref: 'Order', required: true},
@@ -18,19 +16,25 @@ const tradeSchema = new Schema({
 
 require("../utils/findUnique")(tradeSchema);
 
+tradeSchema.statics.sanitizePopulate = function(populate) {
+  /*
+  Restrict access to the Trade object referred to in path 'counterpartyTrade'
+   */
+  return populate.map(path => {
+    if(path.path == 'counterpartyTrade') {
+      return {
+        path: 'counterpartyTrade',
+        select: 'user',
+        populate: {path: 'user', select: 'name email phone'}
+      };
+    } else {
+      return path;
+    }
+  });
+}
+
 tradeSchema.pre('save', function(next) {
   this.updateTimestamp = new Date();
-  next();
-});
-
-tradeSchema.pre('save', function(next) {
-  this.wasNew = this.isNew;
-  next();
-});
-
-tradeSchema.post('save', function(trade, next) {
-  const eventType = trade.wasNew ? 'Create' : 'Update';
-  eventEmitter.emit('save', new Event(eventType, 'Trade', trade));
   next();
 });
 

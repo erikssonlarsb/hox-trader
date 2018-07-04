@@ -1,3 +1,6 @@
+const async = require('async');
+const instrumentFactory = require('../factories/instrumentFactory');
+
 class OrderDepth {
   constructor(instrument) {
     this.instrument = instrument;
@@ -5,6 +8,26 @@ class OrderDepth {
     this.totalBuy = 0;
     this.totalSell = 0;
     this.max = 0;
+  }
+
+  populate(populate, callback) {
+    let orderDepth = this;
+    async.each(populate, function(path, callback) {
+      if(path.path == 'instrument') {
+        instrumentFactory.findOne(ticker.instrument, {populate: path.populate}, function(err, instrument) {
+          if(err) {
+            callback(err);
+          } else {
+            orderDepth.instrument = instrument;
+            callback();
+          }
+        });
+      } else {
+        callback();
+      }
+    }, function(err) {
+      callback(err, ticker);
+    });
   }
 
   addOrder(order) {

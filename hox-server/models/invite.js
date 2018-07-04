@@ -18,6 +18,22 @@ const inviteSchema = new Schema({
 
 require("../utils/findUnique")(inviteSchema);
 
+inviteSchema.statics.sanitizePopulate = function (populate) {
+  /*
+  Restrict access to the User object referred to in path 'invitee'
+   */
+  return populate.map(path => {
+    if(path.path == 'invitee') {
+      return {
+        path: 'invitee',
+        select: 'name'
+      };
+    } else {
+      return path;
+    }
+  });
+}
+
 inviteSchema.pre('save', function(next) {
   this.updateTimestamp = new Date();
   next();

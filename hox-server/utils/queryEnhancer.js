@@ -37,4 +37,7 @@ function getPopulate(populate) {
   }
 }
 
-module.exports = queryEnhancer;
+module.exports = {
+  queryEnhancer: queryEnhancer,
+  getPopulate: getPopulate
+}

@@ -2,8 +2,6 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
 const Instrument = require('./instrument');
-const eventEmitter = require('../events/eventEmitter');
-const Event = require('../events/event');
 
 const orderSchema = new Schema({
   user: {type: ObjectId, ref: 'User', required: true},
@@ -52,17 +50,6 @@ orderSchema.pre('save', function(next) {
   } else if (this.quantity == this.tradedQuantity) {
     this.status = 'TRADED';
   }
-  next();
-});
-
-orderSchema.pre('save', function(next) {
-  this.wasNew = this.isNew;
-  next();
-});
-
-orderSchema.post('save', function(order, next) {
-  const eventType = order.wasNew ? 'Create' : 'Update';
-  eventEmitter.emit('save', new Event(eventType, 'Order', order));
   next();
 });
 

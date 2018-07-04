@@ -13,7 +13,7 @@ module.exports = {
     params[auth.userField] = auth.userId;
 
     Invite.find(params)
-    .populate(sanitizePopulate(populate))
+    .populate(Invite.sanitizePopulate(populate))
     .exec(function(err, invites) {
       callback(err, invites);
     });
@@ -25,7 +25,7 @@ module.exports = {
       callback = arguments[1];
     }
 
-    Invite.findUnique({[idField]: id, [auth.userField]: auth.userId}, sanitizePopulate(populate), function(err, invite) {
+    Invite.findUnique({[idField]: id, [auth.userField]: auth.userId}, Invite.sanitizePopulate(populate), function(err, invite) {
       callback(err, invite);
     });
   },
@@ -36,20 +36,4 @@ module.exports = {
       callback(err, invite);
     });
   }
-}
-
-function sanitizePopulate(populate) {
-  /*
-  Restrict access to the User object referred to in path 'invitee'
-   */
-  return populate.map(path => {
-    if(path.path == 'invitee') {
-      return {
-        path: 'invitee',
-        select: 'name'
-      };
-    } else {
-      return path;
-    }
-  });
 }

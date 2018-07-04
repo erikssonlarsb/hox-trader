@@ -13,6 +13,23 @@ const settlementSchema = new Schema({
 
 require("../utils/findUnique")(settlementSchema);
 
+settlementSchema.statics.sanitizePopulate = function(populate) {
+  /*
+  Restrict access to the Settlement object referred to in path 'counterpartySettlement'
+   */
+  return populate.map(path => {
+    if(path.path == 'counterpartySettlement') {
+      return {
+        path: 'counterpartySettlement',
+        select: 'user isAcknowledged',
+        populate: {path: 'user', select: 'name email phone'}
+      };
+    } else {
+      return path;
+    }
+  });
+}
+
 settlementSchema.pre('save', function(next) {
   this.updateTimestamp = new Date();
   next();

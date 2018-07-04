@@ -4,14 +4,16 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { AuthService } from '../../services/auth/auth.service';
 
-import { Event } from './event';
+import { Event, EVENT_TYPE, ConnectionEvent, CONNECTION_STATUS, DocumentEvent, DOCUMENT_OPERATION } from './event';
 
 @Injectable()
 export class WebSocketService {
   private socket: Subject<any>;
-  private eventSource: Subject<Event> = new Subject<Event>();
+  private eventSource: Subject<DocumentEvent> = new Subject<DocumentEvent>();
+  private populateMessages: any = {};
+  private connectionStatus: CONNECTION_STATUS = CONNECTION_STATUS.Disconnected;
 
-  events: Observable<Event> = this.eventSource.asObservable();
+  events: Observable<DocumentEvent> = this.eventSource.asObservable();
 
   constructor(private authService: AuthService) {
     this.init();
@@ -30,20 +32,37 @@ export class WebSocketService {
 
           this.socket
           .retry()
-          .map(message => new Event(message))
+          .map(event => Event.typeMapper(event))
           .subscribe(
-            (event) => this.eventSource.next(event),
+            (event) => {
+              switch (event.type) {
+                case EVENT_TYPE.Connection:
+                  const connectionEvent = <ConnectionEvent> event;
+                  this.connectionStatus = connectionEvent.status;
+                  if(connectionEvent.status == CONNECTION_STATUS.Connected) {
+                    for(let message of Object.values(this.populateMessages)) {
+                      this.socket.next(JSON.stringify(message));
+                    }
+                  }
+                  break;
+                case EVENT_TYPE.Document:
+                  this.eventSource.next(<DocumentEvent> event);
+                  break;
+              }
+            },
             (err) => console.error(err),
             () => console.log('Completed!')
           );
-        } else {
-
         }
       }
     )
   }
 
   populate(docType: string, populate: Array<any>): void {
-    this.socket.next(JSON.stringify({type: 'Populate', data: {docType: docType, populate: populate}}));
+    const populateMessage = {type: 'Populate', data: {docType: docType, populate: populate}};
+    this.populateMessages[docType] = populateMessage;
+    if(this.connectionStatus == CONNECTION_STATUS.Connected) {
+      this.socket.next(JSON.stringify(populateMessage));
+    }
   }
 }

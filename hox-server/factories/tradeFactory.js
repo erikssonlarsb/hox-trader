@@ -13,7 +13,7 @@ module.exports = {
     params[auth.userField] = auth.userId;
 
     Trade.find(params)
-    .populate(sanitizePopulate(populate))
+    .populate(Trade.sanitizePopulate(populate))
     .sort(sort)
     .limit(limit)
     .exec(function(err, trades) {
@@ -27,7 +27,7 @@ module.exports = {
       callback = arguments[1];
     }
 
-    Trade.findUnique({[idField]: id, [auth.userField]: auth.userId}, sanitizePopulate(populate), function(err, trade) {
+    Trade.findUnique({[idField]: id, [auth.userField]: auth.userId}, Trade.sanitizePopulate(populate), function(err, trade) {
       callback(err, trade);
     });
   },
@@ -38,21 +38,4 @@ module.exports = {
       callback(err, trade);
     });
   }
-}
-
-function sanitizePopulate(populate) {
-  /*
-  Restrict access to the Trade object referred to in path 'counterpartyTrade'
-   */
-  return populate.map(path => {
-    if(path.path == 'counterpartyTrade') {
-      return {
-        path: 'counterpartyTrade',
-        select: 'user',
-        populate: {path: 'user', select: 'name email phone'}
-      };
-    } else {
-      return path;
-    }
-  });
 }
