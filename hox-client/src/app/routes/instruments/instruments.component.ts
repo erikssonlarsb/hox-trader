@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { trigger, style, transition, animate, group, query } from '@angular/animations';
 
 import { ApiService } from '../../services/api/index';
 import { WebSocketService, DocumentEvent, DOCUMENT_OPERATION, DOCUMENT_TYPE } from '../../services/websocket/index';
@@ -8,7 +9,23 @@ import { OrderDepth, Instrument, INSTRUMENT_TYPE, Ticker } from '../../models/in
 @Component({
   selector: 'app-instruments',
   templateUrl: './instruments.component.html',
-  styleUrls: ['./instruments.component.css']
+  styleUrls: ['./instruments.component.css'],
+  animations: [
+  trigger('valueChange', [
+    transition(':increment', group([
+      query(':enter', [
+        style({ color: 'green', 'font-weight': 'bold'}),
+        animate('10s', style('*'))
+      ])
+    ])),
+    transition(':decrement', group([
+      query(':enter', [
+        style({ color: 'red', 'font-weight': 'bold'}),
+        animate('10s', style('*'))
+      ])
+    ]))
+  ])
+]
 })
 export class InstrumentsComponent  implements OnInit  {
   orderDepths: Array<OrderDepth>;
@@ -47,7 +64,8 @@ export class InstrumentsComponent  implements OnInit  {
             case DOCUMENT_OPERATION.Update:
               this.orderDepths.forEach((orderDepth, i) => {
                 if(orderDepth.instrument.id == event.document.instrument.id) {
-                  this.orderDepths[i] = event.document;
+                  this.orderDepths[i].instrument = event.document.instrument;
+                  this.orderDepths[i].levels = event.document.levels;
                 }
               });
               break;
@@ -61,9 +79,11 @@ export class InstrumentsComponent  implements OnInit  {
           switch (event.operation) {
             case DOCUMENT_OPERATION.Create:
               this.tickers.unshift(event.document);
+              /*
               if(this.tickers.length > 15) {
                 this.tickers.pop();
               }
+              */
               break;
           }
         } else if(event.docType == DOCUMENT_TYPE.Instrument) {
