@@ -1,5 +1,7 @@
-var Trade = require('../../models/trade');
-var Settlement = require('../../models/settlement');
+const Trade = require('../../models/trade');
+const Settlement = require('../../models/settlement');
+const eventEmitter = require('../../events/eventEmitter');
+const DocumentEvent = require('../../events/event.document');
 
 exports.run = function() {
   console.log("### settleTrades started.");
@@ -56,16 +58,26 @@ exports.run = function() {
             if (settlement.amount == 0) {
               settlement.isAcknowledged = true;
             }
-            settlement.save();
+            settlement.save(function(err) {
+              if(err) {
+                console.error(err);
+              } else {
+                eventEmitter.emit('DocumentEvent', new DocumentEvent('Create', 'Settlement', settlement));
+              }
+            });
 
             for (let trade of settlement.trades) {
               trade.isSettled = true;
-              trade.save();
-              console.log("Settled trade: " + trade._id);
+              trade.save(function(err) {
+                if(err) {
+                  console.error(err);
+                } else {
+                  eventEmitter.emit('DocumentEvent', new DocumentEvent('Update', 'Trade', trade));
+                }
+              });
             }
           }
         }
-
         console.log("settleTrades finished. ###");
       }
     });

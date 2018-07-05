@@ -4,6 +4,7 @@ import { Http }  from '@angular/http';
 
 import { AuthService } from '../../services/auth/auth.service';
 import { ApiService } from '../../services/api/api.service';
+import { WebSocketService, DocumentEvent, DOCUMENT_OPERATION, DOCUMENT_TYPE } from '../../services/websocket/index';
 
 import { Settlement, User } from '../../models/index';
 
@@ -25,10 +26,29 @@ export class SettlementsComponent implements OnInit, OnDestroy  {
     }
   };
 
-  constructor(private datePipe: DatePipe, private http: Http, private authService: AuthService, private apiService: ApiService) { }
+  constructor(private datePipe: DatePipe, private http: Http, private authService: AuthService, private apiService: ApiService, private webSocketService: WebSocketService) { }
 
   ngOnInit(): void {
     this.user = this.authService.getLoggedInUser();
+
+    this.webSocketService.populate('Settlement', ['user', 'counterpartySettlement']);
+
+    this.webSocketService.events.subscribe(
+      event => {
+        if(event.docType == DOCUMENT_TYPE.Settlement) {
+          switch (event.operation) {
+            case DOCUMENT_OPERATION.Create:
+              this.settlements.push(event.document);
+              break;
+            case DOCUMENT_OPERATION.Update:
+              this.settlements.forEach((settlement, i) => {
+                if(settlement.id == event.document.id) this.settlements[i] = event.document;
+              });
+              break;
+          }
+        }
+      }
+    );
 
     this.apiService.getSettlements({'$populate': ['user', 'counterpartySettlement']})
     .subscribe(settlements =>
@@ -50,13 +70,7 @@ export class SettlementsComponent implements OnInit, OnDestroy  {
   }
 
   acknowledgeSettlement(id): void {
-    this.apiService.acknowledgeSettlement(id)
-      .subscribe(() => {
-        this.apiService.getSettlements({'$populate': ['user', 'counterpartySettlement']})
-          .subscribe(settlements => {
-            this.settlements = settlements.sort((a: Settlement, b: Settlement) => {return a.createTimestamp.getTime() - b.createTimestamp.getTime()})
-          });
-      });
+    this.apiService.acknowledgeSettlement(id).subscribe();
   }
 
   openSwish(settlement): void {

@@ -37,9 +37,14 @@ export class TransactionsComponent implements OnInit, OnDestroy  {
           switch (event.operation) {
             case DOCUMENT_OPERATION.Create:
               this.trades.push(event.document);
-              this.calculatePositions();
+              break;
+            case DOCUMENT_OPERATION.Update:
+              this.trades.forEach((trade, i) => {
+                if(trade.id == event.document.id) this.trades[i] = event.document;
+              });
               break;
           }
+          this.calculatePositions();
         }
       }
     );

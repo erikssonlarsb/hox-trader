@@ -14,6 +14,7 @@ const ConnectionEvent = require('./events/event.connection');
 const DocumentEvent = require('./events/event.document');
 const orderDepthFactory = require('./factories/orderDepthFactory');
 const tickerFactory = require('./factories/tickerFactory');
+const settlementFactory = require('./factories/settlementFactory');
 
 require('console-stamp')(console, { pattern: 'yyyy/mm/dd HH:MM:ss.l' });
 
@@ -117,6 +118,16 @@ eventEmitter.on('DocumentEvent', function(event) {
           if(err) {
           } else if (ticker) {
             eventEmitter.emit('DocumentEvent', new DocumentEvent('Create', 'Ticker', ticker));
+          }
+        });
+      }
+      break;
+    case 'Settlement':
+      if(event.operation == 'Update') {
+        settlementFactory.findOne(event.document.counterpartySettlement, function(err, counterpartySettlement) {
+          if(err) {
+          } else if (counterpartySettlement) {
+            eventEmitter.emit('DocumentEvent', new DocumentEvent('Update', 'Settlement', counterpartySettlement));
           }
         });
       }
