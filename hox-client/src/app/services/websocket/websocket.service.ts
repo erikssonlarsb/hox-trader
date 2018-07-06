@@ -26,7 +26,7 @@ export class WebSocketService {
         if(loggedIn) {
           const token = this.authService.getToken();
           this.socket = Observable.webSocket({
-            url: `ws://${window.location.host}/ws`,
+            url: `${window.location.protocol == 'http:' ? 'ws' : 'wss'}://${window.location.host}/ws`,
             protocol: [token]
           });
 
