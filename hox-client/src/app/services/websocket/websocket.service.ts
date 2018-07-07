@@ -58,7 +58,7 @@ export class WebSocketService {
     )
   }
 
-  populate(docType: string, populate: Array<any>): void {
+  populate(docType: string, populate: Array<any> = []): void {
     const populateMessage = {type: 'Populate', data: {docType: docType, populate: populate}};
     this.populateMessages[docType] = populateMessage;
     if(this.connectionStatus == CONNECTION_STATUS.Connected) {

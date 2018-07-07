@@ -79,11 +79,9 @@ export class InstrumentsComponent  implements OnInit  {
           switch (event.operation) {
             case DOCUMENT_OPERATION.Create:
               this.tickers.unshift(event.document);
-              /*
               if(this.tickers.length > 15) {
                 this.tickers.pop();
               }
-              */
               break;
           }
         } else if(event.docType == DOCUMENT_TYPE.Instrument) {
