@@ -54,7 +54,6 @@ export class InstrumentDetailsComponent  implements OnInit  {
               case DOCUMENT_OPERATION.Update:
                 this.prices.forEach((price, i) => {
                   if(price.type == event.document.type) {
-                    console.log("Update: " + price.type);
                     this.prices[i] = event.document;
                   }
                 });
