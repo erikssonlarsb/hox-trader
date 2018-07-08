@@ -8,9 +8,9 @@ import { UsersComponent } from './routes/users/users.component';
 import { UserDetailsComponent } from './routes/users/details/details.component';
 import { InstrumentsComponent } from './routes/instruments/instruments.component';
 import { InstrumentDetailsComponent } from './routes/instruments/details/details.component';
-import { OrderComponent } from './routes/order/order.component';
-import { TransactionsComponent } from './routes/transactions/transactions.component';
 import { OrdersComponent } from './routes/orders/orders.component';
+import { OrderDetailsComponent } from './routes/orders/details/details.component';
+import { TransactionsComponent } from './routes/transactions/transactions.component';
 import { SettlementsComponent } from './routes/settlements/settlements.component';
 import { SettlementDetailsComponent } from './routes/settlements/details/details.component';
 import { AdminComponent } from './routes/admin/admin.component';
@@ -25,9 +25,8 @@ const routes: Routes = [
   { path: 'users/:id', component: UserDetailsComponent },
   { path: 'instruments', component: InstrumentsComponent },
   { path: 'instruments/:id', component: InstrumentDetailsComponent },
-  { path: 'order', component: OrderComponent },
-  { path: 'orders/:id', component: OrderComponent },
   { path: 'orders', component: OrdersComponent },
+  { path: 'orders/:id', component: OrderDetailsComponent },
   { path: 'transactions', component: TransactionsComponent },
   { path: 'settlements', component: SettlementsComponent },
   { path: 'settlements/:id', component: SettlementDetailsComponent },

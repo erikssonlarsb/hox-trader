@@ -4,17 +4,17 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 
-import { ApiService } from '../../services/api/index';
-import { WebSocketService, DocumentEvent, DOCUMENT_OPERATION, DOCUMENT_TYPE } from '../../services/websocket/index';
+import { ApiService } from '../../../services/api/index';
+import { WebSocketService, DocumentEvent, DOCUMENT_OPERATION, DOCUMENT_TYPE } from '../../../services/websocket/index';
 
-import { Instrument, Order, ORDER_SIDE, OrderDepth } from '../../models/index';
+import { Instrument, Order, ORDER_SIDE, OrderDepth } from '../../../models/index';
 
 @Component({
   selector: 'app-order',
-  templateUrl: './order.component.html',
-  styleUrls: ['./order.component.css']
+  templateUrl: './details.component.html',
+  styleUrls: ['./details.component.css']
 })
-export class OrderComponent  implements OnInit  {
+export class OrderDetailsComponent  implements OnInit  {
   instruments: Array<Instrument>;
   instrument: Instrument;
   instrumentVal: string;
@@ -64,7 +64,7 @@ export class OrderComponent  implements OnInit  {
     this.route
       .paramMap
       .subscribe(params => {
-        if(params.get('id')) {  // Retrieve existing order
+        if(params.get('id') != 'new') {  // Retrieve existing order
           this.apiService.getOrder(params.get('id'), {'$populate': 'instrument'})
           .subscribe(order => {
             this.order = order;
