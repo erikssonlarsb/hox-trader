@@ -112,8 +112,8 @@ module.exports = {
 
   // Update an instrument
   update: function(id, {idField = '_id', populate = []}, updateInstrument, callback) {
-    if (typeof arguments[1] === 'function') {
-      callback = arguments[1];
+    if (typeof arguments[2] === 'function') {
+      callback = arguments[2];
     }
 
     Instrument.findUnique({[idField]:id}, populate, function(err, instrument) {

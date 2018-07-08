@@ -42,8 +42,8 @@ module.exports = {
 
   // Update a settlement
   update: function(id, {idField = '_id', auth = {}, populate = []}, updateSettlement, callback) {
-    if (typeof arguments[1] === 'function') {
-      callback = arguments[1];
+    if (typeof arguments[2] === 'function') {
+      callback = arguments[2];
     }
 
     Settlement.findUnique({[idField]: id, [auth.userField]: auth.userId}, Settlement.sanitizePopulate(populate), function(err, settlement) {

@@ -47,8 +47,8 @@ module.exports = {
 
   // Update an order.
   update: function(id, {idField = '_id', auth = {}, populate = []}, updateOrder, callback) {
-    if (typeof arguments[1] === 'function') {
-      callback = arguments[1];
+    if (typeof arguments[2] === 'function') {
+      callback = arguments[2];
     }
 
     Order.findUnique({[idField]: id, [auth.userField]: auth.userId}, populate, function(err, order) {
