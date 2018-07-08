@@ -1,6 +1,8 @@
-var DateOnly = require('dateonly');
-var Derivative = require('../../models/instrument.derivative');
-var Order = require('../../models/order');
+const DateOnly = require('dateonly');
+const Derivative = require('../../models/instrument.derivative');
+const Order = require('../../models/order');
+const eventEmitter = require('../../events/eventEmitter');
+const DocumentEvent = require('../../events/event.document');
 
 exports.run = function() {
   console.log("### expireInstruments started.");
@@ -11,8 +13,14 @@ exports.run = function() {
     } else if(instruments) {
       for (let instrument of instruments) {
         instrument.status = 'INACTIVE';
-        instrument.save();
-        console.log("Expired instrument: " + instrument._id);
+        instrument.save(function(err) {
+          if(err) {
+            console.error(err);
+          } else {
+            eventEmitter.emit('DocumentEvent', new DocumentEvent('Update', 'Instrument', instrument));
+            console.log("Expired instrument: " + instrument.name);
+          }
+        });
         Order.find({status: 'ACTIVE', instrument: instrument._id})
         .exec(function(err, orders) {
           if(err) {
@@ -20,11 +28,17 @@ exports.run = function() {
           } else if(orders) {
             for (let order of orders) {
               order.status = 'EXPIRED';
-              order.save();
-              console.log("Expired order: " + order._id);
+              order.save(function(err) {
+                if(err) {
+                  console.error(err);
+                } else {
+                  eventEmitter.emit('DocumentEvent', new DocumentEvent('Update', 'Order', order));
+                  console.log("Expired order: " + order._id);
+                }
+              });
             }
           }
-        })
+        });
       }
     }
   });

@@ -2,6 +2,8 @@
 priceFactory handles database interaction for the prices collection.
 */
 const Price = require('../models/price');
+const eventEmitter = require('../events/eventEmitter');
+const DocumentEvent = require('../events/event.document');
 
 module.exports = {
 
@@ -33,6 +35,7 @@ module.exports = {
   create: function(price, callback) {
     Price.create(price, function(err, price) {
       callback(err, price);
+      if(price) eventEmitter.emit('DocumentEvent', new DocumentEvent('Create', 'Price', price));
     });
   },
 
@@ -48,18 +51,24 @@ module.exports = {
         Price.create(newTradePrice, function(err, price) {
           if(err) {
             callback(err);
+          } else {
+            eventEmitter.emit('DocumentEvent', new DocumentEvent('Create', 'Price', price));
           }
         });
         newTradePrice.type = "HIGH";
         Price.create(newTradePrice, function(err, price) {
           if(err) {
             callback(err);
+          } else {
+            eventEmitter.emit('DocumentEvent', new DocumentEvent('Create', 'Price', price));
           }
         });
         newTradePrice.type = "LOW";
         Price.create(newTradePrice, function(err, price) {
           if(err) {
             callback(err);
+          } else {
+            eventEmitter.emit('DocumentEvent', new DocumentEvent('Create', 'Price', price));
           }
         });
       } else {
@@ -68,23 +77,41 @@ module.exports = {
           if (price.type == "LAST") {
             price.date = new Date();
             price.value = newTradePrice.value;
-            price.save();
+            price.save(function(err) {
+              if(err) {
+                callback(err);
+              } else {
+                eventEmitter.emit('DocumentEvent', new DocumentEvent('Update', 'Price', price));
+              }
+            });
           } else if (price.type == "HIGH") {
             if (newTradePrice.value > price.value) {
               price.date = new Date();
               price.value = newTradePrice.value;
-              price.save();
+              price.save(function(err) {
+                if(err) {
+                  callback(err);
+                } else {
+                  eventEmitter.emit('DocumentEvent', new DocumentEvent('Update', 'Price', price));
+                }
+              });
             }
           } else if (price.type == "LOW") {
             if (newTradePrice.value < price.value) {
               price.date = new Date();
               price.value = newTradePrice.value;
-              price.save();
+              price.save(function(err) {
+                if(err) {
+                  callback(err);
+                } else {
+                  eventEmitter.emit('DocumentEvent', new DocumentEvent('Update', 'Price', price));
+                }
+              });
             }
           }
         }
       }
       callback(null);
-    })
+    });
   }
 }

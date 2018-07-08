@@ -4,7 +4,8 @@ import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 
 import { AuthService } from '../../services/auth/auth.service';
-import { ApiService, ApiParams } from '../../services/api/index';
+import { ApiService } from '../../services/api/index';
+import { WebSocketService, DocumentEvent, DOCUMENT_OPERATION, DOCUMENT_TYPE } from '../../services/websocket/index';
 
 import { Order, User } from '../../models/index';
 
@@ -16,7 +17,7 @@ import { Order, User } from '../../models/index';
 
 export class OrdersComponent implements OnInit, OnDestroy  {
   user: User;
-  orders: Array<Order>;
+  orders: Array<Order> = new Array<Order>();
 
   orderToWithdraw: Order;
   withdrawModal: BsModalRef;
@@ -34,22 +35,46 @@ export class OrdersComponent implements OnInit, OnDestroy  {
     }
   };
 
-  constructor(private modalService: BsModalService, private authService: AuthService, private ApiService: ApiService) { }
+  constructor(private modalService: BsModalService, private authService: AuthService, private ApiService: ApiService, private webSocketService: WebSocketService) { }
 
   ngOnInit(): void {
     this.user = this.authService.getLoggedInUser();
 
-    let orderParams = new ApiParams({
-        '$populate': [
-          'user',
-          {
-            path: 'instrument',
-            populate: {
-              path: 'underlying'
-            }
-        }]
-    });
-    this.ApiService.getOrders(orderParams)
+    this.webSocketService.populate('Order', ['user', 'instrument']);
+
+    this.webSocketService.events.subscribe(
+      event => {
+        if(event.docType == DOCUMENT_TYPE.Order) {
+          switch (event.operation) {
+            case DOCUMENT_OPERATION.Create:
+              this.orders.push(event.document);
+              break;
+            case DOCUMENT_OPERATION.Update:
+              this.orders.forEach((order, i) => {
+                if(order.id == event.document.id) this.orders[i] = event.document;
+              });
+              break;
+            case DOCUMENT_OPERATION.Delete:
+              this.orders.forEach((order, i) => {
+                if(order.id == event.document.id) this.orders.splice(i, 1);
+              });
+              break;
+          }
+        } else if(event.docType == DOCUMENT_TYPE.Instrument) {
+          switch (event.operation) {
+            case DOCUMENT_OPERATION.Update:
+              this.orders.forEach((order, i) => {
+                if(order.instrument.id == event.document.id) {
+                  this.orders[i].instrument = event.document;
+                }
+              });
+              break;
+          }
+        }
+      }
+    );
+
+    this.ApiService.getOrders({'$populate': ['user', 'instrument']})
     .subscribe(
       orders => this.orders = orders.sort((a: Order, b: Order) => {return a.createTimestamp.getTime() - b.createTimestamp.getTime()})
     );
@@ -69,22 +94,8 @@ export class OrdersComponent implements OnInit, OnDestroy  {
   }
 
   withdrawOrder(id): void {
-    let orderParams = new ApiParams({
-        '$populate': [
-          'user',
-          {
-            path: 'instrument',
-            populate: {
-              path: 'underlying'
-            }
-        }]
-    });
     this.ApiService.withdrawOrder(id)
     .subscribe(() => {
-      this.ApiService.getOrders(orderParams)
-      .subscribe(
-        orders => this.orders = orders
-      );
       this.orderToWithdraw = null;
       this.withdrawModal.hide();
     });

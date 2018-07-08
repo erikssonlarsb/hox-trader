@@ -4,6 +4,8 @@ orderFactory handles database interaction for the orders collection.
 const Order = require('../models/order');
 const Trade = require('../models/trade');
 const priceFactory = require('../factories/priceFactory');
+const eventEmitter = require('../events/eventEmitter');
+const DocumentEvent = require('../events/event.document');
 
 module.exports = {
 
@@ -36,14 +38,17 @@ module.exports = {
   create: function(order, callback) {
     Order.create(order, function(err, order) {
       callback(err, order);
-      matchOrder(order);
+      if(order) {
+        eventEmitter.emit('DocumentEvent', new DocumentEvent('Create', 'Order', order));
+        matchOrder(order);
+      }
     });
   },
 
   // Update an order.
   update: function(id, {idField = '_id', auth = {}, populate = []}, updateOrder, callback) {
-    if (typeof arguments[1] === 'function') {
-      callback = arguments[1];
+    if (typeof arguments[2] === 'function') {
+      callback = arguments[2];
     }
 
     Order.findUnique({[idField]: id, [auth.userField]: auth.userId}, populate, function(err, order) {
@@ -56,7 +61,10 @@ module.exports = {
 
         order.save(function(err) {
           callback(err, order);
-          matchOrder(order);
+          if(!err) {
+            eventEmitter.emit('DocumentEvent', new DocumentEvent('Update', 'Order', order));
+            matchOrder(order);
+          }
         });
       }
     });
@@ -75,8 +83,9 @@ module.exports = {
         callback("Cannot delete non-active order.");
       } else {
         order.status = "WITHDRAWN";
-        order.save(function(err, order) {
+        order.save(function(err) {
           callback(err, order);
+          if(!err) eventEmitter.emit('DocumentEvent', new DocumentEvent('Update', 'Order', order));
         });
       }
     });
@@ -145,15 +154,21 @@ function matchOrder(order) {
           return matchingOrder.save();
         })
         .then(function() {
+          // Emit Create Trade events
+          eventEmitter.emit('DocumentEvent', new DocumentEvent('Create', 'Trade', trade));
+          eventEmitter.emit('DocumentEvent', new DocumentEvent('Create', 'Trade', matchingTrade));
+
+          // Emit Update Order events
+          eventEmitter.emit('DocumentEvent', new DocumentEvent('Update', 'Order', order));
+          eventEmitter.emit('DocumentEvent', new DocumentEvent('Update', 'Order', matchingOrder));
+
           // Update price for instrument
           let newTradePrice = {
             instrument: order.instrument,
             value: trade.price
           };
           priceFactory.newTradePrice(newTradePrice, function(err) {
-            if (err) {
-              console.error(err);
-            }
+            if(err) console.error(err);
           });
         })
         .catch(function(err) {

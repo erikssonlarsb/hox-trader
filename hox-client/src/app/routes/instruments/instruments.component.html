@@ -29,42 +29,44 @@
           [(ngModel)]="orderDepthFilter" />
       </div>
     </div>
-    <div class="card" *ngFor="let orderDepth of orderDepths | orderDepth:orderDepthFilter">
-      <div class="card-body">
-        <h5 class="card-title">
-          <a
-            routerLink="/instruments/{{orderDepth.instrument.id}}">
-            {{orderDepth.instrument.name}}
-          </a>
-        </h5>
-        <div class="row">
-          <div class="col-sm-6">
-            <div class="row">
-              <div class="col-sm-12">
-                <button
-                  type="button"
-                  class="btn btn-sm btn-primary btn-block"
-                  [routerLink]="['/order', {instrument: orderDepth.instrument.id, side: 'BUY', price: orderDepth.levels[0]?.sellPrice}]">
-                  Buy {{orderDepth.levels[0]?.sellPrice ? '@ ' + (orderDepth.levels[0]?.sellPrice | number:'.2-2') : ''}}
-                </button>
+    <ng-container *ngFor="let orderDepth of orderDepths | orderDepth:orderDepthFilter">
+      <div class="card" *ngIf="orderDepth.instrument.status == 'ACTIVE'">
+        <div class="card-body">
+          <h5 class="card-title">
+            <a
+              routerLink="/instruments/{{orderDepth.instrument.id}}">
+              {{orderDepth.instrument.name}}
+            </a>
+          </h5>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="row">
+                <div class="col-sm-12">
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-primary btn-block"
+                    [routerLink]="['/orders/new', {instrument: orderDepth.instrument.id, side: 'BUY', price: orderDepth.levels[0]?.sellPrice}]">
+                    Buy {{orderDepth.levels[0]?.sellPrice ? '@ ' + (orderDepth.levels[0]?.sellPrice | number:'.2-2') : ''}}
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="col-sm-6">
-            <div class="row">
-              <div class="col-sm-12">
-                <button
-                  type="button"
-                  class="btn btn-sm btn-danger btn-block"
-                  [routerLink]="['/order', {instrument: orderDepth.instrument.id, side: 'SELL', price: orderDepth.levels[0]?.buyPrice}]">
-                  Sell {{orderDepth.levels[0]?.buyPrice ? '@ ' + (orderDepth.levels[0]?.buyPrice | number:'.2-2') : ''}}
-                </button>
+            <div class="col-sm-6">
+              <div class="row">
+                <div class="col-sm-12">
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-danger btn-block"
+                    [routerLink]="['/orders/new', {instrument: orderDepth.instrument.id, side: 'SELL', price: orderDepth.levels[0]?.buyPrice}]">
+                    Sell {{orderDepth.levels[0]?.buyPrice ? '@ ' + (orderDepth.levels[0]?.buyPrice | number:'.2-2') : ''}}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </ng-container>
   </div>
 
   <!-- Classic view -->
@@ -94,7 +96,7 @@
             </thead>
             <tbody>
               <ng-container *ngFor="let orderDepth of orderDepths">
-                <tr>
+                <tr *ngIf="orderDepth.instrument.status == 'ACTIVE'">
                   <td>
                     <a
                       routerLink="/instruments/{{orderDepth.instrument.id}}">
@@ -102,25 +104,29 @@
                       {{orderDepth.instrument.name}}
                     </a>
                   </td>
-                  <td class="text-right">{{((orderDepth.instrument.prices | price:'LAST')?.value | number:'.2-2') || 'N/A'}}</td>
-                  <td class="text-right">
-                    <a [routerLink]="['/order', {instrument: orderDepth.instrument.id, side: 'SELL', quantity: orderDepth.levels[0]?.buyQuantity, price: orderDepth.levels[0]?.buyPrice}]">
-                      {{(orderDepth.levels[0]?.buyQuantity | number:'.0-0') || 'N/A'}}
+                  <td class="text-right" [@valueChange]="(orderDepth.instrument.prices | price:'LAST')?.value">
+                    <span *ngFor="let last of [(orderDepth.instrument.prices | price:'LAST')?.value]">
+                      {{((orderDepth.instrument.prices | price:'LAST')?.value | number:'.2-2') || '-'}}
+                    </span>
+                  </td>
+                  <td class="text-right" [@valueChange]="orderDepth.levels[0]?.buyQuantity">
+                    <a *ngFor="let buyQuantity of [orderDepth.levels[0]?.buyQuantity]" [routerLink]="['/orders/new', {instrument: orderDepth.instrument.id, side: 'SELL', quantity: orderDepth.levels[0]?.buyQuantity, price: orderDepth.levels[0]?.buyPrice}]">
+                      {{(buyQuantity | number:'.0-0') || '-'}}
                     </a>
                   </td>
-                  <td class="text-right">
-                    <a [routerLink]="['/order', {instrument: orderDepth.instrument.id, side: 'SELL', price: orderDepth.levels[0]?.buyPrice}]">
-                      {{(orderDepth.levels[0]?.buyPrice | number:'.2-2') || 'N/A'}}
+                  <td class="text-right" [@valueChange]="orderDepth.levels[0]?.buyPrice">
+                    <a *ngFor="let buyPrice of [orderDepth.levels[0]?.buyPrice]" [routerLink]="['/orders/new', {instrument: orderDepth.instrument.id, side: 'SELL', price: orderDepth.levels[0]?.buyPrice}]">
+                      {{(buyPrice | number:'.2-2') || '-'}}
                     </a>
                   </td>
-                  <td class="text-right">
-                    <a [routerLink]="['/order', {instrument: orderDepth.instrument.id, side: 'BUY', price: orderDepth.levels[0]?.sellPrice}]">
-                      {{(orderDepth.levels[0]?.sellPrice | number:'.2-2') || 'N/A'}}
+                  <td class="text-right" [@valueChange]="orderDepth.levels[0]?.sellPrice">
+                    <a *ngFor="let sellPrice of [orderDepth.levels[0]?.sellPrice]" [routerLink]="['/orders/new', {instrument: orderDepth.instrument.id, side: 'BUY', price: orderDepth.levels[0]?.sellPrice}]">
+                      {{(sellPrice | number:'.2-2') || '-'}}
                     </a>
                   </td>
-                  <td class="text-right">
-                    <a [routerLink]="['/order', {instrument: orderDepth.instrument.id, side: 'BUY', quantity: orderDepth.levels[0]?.sellQuantity, price: orderDepth.levels[0]?.sellPrice}]">
-                      {{(orderDepth.levels[0]?.sellQuantity | number:'.0-0') || 'N/A'}}
+                  <td class="text-right" [@valueChange]="orderDepth.levels[0]?.sellQuantity">
+                    <a *ngFor="let sellQuantity of [orderDepth.levels[0]?.sellQuantity]" [routerLink]="['/orders/new', {instrument: orderDepth.instrument.id, side: 'BUY', quantity: orderDepth.levels[0]?.sellQuantity, price: orderDepth.levels[0]?.sellPrice}]">
+                      {{(sellQuantity | number:'.0-0') || '-'}}
                     </a>
                   </td>
                 </tr>

@@ -13,14 +13,16 @@ module.exports = {
       callback = arguments[1];
     }
 
-    instrumentFactory.query(params, {populate: populate}, function(err, instruments) {
+    let instrumentPopulate = populate.find(path => path.path == 'instrument');
+
+    instrumentFactory.query(params, {populate: instrumentPopulate ? instrumentPopulate.populate : []}, function(err, instruments) {
       if(err) {
         callback(err);
       } else {
         /* Create an object of OrderDepths for each instrument.
            The key is later used to map orders to each the OrderDepth */
         let orderDepths = instruments.reduce(function(result, instrument) {
-          result[instrument._id] = new OrderDepth(instrument);
+          result[instrument._id] = new OrderDepth(instrumentPopulate ? instrument : instrument._id);
           return result;
         }, {});
         orderFactory.query({instrument: Object.keys(orderDepths), status: "ACTIVE"}, function(err, orders) {
@@ -43,13 +45,13 @@ module.exports = {
       callback = arguments[1];
     }
 
-    instrumentFactory.findOne(id, {idField: idField, populate: populate}, function(err, instrument) {
-      if(err) {
-        callback(err);
-      } else if (!instrument) {
-        return callback(err, instrument);
+    let instrumentPopulate = populate.find(path => path.path == 'instrument');
+
+    instrumentFactory.findOne(id, {idField: idField, populate: instrumentPopulate ? instrumentPopulate.populate : []}, function(err, instrument) {
+      if(err || !instrument) {
+        callback(err, instrument);
       } else {
-        let orderDepth = new OrderDepth(instrument);
+        let orderDepth = new OrderDepth(instrumentPopulate ? instrument : instrument._id);
         orderFactory.query({instrument: instrument._id, status: "ACTIVE"}, function(err, orders) {
           if(err) {
             callback(err);

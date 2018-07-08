@@ -3,6 +3,11 @@
     "target": "https://localhost:4000",
     "secure": false
   },
+  "/ws": {
+    "target": "wss://localhost:4000",
+    "secure": false,
+    "ws": true
+  },
   "/qr": {
     "target": "https://mpc.getswish.net/qrg-swish/api/v1/prefilled",
     "secure": true,

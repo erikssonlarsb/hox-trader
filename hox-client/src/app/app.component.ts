@@ -5,6 +5,7 @@ import { trigger,state,style,transition,animate } from '@angular/animations';
 import { Subscription } from 'rxjs/Subscription';
 
 import { AuthService } from './services/auth/auth.service';
+import { WebSocketService } from './services/websocket/websocket.service';
 import { User } from './models/index';
 
 @Component({
@@ -30,7 +31,7 @@ export class AppComponent implements OnInit {
   menuVisibleState: string = 'hidden';
   user: User;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private webSocketService: WebSocketService, private router: Router) {}
 
   ngOnInit(): void {
     this.subscription = this.authService.loginChanged

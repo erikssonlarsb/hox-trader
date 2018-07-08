@@ -2,7 +2,10 @@ import { Injectable, PipeTransform, Pipe } from '@angular/core';
 
 import { Price } from '../models/index';
 
-@Pipe({name: 'price'})
+@Pipe({
+  name: 'price',
+  pure: false
+})
 @Injectable()
 export class PricePipe implements PipeTransform  {
   transform(prices: Array<Price>, type: string, index: number = -1): Price|null {

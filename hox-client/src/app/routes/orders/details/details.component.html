@@ -1,0 +1,244 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">
+          Order<span *ngIf="order"> {{order.id}}</span>
+        </h5>
+        <div class="row">
+          <div class="col-md-6">
+            <h6 class="card-title">
+              Details
+            </h6>
+            <form *ngIf="order">
+              <div class="form-group">
+                <label for="instrument">Instrument</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fa fa-fw fa-newspaper-o" aria-hidden="true"></i></span>
+                  </div>
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="instrument"
+                    id="instrument"
+                    autocomplete="off"
+                    [typeahead]="instruments"
+                    [typeaheadMinLength]="0"
+                    typeaheadOptionField="name"
+                    placeholder="Click to search"
+                    (typeaheadOnSelect)="instrument = $event.item"
+                    [(ngModel)]="instrumentVal"
+                    required
+                    [disabled]="instruments?.length < 2 || order != null"/>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-12">
+                  <label>Side</label>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="custom-control custom-radio custom-control-inline">
+                        <input
+                          type="radio"
+                          class="custom-control-input"
+                          name="side"
+                          id="buy"
+                          value="BUY"
+                          [(ngModel)]="order.side"
+                          required>
+                        <label class="custom-control-label" for="buy">Buy</label>
+                      </div>
+                      <div class="custom-control custom-radio custom-control-inline">
+                        <input
+                          type="radio"
+                          class="custom-control-input"
+                          name="side"
+                          id="sell"
+                          value="SELL"
+                          [(ngModel)]="order.side"
+                          required>
+                        <label class="custom-control-label" for="sell">Sell</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="quantity"><span *ngIf="order.status">Remaining</span> Quantity</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fa fa-fw fa-balance-scale" aria-hidden="true"></i></span>
+                    </div>
+                    <input
+                      type="number"
+                      step="1"
+                      min="0"
+                      class="form-control"
+                      name="quantity"
+                      id="quantity"
+                      [value]="order.quantity - (order.tradedQuantity || 0)"
+                      (input)="setOrderQuantity($event.target.value)"
+                      required />
+                  </div>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="price">Price</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fa fa-fw fa-money" aria-hidden="true"></i></span>
+                    </div>
+                    <input
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      class="form-control"
+                      name="price"
+                      id="price"
+                      [(ngModel)]="order.price"
+                      required />
+                  </div>
+                </div>
+              </div>
+              <button
+                *ngIf="!order?.status"
+                type="submit"
+                class="btn btn-lg btn-primary btn-block"
+                (click)="openModal(orderCreate)"
+                [disabled]="!order || !order.quantity || !order.price">
+                <i class="fa fa-unlock"></i> Create
+              </button>
+              <button
+                *ngIf="order?.status == 'ACTIVE'"
+                type="submit"
+                class="btn btn-lg btn-success btn-block"
+                (click)="openModal(orderModify)"
+                [disabled]="!order?.quantity || !order?.price">
+                <i class="fa fa-unlock"></i> Modify
+              </button>
+              <button
+                *ngIf="order?.status == 'ACTIVE'"
+                type="submit"
+                class="btn btn-lg btn-danger btn-block"
+                (click)="openModal(orderDelete)"
+                [disabled]="!order?.quantity || !order?.price">
+                <i class="fa fa-trash"></i> Delete
+              </button>
+            </form>
+            <div [hidden]="!order?.status" class="alert alert-success" role="alert">
+              {{order?.status}}
+            </div>
+            <div [hidden]="!errorMessage" class="alert alert-danger" role="alert">
+              {{errorMessage}}
+            </div>
+          </div>
+          <div class="col-md-6">
+            <h6 class="card-title">
+              Order Depth
+            </h6>
+            <order-depth [orderDepth]="orderDepth"></order-depth>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #orderCreate>
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">
+          Create order
+        </h5>
+        <div class="row">
+          <div class="col-5 col-lg-4"><b>Instrument</b></div>
+          <div class="col">{{instrument.name}}</div>
+        </div>
+        <div class="row">
+          <div class="col-5 col-lg-4"><b>Side</b></div>
+          <div class="col">{{order?.side}}</div>
+        </div>
+        <div class="row">
+          <div class="col-5 col-lg-4"><b>Quantity</b></div>
+          <div class="col">{{order?.quantity | number:'.0-0'}}</div>
+        </div>
+        <div class="row">
+          <div class="col-5 col-lg-4"><b>Price</b></div>
+          <div class="col">{{order?.price | number:'.2-2'}}</div>
+        </div>
+        <div class="row">
+          <div class="col-5 col-lg-4"><b>Value</b></div>
+          <div class="col">{{order?.quantity * order?.price | number:'.2-2'}}</div>
+        </div>
+        <br>
+        <button type="button" class="btn btn-success mr-2" (click)="createOrder()" ><i class="fa fa-paper-plane-o"></i> Create</button>
+        <button type="button" class="btn btn-danger" (click)="confirmationModal.hide()" ><i class="fa fa-times"></i> Abort</button>
+      </div>
+    </div>
+</ng-template>
+
+<ng-template #orderModify>
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">
+          Modify order
+        </h5>
+        <div class="row">
+          <div class="col-5 col-lg-4"><b>Instrument</b></div>
+          <div class="col">{{instrument.name}}</div>
+        </div>
+        <div class="row">
+          <div class="col-5 col-lg-4"><b>Side</b></div>
+          <div class="col">{{order?.side}}</div>
+        </div>
+        <div class="row">
+          <div class="col-5 col-lg-4"><b>Quantity</b></div>
+          <div class="col">{{order?.quantity | number:'.0-0'}} ({{order?.quantity - order?.tradedQuantity | number:'.0-0'}} remaining)</div>
+        </div>
+        <div class="row">
+          <div class="col-5 col-lg-4"><b>Price</b></div>
+          <div class="col">{{order?.price | number:'.2-2'}}</div>
+        </div>
+        <div class="row">
+          <div class="col-5 col-lg-4"><b>Value</b></div>
+          <div class="col">{{order?.quantity * order?.price | number:'.2-2'}}</div>
+        </div>
+        <br>
+        <button type="button" class="btn btn-success mr-2" (click)="modifyOrder()" ><i class="fa fa-paper-plane-o"></i> Modify</button>
+        <button type="button" class="btn btn-danger" (click)="confirmationModal.hide()" ><i class="fa fa-times"></i> Abort</button>
+      </div>
+    </div>
+</ng-template>
+
+<ng-template #orderDelete>
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">
+          Delete order
+        </h5>
+        <div class="row">
+          <div class="col-5 col-lg-4"><b>Instrument</b></div>
+          <div class="col">{{instrument.name}}</div>
+        </div>
+        <div class="row">
+          <div class="col-5 col-lg-4"><b>Side</b></div>
+          <div class="col">{{order?.side}}</div>
+        </div>
+        <div class="row">
+          <div class="col-5 col-lg-4"><b>Quantity</b></div>
+          <div class="col">{{order?.quantity | number:'.0-0'}} ({{order?.quantity - order?.tradedQuantity | number:'.0-0'}} remaining)</div>
+        </div>
+        <div class="row">
+          <div class="col-5 col-lg-4"><b>Price</b></div>
+          <div class="col">{{order?.price | number:'.2-2'}}</div>
+        </div>
+        <br>
+        <p>
+          Maximum potential loss for this order is {{(side == 'BUY' ? order?.quantity * order?.price : order?.quantity * (30-order?.price)) | number:'.2-2'}} SEK.
+        </p>
+        <button type="button" class="btn btn-success mr-2" (click)="placeOrder()" ><i class="fa fa-paper-plane-o"></i> Submit</button>
+        <button type="button" class="btn btn-danger" (click)="confirmationModal.hide()" ><i class="fa fa-times"></i> Abort</button>
+      </div>
+    </div>
+</ng-template>

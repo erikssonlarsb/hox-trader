@@ -2,6 +2,8 @@
 inviteFactory handles database interaction for the invites collection.
 */
 const Invite = require('../models/invite');
+const eventEmitter = require('../events/eventEmitter');
+const DocumentEvent = require('../events/event.document');
 
 module.exports = {
 
@@ -13,7 +15,7 @@ module.exports = {
     params[auth.userField] = auth.userId;
 
     Invite.find(params)
-    .populate(sanitizePopulate(populate))
+    .populate(Invite.sanitizePopulate(populate))
     .exec(function(err, invites) {
       callback(err, invites);
     });
@@ -25,7 +27,7 @@ module.exports = {
       callback = arguments[1];
     }
 
-    Invite.findUnique({[idField]: id, [auth.userField]: auth.userId}, sanitizePopulate(populate), function(err, invite) {
+    Invite.findUnique({[idField]: id, [auth.userField]: auth.userId}, Invite.sanitizePopulate(populate), function(err, invite) {
       callback(err, invite);
     });
   },
@@ -34,22 +36,7 @@ module.exports = {
   create: function(invite, callback) {
     Invite.create(invite, function(err, invite) {
       callback(err, invite);
+      if(invite) eventEmitter.emit('DocumentEvent', new DocumentEvent('Create', 'Invite', invite));
     });
   }
-}
-
-function sanitizePopulate(populate) {
-  /*
-  Restrict access to the User object referred to in path 'invitee'
-   */
-  return populate.map(path => {
-    if(path.path == 'invitee') {
-      return {
-        path: 'invitee',
-        select: 'name'
-      };
-    } else {
-      return path;
-    }
-  });
 }

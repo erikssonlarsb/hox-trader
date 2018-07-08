@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { AuthService } from '../../services/auth/auth.service';
-import { ApiService, ApiParams } from '../../services/api/index';
+import { ApiService } from '../../services/api/index';
+import { WebSocketService, DocumentEvent, DOCUMENT_OPERATION, DOCUMENT_TYPE } from '../../services/websocket/index';
 
 import { Trade, Position, User } from '../../models/index';
 
@@ -23,38 +24,35 @@ export class TransactionsComponent implements OnInit, OnDestroy  {
     }
   };
 
-  constructor(private authService: AuthService, private ApiService: ApiService) { }
+  constructor(private authService: AuthService, private ApiService: ApiService, private webSocketService: WebSocketService) { }
 
   ngOnInit(): void {
     this.user = this.authService.getLoggedInUser();
 
-    let tradeParams = new ApiParams({
-        '$populate': [
-          'user',
-          'counterpartyTrade',
-          {
-            path: 'instrument',
-            populate: {
-              path: 'underlying'
-            }
-        }]
-    });
-    this.ApiService.getTrades(tradeParams)
-    .subscribe(trades => {
-      this.trades = trades.sort((a: Trade, b: Trade) => {return a.createTimestamp.getTime() - b.createTimestamp.getTime()});
-      for (let trade of this.trades) {
-        let position = this.positions.find(position => position.instrument.id == trade.instrument.id && position.user.id == trade.user.id);
-        if (!position) {
-          this.positions.push(new Position({instrument: trade.instrument, user: trade.user, trades: [trade]}));
-        } else {
-          position.addTrade(trade);
+    this.webSocketService.populate('Trade', ['instrument', 'user', 'counterpartyTrade']);
+
+    this.webSocketService.events.subscribe(
+      event => {
+        if(event.docType == DOCUMENT_TYPE.Trade) {
+          switch (event.operation) {
+            case DOCUMENT_OPERATION.Create:
+              this.trades.push(event.document);
+              break;
+            case DOCUMENT_OPERATION.Update:
+              this.trades.forEach((trade, i) => {
+                if(trade.id == event.document.id) this.trades[i] = event.document;
+              });
+              break;
+          }
+          this.calculatePositions();
         }
       }
-      this.positions = this.positions.sort((a: Position, b: Position) => {
-        if(a.instrument.name < b.instrument.name) return -1;
-        if(a.instrument.name > b.instrument.name) return 1;
-        return 0;
-      });
+    );
+
+    this.ApiService.getTrades({'$populate': ['instrument', 'user', 'counterpartyTrade']})
+    .subscribe(trades => {
+      this.trades = trades.sort((a: Trade, b: Trade) => {return a.createTimestamp.getTime() - b.createTimestamp.getTime()});
+      this.calculatePositions();
     });
 
     // Get config from local storage and replace defaults.
@@ -74,5 +72,22 @@ export class TransactionsComponent implements OnInit, OnDestroy  {
   ngOnDestroy(): void {
     // Save config to local storage when component is destroyed.
     localStorage.setItem("transactionsConfig", JSON.stringify(this.configOptions));
+  }
+
+  calculatePositions(): void {
+    this.positions = [];
+    for (let trade of this.trades) {
+      let position = this.positions.find(position => position.instrument.id == trade.instrument.id && position.user.id == trade.user.id);
+      if (!position) {
+        this.positions.push(new Position({instrument: trade.instrument, user: trade.user, trades: [trade]}));
+      } else {
+        position.addTrade(trade);
+      }
+    }
+    this.positions = this.positions.sort((a: Position, b: Position) => {
+      if(a.instrument.name < b.instrument.name) return -1;
+      if(a.instrument.name > b.instrument.name) return 1;
+      return 0;
+    });
   }
 }

@@ -6,6 +6,8 @@ const Instrument = require('../models/instrument');
 const Index = require('../models/instrument.index');
 const Derivative = require('../models/instrument.derivative');
 const priceFactory = require('./priceFactory');
+const eventEmitter = require('../events/eventEmitter');
+const DocumentEvent = require('../events/event.document');
 
 module.exports = {
 
@@ -100,7 +102,8 @@ module.exports = {
             /*
              * Return the created instrument including any embedded documents
              */
-            callback(err, instrument);
+             callback(err, instrument);
+             if(instrument) eventEmitter.emit('DocumentEvent', new DocumentEvent('Create', 'Instrument', instrument));
           });
         }
       });
@@ -109,8 +112,8 @@ module.exports = {
 
   // Update an instrument
   update: function(id, {idField = '_id', populate = []}, updateInstrument, callback) {
-    if (typeof arguments[1] === 'function') {
-      callback = arguments[1];
+    if (typeof arguments[2] === 'function') {
+      callback = arguments[2];
     }
 
     Instrument.findUnique({[idField]:id}, populate, function(err, instrument) {
@@ -121,6 +124,7 @@ module.exports = {
 
         instrument.save(function(err) {
           callback(err, instrument);
+          if(!err) eventEmitter.emit('DocumentEvent', new DocumentEvent('Update', 'Instrument', instrument));
         });
       }
     });

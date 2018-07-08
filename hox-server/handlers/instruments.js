@@ -26,7 +26,6 @@ router.post('/', function(req, res) {
 
 router.get('/:id', function(req, res) {
   instrumentFactory.findOne(req.params.id, req.queryOptions, function(err, instrument) {
-    console.log(err);
     if(err) {
       return res.status(HttpStatus.hasOwnProperty(err.code) ? err.code : 500).json(new Error(err));
     } else if (instrument) {

@@ -38,7 +38,7 @@ router.get('/:id', function(req, res) {
 });
 
 router.put('/:id', function(req, res) {
-  orderFactory.update(req.params.id, req.queryOptions, function(err, order) {
+  orderFactory.update(req.params.id, req.queryOptions, req.body, function(err, order) {
     if(err) {
       return res.status(HttpStatus.hasOwnProperty(err.code) ? err.code : 500).json(new Error(err));
     } else if (order) {

@@ -10,7 +10,7 @@
             <button
               type="button"
               class="btn btn-sm btn-primary btn-block"
-              [routerLink]="['/order', {instrument: orderDepth?.instrument.id, side: 'BUY', price: orderDepth?.levels[0]?.sellPrice}]">
+              [routerLink]="['/orders/new', {instrument: instrument.id, side: 'BUY', price: orderDepth?.levels[0]?.sellPrice}]">
               Buy {{orderDepth?.levels[0]?.sellPrice ? '@ ' + (orderDepth?.levels[0]?.sellPrice | number:'.2-2') : ''}}
             </button>
           </div>
@@ -18,7 +18,7 @@
             <button
               type="button"
               class="btn btn-sm btn-danger btn-block"
-              [routerLink]="['/order', {instrument: orderDepth?.instrument.id, side: 'SELL', price: orderDepth?.levels[0]?.buyPrice}]">
+              [routerLink]="['/orders/new', {instrument: instrument.id, side: 'SELL', price: orderDepth?.levels[0]?.buyPrice}]">
               Sell {{orderDepth?.levels[0]?.buyPrice ? '@ ' + (orderDepth?.levels[0]?.buyPrice | number:'.2-2') : ''}}
             </button>
           </div>
@@ -36,10 +36,10 @@
               </thead>
               <tbody>
                 <tr>
-                  <td>{{((instrument.prices | price:'LAST')?.value | number:'.2-2') || 'N/A'}}</td>
-                  <td>{{((instrument.prices | price:'HIGH')?.value | number:'.2-2') || 'N/A'}}</td>
-                  <td>{{((instrument.prices | price:'LOW')?.value | number:'.2-2') || 'N/A'}}</td>
-                  <td>{{((instrument.prices | price:'CLOSE')?.value | number:'.2-2') || 'N/A'}}</td>
+                  <td>{{((prices | price:'LAST')?.value | number:'.2-2') || 'N/A'}}</td>
+                  <td>{{((prices | price:'HIGH')?.value | number:'.2-2') || 'N/A'}}</td>
+                  <td>{{((prices | price:'LOW')?.value | number:'.2-2') || 'N/A'}}</td>
+                  <td>{{((prices | price:'CLOSE')?.value | number:'.2-2') || 'N/A'}}</td>
                 </tr>
               </tbody>
             </table>

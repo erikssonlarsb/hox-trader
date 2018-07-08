@@ -30,7 +30,7 @@
                   </td>
                   <td *ngIf="user?.role.isAdmin" scope="col">{{position.user.name}}</td>
                   <td class="text-right">
-                    <a [routerLink]="['/order', {instrument: position.instrument.id, side: (position.openQuantity > 0 ? 'SELL' : 'BUY'), quantity: (position.openQuantity > 0 ? position.openQuantity : -position.openQuantity)}]">
+                    <a [routerLink]="['/orders/new', {instrument: position.instrument.id, side: (position.openQuantity > 0 ? 'SELL' : 'BUY'), quantity: (position.openQuantity > 0 ? position.openQuantity : -position.openQuantity)}]">
                       {{position.openQuantity | number:'.0-0'}}
                     </a>
                   </td>

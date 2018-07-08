@@ -4,6 +4,8 @@ userFactory handles database interaction for the users collection.
 const User = require('../models/user');
 const inviteFactory = require('../factories/inviteFactory');
 const systemInfoFactory = require('../factories/systemInfoFactory');
+const eventEmitter = require('../events/eventEmitter');
+const DocumentEvent = require('../events/event.document');
 
 module.exports = {
 
@@ -49,19 +51,31 @@ module.exports = {
             } else {
               user.invite = undefined;
               User.create(user, function(err, user) {
-                if(user) {
+                if(err) {
+                  callback(err);
+                } else {
                   user.password = undefined;  // Hide password in response.
-                  invite.invitee = user._id;  // Set invitee to prevent invite from being reused.
-                  invite.save();
+                  callback(err, user);
+                  eventEmitter.emit('DocumentEvent', new DocumentEvent('Create', 'User', user));
+
+                  // Update the invite (with the invited user) to prevent it from being reused.
+                  invite.invitee = user._id;
+                  invite.save(function(err) {
+                    if(!err) eventEmitter.emit('DocumentEvent', new DocumentEvent('Update', 'Invite', invite));
+                  });
                 }
-                callback(err, user);
               });
             }
           })
         } else {
           User.create(user, function(err, user) {
-            if(user) user.password = undefined;  // Hide password in response.
-            callback(err, user);
+            if(err) {
+              callback(err);
+            } else {
+              user.password = undefined;  // Hide password in response.
+              callback(err, user);
+              eventEmitter.emit('DocumentEvent', new DocumentEvent('Create', 'User', user));
+            }
           });
         }
       }
@@ -70,8 +84,8 @@ module.exports = {
 
   // Update a user
   update: function(id, {idField = '_id', auth = {}, populate = []}, updateUser, callback) {
-    if (typeof arguments[1] === 'function') {
-      callback = arguments[1];
+    if (typeof arguments[2] === 'function') {
+      callback = arguments[2];
     }
 
     User.findUnique({[idField]: id, [auth.userField]: auth.userId}, populate, function(err, user) {
@@ -85,8 +99,13 @@ module.exports = {
         if(updateUser.password) user.password = updateUser.password;
 
         user.save(function(err) {
-          if(user) user.password = undefined;  // Hide password in response.
-          callback(err, user);
+          if(err) {
+            callback(err);
+          } else {
+            user.password = undefined;  // Hide password in response.
+            callback(err, user);
+            eventEmitter.emit('DocumentEvent', new DocumentEvent('Update', 'User', user));
+          }
         });
       }
     });

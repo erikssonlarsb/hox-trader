@@ -16,6 +16,23 @@ const tradeSchema = new Schema({
 
 require("../utils/findUnique")(tradeSchema);
 
+tradeSchema.statics.sanitizePopulate = function(populate) {
+  /*
+  Restrict access to the Trade object referred to in path 'counterpartyTrade'
+   */
+  return populate.map(path => {
+    if(path.path == 'counterpartyTrade') {
+      return {
+        path: 'counterpartyTrade',
+        select: 'user',
+        populate: {path: 'user', select: 'name email phone'}
+      };
+    } else {
+      return path;
+    }
+  });
+}
+
 tradeSchema.pre('save', function(next) {
   this.updateTimestamp = new Date();
   next();

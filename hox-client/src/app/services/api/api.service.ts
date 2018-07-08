@@ -160,6 +160,16 @@ export class ApiService {
       );
   }
 
+  updateOrder(id: string, order: Order): Observable<Order> {
+    let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
+    return this.http
+      .put<Order>(`${window.location.origin}/api/orders/${id}`, order, { headers: headers })
+      .map(order => new Order(order))
+      .pipe(
+        catchError(error => this.errorHandler.handleError(error))
+      );
+  }
+
   withdrawOrder(id: string): Observable<{}> {
     let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
@@ -229,10 +239,10 @@ export class ApiService {
       );
   }
 
-  getOrderDepth(id: string): Observable<OrderDepth> {
+  getOrderDepth(id: string, params: ApiParams | Object = {}): Observable<OrderDepth> {
     let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http
-      .get<OrderDepth>(`${window.location.origin}/api/orderdepths/${id}`, { headers: headers })
+      .get<OrderDepth>(`${window.location.origin}/api/orderdepths/${id}`, { headers: headers, params: this.toHttpParams(params) })
       .map(orderDepth => new OrderDepth(orderDepth))
       .pipe(
         catchError(error => this.errorHandler.handleError(error))

@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const Error = require('../utils/error');
 
 const instrumentSchema = new Schema({
     name: {type: String, unique: true, required: true},
