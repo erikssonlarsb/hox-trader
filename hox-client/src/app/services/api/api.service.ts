@@ -160,6 +160,16 @@ export class ApiService {
       );
   }
 
+  updateOrder(id: string, order: Order): Observable<Order> {
+    let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
+    return this.http
+      .put<Order>(`${window.location.origin}/api/orders/${id}`, order, { headers: headers })
+      .map(order => new Order(order))
+      .pipe(
+        catchError(error => this.errorHandler.handleError(error))
+      );
+  }
+
   withdrawOrder(id: string): Observable<{}> {
     let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authService.getToken()});
     return this.http

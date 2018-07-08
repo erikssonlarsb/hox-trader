@@ -18,6 +18,7 @@
                 <th scope="col">Status</th>
                 <th scope="col">Time</th>
                 <th scope="col"></th>
+                <th scope="col"></th>
               </tr>
             </thead>
             <tbody>
@@ -36,6 +37,14 @@
                   <td class="text-right">{{order.price | number:'.2-2'}}</td>
                   <td>{{order.status}}</td>
                   <td title="{{order.createTimestamp}}">{{order.createTimestamp | date:'HH:mm, MMM, d'}}</td>
+                  <td>
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-primary btn-block"
+                      routerLink="/orders/{{order.id}}">
+                      <i class="fa fa-edit"></i> Edit
+                    </button>
+                  </td>
                   <td>
                     <button
                       type="button"

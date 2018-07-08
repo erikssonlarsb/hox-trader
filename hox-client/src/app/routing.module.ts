@@ -26,7 +26,7 @@ const routes: Routes = [
   { path: 'instruments', component: InstrumentsComponent },
   { path: 'instruments/:id', component: InstrumentDetailsComponent },
   { path: 'order', component: OrderComponent },
-  { path: 'order/:id', component: OrderComponent },
+  { path: 'orders/:id', component: OrderComponent },
   { path: 'orders', component: OrdersComponent },
   { path: 'transactions', component: TransactionsComponent },
   { path: 'settlements', component: SettlementsComponent },
