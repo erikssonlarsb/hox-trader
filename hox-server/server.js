@@ -80,9 +80,6 @@ wss.on('connection', function(ws, req) {
         console.error("Unsupported message type: " + message.type);
     }
   });
-
-  ws.send(JSON.stringify(new ConnectionEvent('Connected', ws.user.name + ' successfully connected.')))
-
   ws.on('close', function() {
     console.log(ws.user.name + " disconnected");
   });
