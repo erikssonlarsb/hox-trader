@@ -45,8 +45,8 @@ export class InstrumentsComponent  implements OnInit  {
   constructor(private apiService: ApiService, private webSocketService: WebSocketService) { }
 
   ngOnInit(): void {
-    this.webSocketService.populate('OrderDepth', [{path: 'instrument', populate: {path: 'prices', match: { type: { $eq: 'LAST'}}}}]);
-    this.webSocketService.populate('Ticker', ['instrument']);
+    this.webSocketService.populate('OrderDepth', [{path: 'instrument', populate: [{path: 'underlying'}, {path: 'prices', match: { type: { $eq: 'LAST'}}}]}]);
+    this.webSocketService.populate('Ticker', [{path: 'instrument', populate: {path: 'underlying'}}]);
     this.webSocketService.populate('Instrument', ['prices']);
 
     this.webSocketService.events.subscribe(
@@ -118,7 +118,7 @@ export class InstrumentsComponent  implements OnInit  {
 
     this.apiService.getOrderDepths({
       'type': 'Derivative',
-      '$populate': {path: 'instrument', populate: {path: 'prices', match: { type: { $eq: 'LAST'}}}}
+      '$populate': {path: 'instrument', populate: [{path: 'underlying'}, {path: 'prices', match: { type: { $eq: 'LAST'}}}]}
     })
     .subscribe(
       orderDepths => this.orderDepths = orderDepths.sort((a: OrderDepth, b: OrderDepth) => {

@@ -237,7 +237,7 @@
         <p>
           Maximum potential loss for this order is {{(side == 'BUY' ? order?.quantity * order?.price : order?.quantity * (30-order?.price)) | number:'.2-2'}} SEK.
         </p>
-        <button type="button" class="btn btn-success mr-2" (click)="placeOrder()" ><i class="fa fa-paper-plane-o"></i> Submit</button>
+        <button type="button" class="btn btn-success mr-2" (click)="withdrawOrder()" ><i class="fa fa-paper-plane-o"></i> Submit</button>
         <button type="button" class="btn btn-danger" (click)="confirmationModal.hide()" ><i class="fa fa-times"></i> Abort</button>
       </div>
     </div>
