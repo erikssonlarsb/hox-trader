@@ -8,10 +8,9 @@ import { Event, EVENT_TYPE, ConnectionEvent, CONNECTION_STATUS, DocumentEvent, D
 
 @Injectable()
 export class WebSocketService {
-  private socket: Subject<any>;
+  private socket: WebSocket;
   private eventSource: Subject<DocumentEvent> = new Subject<DocumentEvent>();
   private populateMessages: any = {};
-  private connectionStatus: CONNECTION_STATUS = CONNECTION_STATUS.Disconnected;
 
   events: Observable<DocumentEvent> = this.eventSource.asObservable();
 
@@ -25,44 +24,57 @@ export class WebSocketService {
       (loggedIn: boolean) => {
         if(loggedIn) {
           const token = this.authService.getToken();
-          this.socket = Observable.webSocket({
-            url: `${window.location.protocol == 'http:' ? 'ws' : 'wss'}://${window.location.host}/ws`,
-            protocol: [token]
-          });
 
-          this.socket
-          .retry()
-          .map(event => Event.typeMapper(event))
-          .subscribe(
-            (event) => {
-              switch (event.type) {
-                case EVENT_TYPE.Connection:
-                  const connectionEvent = <ConnectionEvent> event;
-                  this.connectionStatus = connectionEvent.status;
-                  if(connectionEvent.status == CONNECTION_STATUS.Connected) {
-                    for(let message of Object.values(this.populateMessages)) {
-                      this.socket.next(JSON.stringify(message));
-                    }
-                  }
-                  break;
-                case EVENT_TYPE.Document:
-                  this.eventSource.next(<DocumentEvent> event);
-                  break;
-              }
-            },
-            (err) => console.error(err),
-            () => console.log('Completed!')
-          );
+          // Create WebSocket connection.
+          this.connect(token);
         }
       }
     )
   }
 
+  private connect(token: string): void {
+    this.socket = new WebSocket(
+      `${window.location.protocol == 'http:' ? 'ws' : 'wss'}://${window.location.host}/ws`,
+      [token]
+    );
+
+    // Connection opened
+    this.socket.addEventListener(
+    'open', (openEvent) => {
+      for(let message of Object.values(this.populateMessages)) {
+        this.socket.send(JSON.stringify(message));
+      }
+    });
+
+    // Listen for messages
+    this.socket.addEventListener(
+    'message', (messageEvent: MessageEvent) => {
+      let event: Event = Event.typeMapper(JSON.parse(messageEvent.data));
+      switch (event.type) {
+        case EVENT_TYPE.Connection:
+          break;
+        case EVENT_TYPE.Document:
+          this.eventSource.next(<DocumentEvent> event);
+          break;
+      }
+    });
+
+    // Connection closed
+    this.socket.addEventListener(
+    'close', (closeEvent: CloseEvent) => {
+      if(!closeEvent.wasClean) {
+        // Reconnect after 3000 ms
+        setTimeout(() => this.connect(token), 3000);
+
+      }
+    });
+  }
+
   populate(docType: string, populate: Array<any> = []): void {
     const populateMessage = {type: 'Populate', data: {docType: docType, populate: populate}};
     this.populateMessages[docType] = populateMessage;
-    if(this.connectionStatus == CONNECTION_STATUS.Connected) {
-      this.socket.next(JSON.stringify(populateMessage));
+      if(this.socket.readyState == 1) {
+      this.socket.send(JSON.stringify(populateMessage));
     }
   }
 }
