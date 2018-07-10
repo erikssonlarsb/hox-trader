@@ -48,7 +48,7 @@ export class OrderDetailsComponent  implements OnInit  {
         } else if(event.docType == DOCUMENT_TYPE.Order) {
           switch (event.operation) {
             case DOCUMENT_OPERATION.Update:
-              if(this.order) {
+              if(this.order.id) {  // Order has id if it's been returned from server
                 if(this.order.id == event.document.id) {
                   this.order = event.document;
                 }
@@ -126,7 +126,7 @@ export class OrderDetailsComponent  implements OnInit  {
           this.order = order;
         } else {
           let latestOrderUpdate = this.orderUpdates.find(orderUpdate => orderUpdate.id == order.id);
-          this.orderUpdates = [];
+          this.orderUpdates = [];  // Reset queue
           if(latestOrderUpdate && latestOrderUpdate.updateTimestamp > order.updateTimestamp) {
             this.order = latestOrderUpdate;
           } else {
