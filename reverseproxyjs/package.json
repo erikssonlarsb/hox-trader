@@ -1,0 +1,14 @@
+{
+  "name": "reverseproxyjs",
+  "description": "Reverse proxy using nodejs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node reverseproxyjs.js",
+    "dev": "nodemon reverseproxyjs.js"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.3",
+    "http-proxy-middleware": "^0.18.0"
+  }
+}

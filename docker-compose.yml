@@ -53,13 +53,20 @@ services:
       - client
     restart: on-failure
 
+  reverseproxyjs:
+    build: ./reverseproxyjs
+    ports:
+      - '80:80'
+    depends_on:
+      - cert-gen
+    restart: on-failure
+
   reverseproxy:
     image: nginx:1.13-alpine
     volumes:
       - certs:/etc/letsencrypt
       - ./reverseproxy/nginx.conf.template:/etc/nginx/nginx.conf.template
     ports:
-      - '80:80'
       - '443:443'
       - '4000:4000'
       - '27017:27017'
@@ -69,15 +76,6 @@ services:
     depends_on:
       - cert-gen
     restart: always
-
-  reverseproxyjs:
-    build: ./reverseproxyjs
-    environment:
-      LE_DOMAIN: ${LE_DOMAIN}
-      LE_EMAIL: ${LE_EMAIL}
-    ports:
-      - '8080:80'
-      - '8443:443'
 
   certbot:
     build: ./certbot
