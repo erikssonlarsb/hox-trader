@@ -1,0 +1,14 @@
+{
+  "name": "certproxy",
+  "description": "Creates ssl certificate and forwards http to https",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node certproxy.js"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.3",
+    "http-proxy-middleware": "^0.18.0",
+    "pem": "^1.12.5"
+  }
+}

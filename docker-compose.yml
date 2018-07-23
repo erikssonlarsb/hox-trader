@@ -42,29 +42,24 @@ services:
       - server
     restart: always
 
-  cert-gen:
-    build: ./cert-gen
+  certproxy:
+    build: ./certproxy
     environment:
-      COMMON_NAME: ${COMMON_NAME-Hox Trader}
-      KEY_NAME: ${KEY_NAME-hoxtrader}
-    volumes:
-      - certs:/certs
-    depends_on:
-      - client
-    restart: on-failure
-
-  reverseproxyjs:
-    build: ./reverseproxyjs
+      DOMAIN: ${DOMAIN-selfsigned}
+      EMAIL: ${EMAIL}
+      CB_PORT: ${CB_PORT-8080}
     ports:
       - '80:80'
+    volumes:
+      - ssl:/etc/ssl
     depends_on:
-      - cert-gen
-    restart: on-failure
+      - client
+    restart: always
 
   reverseproxy:
     image: nginx:1.13-alpine
     volumes:
-      - certs:/etc/letsencrypt
+      - ssl:/etc/ssl
       - ./reverseproxy/nginx.conf.template:/etc/nginx/nginx.conf.template
     ports:
       - '443:443'
@@ -74,25 +69,8 @@ services:
       LE_DOMAIN: ${LE_DOMAIN}
     command: sh -c "envsubst '$${LE_DOMAIN}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
     depends_on:
-      - cert-gen
+      - certproxy
     restart: always
-
-  certbot:
-    build: ./certbot
-    environment:
-      LE_DOMAIN: ${LE_DOMAIN}
-      LE_EMAIL: ${LE_EMAIL}
-    volumes:
-      - certs:/etc/letsencrypt
-
-    depends_on:
-      - reverseproxy
-    deploy:
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        max_attempts: 3
-        window: 10s
 
   api-seed:
     build:
@@ -106,8 +84,8 @@ services:
       INVITE_ONLY: ${INVITE_ONLY-false}
       IMPORT_FILES: ${IMPORT_FILES-hoxInstruments}
     depends_on:
-      - certbot
+      - reverseproxy
     restart: on-failure
 
 volumes:
-  certs:
+  ssl:
