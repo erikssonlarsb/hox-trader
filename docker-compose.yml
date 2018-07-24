@@ -38,6 +38,8 @@ services:
 
   client:
     build: ./hox-client
+    environment:
+      LE_DOMAIN: ${LE_DOMAIN-selfsigned}
     depends_on:
       - server
     restart: always
