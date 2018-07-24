@@ -43,7 +43,7 @@ if(!config.domain || config.domain == "selfsigned") {
   if(!config.email) {
     console.error("Email required for Let's Encrypt certificate generation");
   } else {
-    letsEncrypt.create(config.certbotPort, config.email, config.domain, function(err) {
+    letsEncrypt.create(config.environment, config.certbotPort, config.email, config.domain, function(err) {
       if(err) {
         console.error(err);
       } else {

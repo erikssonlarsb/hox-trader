@@ -4,15 +4,16 @@
 const { exec } = require('child_process');
 
 module.exports = {
-  create: function(port, email, domain, cb) {
+  create: function(environment, port, email, domain, cb) {
     /*  Create Let's Encrypt certificate.
     */
+    const staging = (environment == 'prod') ? '' : '--staging';
 
     const cmd = `/usr/bin/certbot certonly \
                   --standalone \
                   --non-interactive \
                   --agree-tos \
-                  --staging \
+                  ${staging} \
                   --config-dir /etc/ssl/letsencrypt \
                   --http-01-port ${port} \
                   --email ${email} \

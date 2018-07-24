@@ -45,8 +45,9 @@ services:
   certproxy:
     build: ./certproxy
     environment:
-      DOMAIN: ${DOMAIN-selfsigned}
-      EMAIL: ${EMAIL}
+      LE_DOMAIN: ${LE_DOMAIN-selfsigned}
+      LE_EMAIL: ${LE_EMAIL}
+      LE_ENVIRONMENT: ${LE_ENVIRONMENT-staging}
       CB_PORT: ${CB_PORT-8080}
     ports:
       - '80:80'
@@ -57,17 +58,15 @@ services:
     restart: always
 
   reverseproxy:
-    image: nginx:1.13-alpine
-    volumes:
-      - ssl:/etc/ssl
-      - ./reverseproxy/nginx.conf.template:/etc/nginx/nginx.conf.template
+    build: ./reverseproxy
+    environment:
+      LE_DOMAIN: ${LE_DOMAIN-selfsigned}
     ports:
       - '443:443'
       - '4000:4000'
       - '27017:27017'
-    environment:
-      LE_DOMAIN: ${LE_DOMAIN}
-    command: sh -c "envsubst '$${LE_DOMAIN}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
+    volumes:
+      - ssl:/etc/ssl
     depends_on:
       - certproxy
     restart: always

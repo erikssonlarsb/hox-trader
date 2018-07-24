@@ -13,7 +13,7 @@ module.exports = {
         Return true if so, otherwise return false.
     */
 
-   fs.readFile('/etc/ssl/selfsigned/selfsigned.crt', function(err, data) {
+   fs.readFile('/etc/ssl/selfsigned/fullchain.pem', function(err, data) {
      if(err) {
        cb(err, false);
      } else {
@@ -58,11 +58,11 @@ module.exports = {
         if (!fs.existsSync('/etc/ssl/selfsigned/')){
             fs.mkdirSync('/etc/ssl/selfsigned/');
         }
-        fs.writeFile('/etc/ssl/selfsigned/selfsigned.crt', keys.certificate, (err) => {
+        fs.writeFile('/etc/ssl/selfsigned/fullchain.pem', keys.certificate, (err) => {
           if(err) {
             cb(err);
           } else {
-            fs.writeFile('/etc/ssl/selfsigned/selfsigned.key', keys.serviceKey, (err) => {
+            fs.writeFile('/etc/ssl/selfsigned/privkey.pem', keys.serviceKey, (err) => {
               if(err) {
                 cb(err);
               } else {
