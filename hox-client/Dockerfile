@@ -3,7 +3,7 @@ RUN mkdir /client
 WORKDIR /client
 COPY . /client
 RUN npm install --quiet
-RUN npm install -g @angular/cli@1.6.5
+RUN npm install -g @angular/cli@1.6.5 --unsafe-perm
 
 CMD if [ "$LE_DOMAIN" == "selfsigned" ]; \
       then export PUBLIC_HOST=""; \
