@@ -1,17 +1,15 @@
 {
   "/api/*": {
-    "target": "https://localhost:4000",
+    "target": "https://localhost",
     "secure": false
   },
   "/ws": {
-    "target": "wss://localhost:4000",
+    "target": "wss://localhost",
     "secure": false,
     "ws": true
   },
   "/qr": {
-    "target": "https://mpc.getswish.net/qrg-swish/api/v1/prefilled",
-    "secure": true,
-    "changeOrigin": true,
-    "pathRewrite": {"^/qr" : ""}
+    "target": "https://localhost",
+    "secure": false
   }
 }

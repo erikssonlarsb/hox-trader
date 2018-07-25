@@ -9,9 +9,7 @@
     "ws": true
   },
   "/qr": {
-    "target": "https://mpc.getswish.net/qrg-swish/api/v1/prefilled",
-    "secure": true,
-    "changeOrigin": true,
-    "pathRewrite": {"^/qr" : ""}
+    "target": "https://localhost",
+    "secure": false
   }
 }

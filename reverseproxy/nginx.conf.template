@@ -59,32 +59,6 @@ http {
             proxy_redirect     off;
         }
     }
-
-    server {
-        listen    4000 ssl;
-
-        location / {
-            proxy_pass         http://hox-server;
-            proxy_redirect     off;
-            proxy_set_header   Host $host;
-            proxy_set_header   X-Real-IP $remote_addr;
-            proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header   X-Forwarded-Host $server_name;
-        }
-
-        location /ws {
-            proxy_pass          http://hox-server;
-            proxy_http_version  1.1;
-            proxy_set_header    Upgrade $http_upgrade;
-            proxy_set_header    Connection $connection_upgrade;
-            proxy_read_timeout  60m;
-        }
-
-        location /qr {
-            proxy_pass         https://mpc.getswish.net/qrg-swish/api/v1/prefilled/;
-            proxy_redirect     off;
-        }
-    }
 }
 
 stream {
