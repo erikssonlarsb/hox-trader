@@ -38,11 +38,11 @@ services:
 
   client:
     build: ./hox-client
-    environment:
-      LE_DOMAIN: ${LE_DOMAIN-selfsigned}
+    volumes:
+      - www:/client/dist
     depends_on:
       - server
-    restart: always
+    restart: on-failure
 
   certproxy:
     build: ./certproxy
@@ -55,6 +55,7 @@ services:
       - '80:80'
     volumes:
       - ssl:/etc/ssl
+      - www:/var/www
     depends_on:
       - client
     restart: always
@@ -69,6 +70,7 @@ services:
       - '27017:27017'
     volumes:
       - ssl:/etc/ssl
+      - www:/var/www
     depends_on:
       - certproxy
     restart: always
@@ -89,4 +91,5 @@ services:
     restart: on-failure
 
 volumes:
+  www:
   ssl:

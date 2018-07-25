@@ -15,10 +15,6 @@ http {
         '' close;
     }
 
-    upstream hox-client {
-        server  client:4200;
-    }
-
     upstream hox-server {
         server  server:4000;
     }
@@ -26,8 +22,23 @@ http {
     server {
         listen   443 ssl;
 
+        gzip on;
+        gzip_vary on;
+        gzip_min_length 10240;
+        gzip_proxied expired no-cache no-store private auth;
+        gzip_types text/plain text/css application/javascript text/xml application/xml;
+
+        include /etc/nginx/mime.types;
+
+        root /var/www;
+        index index.html;
+
         location / {
-            proxy_pass         http://hox-client;
+          try_files $uri $uri/ /index.html?$args;
+        }
+
+        location /api {
+            proxy_pass         http://hox-server;
             proxy_redirect     off;
             proxy_set_header   Host $host;
             proxy_set_header   X-Real-IP $remote_addr;
@@ -36,11 +47,16 @@ http {
         }
 
         location /ws {
-            proxy_pass          http://hox-client;
+            proxy_pass          http://hox-server;
             proxy_http_version  1.1;
             proxy_set_header    Upgrade $http_upgrade;
             proxy_set_header    Connection $connection_upgrade;
             proxy_read_timeout  60m;
+        }
+
+        location /qr {
+            proxy_pass         https://mpc.getswish.net/qrg-swish/api/v1/prefilled/;
+            proxy_redirect     off;
         }
     }
 
@@ -62,6 +78,11 @@ http {
             proxy_set_header    Upgrade $http_upgrade;
             proxy_set_header    Connection $connection_upgrade;
             proxy_read_timeout  60m;
+        }
+
+        location /qr {
+            proxy_pass         https://mpc.getswish.net/qrg-swish/api/v1/prefilled/;
+            proxy_redirect     off;
         }
     }
 }
