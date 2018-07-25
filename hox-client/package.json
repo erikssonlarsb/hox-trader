@@ -1,5 +1,6 @@
 {
   "name": "hox-client",
+  "description": "The Hox-trader client application",
   "repository": "github:erikssonlarsb/hox-trader",
   "license": "ISC",
   "scripts": {
