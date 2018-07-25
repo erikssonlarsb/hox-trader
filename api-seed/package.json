@@ -1,11 +1,12 @@
 {
   "name": "api-seed",
   "description": "Populates database via hox-server api",
+  "repository": "github:erikssonlarsb/hox-trader",
+  "license": "ISC",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node api-seed.js"
   },
-  "license": "ISC",
   "dependencies": {
     "async": "^2.6.1",
     "request": "^2.87.0"
