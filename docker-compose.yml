@@ -24,6 +24,7 @@ services:
     build: ./hox-server
     environment:
       DB_URL: mongodb:27017
+      DB_NAME: test
       DB_USER: ${DB_USER-root}
       DB_PASSWORD: ${DB_PASSWORD-Aaa12345}
       DB_AUTH : admin

@@ -1,6 +1,7 @@
 const crypto = require('crypto');
 
 var dbURL = process.env.DB_URL || 'localhost:27017';
+var dbName = process.env.DB_NAME || 'test';
 var dbUser = process.env.DB_USER || 'root';
 var dbPassword = process.env.DB_PASSWORD || 'Aaa12345';
 var dbAuth = process.env.DB_AUTH || 'admin';
@@ -16,6 +17,7 @@ if(jwtRandomizeSecret) {
 
 module.exports = {
   'dbURL': 'mongodb://' + dbURL,
+  'dbName': dbName,
   'dbUser': dbUser,
   'dbPassword': dbPassword,
   'dbAuth': dbAuth,

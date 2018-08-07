@@ -25,10 +25,14 @@ function connectWithRetry() {
   console.info('Connecting to database: %s...', config.dbURL);
   mongoose.connect(
     config.dbURL,
-    {server: {ssl: config.dbUseSSL},
-    user: config.dbUser,
-    pass: config.dbPassword,
-    auth: {authdb: config.dbAuth}},
+    {
+      dbName: config.dbName,
+      useMongoClient: true,
+      ssl: config.dbUseSSL,
+      user: config.dbUser,
+      pass: config.dbPassword,
+      auth: {authdb: config.dbAuth}
+    },
   function(err) {
     if (err) {
       console.error('Failed to connect to Mongo DB - retrying in 5 sec', err);
