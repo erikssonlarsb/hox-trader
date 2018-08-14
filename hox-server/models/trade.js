@@ -14,8 +14,7 @@ const tradeSchema = new Schema({
 });
 
 tradeSchema.plugin(require('./plugins/updateTimestamp'));
-
-require("../utils/findUnique")(tradeSchema);
+tradeSchema.plugin(require('./plugins/findUnique'));
 
 tradeSchema.statics.sanitizePopulate = function(populate) {
   /*

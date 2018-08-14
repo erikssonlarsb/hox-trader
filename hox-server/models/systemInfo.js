@@ -10,7 +10,6 @@ const systemInfoSchema = new Schema({
 });
 
 systemInfoSchema.plugin(require('./plugins/updateTimestamp'));
-
-require("../utils/findUnique")(systemInfoSchema);
+systemInfoSchema.plugin(require('./plugins/findUnique'));
 
 module.exports = mongoose.model('SystemInfo', systemInfoSchema);

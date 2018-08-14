@@ -15,8 +15,7 @@ const inviteSchema = new Schema({
 });
 
 inviteSchema.plugin(require('./plugins/updateTimestamp'));
-
-require("../utils/findUnique")(inviteSchema);
+inviteSchema.plugin(require('./plugins/findUnique'));
 
 inviteSchema.statics.sanitizePopulate = function (populate) {
   /*

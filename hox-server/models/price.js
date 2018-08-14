@@ -13,7 +13,6 @@ const priceSchema = new Schema({
 priceSchema.index({instrument: 1, type: 1, date: 1}, {unique: true});
 
 priceSchema.plugin(require('./plugins/updateTimestamp'));
-
-require("../utils/findUnique")(priceSchema);
+priceSchema.plugin(require('./plugins/findUnique'));
 
 module.exports = mongoose.model('Price', priceSchema);

@@ -20,8 +20,7 @@ const userSchema = new Schema({
 });
 
 userSchema.plugin(require('./plugins/updateTimestamp'));
-
-require("../utils/findUnique")(userSchema);
+userSchema.plugin(require('./plugins/findUnique'));
 
 userSchema.pre('save', function(next) {
   if (this.isModified("password")) {

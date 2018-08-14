@@ -21,11 +21,9 @@ instrumentSchema.virtual('derivatives', {
 });
 
 instrumentSchema.plugin(require('./plugins/updateTimestamp'));
-
-require("../utils/findUnique")(instrumentSchema);
+instrumentSchema.plugin(require('./plugins/findUnique'));
 
 instrumentSchema.set('toObject', { virtuals: true });
-
 instrumentSchema.set('toJSON', { virtuals: true });
 
 module.exports = mongoose.model('Instrument', instrumentSchema);

@@ -19,8 +19,7 @@ const orderSchema = new Schema({
 });
 
 orderSchema.plugin(require('./plugins/updateTimestamp'));
-
-require("../utils/findUnique")(orderSchema);
+orderSchema.plugin(require('./plugins/findUnique'));
 
 orderSchema.pre('save', function(next) {
   if(this.status != 'EXPIRED') {

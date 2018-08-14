@@ -14,7 +14,6 @@ const roleSchema = new Schema({
 });
 
 roleSchema.plugin(require('./plugins/updateTimestamp'));
-
-require("../utils/findUnique")(roleSchema);
+roleSchema.plugin(require('./plugins/findUnique'));
 
 module.exports = mongoose.model('Role', roleSchema);

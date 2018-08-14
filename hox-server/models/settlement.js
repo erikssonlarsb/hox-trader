@@ -11,8 +11,7 @@ const settlementSchema = new Schema({
 });
 
 settlementSchema.plugin(require('./plugins/updateTimestamp'));
-
-require("../utils/findUnique")(settlementSchema);
+settlementSchema.plugin(require('./plugins/findUnique'));
 
 settlementSchema.statics.sanitizePopulate = function(populate) {
   /*
