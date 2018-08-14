@@ -1,12 +1,8 @@
 /**
- * Plugin addes field updateTimestamp to schema, and updates the field
+ * Plugin adds field updateTimestamp to schema, and updates the field
  * before saving schema.
- *
- * @param  {Schema} schema  The schema to which the plugin is utilized.
- * @param  {Dict} options Any options that should be applied.
  */
-
-module.exports = function updateTimestampPlugin(schema, options) {
+module.exports = function(schema, options) {
   schema.add({ updateTimestamp: Date });
 
   schema.pre('save', function (next) {
