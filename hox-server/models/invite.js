@@ -1,7 +1,6 @@
 const crypto = require('crypto');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const DateOnly = require('mongoose-dateonly')(mongoose);
 const ObjectId = Schema.Types.ObjectId;
 
 const inviteSchema = new Schema({
@@ -12,9 +11,10 @@ const inviteSchema = new Schema({
     unique: true,
     set: function() {
       return crypto.randomBytes(8).toString('hex');  // Auto-generate random code.
-    }},
-  updateTimestamp: Date
+    }}
 });
+
+inviteSchema.plugin(require('./plugins/updateTimestamp'));
 
 require("../utils/findUnique")(inviteSchema);
 
@@ -33,10 +33,5 @@ inviteSchema.statics.sanitizePopulate = function (populate) {
     }
   });
 }
-
-inviteSchema.pre('save', function(next) {
-  this.updateTimestamp = new Date();
-  next();
-});
 
 module.exports = mongoose.model('Invite', inviteSchema);

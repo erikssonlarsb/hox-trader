@@ -7,17 +7,13 @@ const priceSchema = new Schema({
   instrument: {type: ObjectId, ref: 'Instrument', required: true},
   type: {type: String, enum: ['LAST', 'HIGH', 'LOW', 'CLOSE', 'SETTLEMENT'], required: true},
   date: {type: DateOnly, required: true},
-  value: {type: Number, required: true},
-  updateTimestamp: Date
+  value: {type: Number, required: true}
 });
 
 priceSchema.index({instrument: 1, type: 1, date: 1}, {unique: true});
 
-require("../utils/findUnique")(priceSchema);
+priceSchema.plugin(require('./plugins/updateTimestamp'));
 
-priceSchema.pre('save', function(next) {
-  this.updateTimestamp = new Date();
-  next();
-});
+require("../utils/findUnique")(priceSchema);
 
 module.exports = mongoose.model('Price', priceSchema);

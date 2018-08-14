@@ -10,9 +10,10 @@ const tradeSchema = new Schema({
   side: {type: String, enum: ['BUY', 'SELL'], required: true},
   price: {type: Number, required: true},
   quantity: {type: Number, required: true},
-  isSettled: {type: Boolean, default: false},
-  updateTimestamp: Date
+  isSettled: {type: Boolean, default: false}
 });
+
+tradeSchema.plugin(require('./plugins/updateTimestamp'));
 
 require("../utils/findUnique")(tradeSchema);
 
@@ -32,10 +33,5 @@ tradeSchema.statics.sanitizePopulate = function(populate) {
     }
   });
 }
-
-tradeSchema.pre('save', function(next) {
-  this.updateTimestamp = new Date();
-  next();
-});
 
 module.exports = mongoose.model('Trade', tradeSchema);

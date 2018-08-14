@@ -10,15 +10,11 @@ const permissionSchema = new Schema({
 const roleSchema = new Schema({
   name: {type: String, required: true, unique: true},
   isAdmin: Boolean,
-  permissions: {type: [permissionSchema], required: true},
-  updateTimestamp: Date
+  permissions: {type: [permissionSchema], required: true}
 });
+
+roleSchema.plugin(require('./plugins/updateTimestamp'));
 
 require("../utils/findUnique")(roleSchema);
-
-roleSchema.pre('save', function(next) {
-  this.updateTimestamp = new Date();
-  next();
-});
 
 module.exports = mongoose.model('Role', roleSchema);

@@ -16,16 +16,12 @@ const userSchema = new Schema({
     required: true,
     unique: true
   },
-  phone: {type: String, required: true},
-  updateTimestamp: Date
+  phone: {type: String, required: true}
 });
+
+userSchema.plugin(require('./plugins/updateTimestamp'));
 
 require("../utils/findUnique")(userSchema);
-
-userSchema.pre('save', function(next) {
-  this.updateTimestamp = new Date();
-  next();
-});
 
 userSchema.pre('save', function(next) {
   if (this.isModified("password")) {

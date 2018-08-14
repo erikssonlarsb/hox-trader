@@ -15,9 +15,10 @@ const orderSchema = new Schema({
     message   : '{VALUE} is not an integer value'
   }},
   tradedQuantity: {type: Number, min: 0, default: 0},
-  status: {type: String, enum: ['ACTIVE', 'WITHDRAWN', 'TRADED', 'EXPIRED']},
-  updateTimestamp: Date
+  status: {type: String, enum: ['ACTIVE', 'WITHDRAWN', 'TRADED', 'EXPIRED']}
 });
+
+orderSchema.plugin(require('./plugins/updateTimestamp'));
 
 require("../utils/findUnique")(orderSchema);
 
@@ -37,11 +38,6 @@ orderSchema.pre('save', function(next) {
   } else {
     next();
   }
-});
-
-orderSchema.pre('save', function(next) {
-  this.updateTimestamp = new Date();
-  next();
 });
 
 orderSchema.pre('save', function(next) {

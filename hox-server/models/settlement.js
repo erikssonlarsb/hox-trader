@@ -7,9 +7,10 @@ const settlementSchema = new Schema({
   counterpartySettlement: {type: ObjectId, ref: 'Settlement', required: true},
   trades: [{type: ObjectId, ref: 'Trade', required: true}],
   isAcknowledged: {type: Boolean, default: false},
-  amount: {type: Number, default: 0},
-  updateTimestamp: Date
+  amount: {type: Number, default: 0}
 });
+
+settlementSchema.plugin(require('./plugins/updateTimestamp'));
 
 require("../utils/findUnique")(settlementSchema);
 
@@ -29,10 +30,5 @@ settlementSchema.statics.sanitizePopulate = function(populate) {
     }
   });
 }
-
-settlementSchema.pre('save', function(next) {
-  this.updateTimestamp = new Date();
-  next();
-});
 
 module.exports = mongoose.model('Settlement', settlementSchema);
