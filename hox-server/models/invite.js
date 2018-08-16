@@ -16,21 +16,6 @@ const inviteSchema = new Schema({
 
 inviteSchema.plugin(require('./plugins/updateTimestamp'));
 inviteSchema.plugin(require('./plugins/findUnique'));
-
-inviteSchema.statics.sanitizePopulate = function (populate) {
-  /*
-  Restrict access to the User object referred to in path 'invitee'
-   */
-  return populate.map(path => {
-    if(path.path == 'invitee') {
-      return {
-        path: 'invitee',
-        select: 'name'
-      };
-    } else {
-      return path;
-    }
-  });
-}
+inviteSchema.plugin(require('./plugins/sanitizePopulate'), {fields: ['invitee']});
 
 module.exports = mongoose.model('Invite', inviteSchema);

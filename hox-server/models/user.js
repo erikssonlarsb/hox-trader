@@ -6,7 +6,7 @@ const ObjectId = Schema.Types.ObjectId;
 const Role = require('./role');
 
 const userSchema = new Schema({
-  name: String,
+  name: {type: String, public: true},
   role: {type: ObjectId, ref: 'Role', required: true, set: getReferenceId},
   username: {type: String, required: true, unique: true, lowercase: true, trim: true},
   password: {type: String, required: true, select: false},
@@ -16,11 +16,25 @@ const userSchema = new Schema({
     required: true,
     unique: true
   },
-  phone: {type: String, required: true}
+  phone: {type: String, required: true, public: true}
 });
 
 userSchema.plugin(require('./plugins/updateTimestamp'));
 userSchema.plugin(require('./plugins/findUnique'));
+
+
+userSchema.pre('find', function(next) {
+  console.log('pre find user');
+  console.log(this.getQuery());
+  next();
+});
+
+userSchema.post('find', function(doc, next) {
+  console.log('post find user');
+  console.log(this.getQuery());
+  console.log(doc);  
+  next();
+});
 
 userSchema.pre('save', function(next) {
   if (this.isModified("password")) {

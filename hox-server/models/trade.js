@@ -15,6 +15,7 @@ const tradeSchema = new Schema({
 
 tradeSchema.plugin(require('./plugins/updateTimestamp'));
 tradeSchema.plugin(require('./plugins/findUnique'));
+tradeSchema.plugin(require('./plugins/sanitizePopulate'), {fields: ['invitee']});
 
 tradeSchema.statics.sanitizePopulate = function(populate) {
   /*
