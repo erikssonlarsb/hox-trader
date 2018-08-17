@@ -15,7 +15,7 @@ module.exports = {
     params[auth.userField] = auth.userId;
 
     Trade.find(params)
-    .populate(Trade.sanitizePopulate(populate))
+    .populate(populate)
     .sort(sort)
     .limit(limit)
     .exec(function(err, trades) {

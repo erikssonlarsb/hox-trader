@@ -83,8 +83,8 @@ function verifyPermissions(req, res, userField) {
     }
   } else {
     req.queryOptions.auth = {
-      'userField': null,
-      'userId': null
+      'userField': userField,
+      'userId': {$exists: true}
     }
   }
 }

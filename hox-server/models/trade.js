@@ -13,14 +13,26 @@ const tradeSchema = new Schema({
   isSettled: {type: Boolean, default: false}
 });
 
+tradeSchema.auth = {
+  field: 'user',
+  public: ['user']
+}
+
 tradeSchema.plugin(require('./plugins/updateTimestamp'));
 tradeSchema.plugin(require('./plugins/findUnique'));
-tradeSchema.plugin(require('./plugins/sanitizePopulate'), {fields: ['invitee']});
+//tradeSchema.plugin(require('./plugins/sanitizePopulate'), {fields: ['counterpartyTrade']});
 
+
+tradeSchema.pre('find', function(next) {
+  if(!this.getQuery()[tradeSchema.auth.field]) {
+    // If not queried with authentication, only expose public fields
+    this._fields = tradeSchema.auth.public;
+  }
+  next();
+});
+
+/*
 tradeSchema.statics.sanitizePopulate = function(populate) {
-  /*
-  Restrict access to the Trade object referred to in path 'counterpartyTrade'
-   */
   return populate.map(path => {
     if(path.path == 'counterpartyTrade') {
       return {
@@ -33,5 +45,6 @@ tradeSchema.statics.sanitizePopulate = function(populate) {
     }
   });
 }
+*/
 
 module.exports = mongoose.model('Trade', tradeSchema);

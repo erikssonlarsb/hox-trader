@@ -41,7 +41,7 @@ export class UserDetailsComponent implements OnInit  {
       }
     });
 
-    this.apiService.getInvites({'$populate': 'invitee'})
+    this.apiService.getInvites({'$populate': {'path': 'counterpartyTrade', 'populate': {'path': 'user'}}})
     .subscribe(invites => {
       this.invites = invites;
     });

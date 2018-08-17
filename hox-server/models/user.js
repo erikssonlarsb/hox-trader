@@ -6,7 +6,7 @@ const ObjectId = Schema.Types.ObjectId;
 const Role = require('./role');
 
 const userSchema = new Schema({
-  name: {type: String, public: true},
+  name: {type: String},
   role: {type: ObjectId, ref: 'Role', required: true, set: getReferenceId},
   username: {type: String, required: true, unique: true, lowercase: true, trim: true},
   password: {type: String, required: true, select: false},
@@ -16,23 +16,24 @@ const userSchema = new Schema({
     required: true,
     unique: true
   },
-  phone: {type: String, required: true, public: true}
+  phone: {type: String, required: true}
 });
+
+userSchema.auth = {
+  field: '_id',
+  public: ['name', 'email', 'phone']
+}
 
 userSchema.plugin(require('./plugins/updateTimestamp'));
 userSchema.plugin(require('./plugins/findUnique'));
 
 
 userSchema.pre('find', function(next) {
-  console.log('pre find user');
   console.log(this.getQuery());
-  next();
-});
-
-userSchema.post('find', function(doc, next) {
-  console.log('post find user');
-  console.log(this.getQuery());
-  console.log(doc);  
+  if(!this.getQuery()[userSchema.auth.field] || this.getQuery()[userSchema.auth.field]['$in']) {
+    // If not queried with authentication, only expose public fields
+    this._fields = userSchema.auth.public;
+  }
   next();
 });
 
