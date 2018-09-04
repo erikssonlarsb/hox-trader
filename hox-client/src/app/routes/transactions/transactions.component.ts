@@ -29,7 +29,16 @@ export class TransactionsComponent implements OnInit, OnDestroy  {
   ngOnInit(): void {
     this.user = this.authService.getLoggedInUser();
 
-    this.webSocketService.populate('Trade', ['instrument', 'user', 'counterpartyTrade']);
+    const populate = [
+      'instrument',
+      'user',
+      {
+        path: 'counterpartyTrade',
+        populate: {path: 'user'}
+      }
+    ]
+
+    this.webSocketService.populate('Trade', populate);
 
     this.webSocketService.events.subscribe(
       event => {
@@ -49,7 +58,7 @@ export class TransactionsComponent implements OnInit, OnDestroy  {
       }
     );
 
-    this.ApiService.getTrades({'$populate': ['instrument', 'user', 'counterpartyTrade']})
+    this.ApiService.getTrades({'$populate': populate})
     .subscribe(trades => {
       this.trades = trades.sort((a: Trade, b: Trade) => {return a.createTimestamp.getTime() - b.createTimestamp.getTime()});
       this.calculatePositions();

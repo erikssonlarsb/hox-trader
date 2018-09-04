@@ -31,7 +31,15 @@ export class SettlementsComponent implements OnInit, OnDestroy  {
   ngOnInit(): void {
     this.user = this.authService.getLoggedInUser();
 
-    this.webSocketService.populate('Settlement', ['user', 'counterpartySettlement']);
+    const populate = [
+      'user',
+      {
+        path: 'counterpartySettlement',
+        populate: {path: 'user'}
+      }
+    ]
+
+    this.webSocketService.populate('Settlement', populate);
 
     this.webSocketService.events.subscribe(
       event => {
@@ -50,7 +58,7 @@ export class SettlementsComponent implements OnInit, OnDestroy  {
       }
     );
 
-    this.apiService.getSettlements({'$populate': ['user', 'counterpartySettlement']})
+    this.apiService.getSettlements({'$populate': populate})
     .subscribe(settlements =>
       this.settlements = settlements.sort((a: Settlement, b: Settlement) => {return a.createTimestamp.getTime() - b.createTimestamp.getTime()})
     );
