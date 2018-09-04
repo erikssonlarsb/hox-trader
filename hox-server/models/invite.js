@@ -14,8 +14,12 @@ const inviteSchema = new Schema({
     }}
 });
 
+inviteSchema.auth = {
+  ownerField: 'inviter'
+}
+
 inviteSchema.plugin(require('./plugins/updateTimestamp'));
 inviteSchema.plugin(require('./plugins/findUnique'));
-inviteSchema.plugin(require('./plugins/sanitizePopulate'), {fields: ['invitee']});
+inviteSchema.plugin(require('./plugins/authorizeFind'));
 
 module.exports = mongoose.model('Invite', inviteSchema);

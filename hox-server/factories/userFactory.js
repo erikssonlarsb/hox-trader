@@ -10,13 +10,11 @@ const DocumentEvent = require('../events/event.document');
 module.exports = {
 
   // Query users.
-  query: function(params, {auth = {}, populate = []}, callback) {
-    if (typeof arguments[1] === 'function') {
-      callback = arguments[1];
-    }
-    params[auth.userField] = auth.userId;
+  query: function(params, {requester, populate = ''}, callback) {
+    if (typeof arguments[1] === 'function') callback = arguments[1];
 
     User.find(params)
+    .setOptions({requester: requester})
     .populate(populate)
     .exec(function(err, users) {
       callback(err, users);
@@ -24,13 +22,11 @@ module.exports = {
   },
 
   // Find a single user
-  findOne: function(id, {idField = '_id', auth = {}, populate = []}, callback) {
-    if (typeof arguments[1] === 'function') {
-      callback = arguments[1];
-    }
+  findOne: function(id, queryOptions, callback) {
+    if (typeof arguments[1] === 'function') callback = arguments[1];
 
-    User.findUnique({[idField]: id, [auth.userField]: auth.userId}, populate, function(err, user) {
-      callback(err, user);
+    User.findUnique(id, queryOptions, function(err, invite) {
+      callback(err, invite);
     });
   },
 
@@ -84,9 +80,7 @@ module.exports = {
 
   // Update a user
   update: function(id, {idField = '_id', auth = {}, populate = []}, updateUser, callback) {
-    if (typeof arguments[2] === 'function') {
-      callback = arguments[2];
-    }
+    if (typeof arguments[2] === 'function') callback = arguments[2];
 
     User.findUnique({[idField]: id, [auth.userField]: auth.userId}, populate, function(err, user) {
       if(err || !user) {

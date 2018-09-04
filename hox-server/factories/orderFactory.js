@@ -10,13 +10,11 @@ const DocumentEvent = require('../events/event.document');
 module.exports = {
 
   // Query orders.
-  query: function(params, {auth = {}, populate = []}, callback) {
-    if (typeof arguments[1] === 'function') {
-      callback = arguments[1];
-    }
-    params[auth.userField] = auth.userId;
+  query: function(params, {requester, populate = ''}, callback) {
+    if (typeof arguments[1] === 'function') callback = arguments[1];
 
     Order.find(params)
+    .setOptions({requester: requester})
     .populate(populate)
     .exec(function(err, orders) {
       callback(err, orders);
@@ -24,12 +22,10 @@ module.exports = {
   },
 
   // Find a single order.
-  findOne: function(id, {idField = '_id', auth = {}, populate = []}, callback) {
-    if (typeof arguments[1] === 'function') {
-      callback = arguments[1];
-    }
+  findOne: function(id, queryOptions, callback) {
+    if (typeof arguments[1] === 'function') callback = arguments[1];
 
-    Order.findUnique({[idField]: id, [auth.userField]: auth.userId}, populate, function(err, order) {
+    Order.findUnique(id, queryOptions, function(err, order) {
       callback(err, order);
     });
   },
@@ -46,12 +42,10 @@ module.exports = {
   },
 
   // Update an order.
-  update: function(id, {idField = '_id', auth = {}, populate = []}, updateOrder, callback) {
-    if (typeof arguments[2] === 'function') {
-      callback = arguments[2];
-    }
+  update: function(id, queryOptions, updateOrder, callback) {
+    if (typeof arguments[2] === 'function') callback = arguments[2];
 
-    Order.findUnique({[idField]: id, [auth.userField]: auth.userId}, populate, function(err, order) {
+    Order.findUnique(id, queryOptions, function(err, order) {
       if(err) callback(err);
       else if(order.status != 'ACTIVE') {
         callback("Cannot modify non-active order.")
@@ -71,12 +65,10 @@ module.exports = {
   },
 
   // Delete an order. (i.e. set status to WITHDRAW).
-  delete: function(id, {idField = '_id', auth = {}}, callback) {
-    if (typeof arguments[1] === 'function') {
-      callback = arguments[1];
-    }
-
-    Order.findUnique({[idField]: id, [auth.userField]: auth.userId}, function(err, order) {
+  delete: function(id, queryOptions, callback) {
+    if (typeof arguments[1] === 'function') callback = arguments[1];
+    
+    Order.findUnique(id, queryOptions, function(err, order) {
       if (err) {
         callback(err);
       } else if(order.status != 'ACTIVE') {

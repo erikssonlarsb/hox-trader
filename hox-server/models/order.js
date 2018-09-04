@@ -18,8 +18,13 @@ const orderSchema = new Schema({
   status: {type: String, enum: ['ACTIVE', 'WITHDRAWN', 'TRADED', 'EXPIRED']}
 });
 
+orderSchema.auth = {
+  ownerField: 'user'
+}
+
 orderSchema.plugin(require('./plugins/updateTimestamp'));
 orderSchema.plugin(require('./plugins/findUnique'));
+orderSchema.plugin(require('./plugins/authorizeFind'));
 
 orderSchema.pre('save', function(next) {
   if(this.status != 'EXPIRED') {

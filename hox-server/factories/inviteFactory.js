@@ -8,26 +8,22 @@ const DocumentEvent = require('../events/event.document');
 module.exports = {
 
   // Query invites.
-  query: function(params, {auth = {}, populate = []}, callback) {
-    if (typeof arguments[1] === 'function') {
-      callback = arguments[1];
-    }
-    params[auth.userField] = auth.userId;
+  query: function(params, {requester, populate = ''}, callback) {
+    if (typeof arguments[1] === 'function') callback = arguments[1];
 
     Invite.find(params)
-    .populate(Invite.sanitizePopulate(populate))
+    .setOptions({requester: requester})
+    .populate(populate)
     .exec(function(err, invites) {
       callback(err, invites);
     });
   },
 
   // Find a single invite
-  findOne: function(id, {idField = '_id', auth = {}, populate = []}, callback) {
-    if (typeof arguments[1] === 'function') {
-      callback = arguments[1];
-    }
-
-    Invite.findUnique({[idField]: id, [auth.userField]: auth.userId}, Invite.sanitizePopulate(populate), function(err, invite) {
+  findOne: function(id, queryOptions, callback) {
+    if (typeof arguments[1] === 'function') callback = arguments[1];
+    
+    Invite.findUnique(id, queryOptions, function(err, invite) {
       callback(err, invite);
     });
   },

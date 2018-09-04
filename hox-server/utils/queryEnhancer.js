@@ -29,7 +29,7 @@ function getPopulate(populate) {
     populate = JSON.parse(populate);
     if (!Array.isArray(populate)) populate = [populate];
     return populate.map(path => {
-      if (typeof(path) === "string") return {path: path};  // Force paths to path map {path: path} in order for sanitizePopulate to work in factories
+      if (typeof(path) === "string") return {path: path};
       else return path;
     });
   } catch (e) {

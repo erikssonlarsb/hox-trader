@@ -20,22 +20,13 @@ const userSchema = new Schema({
 });
 
 userSchema.auth = {
-  field: '_id',
-  public: ['name', 'email', 'phone']
+  ownerField: '_id',
+  publicFields: ['name', 'email', 'phone']
 }
 
 userSchema.plugin(require('./plugins/updateTimestamp'));
 userSchema.plugin(require('./plugins/findUnique'));
-
-
-userSchema.pre('find', function(next) {
-  console.log(this.getQuery());
-  if(!this.getQuery()[userSchema.auth.field] || this.getQuery()[userSchema.auth.field]['$in']) {
-    // If not queried with authentication, only expose public fields
-    this._fields = userSchema.auth.public;
-  }
-  next();
-});
+userSchema.plugin(require('./plugins/authorizeFind'));
 
 userSchema.pre('save', function(next) {
   if (this.isModified("password")) {

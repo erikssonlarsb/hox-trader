@@ -9,9 +9,7 @@ module.exports = {
 
   // Query orderDepths.
   query: function(params, {populate = []}, callback) {
-    if (typeof arguments[1] === 'function') {
-      callback = arguments[1];
-    }
+    if (typeof arguments[1] === 'function') callback = arguments[1];
 
     let instrumentPopulate = populate.find(path => path.path == 'instrument');
 
@@ -41,10 +39,8 @@ module.exports = {
 
   // Find a single orderDepth.
   findOne: function(id, {idField = '_id', populate = []}, callback) {
-    if (typeof arguments[1] === 'function') {
-      callback = arguments[1];
-    }
-
+    if (typeof arguments[1] === 'function') callback = arguments[1];
+    
     let instrumentPopulate = populate.find(path => path.path == 'instrument');
 
     instrumentFactory.findOne(id, {idField: idField, populate: instrumentPopulate ? instrumentPopulate.populate : []}, function(err, instrument) {

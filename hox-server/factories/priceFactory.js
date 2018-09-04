@@ -8,10 +8,8 @@ const DocumentEvent = require('../events/event.document');
 module.exports = {
 
   // Query prices.
-  query: function(params, {populate = []}, callback) {
-    if (typeof arguments[1] === 'function') {
-      callback = arguments[1];
-    }
+  query: function(params, {populate = ''}, callback) {
+    if (typeof arguments[1] === 'function') callback = arguments[1];
 
     Price.find(params)
     .populate(populate)
@@ -21,12 +19,10 @@ module.exports = {
   },
 
   // Find a single price
-  findOne: function(id, {idField = '_id', populate = []}, callback) {
-    if (typeof arguments[1] === 'function') {
-      callback = arguments[1];
-    }
-
-    Price.findUnique({[idField]:id}, populate, function(err, price) {
+  findOne: function(id, queryOptions, callback) {
+    if (typeof arguments[1] === 'function') callback = arguments[1];
+    
+    Price.findUnique(id, queryOptions, function(err, price) {
       callback(err, price);
     });
   },

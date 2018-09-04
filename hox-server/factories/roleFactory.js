@@ -8,10 +8,8 @@ const DocumentEvent = require('../events/event.document');
 module.exports = {
 
   // Query roles.
-  query: function(params, {populate = []}, callback) {
-    if (typeof arguments[1] === 'function') {
-      callback = arguments[1];
-    }
+  query: function(params, {populate = ''}, callback) {
+    if (typeof arguments[1] === 'function') callback = arguments[1];
 
     Role.find(params)
     .populate(populate)
@@ -21,12 +19,10 @@ module.exports = {
   },
 
   // Find a single role
-  findOne: function(id, {idField = '_id', populate = []}, callback) {
-    if (typeof arguments[1] === 'function') {
-      callback = arguments[1];
-    }
-
-    Role.findUnique({[idField]:id}, populate, function(err, role) {
+  findOne: function(id, queryOptions, callback) {
+    if (typeof arguments[1] === 'function') callback = arguments[1];
+    
+    Role.findUnique(id, queryOptions, function(err, role) {
       callback(err, role);
     });
   },

@@ -1,6 +1,6 @@
 /**
  * Rest Api Service handles authentication and routing of http requests to
- * the rest api endpoints. 
+ * the rest api endpoints.
  */
 const express = require('express');
 const compression = require('compression');
@@ -17,7 +17,7 @@ function init() {
 
   api.use('/registration', require('./handlers/registration'));
   api.use('/systeminfo', auth(), require('./handlers/systemInfo'));
-  api.use('/invites', auth('inviter'), require('./handlers/invites'));
+  api.use('/invites', auth(), require('./handlers/invites'));
   api.use('/token', auth(), require('./handlers/token'));
   api.use('/users', auth('_id'), require('./handlers/users'));
   api.use('/roles', auth(), require('./handlers/roles'));

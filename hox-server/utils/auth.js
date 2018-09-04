@@ -3,7 +3,7 @@ var config = require('../config');
 var User = require('../models/user');
 var Error = require('../utils/error');
 
-function auth(userField) {
+function auth() {
   return function(req, res, next) {
     if (!req.headers['authorization']) {
       return res.status(401).json(new Error('Authorization required.'));
@@ -17,7 +17,7 @@ function auth(userField) {
           } else {
             req.user = decoded.user;
             try {
-              verifyPermissions(req, res, userField);
+              verifyPermissions(req, res);
               next();
             } catch (error) {
               return res.status(405).json(error);
@@ -45,7 +45,7 @@ function auth(userField) {
                 } else {
                   req.user = user;
                   try {
-                    verifyPermissions(req, res, userField);
+                    verifyPermissions(req, res);
                     next();
                   } catch (error) {
                     return res.status(405).json(error);
@@ -62,7 +62,7 @@ function auth(userField) {
   }
 }
 
-function verifyPermissions(req, res, userField) {
+function verifyPermissions(req, res) {
   //  Verify permissions to the requested resource
   var permission = req.user.role.permissions.find(function(permission) {
     if (permission.resource == req.baseUrl.replace('/api/', '')) {
@@ -73,20 +73,21 @@ function verifyPermissions(req, res, userField) {
     throw new Error('Permission denied for method ' + req.method);
   }
 
-  //  Add user to the request query in order to control access
-  //  to user-specific documents in handlers.
-  if (userField && !req.user.role.isAdmin) {
-    req.queryOptions.auth = {
-      'userField': userField,
-      'userId': req.user._id
-
-    }
+  if(req.user.role.isAdmin) {
+    req.queryOptions.requester = 'admin'
   } else {
-    req.queryOptions.auth = {
-      'userField': userField,
-      'userId': {$exists: true}
-    }
+    req.queryOptions.requester = req.user._id
   }
+
+  if(req.queryOptions.populate) {
+    req.queryOptions.populate.map(populate => authorizePopulate(populate, req.queryOptions.requester));
+  }
+}
+
+function authorizePopulate(populate, requester) {
+  //TODO: Add recursive authorization if sub paths
+  populate.options = {'requester': requester}
+  return populate;
 }
 
 module.exports = auth

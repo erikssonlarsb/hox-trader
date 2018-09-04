@@ -14,37 +14,12 @@ const tradeSchema = new Schema({
 });
 
 tradeSchema.auth = {
-  field: 'user',
-  public: ['user']
+  ownerField: 'user',
+  publicFields: ['user']
 }
 
 tradeSchema.plugin(require('./plugins/updateTimestamp'));
 tradeSchema.plugin(require('./plugins/findUnique'));
-//tradeSchema.plugin(require('./plugins/sanitizePopulate'), {fields: ['counterpartyTrade']});
-
-
-tradeSchema.pre('find', function(next) {
-  if(!this.getQuery()[tradeSchema.auth.field]) {
-    // If not queried with authentication, only expose public fields
-    this._fields = tradeSchema.auth.public;
-  }
-  next();
-});
-
-/*
-tradeSchema.statics.sanitizePopulate = function(populate) {
-  return populate.map(path => {
-    if(path.path == 'counterpartyTrade') {
-      return {
-        path: 'counterpartyTrade',
-        select: 'user',
-        populate: {path: 'user', select: 'name email phone'}
-      };
-    } else {
-      return path;
-    }
-  });
-}
-*/
+tradeSchema.plugin(require('./plugins/authorizeFind'));
 
 module.exports = mongoose.model('Trade', tradeSchema);
