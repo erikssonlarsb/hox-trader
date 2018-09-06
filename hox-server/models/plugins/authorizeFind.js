@@ -13,21 +13,25 @@ const mongoose = require('mongoose');
 const Error = require('../../utils/error');
 
 module.exports = function(schema) {
-  
+
   schema.pre('find', function(next) {
-    if(!schema.auth.publicFields || schema.auth.publicFields.length <= 0) {
-      // Schema has no public fields, filter out any unauthorized documents in query.
-      if(this.options['requester'] == 'admin') {
-        this.getQuery()[schema.auth.ownerField] = {'$exists': true};
-      } else {
-        this.getQuery()[schema.auth.ownerField] = this.options['requester'];
+    console.log(this.options);
+    if(!this.options.isPopulate || !schema.auth.publicFields || schema.auth.publicFields.length <= 0) {
+      // Schema has no public fields, filter out any unauthorized documents in query (if user is not admin)
+      if(this.options['requester'] != 'admin') {
+        if(schema.auth.ownerField in this.getQuery() && this.getQuery()[schema.auth.ownerField] != this.options['requester']) {
+          // If query on owner, and query value is not same as requester; then force empty result.
+          this.getQuery()['_id'] = {'$exists': false};
+        } else {
+          this.getQuery()[schema.auth.ownerField] = this.options['requester'];
+        }
       }
     }
     next();
   });
 
   schema.post('find', function(documents, next) {
-    if(schema.auth.publicFields && schema.auth.publicFields.length > 0) {
+    if(this.options.isPopulate && schema.auth.publicFields && schema.auth.publicFields.length > 0) {
       // Schema has public fields. Sanitize documents from non-public fields,
       // if requestUser is not same as owner.
       const requester = this.options['requester'];

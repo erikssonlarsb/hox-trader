@@ -48,6 +48,7 @@ function auth() {
                     verifyPermissions(req, res);
                     next();
                   } catch (error) {
+                    console.log(error);
                     return res.status(405).json(error);
                   }
                 }
@@ -86,7 +87,14 @@ function verifyPermissions(req, res) {
 
 function authorizePopulate(populate, requester) {
   //TODO: Add recursive authorization if sub paths
-  populate.options = {'requester': requester}
+  populate.options = {'requester': requester, 'isPopulate': true}
+  if (populate.populate) {
+    if(populate.populate.isArray) {
+      populate.populate.map(populate => authorizePopulate(populate, requester));
+    } else {
+      populate.populate = authorizePopulate(populate.populate, requester);
+    }
+  }
   return populate;
 }
 

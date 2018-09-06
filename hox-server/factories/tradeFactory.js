@@ -22,10 +22,10 @@ module.exports = {
   },
 
   // Find a single trade.
-  findOne: function(id, {idField = '_id', auth = {}, populate = []}, callback) {
+  findOne: function(id, queryOptions, callback) {
     if (typeof arguments[1] === 'function') callback = arguments[1];
 
-    Trade.findUnique({[idField]: id, [auth.userField]: auth.userId}, populate, function(err, trade) {
+    Trade.findUnique(id, queryOptions, function(err, trade) {
       callback(err, trade);
     });
   },
