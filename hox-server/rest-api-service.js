@@ -19,15 +19,15 @@ function init() {
   api.use('/systeminfo', auth(), require('./handlers/systemInfo'));
   api.use('/invites', auth(), require('./handlers/invites'));
   api.use('/token', auth(), require('./handlers/token'));
-  api.use('/users', auth('_id'), require('./handlers/users'));
+  api.use('/users', auth(), require('./handlers/users'));
   api.use('/roles', auth(), require('./handlers/roles'));
   api.use('/instruments', auth(), require('./handlers/instruments'));
-  api.use('/orders', auth('user'), require('./handlers/orders'));
+  api.use('/orders', auth(), require('./handlers/orders'));
   api.use('/prices', auth(), require('./handlers/prices'));
-  api.use('/trades', auth('user'), require('./handlers/trades'));
+  api.use('/trades', auth(), require('./handlers/trades'));
   api.use('/tickers', auth(), require('./handlers/tickers'));
   api.use('/orderdepths', auth(), require('./handlers/orderdepths'));
-  api.use('/settlements', auth('user'), require('./handlers/settlements'));
+  api.use('/settlements', auth(), require('./handlers/settlements'));
   api.use('/jobs', auth(), require('./handlers/jobs'));
 
   return api;
