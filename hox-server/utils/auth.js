@@ -48,7 +48,6 @@ function auth() {
                     verifyPermissions(req, res);
                     next();
                   } catch (error) {
-                    console.log(error);
                     return res.status(405).json(error);
                   }
                 }

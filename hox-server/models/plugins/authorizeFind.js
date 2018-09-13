@@ -15,7 +15,6 @@ const Error = require('../../utils/error');
 module.exports = function(schema) {
 
   schema.pre('find', function(next) {
-    console.log(this.options);
     if(!this.options.isPopulate || !schema.auth.publicFields || schema.auth.publicFields.length <= 0) {
       // Schema has no public fields, filter out any unauthorized documents in query (if user is not admin)
       if(this.options['requester'] != 'admin') {
@@ -44,7 +43,6 @@ module.exports = function(schema) {
         } else if (owner._id instanceof mongoose.Types.ObjectId) {
           owner = owner._id.toString();
         } else {
-          console.error(owner);
           throw new Error("Unknown owner.");
         }
         if(requester != owner && requester != 'admin') {
