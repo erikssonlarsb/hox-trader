@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
+mongoose.Promise = require('bluebird');
 
 const settlementSchema = new Schema({
   user: {type: ObjectId, ref: 'User', required: true},
@@ -12,7 +13,7 @@ const settlementSchema = new Schema({
 
 settlementSchema.auth = {
   ownerField: 'user',
-  publicFields: ['user']
+  publicFields: ['user', 'isAcknowledged', 'counterpartySettlement']
 }
 
 settlementSchema.plugin(require('./plugins/updateTimestamp'));

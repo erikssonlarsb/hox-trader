@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const Instrument = require('./instrument');
 const Derivative = require('./instrument.derivative');
+mongoose.Promise = require('bluebird');
 
 const indexSchema = new Schema({
   isin: {type: String},

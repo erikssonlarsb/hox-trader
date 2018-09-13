@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+mongoose.Promise = require('bluebird');
 
 const systemInfoSchema = new Schema({
   version: {type: String, required: true},

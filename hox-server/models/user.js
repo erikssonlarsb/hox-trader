@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
 const Role = require('./role');
+mongoose.Promise = require('bluebird');
 
 const userSchema = new Schema({
   name: {type: String},
@@ -70,7 +71,7 @@ userSchema.methods.verifyPassword = function(candidatePassword, cb) {
  * additional query only to find the ObjectId.
  */
 function getReferenceId(identifier, field) {
-  if (typeof(identifier) === "string") {
+  if (!identifier || typeof(identifier) === "string") {
      // Identifier is ObjectId
      return identifier;
   } else {
