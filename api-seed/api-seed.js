@@ -7,7 +7,7 @@ const request = require('request');
 const async = require('async');
 const config = require('./config');
 
-let serverSystemInfo = {};  // Populated from test response. Used to decide seeding.
+let serverSystemInfo = null;  // Populated from test response. Used to decide seeding.
 
 async.series([
   function(callback) {
@@ -22,15 +22,16 @@ async.series([
        json: true,
        rejectUnauthorized: false
      };
+
      request(options, function(err, response, body) {
        if(err) {
          callback(err);  // Break series due to connection error.
        } else if (response.statusCode == 200) {
          // Request successful with custom password.
          console.log("Admin password in sync.");
-         if(body) {
+         if(body.length > 0) {
            // Save system info object for later processing.
-           serverSystemInfo = body;
+           serverSystemInfo = body[0];
          }
          callback();  // Proceed with next in series.
        } else if (response.statusCode == 401) {
@@ -61,30 +62,53 @@ async.series([
     /*
     Update SystemInfo.
      */
-    if(serverSystemInfo.version == config.gitCommit) {
-      console.log("Restart with same version.");
-      callback();
+    let systemInfo = {
+       version: config.gitCommit,
+       isSeeded: true,
+       inviteOnly: config.inviteOnly
+     };
+
+    if(serverSystemInfo) {
+      if(serverSystemInfo.version == config.gitCommit) {
+        console.log("Restart with same version.");
+        callback();
+      } else {
+        console.log("Deploying new version: " + config.gitCommit);
+        let options = {
+          method: 'PUT',
+          uri: `${config.url}systeminfo/${serverSystemInfo._id}`,
+          auth: { user: 'admin1', password: config.password },
+          json: systemInfo,
+          rejectUnauthorized: false
+        };
+        request(options, function(err, response, body) {
+          if(err) {
+            callback(err);  // Break series due to connection error.
+          } else if (response.statusCode == 200) {
+            // Request successful.
+            console.log("SystemInfo updated.");
+            callback();
+          } else {
+            callback(body);
+          }
+        });
+      }
     } else {
-      console.log("Deploying new version: " + config.gitCommit);
-      let systemInfo = {
-        version: config.gitCommit,
-        isSeeded: true,
-        inviteOnly: config.inviteOnly
-      };
-      // First do a trial request with custom password to see if it's already set.
+      console.log("Initial deployment.");
       let options = {
-        method: 'PUT',
-        uri: config.url + 'systeminfo',
-        auth: { user: 'admin1', password: config.password },  // use custom password
+        method: 'POST',
+        uri: `${config.url}systeminfo`,
+        auth: { user: 'admin1', password: config.password },
         json: systemInfo,
         rejectUnauthorized: false
       };
+
       request(options, function(err, response, body) {
         if(err) {
           callback(err);  // Break series due to connection error.
         } else if (response.statusCode == 200) {
           // Request successful.
-          console.log("SystemInfo updated.");
+          console.log("SystemInfo created.");
           callback();
         } else {
           callback(body);
@@ -96,7 +120,7 @@ async.series([
     /*
     Parse named import files and POST to api.
      */
-    if(serverSystemInfo.isSeeded) {
+    if(serverSystemInfo && serverSystemInfo.isSeeded) {
       console.log("Already seeded.");
       callback();
     } else {

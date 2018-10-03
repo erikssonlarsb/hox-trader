@@ -9,6 +9,7 @@
               "resource" : "systeminfo",
               "methods" : [
                   "GET",
+                  "POST",
                   "PUT"
               ]
           },

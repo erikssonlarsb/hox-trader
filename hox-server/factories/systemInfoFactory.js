@@ -16,8 +16,8 @@ module.exports = {
 
     SystemInfo.find(params)
     .populate(populate)
-    .exec(function(err, prices) {
-      callback(err, prices);
+    .exec(function(err, systemInfo) {
+      callback(err, systemInfo);
     });
   },
 
