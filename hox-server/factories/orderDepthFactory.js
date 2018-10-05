@@ -23,7 +23,7 @@ module.exports = {
           result[instrument._id] = new OrderDepth(instrumentPopulate ? instrument : instrument._id);
           return result;
         }, {});
-        orderFactory.query({instrument: Object.keys(orderDepths), status: "ACTIVE"}, function(err, orders) {
+        orderFactory.query({instrument: Object.keys(orderDepths), status: "ACTIVE"}, {requester: 'admin'}, function(err, orders) {
           if(err) {
             callback(err);
           } else {
@@ -48,10 +48,12 @@ module.exports = {
         callback(err, instrument);
       } else {
         let orderDepth = new OrderDepth(instrumentPopulate ? instrument : instrument._id);
-        orderFactory.query({instrument: instrument._id, status: "ACTIVE"}, function(err, orders) {
+        console.log(instrument);
+        orderFactory.query({instrument: instrument._id, status: "ACTIVE"}, {requester: 'admin'}, function(err, orders) {
           if(err) {
             callback(err);
           } else {
+            console.log(orders);
             for (let order of orders) {
               orderDepth.addOrder(order);
             }
