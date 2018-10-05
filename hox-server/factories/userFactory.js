@@ -6,6 +6,7 @@ const inviteFactory = require('../factories/inviteFactory');
 const systemInfoFactory = require('../factories/systemInfoFactory');
 const eventEmitter = require('../events/eventEmitter');
 const DocumentEvent = require('../events/event.document');
+const Error = require('../utils/error');
 
 module.exports = {
 
@@ -32,11 +33,14 @@ module.exports = {
 
   // Create a user.
   create: function(user, callback) {
-    systemInfoFactory.findOne({}, function(err, systemInfo) {
+    systemInfoFactory.query({}, function(err, systemInfos) {
       if (err) {
         callback(err);
       } else {
-        if (systemInfo.inviteOnly) {
+        if (systemInfos.length < 1) {
+          callback(new Error("SystemInfo not available. Cannot create user."))
+        }
+        else if (systemInfos[0].inviteOnly) {
           inviteFactory.findOne(user.invite, {idField: 'code'}, function(err, invite) {
             if (err) {
               callback(err);
