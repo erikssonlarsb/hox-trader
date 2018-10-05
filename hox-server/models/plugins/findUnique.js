@@ -6,10 +6,8 @@
  const Error = require('../../utils/error');
 
  module.exports = function(schema) {
-   schema.statics.findUnique = function (id, {idField = '_id', requester, populate = ''}, callback) {
-     if (typeof arguments[1] === 'function') {
-       callback = arguments[1];
-     }
+   schema.statics.findUnique = function (id, {idField = '_id', requester, populate = []}, callback) {
+     if (typeof arguments[1] === 'function') callback = arguments[1];
 
      this.find({[idField]: id})
      .limit(2) // Only one should be found, if 2, id is not unique.

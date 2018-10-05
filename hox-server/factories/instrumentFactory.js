@@ -12,7 +12,7 @@ const DocumentEvent = require('../events/event.document');
 module.exports = {
 
   // Query instruments.
-  query: function(params, {populate = ''}, callback) {
+  query: function(params, {populate = []}, callback) {
     if (typeof arguments[1] === 'function') callback = arguments[1];
 
     Instrument.find(params)

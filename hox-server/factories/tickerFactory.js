@@ -7,9 +7,9 @@ const tradeFactory = require('../factories/tradeFactory');
 module.exports = {
 
   // Query tickers.
-  query: function(params, {requester, populate = '', sort = {'_id': 'desc'}, limit = null}, callback) {
+  query: function(params, {requester, populate = [], sort = {'_id': 'desc'}, limit = null}, callback) {
     if (typeof arguments[1] === 'function') callback = arguments[1];
-    
+
     params.side = 'BUY';
 
     tradeFactory.query(params, {requester: 'admin', populate: populate, sort: sort, limit: limit}, function(err, trades) {

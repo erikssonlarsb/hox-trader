@@ -8,7 +8,7 @@ const orderFactory = require('../factories/orderFactory');
 module.exports = {
 
   // Query orderDepths.
-  query: function(params, {populate = ''}, callback) {
+  query: function(params, {populate = []}, callback) {
     if (typeof arguments[1] === 'function') callback = arguments[1];
 
     let instrumentPopulate = populate.find(path => path.path == 'instrument');

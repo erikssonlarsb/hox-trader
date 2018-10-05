@@ -8,7 +8,7 @@ const DocumentEvent = require('../events/event.document');
 module.exports = {
 
   // Query invites.
-  query: function(params, {requester, populate = ''}, callback) {
+  query: function(params, {requester, populate = []}, callback) {
     if (typeof arguments[1] === 'function') callback = arguments[1];
 
     Invite.find(params)
@@ -22,7 +22,7 @@ module.exports = {
   // Find a single invite
   findOne: function(id, queryOptions, callback) {
     if (typeof arguments[1] === 'function') callback = arguments[1];
-    
+
     Invite.findUnique(id, queryOptions, function(err, invite) {
       callback(err, invite);
     });

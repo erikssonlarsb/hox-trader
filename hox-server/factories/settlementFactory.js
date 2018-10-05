@@ -8,7 +8,7 @@ const DocumentEvent = require('../events/event.document');
 module.exports = {
 
   // Query settlements.
-  query: function(params, {requester, populate = ''}, callback) {
+  query: function(params, {requester, populate = []}, callback) {
     if (typeof arguments[1] === 'function') callback = arguments[1];
 
     Settlement.find(params)

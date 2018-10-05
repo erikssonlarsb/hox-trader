@@ -10,7 +10,7 @@ const DocumentEvent = require('../events/event.document');
 module.exports = {
 
   // Query orders.
-  query: function(params, {requester, populate = ''}, callback) {
+  query: function(params, {requester, populate = []}, callback) {
     if (typeof arguments[1] === 'function') callback = arguments[1];
 
     Order.find(params)
@@ -67,7 +67,7 @@ module.exports = {
   // Delete an order. (i.e. set status to WITHDRAW).
   delete: function(id, queryOptions, callback) {
     if (typeof arguments[1] === 'function') callback = arguments[1];
-    
+
     Order.findUnique(id, queryOptions, function(err, order) {
       if (err) {
         callback(err);

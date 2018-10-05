@@ -8,7 +8,7 @@ const DocumentEvent = require('../events/event.document');
 module.exports = {
 
   // Query trades.
-  query: function(params, {requester, populate = '', sort = null, limit = null}, callback) {
+  query: function(params, {requester, populate = [], sort = null, limit = null}, callback) {
     if (typeof arguments[1] === 'function') callback = arguments[1];
 
     Trade.find(params)

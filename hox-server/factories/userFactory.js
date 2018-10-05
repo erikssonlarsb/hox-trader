@@ -11,7 +11,7 @@ const Error = require('../utils/error');
 module.exports = {
 
   // Query users.
-  query: function(params, {requester, populate = ''}, callback) {
+  query: function(params, {requester, populate = []}, callback) {
     if (typeof arguments[1] === 'function') callback = arguments[1];
 
     User.find(params)

@@ -11,7 +11,7 @@ const Error = require('../utils/error');
 module.exports = {
 
   // Query system info.
-  query: function(params, {populate = ''}, callback) {
+  query: function(params, {populate = []}, callback) {
     if (typeof arguments[1] === 'function') callback = arguments[1];
 
     SystemInfo.find(params)
