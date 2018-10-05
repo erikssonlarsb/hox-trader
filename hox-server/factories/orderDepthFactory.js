@@ -48,12 +48,10 @@ module.exports = {
         callback(err, instrument);
       } else {
         let orderDepth = new OrderDepth(instrumentPopulate ? instrument : instrument._id);
-        console.log(instrument);
         orderFactory.query({instrument: instrument._id, status: "ACTIVE"}, {requester: 'admin'}, function(err, orders) {
           if(err) {
             callback(err);
           } else {
-            console.log(orders);
             for (let order of orders) {
               orderDepth.addOrder(order);
             }
