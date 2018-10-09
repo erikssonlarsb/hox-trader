@@ -3,7 +3,7 @@ var config = require('../config');
 var User = require('../models/user');
 var Error = require('../utils/error');
 
-function auth() {
+function authorizeRequest() {
   return function(req, res, next) {
     if (!req.headers['authorization']) {
       return res.status(401).json(new Error('Authorization required.'));
@@ -97,4 +97,7 @@ function authorizePopulate(populate, requester) {
   return populate;
 }
 
-module.exports = auth
+module.exports = {
+  authorizeRequest: authorizeRequest,
+  authorizePopulate: authorizePopulate
+}

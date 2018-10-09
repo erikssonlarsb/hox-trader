@@ -101,7 +101,10 @@ function matchOrder(order) {
     sorting.unshift(['price', 'descending']);  // Match with highest buy price first (unshift to prioritize over updateTimestamp)
   }
 
-  Order.find(query).sort(sorting).exec(function (err, matchingOrders) {
+  Order.find(query)
+  .setOptions({requester: 'admin'})
+  .sort(sorting)
+  .exec(function (err, matchingOrders) {
     if (err) {
       console.error(err);
     } else {

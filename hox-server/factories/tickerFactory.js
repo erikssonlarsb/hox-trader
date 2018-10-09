@@ -21,4 +21,13 @@ module.exports = {
       }
     });
   },
+
+  // Find a single ticker.
+  findOne: function(id, queryOptions, callback) {
+    if (typeof arguments[1] === 'function') callback = arguments[1];
+
+    tradeFactory.findOne(id, queryOptions, function(err, trade) {
+      callback(err, trade ? new Ticker(trade) : trade);
+    });
+  }
 }
