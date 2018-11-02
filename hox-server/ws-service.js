@@ -64,49 +64,56 @@ function init(httpServer, path) {
   });
 
   // Broadcast document to clients.
-  eventEmitter.on('DocumentEvent', function(event) {
+  eventEmitter.on('DocumentEvent', function(event, triggerDependants=true) {
 
     // Trigger events for any dependent models
-    switch (event.docType) {
-      case 'Instrument':
-        if(event.operation == 'Create') {
-          orderDepthFactory.findOne(event.document._id, {requester: 'admin'}, function(err, orderDepth) {
-            if(err) {
-              console.error(err);
-            } else if (orderDepth) {
-              eventEmitter.emit('DocumentEvent', new DocumentEvent('Create', 'OrderDepth', orderDepth));
-            }
-          });
-        }
-        break;
-      case 'Order':
-        orderDepthFactory.findOne(event.document.instrument, {requester: 'admin'}, function(err, orderDepth) {
-          if(err) {
-          } else if (orderDepth) {
-            eventEmitter.emit('DocumentEvent', new DocumentEvent('Update', 'OrderDepth', orderDepth));
+    if (triggerDependants) {
+      switch (event.docType) {
+        case 'Instrument':
+          if(event.operation == 'Create') {
+            orderDepthFactory.findOne(event.document._id, {requester: 'admin'}, function(err, orderDepth) {
+              if(err) {
+                console.error(err);
+              } else if (orderDepth) {
+                eventEmitter.emit('DocumentEvent', new DocumentEvent('Create', 'OrderDepth', orderDepth));
+              }
+            });
           }
-        });
-        break;
-      case 'Trade':
-        if(event.operation == 'Create' && event.document.side == 'BUY') {  // Only create ticker for 1 side of the trade-pairs
-          tickerFactory.findOne(event.document._id, {requester: 'admin'}, function(err, ticker) {
+          break;
+        case 'Order':
+          orderDepthFactory.findOne(event.document.instrument, {requester: 'admin'}, function(err, orderDepth) {
             if(err) {
-            } else if (ticker) {
-              eventEmitter.emit('DocumentEvent', new DocumentEvent('Create', 'Ticker', ticker));
+            } else if (orderDepth) {
+              eventEmitter.emit('DocumentEvent', new DocumentEvent('Update', 'OrderDepth', orderDepth));
             }
           });
-        }
-        break;
-      case 'Settlement':
-        if(event.operation == 'Update') {
-          settlementFactory.findOne(event.document.counterpartySettlement, {requester: 'admin'}, function(err, counterpartySettlement) {
-            if(err) {
-            } else if (counterpartySettlement) {
-              //eventEmitter.emit('DocumentEvent', new DocumentEvent('Update', 'Settlement', counterpartySettlement));
+          break;
+        case 'Trade':
+          if(event.operation == 'Create' && event.document.side == 'BUY') {  // Only create ticker for 1 side of the trade-pairs
+            tickerFactory.findOne(event.document._id, {requester: 'admin'}, function(err, ticker) {
+              if(err) {
+              } else if (ticker) {
+                eventEmitter.emit('DocumentEvent', new DocumentEvent('Create', 'Ticker', ticker));
+              }
+            });
+          }
+          break;
+        case 'Settlement':
+          if(event.operation == 'Update') {
+            if(original) {
+              // If it's the original Settlement update event, broadcast also an update on the counterparty settlement
+              // If it's not the original update event, do nothing (prevent an infinite loop of updates triggering each other)
+              settlementFactory.findOne(event.document.counterpartySettlement, {requester: 'admin'}, function(err, counterpartySettlement) {
+                if(err) {
+                } else if (counterpartySettlement) {
+                  // Broadcast with original=false, to stop from further broadcasting.
+                  eventEmitter.emit('DocumentEvent', new DocumentEvent('Update', 'Settlement', counterpartySettlement), false);
+                }
+              });
             }
-          });
-        }
-        break;
+          }
+          break;
+      }
     }
 
     wss.clients.forEach(function each(client) {
