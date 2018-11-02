@@ -4,6 +4,7 @@ const ObjectId = Schema.Types.ObjectId;
 const DateOnly = require('mongoose-dateonly')(mongoose);
 const Instrument = require('./instrument');
 const Error = require('../utils/error');
+mongoose.Promise = require('bluebird');
 
 const derivativeSchema = new Schema({
   underlying: {type: ObjectId, ref: 'Instrument', required: true},

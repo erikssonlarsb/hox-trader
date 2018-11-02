@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const DateOnly = require('mongoose-dateonly')(mongoose);
 const ObjectId = Schema.Types.ObjectId;
+mongoose.Promise = require('bluebird');
 
 const priceSchema = new Schema({
   instrument: {type: ObjectId, ref: 'Instrument', required: true},

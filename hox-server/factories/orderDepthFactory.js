@@ -9,9 +9,7 @@ module.exports = {
 
   // Query orderDepths.
   query: function(params, {populate = []}, callback) {
-    if (typeof arguments[1] === 'function') {
-      callback = arguments[1];
-    }
+    if (typeof arguments[1] === 'function') callback = arguments[1];
 
     let instrumentPopulate = populate.find(path => path.path == 'instrument');
 
@@ -25,7 +23,7 @@ module.exports = {
           result[instrument._id] = new OrderDepth(instrumentPopulate ? instrument : instrument._id);
           return result;
         }, {});
-        orderFactory.query({instrument: Object.keys(orderDepths), status: "ACTIVE"}, function(err, orders) {
+        orderFactory.query({instrument: Object.keys(orderDepths), status: "ACTIVE"}, {requester: 'admin'}, function(err, orders) {
           if(err) {
             callback(err);
           } else {
@@ -41,9 +39,7 @@ module.exports = {
 
   // Find a single orderDepth.
   findOne: function(id, {idField = '_id', populate = []}, callback) {
-    if (typeof arguments[1] === 'function') {
-      callback = arguments[1];
-    }
+    if (typeof arguments[1] === 'function') callback = arguments[1];
 
     let instrumentPopulate = populate.find(path => path.path == 'instrument');
 
@@ -52,7 +48,7 @@ module.exports = {
         callback(err, instrument);
       } else {
         let orderDepth = new OrderDepth(instrumentPopulate ? instrument : instrument._id);
-        orderFactory.query({instrument: instrument._id, status: "ACTIVE"}, function(err, orders) {
+        orderFactory.query({instrument: instrument._id, status: "ACTIVE"}, {requester: 'admin'}, function(err, orders) {
           if(err) {
             callback(err);
           } else {

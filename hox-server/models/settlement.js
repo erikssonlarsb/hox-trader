@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
+mongoose.Promise = require('bluebird');
 
 const settlementSchema = new Schema({
   user: {type: ObjectId, ref: 'User', required: true},
@@ -10,24 +11,13 @@ const settlementSchema = new Schema({
   amount: {type: Number, default: 0}
 });
 
+settlementSchema.auth = {
+  ownerField: 'user',
+  publicFields: ['user', 'isAcknowledged', 'counterpartySettlement']
+}
+
 settlementSchema.plugin(require('./plugins/updateTimestamp'));
 settlementSchema.plugin(require('./plugins/findUnique'));
-
-settlementSchema.statics.sanitizePopulate = function(populate) {
-  /*
-  Restrict access to the Settlement object referred to in path 'counterpartySettlement'
-   */
-  return populate.map(path => {
-    if(path.path == 'counterpartySettlement') {
-      return {
-        path: 'counterpartySettlement',
-        select: 'user isAcknowledged',
-        populate: {path: 'user', select: 'name email phone'}
-      };
-    } else {
-      return path;
-    }
-  });
-}
+settlementSchema.plugin(require('./plugins/authorizeFind'));
 
 module.exports = mongoose.model('Settlement', settlementSchema);

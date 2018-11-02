@@ -25,18 +25,20 @@ export class SettlementDetailsComponent implements OnInit  {
       if(params.get('id')) {
         let settlementParams = new ApiParams({
           '$populate': [{
-              path: 'counterpartySettlement'
+              path: 'counterpartySettlement',
+              populate: {path: 'user'}
             },
             {
               path: 'trades',
               populate: {
-              path: 'instrument',
-              populate: {
-                path: 'prices',
-                match: { type: { $eq: 'SETTLEMENT'}}
+                path: 'instrument',
+                populate: {
+                  path: 'prices',
+                  match: { type: { $eq: 'SETTLEMENT'}}
+                }
               }
             }
-          }]
+          ]
         });
         this.apiService.getSettlement(params.get('id'), settlementParams)
           .subscribe(

@@ -13,6 +13,7 @@ const WebSocket = require('ws');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const config = require('./config');
+const auth = require('./utils/auth');
 const queryEnhancer = require('./utils/queryEnhancer');
 const eventEmitter = require('./events/eventEmitter');
 const ConnectionEvent = require('./events/event.connection');
@@ -51,7 +52,7 @@ function init(httpServer, path) {
       message = JSON.parse(message);
       switch(message.type) {
         case 'Populate':
-          ws.populate[message.data.docType] = queryEnhancer.getPopulate(JSON.stringify(message.data.populate));
+          ws.populate[message.data.docType] = queryEnhancer.getPopulate(JSON.stringify(message.data.populate)).map(populate => auth.authorizePopulate(populate, ws.user._id));
           break;
         default:
           console.error("Unsupported message type: " + message.type);
@@ -63,53 +64,61 @@ function init(httpServer, path) {
   });
 
   // Broadcast document to clients.
-  eventEmitter.on('DocumentEvent', function(event) {
+  eventEmitter.on('DocumentEvent', function(event, triggerDependants=true) {
 
     // Trigger events for any dependent models
-    switch (event.docType) {
-      case 'Instrument':
-        if(event.operation == 'Create') {
-          orderDepthFactory.findOne(event.document._id, function(err, orderDepth) {
-            if(err) {
-              console.error(err);
-            } else if (orderDepth) {
-              eventEmitter.emit('DocumentEvent', new DocumentEvent('Create', 'OrderDepth', orderDepth));
-            }
-          });
-        }
-        break;
-      case 'Order':
-        orderDepthFactory.findOne(event.document.instrument, function(err, orderDepth) {
-          if(err) {
-          } else if (orderDepth) {
-            eventEmitter.emit('DocumentEvent', new DocumentEvent('Update', 'OrderDepth', orderDepth));
+    if (triggerDependants) {
+      switch (event.docType) {
+        case 'Instrument':
+          if(event.operation == 'Create') {
+            orderDepthFactory.findOne(event.document._id, {requester: 'admin'}, function(err, orderDepth) {
+              if(err) {
+                console.error(err);
+              } else if (orderDepth) {
+                eventEmitter.emit('DocumentEvent', new DocumentEvent('Create', 'OrderDepth', orderDepth));
+              }
+            });
           }
-        });
-        break;
-      case 'Trade':
-        if(event.operation == 'Create' && event.document.side == 'BUY') {  // Only create ticker for 1 side of the trade-pairs
-          tickerFactory.findOne(event.document._id, function(err, ticker) {
+          break;
+        case 'Order':
+          orderDepthFactory.findOne(event.document.instrument, {requester: 'admin'}, function(err, orderDepth) {
             if(err) {
-            } else if (ticker) {
-              eventEmitter.emit('DocumentEvent', new DocumentEvent('Create', 'Ticker', ticker));
+            } else if (orderDepth) {
+              eventEmitter.emit('DocumentEvent', new DocumentEvent('Update', 'OrderDepth', orderDepth));
             }
           });
-        }
-        break;
-      case 'Settlement':
-        if(event.operation == 'Update') {
-          settlementFactory.findOne(event.document.counterpartySettlement, function(err, counterpartySettlement) {
-            if(err) {
-            } else if (counterpartySettlement) {
-              eventEmitter.emit('DocumentEvent', new DocumentEvent('Update', 'Settlement', counterpartySettlement));
+          break;
+        case 'Trade':
+          if(event.operation == 'Create' && event.document.side == 'BUY') {  // Only create ticker for 1 side of the trade-pairs
+            tickerFactory.findOne(event.document._id, {requester: 'admin'}, function(err, ticker) {
+              if(err) {
+              } else if (ticker) {
+                eventEmitter.emit('DocumentEvent', new DocumentEvent('Create', 'Ticker', ticker));
+              }
+            });
+          }
+          break;
+        case 'Settlement':
+          if(event.operation == 'Update') {
+            if(original) {
+              // If it's the original Settlement update event, broadcast also an update on the counterparty settlement
+              // If it's not the original update event, do nothing (prevent an infinite loop of updates triggering each other)
+              settlementFactory.findOne(event.document.counterpartySettlement, {requester: 'admin'}, function(err, counterpartySettlement) {
+                if(err) {
+                } else if (counterpartySettlement) {
+                  // Broadcast with original=false, to stop from further broadcasting.
+                  eventEmitter.emit('DocumentEvent', new DocumentEvent('Update', 'Settlement', counterpartySettlement), false);
+                }
+              });
             }
-          });
-        }
-        break;
+          }
+          break;
+      }
     }
 
     wss.clients.forEach(function each(client) {
       if (client.readyState === WebSocket.OPEN) {
+        const schema = mongoose.modelSchemas[event.docType];
         const typePermission = client.user.role.permissions.find(function(permission) {
           if (permission.resource == event.docType.toLowerCase()+'s') {
             return true;
@@ -121,55 +130,22 @@ function init(httpServer, path) {
         if(client.user.role.isAdmin) {
           userPermission = true;
         } else {
-          switch (event.docType) {
-            case 'Instrument':
+          if(schema && schema.auth) {
+            // schema is user specific; check owner.
+            let owner = event.document[schema.auth.ownerField];
+            if(owner == client.user._id) {
               userPermission = true;
-              break;
-            case 'Invite':
-              userPermission = event.document.inviter == client.user._id;
-              break;
-            case 'Order':
-              userPermission = event.document.user == client.user._id;
-              break;
-            case 'OrderDepth':
-              userPermission = true;
-              break;
-            case 'Price':
-              userPermission = true;
-              break;
-            case 'Role':
-              userPermission = true;
-              break;
-            case 'Settlement':
-              userPermission = event.document.user == client.user._id;
-              break;
-            case 'SystemInfo':
-              userPermission = true;
-              break;
-            case 'Ticker':
-              userPermission = true;
-              break;
-            case 'Trade':
-              userPermission = event.document.user == client.user._id;
-              break;
-            case 'User':
-              userPermission = event.document._id == client.user._id;;
-              break;
-            default:
-              userPermission = false;
+            }
+          } else {
+            // Public schema.
+            userPermission = true;
           }
         }
 
         if(typePermission && userPermission) {
           if(client.populate.hasOwnProperty(event.docType)) {
             try {
-              let populate = null;
-              if(mongoose.modelSchemas[event.docType] && typeof(mongoose.model(event.docType).sanitizePopulate) === 'function') {
-                populate = mongoose.model(event.docType).sanitizePopulate(client.populate[event.docType]);
-              } else {
-                populate = client.populate[event.docType];
-              }
-              event.document.populate(populate, function(err, document) {
+              event.document.populate(client.populate[event.docType], function(err, document) {
                 if(err) {
                   console.error("Population error: " + err);
                 } else {

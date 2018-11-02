@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
 const Instrument = require('./instrument');
+mongoose.Promise = require('bluebird');
 
 const orderSchema = new Schema({
   user: {type: ObjectId, ref: 'User', required: true},
@@ -18,8 +19,13 @@ const orderSchema = new Schema({
   status: {type: String, enum: ['ACTIVE', 'WITHDRAWN', 'TRADED', 'EXPIRED']}
 });
 
+orderSchema.auth = {
+  ownerField: 'user'
+}
+
 orderSchema.plugin(require('./plugins/updateTimestamp'));
 orderSchema.plugin(require('./plugins/findUnique'));
+orderSchema.plugin(require('./plugins/authorizeFind'));
 
 orderSchema.pre('save', function(next) {
   if(this.status != 'EXPIRED') {

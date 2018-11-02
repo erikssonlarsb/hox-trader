@@ -8,14 +8,12 @@ const DocumentEvent = require('../events/event.document');
 module.exports = {
 
   // Query trades.
-  query: function(params, {auth = {}, populate = [], sort = null, limit = null}, callback) {
-    if (typeof arguments[1] === 'function') {
-      callback = arguments[1];
-    }
-    params[auth.userField] = auth.userId;
+  query: function(params, {requester, populate = [], sort = null, limit = null}, callback) {
+    if (typeof arguments[1] === 'function') callback = arguments[1];
 
     Trade.find(params)
-    .populate(Trade.sanitizePopulate(populate))
+    .setOptions({requester: requester})
+    .populate(populate)
     .sort(sort)
     .limit(limit)
     .exec(function(err, trades) {
@@ -24,12 +22,10 @@ module.exports = {
   },
 
   // Find a single trade.
-  findOne: function(id, {idField = '_id', auth = {}, populate = []}, callback) {
-    if (typeof arguments[1] === 'function') {
-      callback = arguments[1];
-    }
+  findOne: function(id, queryOptions, callback) {
+    if (typeof arguments[1] === 'function') callback = arguments[1];
 
-    Trade.findUnique({[idField]: id, [auth.userField]: auth.userId}, Trade.sanitizePopulate(populate), function(err, trade) {
+    Trade.findUnique(id, queryOptions, function(err, trade) {
       callback(err, trade);
     });
   },
@@ -40,5 +36,24 @@ module.exports = {
       callback(err, trade);
       if(trade) eventEmitter.emit('DocumentEvent', new DocumentEvent('Create', 'Trade', trade));
     });
-  }
+  },
+
+  // Update a trade.
+  update: function(id, queryOptions, updateTrade, callback) {
+    if (typeof arguments[2] === 'function') callback = arguments[2];
+
+    Trade.findUnique(id, queryOptions, function(err, trade) {
+      if(err) callback(err);
+      else {
+        if(updateTrade.isSettled) trade.isSettled = updateTrade.isSettled;
+
+        trade.save(function(err) {
+          callback(err, trade);
+          if(!err) {
+            eventEmitter.emit('DocumentEvent', new DocumentEvent('Update', 'Trade', trade));
+          }
+        });
+      }
+    });
+  },
 }

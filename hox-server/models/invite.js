@@ -2,6 +2,7 @@ const crypto = require('crypto');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
+mongoose.Promise = require('bluebird');
 
 const inviteSchema = new Schema({
   inviter: {type: ObjectId, ref: 'User', required: true},
@@ -14,23 +15,12 @@ const inviteSchema = new Schema({
     }}
 });
 
+inviteSchema.auth = {
+  ownerField: 'inviter'
+}
+
 inviteSchema.plugin(require('./plugins/updateTimestamp'));
 inviteSchema.plugin(require('./plugins/findUnique'));
-
-inviteSchema.statics.sanitizePopulate = function (populate) {
-  /*
-  Restrict access to the User object referred to in path 'invitee'
-   */
-  return populate.map(path => {
-    if(path.path == 'invitee') {
-      return {
-        path: 'invitee',
-        select: 'name'
-      };
-    } else {
-      return path;
-    }
-  });
-}
+inviteSchema.plugin(require('./plugins/authorizeFind'));
 
 module.exports = mongoose.model('Invite', inviteSchema);

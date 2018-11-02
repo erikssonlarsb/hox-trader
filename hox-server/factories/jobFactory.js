@@ -7,9 +7,7 @@ module.exports = {
 
   // Query jobs.
   query: function(params, {}, callback) {
-    if (typeof arguments[1] === 'function') {
-      callback = arguments[1];
-    }
+    if (typeof arguments[1] === 'function') callback = arguments[1];
 
     fs.readdir('./jobs/scripts/', function(err, files) {
       if(err) {

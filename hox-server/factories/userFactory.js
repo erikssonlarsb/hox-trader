@@ -6,17 +6,16 @@ const inviteFactory = require('../factories/inviteFactory');
 const systemInfoFactory = require('../factories/systemInfoFactory');
 const eventEmitter = require('../events/eventEmitter');
 const DocumentEvent = require('../events/event.document');
+const Error = require('../utils/error');
 
 module.exports = {
 
   // Query users.
-  query: function(params, {auth = {}, populate = []}, callback) {
-    if (typeof arguments[1] === 'function') {
-      callback = arguments[1];
-    }
-    params[auth.userField] = auth.userId;
+  query: function(params, {requester, populate = []}, callback) {
+    if (typeof arguments[1] === 'function') callback = arguments[1];
 
     User.find(params)
+    .setOptions({requester: requester})
     .populate(populate)
     .exec(function(err, users) {
       callback(err, users);
@@ -24,23 +23,24 @@ module.exports = {
   },
 
   // Find a single user
-  findOne: function(id, {idField = '_id', auth = {}, populate = []}, callback) {
-    if (typeof arguments[1] === 'function') {
-      callback = arguments[1];
-    }
+  findOne: function(id, queryOptions, callback) {
+    if (typeof arguments[1] === 'function') callback = arguments[1];
 
-    User.findUnique({[idField]: id, [auth.userField]: auth.userId}, populate, function(err, user) {
-      callback(err, user);
+    User.findUnique(id, queryOptions, function(err, invite) {
+      callback(err, invite);
     });
   },
 
   // Create a user.
   create: function(user, callback) {
-    systemInfoFactory.findOne({}, function(err, systemInfo) {
+    systemInfoFactory.query({}, function(err, systemInfos) {
       if (err) {
         callback(err);
       } else {
-        if (systemInfo.inviteOnly) {
+        if (systemInfos.length < 1) {
+          callback(new Error("SystemInfo not available. Cannot create user."))
+        }
+        else if (systemInfos[0].inviteOnly) {
           inviteFactory.findOne(user.invite, {idField: 'code'}, function(err, invite) {
             if (err) {
               callback(err);
@@ -84,9 +84,7 @@ module.exports = {
 
   // Update a user
   update: function(id, {idField = '_id', auth = {}, populate = []}, updateUser, callback) {
-    if (typeof arguments[2] === 'function') {
-      callback = arguments[2];
-    }
+    if (typeof arguments[2] === 'function') callback = arguments[2];
 
     User.findUnique({[idField]: id, [auth.userField]: auth.userId}, populate, function(err, user) {
       if(err || !user) {

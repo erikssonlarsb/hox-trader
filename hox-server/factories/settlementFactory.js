@@ -8,26 +8,22 @@ const DocumentEvent = require('../events/event.document');
 module.exports = {
 
   // Query settlements.
-  query: function(params, {auth = {}, populate = []}, callback) {
-    if (typeof arguments[1] === 'function') {
-      callback = arguments[1];
-    }
-    params[auth.userField] = auth.userId;
+  query: function(params, {requester, populate = []}, callback) {
+    if (typeof arguments[1] === 'function') callback = arguments[1];
 
     Settlement.find(params)
-    .populate(Settlement.sanitizePopulate(populate))
+    .setOptions({requester: requester})
+    .populate(populate)
     .exec(function(err, settlement) {
       callback(err, settlement);
     });
   },
 
   // Find a single settlement.
-  findOne: function(id, {idField = '_id', auth = {}, populate = []}, callback) {
-    if (typeof arguments[1] === 'function') {
-      callback = arguments[1];
-    }
+  findOne: function(id, queryOptions, callback) {
+    if (typeof arguments[1] === 'function') callback = arguments[1];
 
-    Settlement.findUnique({[idField]: id, [auth.userField]: auth.userId}, Settlement.sanitizePopulate(populate), function(err, settlement) {
+    Settlement.findUnique(id, queryOptions, function(err, settlement) {
       callback(err, settlement);
     });
   },
@@ -41,12 +37,10 @@ module.exports = {
   },
 
   // Update a settlement
-  update: function(id, {idField = '_id', auth = {}, populate = []}, updateSettlement, callback) {
-    if (typeof arguments[2] === 'function') {
-      callback = arguments[2];
-    }
+  update: function(id, queryOptions, updateSettlement, callback) {
+    if (typeof arguments[2] === 'function') callback = arguments[2];
 
-    Settlement.findUnique({[idField]: id, [auth.userField]: auth.userId}, Settlement.sanitizePopulate(populate), function(err, settlement) {
+    Settlement.findUnique(id, queryOptions, function(err, settlement) {
       if(err) callback(err);
       if(updateSettlement.isAcknowledged) settlement.isAcknowledged = updateSettlement.isAcknowledged;
 

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
+mongoose.Promise = require('bluebird');
 
 const tradeSchema = new Schema({
   order: {type: ObjectId, ref: 'Order', required: true},
@@ -13,24 +14,13 @@ const tradeSchema = new Schema({
   isSettled: {type: Boolean, default: false}
 });
 
+tradeSchema.auth = {
+  ownerField: 'user',
+  publicFields: ['user']
+}
+
 tradeSchema.plugin(require('./plugins/updateTimestamp'));
 tradeSchema.plugin(require('./plugins/findUnique'));
-
-tradeSchema.statics.sanitizePopulate = function(populate) {
-  /*
-  Restrict access to the Trade object referred to in path 'counterpartyTrade'
-   */
-  return populate.map(path => {
-    if(path.path == 'counterpartyTrade') {
-      return {
-        path: 'counterpartyTrade',
-        select: 'user',
-        populate: {path: 'user', select: 'name email phone'}
-      };
-    } else {
-      return path;
-    }
-  });
-}
+tradeSchema.plugin(require('./plugins/authorizeFind'));
 
 module.exports = mongoose.model('Trade', tradeSchema);

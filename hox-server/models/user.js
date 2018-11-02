@@ -4,9 +4,10 @@ const bcrypt = require('bcryptjs');
 const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
 const Role = require('./role');
+mongoose.Promise = require('bluebird');
 
 const userSchema = new Schema({
-  name: String,
+  name: {type: String},
   role: {type: ObjectId, ref: 'Role', required: true, set: getReferenceId},
   username: {type: String, required: true, unique: true, lowercase: true, trim: true},
   password: {type: String, required: true, select: false},
@@ -19,8 +20,14 @@ const userSchema = new Schema({
   phone: {type: String, required: true}
 });
 
+userSchema.auth = {
+  ownerField: '_id',
+  publicFields: ['name', 'email', 'phone']
+}
+
 userSchema.plugin(require('./plugins/updateTimestamp'));
 userSchema.plugin(require('./plugins/findUnique'));
+userSchema.plugin(require('./plugins/authorizeFind'));
 
 userSchema.pre('save', function(next) {
   if (this.isModified("password")) {
@@ -64,7 +71,7 @@ userSchema.methods.verifyPassword = function(candidatePassword, cb) {
  * additional query only to find the ObjectId.
  */
 function getReferenceId(identifier, field) {
-  if (typeof(identifier) === "string") {
+  if (!identifier || typeof(identifier) === "string") {
      // Identifier is ObjectId
      return identifier;
   } else {
