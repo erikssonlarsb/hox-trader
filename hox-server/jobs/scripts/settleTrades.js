@@ -8,14 +8,17 @@ exports.run = function() {
   console.log("### settleTrades started.");
 
   let populate = [{
-    path: 'counterpartyTrade'
+    path: 'counterpartyTrade',
+    options: {'requester': 'admin', 'isPopulate': true}
   },{
     path: 'instrument',
     select: 'prices',
+    options: {'requester': 'admin', 'isPopulate': true},
     populate: {
       path: 'prices',
       select: 'type value',
-      match: { type: { $eq: 'SETTLEMENT'}}
+      match: { type: { $eq: 'SETTLEMENT'}},
+      options: {'requester': 'admin', 'isPopulate': true}
     }
   }];
   tradeFactory.query({isSettled: false}, {requester: 'admin', populate: populate}, function(err, trades) {
